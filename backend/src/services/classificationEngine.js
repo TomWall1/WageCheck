@@ -1,0 +1,304 @@
+/**
+ * Classification decision engine — deterministic
+ * Maps a set of question answers to a classification level and stream.
+ *
+ * Input: { [question_key]: answer_key }
+ * Output: { level, stream, confidence, alternateLevel }
+ */
+
+const AWARD_CODE = 'MA000009';
+
+/**
+ * Core rules — maps answer patterns to (level, stream) outcomes.
+ * Evaluated in order; first match wins.
+ * Each rule is: { conditions: { [question_key]: answer_key | answer_key[] }, level, stream }
+ */
+const CLASSIFICATION_RULES = [
+
+  // ── KITCHEN STREAM ──────────────────────────────────────────────────────────
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'head_chef' },
+    level: 5,
+    rationale: 'Head chef with full kitchen responsibility',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'sous_chef' },
+    level: 4,
+    rationale: 'Sous chef / second in charge',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_section', kitchen_menu: 'contributes' },
+    level: 3,
+    rationale: 'Runs own section, contributes to menu',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_section', kitchen_supervises: 'yes' },
+    level: 3,
+    rationale: 'Runs own section, supervises others',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_section' },
+    level: 3,
+    rationale: 'Runs own kitchen section independently',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_basic', kitchen_supervises: 'yes' },
+    level: 3,
+    rationale: 'Experienced cook who supervises others',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_basic', experience: 'senior' },
+    level: 3,
+    rationale: 'Experienced cook (3+ years)',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'cook_basic' },
+    level: 2,
+    rationale: 'Cook working from recipes with some supervision',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'kitchenhand', experience: ['experienced', 'senior'] },
+    level: 2,
+    rationale: 'Experienced kitchen hand',
+  },
+  {
+    stream: 'kitchen',
+    conditions: { stream: 'kitchen', kitchen_role_type: 'kitchenhand' },
+    level: 1,
+    rationale: 'Kitchen hand / basic food prep under supervision',
+  },
+
+  // ── FOOD & BEVERAGE STREAM ──────────────────────────────────────────────────
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', supervises_fb_staff: 'manages_operations' },
+    level: 4,
+    rationale: 'Manages full food and beverage operation',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: {
+      stream: 'food_beverage',
+      supervises_fb_staff: 'supervises_shift',
+      beverage_specialist: ['yes_wine', 'yes_cocktails'],
+    },
+    level: 3,
+    rationale: 'Beverage specialist who also supervises',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', supervises_fb_staff: 'supervises_shift' },
+    level: 3,
+    rationale: 'Shift supervisor in food and beverage',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', beverage_specialist: ['yes_wine', 'yes_cocktails'] },
+    level: 3,
+    rationale: 'Specialist in wine or cocktails',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: {
+      stream: 'food_beverage',
+      takes_orders: 'yes',
+      handles_payments: 'yes',
+    },
+    level: 2,
+    rationale: 'Takes orders and handles payments independently',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', takes_orders: 'yes' },
+    level: 2,
+    rationale: 'Takes orders from customers independently',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', takes_orders: 'no', experience: ['experienced', 'senior'] },
+    level: 2,
+    rationale: 'Experienced food runner / busser',
+  },
+  {
+    stream: 'food_beverage',
+    conditions: { stream: 'food_beverage', takes_orders: 'no' },
+    level: 1,
+    rationale: 'Entry-level delivery of food and drinks only',
+  },
+
+  // ── FRONT OFFICE STREAM ─────────────────────────────────────────────────────
+  {
+    stream: 'front_office',
+    conditions: { stream: 'front_office', fo_supervises: 'manages' },
+    level: 4,
+    rationale: 'Manages front office department',
+  },
+  {
+    stream: 'front_office',
+    conditions: { stream: 'front_office', fo_supervises: 'supervises' },
+    level: 3,
+    rationale: 'Supervises front office staff on shift',
+  },
+  {
+    stream: 'front_office',
+    conditions: { stream: 'front_office', fo_checks_in_guests: 'yes' },
+    level: 2,
+    rationale: 'Checks guests in and out independently',
+  },
+  {
+    stream: 'front_office',
+    conditions: { stream: 'front_office', fo_checks_in_guests: 'no' },
+    level: 1,
+    rationale: 'Basic front office or rooms duties under supervision',
+  },
+
+  // ── GENERAL STREAM ──────────────────────────────────────────────────────────
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'manages' },
+    level: 4,
+    rationale: 'Manages a team with operational responsibility',
+  },
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'supervises' },
+    level: 3,
+    rationale: 'Supervises other staff',
+  },
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'independent', experience: 'senior' },
+    level: 3,
+    rationale: 'Experienced independent worker (3+ years)',
+  },
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'independent' },
+    level: 2,
+    rationale: 'Works independently without constant supervision',
+  },
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'basic_tasks', experience: ['some', 'experienced', 'senior'] },
+    level: 2,
+    rationale: 'Basic tasks but with some experience',
+  },
+  {
+    stream: 'general',
+    conditions: { stream: 'general', general_level: 'basic_tasks' },
+    level: 1,
+    rationale: 'Entry-level, basic tasks under supervision',
+  },
+];
+
+/**
+ * Check if a set of answers matches a rule's conditions.
+ * Conditions values can be a single string or array (matches any of those values).
+ */
+function matchesRule(answers, conditions) {
+  for (const [key, expected] of Object.entries(conditions)) {
+    const actual = answers[key];
+    if (!actual) return false;
+    if (Array.isArray(expected)) {
+      if (!expected.includes(actual)) return false;
+    } else {
+      if (actual !== expected) return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Classify the worker based on their questionnaire answers.
+ * Returns the best matching classification.
+ */
+function classify(answers) {
+  const stream = answers.stream;
+
+  if (!stream) {
+    return {
+      level: null,
+      stream: null,
+      rationale: null,
+      confidence: 'low',
+      error: 'No stream selected',
+    };
+  }
+
+  for (const rule of CLASSIFICATION_RULES) {
+    if (rule.stream !== stream) continue;
+    if (matchesRule(answers, rule.conditions)) {
+      return {
+        level: rule.level,
+        stream: rule.stream,
+        rationale: rule.rationale,
+        confidence: 'high',
+      };
+    }
+  }
+
+  // Fallback — if no rule matched, go to level 1 for the stream
+  return {
+    level: 1,
+    stream,
+    rationale: 'Unable to determine level — defaulting to entry level. Please review.',
+    confidence: 'low',
+  };
+}
+
+/**
+ * Full classification lookup — enriches with DB data
+ */
+async function classifyAndFetch(answers, db) {
+  const result = classify(answers);
+  if (!result.level) return result;
+
+  const classRow = await db.query(`
+    SELECT c.*, pr.rate_amount as base_rate
+    FROM classifications c
+    LEFT JOIN pay_rates pr ON pr.classification_id = c.id
+      AND pr.employment_type = 'full_time'
+      AND pr.rate_type = 'base_hourly'
+    WHERE c.award_code = $1
+      AND c.level = $2
+      AND c.stream = $3
+    ORDER BY pr.effective_date DESC
+    LIMIT 1
+  `, [AWARD_CODE, result.level, result.stream]);
+
+  if (!classRow.rows.length) {
+    // Try general stream fallback
+    const fallback = await db.query(`
+      SELECT c.*, pr.rate_amount as base_rate
+      FROM classifications c
+      LEFT JOIN pay_rates pr ON pr.classification_id = c.id
+        AND pr.employment_type = 'full_time'
+        AND pr.rate_type = 'base_hourly'
+      WHERE c.award_code = $1
+        AND c.level = $2
+        AND c.stream = 'general'
+      ORDER BY pr.effective_date DESC
+      LIMIT 1
+    `, [AWARD_CODE, result.level]);
+
+    if (fallback.rows.length) {
+      return { ...result, classification: fallback.rows[0] };
+    }
+  }
+
+  return {
+    ...result,
+    classification: classRow.rows[0] || null,
+  };
+}
+
+module.exports = { classify, classifyAndFetch };

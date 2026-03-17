@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: wagecheck-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wagecheck-db
+          property: connectionString
+      - key: ADMIN_SECRET
+        generateValue: true
+
+databases:
+  - name: wagecheck-db
+    databaseName: wagecheck
+    user: wagecheck
+    plan: free

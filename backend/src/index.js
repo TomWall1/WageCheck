@@ -1,0 +1,55 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
+const awardRoutes = require('./routes/award');
+const adminRoutes = require('./routes/admin');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Security
+app.use(helmet());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production'
+    ? ['https://wagecheck.com.au', 'https://www.wagecheck.com.au', /\.vercel\.app$/]
+    : 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'x-admin-secret'],
+}));
+
+// Rate limiting — generous for the public API, stricter for admin
+const publicLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests — please try again in a few minutes.' },
+});
+
+const adminLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(express.json({ limit: '1mb' }));
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.use('/api/award', publicLimiter, awardRoutes);
+app.use('/api/admin', adminLimiter, adminRoutes);
+
+app.use(errorHandler);
+
+app.listen(PORT, () => {
+  console.log(`WageCheck API running on port ${PORT}`);
+});
+
+module.exports = app;
