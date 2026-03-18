@@ -24,6 +24,7 @@ const STEP_LABELS = [
 const INITIAL_STATE: WageCheckState = {
   step: 1,
   employmentType: null,
+  age: null,
   classificationAnswers: {},
   classificationResult: null,
   shifts: [],
@@ -65,9 +66,9 @@ export default function HomePage() {
       {state.step === 1 && (
         <StepEmploymentType
           selected={state.employmentType}
-          onSelect={(type: EmploymentType) => {
-            updateState({ employmentType: type });
-          }}
+          age={state.age}
+          onSelect={(type: EmploymentType) => updateState({ employmentType: type })}
+          onAgeChange={(age: number | null) => updateState({ age })}
           onNext={nextStep}
         />
       )}
@@ -75,6 +76,7 @@ export default function HomePage() {
       {state.step === 2 && state.employmentType && (
         <StepClassification
           employmentType={state.employmentType}
+          age={state.age}
           answers={state.classificationAnswers}
           onAnswersChange={(answers) => updateState({ classificationAnswers: answers })}
           onResult={(result) => updateState({ classificationResult: result })}
@@ -86,6 +88,7 @@ export default function HomePage() {
       {state.step === 3 && state.employmentType && state.classificationResult && (
         <StepTimesheet
           employmentType={state.employmentType}
+          age={state.age}
           classificationResult={state.classificationResult}
           shifts={state.shifts}
           onShiftsChange={(shifts) => updateState({ shifts })}

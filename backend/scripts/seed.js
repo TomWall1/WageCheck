@@ -10,6 +10,10 @@ const pool = require('../src/db/pool');
 
 const AWARD_CODE = 'MA000009';
 const EFFECTIVE_DATE = '2024-07-01';
+// 2025 Annual Wage Review — 3.5% increase, effective 1 July 2025
+// Source: Fair Work Commission Annual Wage Review 2024-25
+// Verify current rates at fairwork.gov.au before each July update
+const EFFECTIVE_DATE_2025 = '2025-07-01';
 
 async function seed() {
   const client = await pool.connect();
@@ -26,7 +30,7 @@ async function seed() {
     `, [
       AWARD_CODE,
       'Hospitality Industry (General) Award 2020',
-      EFFECTIVE_DATE,
+      EFFECTIVE_DATE_2025,
       'https://www.fairwork.gov.au/employment-conditions/awards/awards-summary/ma000009-summary'
     ]);
 
@@ -348,32 +352,33 @@ async function seed() {
     }
     console.log(`✓ Inserted ${classifications.length} classifications`);
 
-    // ── Pay rates (1 July 2024) ────────────────────────────────────────────────
-    // Source: Fair Work Ombudsman Hospitality Industry General Award pay guide
-    // Rates are the minimum hourly rates — employers can pay more
-    // Casual loading: 25% on top of base rate
+    // ── Pay rates ─────────────────────────────────────────────────────────────
+    // Casual loading: 25% on top of base rate (combined into base_hourly for casual)
 
-    const baseRates = {
-      // [level, stream] -> hourly rate
-      '1_general': 23.23,
-      '1_food_beverage': 23.23,
-      '1_kitchen': 23.23,
-      '1_front_office': 23.23,
-      '2_general': 24.10,
-      '2_food_beverage': 24.10,
-      '2_kitchen': 24.10,
-      '2_front_office': 24.10,
-      '3_general': 25.41,
-      '3_food_beverage': 25.41,
-      '3_kitchen': 25.41,
-      '3_front_office': 25.41,
-      '4_general': 27.46,
-      '4_food_beverage': 27.46,
-      '4_kitchen': 27.46,
-      '4_front_office': 27.46,
-      '5_general': 29.60,
-      '5_kitchen': 29.60,
-    };
+    const ratesByYear = [
+      {
+        effectiveDate: EFFECTIVE_DATE,
+        label: '2024 (3.75% AWR increase)',
+        rates: {
+          '1_general': 23.23, '1_food_beverage': 23.23, '1_kitchen': 23.23, '1_front_office': 23.23,
+          '2_general': 24.10, '2_food_beverage': 24.10, '2_kitchen': 24.10, '2_front_office': 24.10,
+          '3_general': 25.41, '3_food_beverage': 25.41, '3_kitchen': 25.41, '3_front_office': 25.41,
+          '4_general': 27.46, '4_food_beverage': 27.46, '4_kitchen': 27.46, '4_front_office': 27.46,
+          '5_general': 29.60, '5_kitchen': 29.60,
+        },
+      },
+      {
+        effectiveDate: EFFECTIVE_DATE_2025,
+        label: '2025 (3.5% AWR increase — verify at fairwork.gov.au)',
+        rates: {
+          '1_general': 24.04, '1_food_beverage': 24.04, '1_kitchen': 24.04, '1_front_office': 24.04,
+          '2_general': 24.94, '2_food_beverage': 24.94, '2_kitchen': 24.94, '2_front_office': 24.94,
+          '3_general': 26.30, '3_food_beverage': 26.30, '3_kitchen': 26.30, '3_front_office': 26.30,
+          '4_general': 28.42, '4_food_beverage': 28.42, '4_kitchen': 28.42, '4_front_office': 28.42,
+          '5_general': 30.64, '5_kitchen': 30.64,
+        },
+      },
+    ];
 
     // Fetch classification IDs
     const classResult = await client.query(
@@ -381,36 +386,36 @@ async function seed() {
       [AWARD_CODE]
     );
 
-    for (const cls of classResult.rows) {
-      const key = `${cls.level}_${cls.stream}`;
-      const baseRate = baseRates[key];
-      if (!baseRate) continue;
+    for (const { effectiveDate, rates } of ratesByYear) {
+      for (const cls of classResult.rows) {
+        const key = `${cls.level}_${cls.stream}`;
+        const baseRate = rates[key];
+        if (!baseRate) continue;
 
-      const casualRate = parseFloat((baseRate * 1.25).toFixed(4));
+        const casualRate = parseFloat((baseRate * 1.25).toFixed(4));
 
-      // Full-time / part-time base rate
-      for (const empType of ['full_time', 'part_time']) {
+        for (const empType of ['full_time', 'part_time']) {
+          await client.query(`
+            INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
+            VALUES ($1, $2, $3, 'base_hourly', $4, $5)
+            ON CONFLICT DO NOTHING
+          `, [AWARD_CODE, cls.id, empType, baseRate, effectiveDate]);
+        }
+
         await client.query(`
           INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
-          VALUES ($1, $2, $3, 'base_hourly', $4, $5)
+          VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
           ON CONFLICT DO NOTHING
-        `, [AWARD_CODE, cls.id, empType, baseRate, EFFECTIVE_DATE]);
+        `, [AWARD_CODE, cls.id, casualRate, effectiveDate]);
+
+        await client.query(`
+          INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
+          VALUES ($1, $2, 'casual', 'casual_loading', 0.25, $3)
+          ON CONFLICT DO NOTHING
+        `, [AWARD_CODE, cls.id, effectiveDate]);
       }
-
-      // Casual — base + loading combined
-      await client.query(`
-        INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
-        VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
-        ON CONFLICT DO NOTHING
-      `, [AWARD_CODE, cls.id, casualRate, EFFECTIVE_DATE]);
-
-      await client.query(`
-        INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
-        VALUES ($1, $2, 'casual', 'casual_loading', 0.25, $3)
-        ON CONFLICT DO NOTHING
-      `, [AWARD_CODE, cls.id, EFFECTIVE_DATE]);
     }
-    console.log('✓ Inserted pay rates');
+    console.log('✓ Inserted pay rates (2024 + 2025)');
 
     // ── Penalty rates ─────────────────────────────────────────────────────────
     // Source: MA000009 clause 29 — Penalty rates
@@ -604,79 +609,43 @@ async function seed() {
     console.log(`✓ Inserted ${overtimeRates.length} overtime rules`);
 
     // ── Allowances ────────────────────────────────────────────────────────────
-    // Source: MA000009 clause 19 — Allowances (2024 rates)
-    const allowances = [
+    // Source: MA000009 clause 19 — Allowances
+    const allowancesByYear = [
       {
-        allowance_type: 'meal',
-        name: 'Meal allowance',
-        description: 'If you work overtime and you were not told about it the day before, your employer must pay you a meal allowance for each meal time that falls during the overtime.',
-        trigger_condition: 'Overtime worked without prior day\'s notice, for each meal period (breakfast, lunch, dinner) that falls in the overtime period',
-        amount: 16.92,
-        amount_type: 'fixed',
-        per_unit: 'per_meal',
+        effectiveDate: EFFECTIVE_DATE,
+        allowances: [
+          { allowance_type: 'meal', name: 'Meal allowance', description: 'If you work overtime and you were not told about it the day before, your employer must pay you a meal allowance for each meal time that falls during the overtime.', trigger_condition: 'Overtime worked without prior day\'s notice, for each meal period that falls in the overtime period', amount: 16.92, amount_type: 'fixed', per_unit: 'per_meal' },
+          { allowance_type: 'split_shift', name: 'Split shift allowance', description: 'If your employer splits your shift into two or more separate work periods on the same day (with a break of more than 1 hour between them), you get a split shift allowance.', trigger_condition: 'Work broken into 2+ separate periods on the same day with more than 1 hour unpaid break between them', amount: 3.19, amount_type: 'fixed', per_unit: 'per_shift' },
+          { allowance_type: 'uniform_laundry', name: 'Uniform and laundry allowance', description: 'If your employer requires you to wear a uniform and does not launder it for you, or pay the cost of laundering it, they must pay a laundry allowance.', trigger_condition: 'Required to wear a uniform that employer does not provide laundering for', amount: 1.42, amount_type: 'fixed', per_unit: 'per_shift' },
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'If your employer asks you to use your own car or motorbike for work purposes, you must be paid a vehicle allowance per kilometre.', trigger_condition: 'Using own vehicle for work purposes as directed by employer', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
+          { allowance_type: 'first_aid', name: 'First aid allowance', description: 'If you hold a first aid certificate and your employer asks you to be responsible for first aid at the workplace, you must be paid a first aid allowance.', trigger_condition: 'Hold a first aid certificate AND appointed as first aider by employer', amount: 15.03, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'live_in', name: 'Board and lodging deduction', description: 'If your employer provides accommodation and/or meals, certain amounts may be deducted from your wages. These deductions have maximum limits.', trigger_condition: 'Employer provides accommodation and/or meals', amount: null, amount_type: 'fixed', per_unit: null },
+        ],
       },
       {
-        allowance_type: 'split_shift',
-        name: 'Split shift allowance',
-        description: 'If your employer splits your shift into two or more separate work periods on the same day (with a break of more than 1 hour between them), you get a split shift allowance.',
-        trigger_condition: 'Work broken into 2+ separate periods on the same day with more than 1 hour unpaid break between them',
-        amount: 3.19,
-        amount_type: 'fixed',
-        per_unit: 'per_shift',
-      },
-      {
-        allowance_type: 'uniform_laundry',
-        name: 'Uniform and laundry allowance',
-        description: 'If your employer requires you to wear a uniform and does not launder it for you, or pay the cost of laundering it, they must pay a laundry allowance.',
-        trigger_condition: 'Required to wear a uniform that employer does not provide laundering for',
-        amount: 1.42,
-        amount_type: 'fixed',
-        per_unit: 'per_shift',
-      },
-      {
-        allowance_type: 'vehicle',
-        name: 'Vehicle/travel allowance',
-        description: 'If your employer asks you to use your own car or motorbike for work purposes, you must be paid a vehicle allowance per kilometre.',
-        trigger_condition: 'Using own vehicle for work purposes as directed by employer',
-        amount: 0.99,
-        amount_type: 'per_km',
-        per_unit: 'per_km',
-      },
-      {
-        allowance_type: 'first_aid',
-        name: 'First aid allowance',
-        description: 'If you hold a first aid certificate and your employer asks you to be responsible for first aid at the workplace, you must be paid a first aid allowance.',
-        trigger_condition: 'Hold a first aid certificate AND appointed as first aider by employer',
-        amount: 15.03,
-        amount_type: 'weekly',
-        per_unit: 'per_week',
-      },
-      {
-        allowance_type: 'live_in',
-        name: 'Live-in deduction (board and lodging)',
-        description: 'If your employer provides you with accommodation and meals as part of your employment, certain amounts may be deducted from your wages. These deductions have maximum limits.',
-        trigger_condition: 'Employer provides accommodation and/or meals',
-        amount: null,
-        amount_type: 'fixed',
-        per_unit: null,
+        effectiveDate: EFFECTIVE_DATE_2025,
+        allowances: [
+          { allowance_type: 'meal', name: 'Meal allowance', description: 'If you work overtime and you were not told about it the day before, your employer must pay you a meal allowance for each meal time that falls during the overtime.', trigger_condition: 'Overtime worked without prior day\'s notice, for each meal period that falls in the overtime period', amount: 17.51, amount_type: 'fixed', per_unit: 'per_meal' },
+          { allowance_type: 'split_shift', name: 'Split shift allowance', description: 'If your employer splits your shift into two or more separate work periods on the same day (with a break of more than 1 hour between them), you get a split shift allowance.', trigger_condition: 'Work broken into 2+ separate periods on the same day with more than 1 hour unpaid break between them', amount: 3.30, amount_type: 'fixed', per_unit: 'per_shift' },
+          { allowance_type: 'uniform_laundry', name: 'Uniform and laundry allowance', description: 'If your employer requires you to wear a uniform and does not launder it for you, or pay the cost of laundering it, they must pay a laundry allowance.', trigger_condition: 'Required to wear a uniform that employer does not provide laundering for', amount: 1.47, amount_type: 'fixed', per_unit: 'per_shift' },
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'If your employer asks you to use your own car or motorbike for work purposes, you must be paid a vehicle allowance per kilometre.', trigger_condition: 'Using own vehicle for work purposes as directed by employer', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
+          { allowance_type: 'first_aid', name: 'First aid allowance', description: 'If you hold a first aid certificate and your employer asks you to be responsible for first aid at the workplace, you must be paid a first aid allowance.', trigger_condition: 'Hold a first aid certificate AND appointed as first aider by employer', amount: 15.56, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'live_in', name: 'Board and lodging deduction', description: 'If your employer provides accommodation and/or meals, certain amounts may be deducted from your wages. These deductions have maximum limits.', trigger_condition: 'Employer provides accommodation and/or meals', amount: null, amount_type: 'fixed', per_unit: null },
+        ],
       },
     ];
 
-    for (const a of allowances) {
-      await client.query(`
-        INSERT INTO allowances
-          (award_code, allowance_type, name, description, trigger_condition, amount, amount_type, per_unit, effective_date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ON CONFLICT (award_code, allowance_type, effective_date) DO UPDATE SET
-          name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          amount = EXCLUDED.amount
-      `, [
-        AWARD_CODE, a.allowance_type, a.name, a.description,
-        a.trigger_condition, a.amount, a.amount_type, a.per_unit, EFFECTIVE_DATE
-      ]);
+    for (const { effectiveDate, allowances: yearAllowances } of allowancesByYear) {
+      for (const a of yearAllowances) {
+        await client.query(`
+          INSERT INTO allowances (award_code, allowance_type, name, description, trigger_condition, amount, amount_type, per_unit, effective_date)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          ON CONFLICT (award_code, allowance_type, effective_date) DO UPDATE SET
+            name = EXCLUDED.name, description = EXCLUDED.description, amount = EXCLUDED.amount
+        `, [AWARD_CODE, a.allowance_type, a.name, a.description, a.trigger_condition, a.amount, a.amount_type, a.per_unit, effectiveDate]);
+      }
     }
-    console.log(`✓ Inserted ${allowances.length} allowances`);
+    console.log('✓ Inserted allowances (2024 + 2025)');
 
     // ── Break entitlements ────────────────────────────────────────────────────
     // MA000009 clause 20 — Meal breaks / clause 21 — Rest breaks

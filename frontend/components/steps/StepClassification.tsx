@@ -33,6 +33,7 @@ interface ClassificationResult {
     base_rate?: number;
     level: number;
     stream: string;
+    rate_effective_date?: string;
   } | null;
   rationale: string | null;
   confidence: string;
@@ -40,6 +41,7 @@ interface ClassificationResult {
 
 interface Props {
   employmentType: EmploymentType;
+  age: number | null;
   answers: Record<string, string>;
   onAnswersChange: (answers: Record<string, string>) => void;
   onResult: (result: ClassificationResult) => void;
@@ -54,7 +56,7 @@ const STREAM_LABELS: Record<string, string> = {
   general: 'General',
 };
 
-export default function StepClassification({ employmentType, answers, onAnswersChange, onResult, onNext, onBack }: Props) {
+export default function StepClassification({ employmentType, age, answers, onAnswersChange, onResult, onNext, onBack }: Props) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [classifying, setClassifying] = useState(false);
@@ -95,7 +97,7 @@ export default function StepClassification({ employmentType, answers, onAnswersC
     setClassifying(true);
     setError(null);
     try {
-      const res = await api.classify(answers) as ClassificationResult;
+      const res = await api.classify(answers, employmentType) as ClassificationResult;
       setResult(res);
       onResult(res);
     } catch {
@@ -212,22 +214,32 @@ export default function StepClassification({ employmentType, answers, onAnswersC
               </div>
             )}
 
-            {result.classification.base_rate && (
-              <div className="bg-white rounded-lg p-4 border border-brand-200">
-                <p className="text-sm text-gray-600">Minimum hourly rate at this level</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  ${Number(result.classification.base_rate).toFixed(2)}
-                  <span className="text-lg text-gray-500 font-normal">/hr</span>
-                </p>
-                {employmentType === 'casual' && (
-                  <p className="text-sm text-gray-500 mt-1">
-                    This already includes the 25% casual loading.
-                    Full-time/part-time rate would be ${(Number(result.classification.base_rate) / 1.25).toFixed(2)}/hr.
+            {result.classification.base_rate && (() => {
+              const JUNIOR: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+              const juniorMult = (age && age < 21) ? (JUNIOR[age] ?? 1.0) : 1.0;
+              const displayRate = Number(result.classification.base_rate) * juniorMult;
+              const effectiveDate = result.classification.rate_effective_date
+                ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
+                : '1 July 2025';
+              return (
+                <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
+                  <p className="text-sm text-gray-600">Your minimum hourly rate</p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    ${displayRate.toFixed(2)}
+                    <span className="text-lg text-gray-500 font-normal">/hr</span>
                   </p>
-                )}
-                <p className="text-xs text-gray-400 mt-1">Effective 1 July 2024 — verify at fairwork.gov.au</p>
-              </div>
-            )}
+                  {employmentType === 'casual' && (
+                    <p className="text-sm text-gray-500">Includes the 25% casual loading (base: ${(Number(result.classification.base_rate) / 1.25 * juniorMult).toFixed(2)}/hr + 25%).</p>
+                  )}
+                  {juniorMult < 1.0 && (
+                    <p className="text-sm text-warning-700">
+                      Junior rate applied: {Math.round(juniorMult * 100)}% of adult rate (${Number(result.classification.base_rate).toFixed(2)}/hr).
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-400">Effective {effectiveDate} — verify at fairwork.gov.au</p>
+                </div>
+              );
+            })()}
           </div>
 
           <div className="warning-box text-sm space-y-2">

@@ -26,10 +26,10 @@ export const api = {
   getContent: (key?: string) =>
     apiFetch(key ? `/api/award/content/${key}` : '/api/award/content'),
 
-  classify: (answers: Record<string, string>) =>
+  classify: (answers: Record<string, string>, employmentType?: string) =>
     apiFetch('/api/award/classify', {
       method: 'POST',
-      body: JSON.stringify({ answers }),
+      body: JSON.stringify({ answers, employmentType }),
     }),
 
   calculate: (payload: {
@@ -37,6 +37,7 @@ export const api = {
     classificationId: number;
     shifts: unknown[];
     publicHolidays?: string[];
+    age?: number;
   }) =>
     apiFetch('/api/award/calculate', {
       method: 'POST',

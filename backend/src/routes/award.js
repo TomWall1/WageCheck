@@ -129,15 +129,17 @@ router.get('/questions', async (req, res) => {
 });
 
 // POST /api/award/classify
-// Body: { answers: { [question_key]: answer_key } }
+// Body: { answers: { [question_key]: answer_key }, employmentType?: string }
 router.post('/classify', async (req, res) => {
   try {
-    const { answers } = req.body;
+    const { answers, employmentType } = req.body;
     if (!answers || typeof answers !== 'object') {
       return res.status(400).json({ error: 'answers object is required' });
     }
-
-    const result = await classifyAndFetch(answers, pool);
+    const empType = ['full_time', 'part_time', 'casual'].includes(employmentType)
+      ? employmentType
+      : 'full_time';
+    const result = await classifyAndFetch(answers, pool, empType);
     res.json(result);
   } catch (err) {
     console.error('Classification error:', err);
@@ -149,7 +151,7 @@ router.post('/classify', async (req, res) => {
 // Body: { employmentType, classificationId, shifts, publicHolidays? }
 router.post('/calculate', async (req, res) => {
   try {
-    const { employmentType, classificationId, shifts, publicHolidays } = req.body;
+    const { employmentType, classificationId, shifts, publicHolidays, age } = req.body;
 
     if (!employmentType || !classificationId || !Array.isArray(shifts)) {
       return res.status(400).json({ error: 'employmentType, classificationId, and shifts are required' });
@@ -175,7 +177,7 @@ router.post('/calculate', async (req, res) => {
     }
 
     const result = await calculateEntitlements(
-      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [] },
+      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null },
       pool
     );
 

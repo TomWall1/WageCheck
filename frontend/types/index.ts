@@ -89,6 +89,7 @@ export interface ClassificationOutcome {
     base_rate?: number;
     level?: number;
     stream?: string;
+    rate_effective_date?: string;
   } | null;
   rationale: string | null;
   confidence: string;
@@ -97,6 +98,7 @@ export interface ClassificationOutcome {
 export interface WageCheckState {
   step: number;
   employmentType: EmploymentType | null;
+  age: number | null;
   classificationAnswers: Record<string, string>;
   classificationResult: ClassificationOutcome | null;
   shifts: Shift[];

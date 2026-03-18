@@ -258,45 +258,31 @@ function classify(answers) {
 /**
  * Full classification lookup — enriches with DB data
  */
-async function classifyAndFetch(answers, db) {
+async function classifyAndFetch(answers, db, employmentType = 'full_time') {
   const result = classify(answers);
   if (!result.level) return result;
 
-  const classRow = await db.query(`
-    SELECT c.*, pr.rate_amount as base_rate
+  // Fetch rate for the actual employment type requested
+  const fetchRate = async (stream) => db.query(`
+    SELECT c.*, pr.rate_amount as base_rate, pr.effective_date as rate_effective_date
     FROM classifications c
     LEFT JOIN pay_rates pr ON pr.classification_id = c.id
-      AND pr.employment_type = 'full_time'
+      AND pr.employment_type = $4
       AND pr.rate_type = 'base_hourly'
-    WHERE c.award_code = $1
-      AND c.level = $2
-      AND c.stream = $3
+    WHERE c.award_code = $1 AND c.level = $2 AND c.stream = $3
     ORDER BY pr.effective_date DESC
     LIMIT 1
-  `, [AWARD_CODE, result.level, result.stream]);
+  `, [AWARD_CODE, result.level, stream, employmentType]);
+
+  let classRow = await fetchRate(result.stream);
 
   if (!classRow.rows.length) {
-    // Try general stream fallback
-    const fallback = await db.query(`
-      SELECT c.*, pr.rate_amount as base_rate
-      FROM classifications c
-      LEFT JOIN pay_rates pr ON pr.classification_id = c.id
-        AND pr.employment_type = 'full_time'
-        AND pr.rate_type = 'base_hourly'
-      WHERE c.award_code = $1
-        AND c.level = $2
-        AND c.stream = 'general'
-      ORDER BY pr.effective_date DESC
-      LIMIT 1
-    `, [AWARD_CODE, result.level]);
-
-    if (fallback.rows.length) {
-      return { ...result, classification: fallback.rows[0] };
-    }
+    classRow = await fetchRate('general');
   }
 
   return {
     ...result,
+    employmentType,
     classification: classRow.rows[0] || null,
   };
 }

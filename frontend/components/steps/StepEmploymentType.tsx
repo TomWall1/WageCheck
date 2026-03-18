@@ -5,9 +5,15 @@ import clsx from 'clsx';
 
 interface Props {
   selected: EmploymentType | null;
+  age: number | null;
   onSelect: (type: EmploymentType) => void;
+  onAgeChange: (age: number | null) => void;
   onNext: () => void;
 }
+
+const JUNIOR_RATES: Record<number, number> = {
+  15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90,
+};
 
 const EMPLOYMENT_TYPES: Array<{
   type: EmploymentType;
@@ -48,7 +54,9 @@ const EMPLOYMENT_TYPES: Array<{
   },
 ];
 
-export default function StepEmploymentType({ selected, onSelect, onNext }: Props) {
+export default function StepEmploymentType({ selected, age, onSelect, onAgeChange, onNext }: Props) {
+  const juniorRate = age && JUNIOR_RATES[age];
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -103,6 +111,45 @@ export default function StepEmploymentType({ selected, onSelect, onNext }: Props
           set hours each week, seek advice.
         </div>
       )}
+
+      {/* Age input */}
+      <div className="card space-y-3">
+        <div>
+          <label className="block font-semibold text-gray-900 mb-1">How old are you?</label>
+          <p className="text-sm text-gray-500 mb-3">
+            Under-21s are paid a percentage of the adult rate under the award. Enter your age
+            so we can calculate the right rate for you. If you're 21 or over, junior rates don't apply.
+          </p>
+          <div className="flex items-center gap-3">
+            <input
+              type="number"
+              min={14}
+              max={70}
+              placeholder="e.g. 19"
+              value={age ?? ''}
+              onChange={e => {
+                const val = parseInt(e.target.value);
+                onAgeChange(isNaN(val) ? null : val);
+              }}
+              className="input-field max-w-[120px]"
+            />
+            <span className="text-gray-500 text-sm">years old</span>
+          </div>
+        </div>
+
+        {juniorRate && (
+          <div className="warning-box text-sm">
+            <strong>Junior rate applies.</strong> At age {age}, the award sets your minimum pay
+            at <strong>{Math.round(juniorRate * 100)}% of the adult rate</strong>.
+            This is automatically factored into your calculation.
+          </div>
+        )}
+        {age && age >= 21 && (
+          <div className="success-box text-sm">
+            Adult rate applies — no junior rate reduction.
+          </div>
+        )}
+      </div>
 
       <div className="flex justify-end pt-2">
         <button
