@@ -216,10 +216,24 @@ export default function StepRightsSummary({ employmentType, classificationResult
                 casual rate — not double time and a quarter like permanent employees.
               </p>
               <p>
-                <strong>Conversion to permanent:</strong> If you have worked regular, systematic hours for
-                12 months, you may have the right to request conversion to permanent employment. Your
-                employer must respond in writing and can only refuse on reasonable business grounds.
-                Contact Fair Work for guidance.
+                <strong>Conversion to permanent ("employee choice"):</strong> If you have worked regular,
+                systematic hours you may be able to request conversion to permanent employment:
+              </p>
+              <ul className="ml-4 space-y-1 text-gray-600">
+                <li>
+                  <strong>Large employers (15+ employees):</strong> you can request after <strong>6 months</strong>.
+                  Your employer must also proactively offer conversion after 12 months if you have worked
+                  a regular pattern of hours for the last 6 months.
+                </li>
+                <li>
+                  <strong>Small employers (under 15 employees):</strong> you can request after <strong>12 months</strong>.
+                  Small employers are not required to proactively offer conversion but must respond to your request.
+                </li>
+              </ul>
+              <p>
+                Your employer can only refuse on reasonable grounds and must respond in writing.
+                Note: employment before 26 August 2024 does not count toward these timeframes.
+                Contact Fair Work (13 13 94) for guidance.
               </p>
             </div>
           </div>
