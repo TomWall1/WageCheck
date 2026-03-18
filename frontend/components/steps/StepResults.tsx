@@ -12,6 +12,10 @@ interface Props {
   onStartOver: () => void;
 }
 
+function employmentLabel(type: string) {
+  return { full_time: 'Full-time', part_time: 'Part-time', casual: 'Casual' }[type] || type;
+}
+
 export default function StepResults({ state, onAmountPaidChange, onStartOver }: Props) {
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const { calculationResult, employmentType, classificationResult, allowanceAnswers, amountActuallyPaid } = state;
@@ -40,6 +44,134 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const underpayment = hasPaidAmount ? summary.totalPayOwed - paidAmount : null;
   const wasUnderpaid = underpayment !== null && underpayment > 0.50;
   const wasOverpaid = underpayment !== null && underpayment < -0.50;
+
+  function handleDownloadReport() {
+    const dateGenerated = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    const clsTitle = classificationResult?.classification?.title || `Level ${classificationResult?.level}`;
+    const triggeredAllowanceLines = triggeredAllowances.map(a => {
+      const info = allowanceInfoByType[a.type];
+      if (!info) return '';
+      const superApplies = a.type === 'split_shift' || a.type === 'first_aid';
+      const amt = a.type === 'vehicle' && info.amount && a.detail
+        ? formatCurrency(parseFloat(a.detail) * info.amount)
+        : info.amount ? `${formatCurrency(info.amount)} ${info.per_unit?.replace('_', ' ') || ''}` : '';
+      return `<tr><td>${info.name}</td><td>${amt}</td><td>${superApplies ? 'Yes' : 'No (expense reimbursement)'}</td></tr>`;
+    }).join('');
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WageCheck Pay Entitlements Estimate</title>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; color: #111; margin: 40px; font-size: 13px; line-height: 1.5; }
+  h1 { font-size: 22px; color: #1e40af; margin-bottom: 4px; }
+  h2 { font-size: 15px; color: #1e3a8a; border-bottom: 1px solid #bfdbfe; padding-bottom: 4px; margin-top: 24px; }
+  .disclaimer { background: #fef9c3; border: 1px solid #fde047; padding: 12px; border-radius: 6px; font-size: 12px; margin: 16px 0; }
+  .disclaimer strong { color: #854d0e; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  th { background: #eff6ff; text-align: left; padding: 6px 8px; font-size: 12px; color: #1e40af; }
+  td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; }
+  .total-row td { font-weight: bold; background: #eff6ff; }
+  .super-row td { color: #166534; }
+  .footer { margin-top: 32px; font-size: 11px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 12px; }
+  .meta { color: #6b7280; font-size: 12px; }
+  @media print { body { margin: 20px; } }
+</style>
+</head>
+<body>
+<h1>WageCheck — Pay Entitlements Estimate</h1>
+<p class="meta">Generated: ${dateGenerated} &nbsp;|&nbsp; wagecheck.vercel.app</p>
+
+<div class="disclaimer">
+  <strong>IMPORTANT — READ BEFORE USING THIS DOCUMENT</strong><br>
+  This report is an <strong>estimate only</strong>, generated automatically from information entered by the user.
+  It is <strong>not legal advice</strong> and should not be relied upon as a definitive statement of entitlements.
+  Actual entitlements depend on the specific facts of your employment, any enterprise agreement or IFA in place,
+  correct classification, accurate shift records, and current award rates. Pay rates are based on the
+  Hospitality Industry (General) Award 2020 [MA000009], effective 1 July 2025.
+  Always verify at <strong>fairwork.gov.au</strong> or seek independent legal advice before taking action.
+</div>
+
+<h2>Employment Details</h2>
+<table>
+  <tr><td><strong>Employment type</strong></td><td>${employmentLabel(employmentType!)}</td></tr>
+  <tr><td><strong>Classification</strong></td><td>${clsTitle}</td></tr>
+  <tr><td><strong>Stream / Level</strong></td><td>${classificationResult?.stream ? (classificationResult.stream.replace('_', ' ')) : ''} — Level ${classificationResult?.level}</td></tr>
+  <tr><td><strong>Base hourly rate</strong></td><td>${formatCurrency(baseHourlyRate)}/hr (incl. casual loading if applicable)</td></tr>
+  <tr><td><strong>Rates effective</strong></td><td>1 July 2025</td></tr>
+</table>
+
+<h2>Pay Summary</h2>
+<table>
+  <tr><th>Component</th><th>Amount</th><th>Super applies?</th></tr>
+  <tr><td>Ordinary hours pay</td><td>${formatCurrency(summary.ordinaryPay)}</td><td>Yes</td></tr>
+  ${summary.penaltyPay > 0 ? `<tr><td>Penalty rate loading (weekends/public holidays)</td><td>${formatCurrency(summary.penaltyPay)}</td><td>Yes</td></tr>` : ''}
+  ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td>${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
+  ${summary.overtimePay > 0 ? `<tr><td>Overtime pay</td><td>${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
+  <tr class="total-row"><td>Total wages owed</td><td>${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>
+</table>
+
+${triggeredAllowances.length > 0 ? `
+<h2>Allowances (additional, not included in wages total)</h2>
+<table>
+  <tr><th>Allowance</th><th>Amount</th><th>Super applies?</th></tr>
+  ${triggeredAllowanceLines}
+</table>
+` : ''}
+
+<h2>Superannuation Estimate</h2>
+<table>
+  <tr><td>Super-eligible earnings (OTE)</td><td>${formatCurrency(summary.superEligiblePay)}</td></tr>
+  <tr><td>SGC rate</td><td>${(summary.sgcRate * 100).toFixed(1)}%</td></tr>
+  <tr class="super-row total-row"><td><strong>Estimated super owed</strong></td><td><strong>${formatCurrency(summary.superAmount)}</strong></td></tr>
+</table>
+<p style="font-size:11px;color:#6b7280;">Super is the employer's obligation, payable on top of wages, directly to the employee's super fund.
+Overtime and expense allowances are excluded from the super calculation per ATO OTE definitions.</p>
+
+${summary.allBreakViolations.length > 0 ? `
+<h2>Break Entitlement Concerns</h2>
+<ul>${summary.allBreakViolations.map(v => `<li>${v.message} (${v.date})</li>`).join('')}</ul>
+` : ''}
+
+${hasPaidAmount ? `
+<h2>Underpayment Comparison</h2>
+<table>
+  <tr><td>Award minimum wages owed</td><td>${formatCurrency(summary.totalPayOwed)}</td></tr>
+  <tr><td>Amount actually paid (as entered)</td><td>${formatCurrency(paidAmount)}</td></tr>
+  <tr class="total-row"><td>${wasUnderpaid ? 'Estimated shortfall' : wasOverpaid ? 'Paid above award' : 'Difference'}</td>
+    <td>${formatCurrency(Math.abs(underpayment!))}</td></tr>
+</table>
+` : ''}
+
+<h2>What to do if you've been underpaid</h2>
+<ol>
+  <li>Speak with your employer if you feel safe to do so — it may be an error.</li>
+  <li>Contact the <strong>Fair Work Ombudsman</strong>: <strong>13 13 94</strong> or fairwork.gov.au. They can investigate and recover money on your behalf.</li>
+  <li>Contact your union (if applicable) or a community legal centre for free advice.</li>
+  <li>Regarding unpaid super: contact the <strong>ATO on 13 28 65</strong>. Unpaid super is recoverable for up to 4 years.</li>
+</ol>
+
+<div class="footer">
+  <strong>Disclaimer:</strong> This document is an automated estimate based solely on information entered by the user into WageCheck (wagecheck.vercel.app).
+  It is not legal advice and is subject to the accuracy of the inputs provided. The Hospitality Industry (General) Award 2020 [MA000009] applies to most
+  hospitality workers in Australia, but enterprise agreements, IFAs, or annualised salary arrangements may override award rates.
+  Always verify your entitlements at fairwork.gov.au or seek advice from a qualified employment lawyer or the Fair Work Ombudsman before taking action.
+  WageCheck accepts no liability for any decisions made based on this report.
+</div>
+
+<script>window.print();</script>
+</body>
+</html>`;
+
+    const reportWindow = window.open('', '_blank');
+    if (!reportWindow) {
+      alert('Please allow pop-ups to download the report.');
+      return;
+    }
+    reportWindow.document.write(html);
+    reportWindow.document.close();
+  }
 
   return (
     <div className="space-y-6">
@@ -397,6 +529,21 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
         <p>
           Pay rates shown are effective <strong>1 July 2025</strong>. Rates are updated each July —
           check <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">fairwork.gov.au</a> for the latest.
+        </p>
+      </div>
+
+      {/* Download report */}
+      <div className="card space-y-3">
+        <h3 className="font-bold text-gray-900">Download this report</h3>
+        <p className="text-sm text-gray-600">
+          Save a PDF copy of your pay estimate to share with your employer or keep for your records.
+          The report includes a clear disclaimer that it is an estimate only, not legal advice.
+        </p>
+        <button onClick={handleDownloadReport} className="btn-secondary w-full">
+          Download Report (PDF)
+        </button>
+        <p className="text-xs text-gray-400 text-center">
+          Your browser will open a print dialog — choose "Save as PDF".
         </p>
       </div>
 
