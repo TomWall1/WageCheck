@@ -61,6 +61,9 @@ export interface CalculationResult {
     missedBreakPay: number;
     overtimePay: number;
     overtimeMinutes: number;
+    mealAllowancePay: number;
+    mealAllowancesOwed: number;
+    mealAllowanceRate: number;
     totalPayOwed: number;
     superEligiblePay: number;
     superAmount: number;

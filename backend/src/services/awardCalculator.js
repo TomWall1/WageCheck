@@ -185,8 +185,16 @@ function checkBreakCompliance(shift, breakEntitlements) {
 }
 
 // ── Overtime ──────────────────────────────────────────────────────────────
-function calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates) {
-  if (employmentType === 'casual') return { overtimePay: 0, overtimeMinutes: 0, overtimeBreakdown: [] };
+// Only the PREMIUM above ordinary rate is added here — ordinary pay for all
+// worked hours is already included in totalOrdinaryPay. Adding the full OT rate
+// would double-count the base portion already paid.
+//
+// period: 'weekly' → 38hr threshold per ISO week
+//         'fortnightly' → 76hr threshold across all shifts (averaging arrangement)
+function calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period = 'weekly') {
+  if (employmentType === 'casual') {
+    return { overtimePay: 0, overtimeMinutes: 0, overtimeBreakdown: [], mealAllowancesOwed: 0 };
+  }
 
   const weeklyRates = overtimeRates
     .filter(r => r.employment_type === employmentType && r.period === 'weekly')
@@ -196,42 +204,88 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
     .filter(r => r.employment_type === employmentType && r.period === 'daily')
     .sort((a, b) => parseFloat(a.threshold_hours) - parseFloat(b.threshold_hours));
 
-  const shiftsByWeek = {};
-  for (const shift of processedShifts) {
-    const weekKey = getISOWeek(shift.date);
-    if (!shiftsByWeek[weekKey]) shiftsByWeek[weekKey] = [];
-    shiftsByWeek[weekKey].push(shift);
+  // Multipliers from DB (fall back to award defaults if table is empty)
+  const firstBandMultiplier = weeklyRates[0] ? parseFloat(weeklyRates[0].multiplier) : 1.5;
+  const secondBandMultiplier = weeklyRates[1] ? parseFloat(weeklyRates[1].multiplier) : 2.0;
+  // Weekly threshold per week (38) and second-band threshold per week (40)
+  const weeklyThreshold = weeklyRates[0] ? parseFloat(weeklyRates[0].threshold_hours) : 38;
+  const secondBandThreshold = weeklyRates[1] ? parseFloat(weeklyRates[1].threshold_hours) : 40;
+
+  // Build list of periods to check
+  let periodsToCheck;
+  if (period === 'fortnightly') {
+    // Treat all shifts as a single averaging period (76 hr threshold)
+    periodsToCheck = [{ key: 'fortnight', shifts: processedShifts }];
+  } else {
+    const shiftsByWeek = {};
+    for (const shift of processedShifts) {
+      const weekKey = getISOWeek(shift.date);
+      if (!shiftsByWeek[weekKey]) shiftsByWeek[weekKey] = [];
+      shiftsByWeek[weekKey].push(shift);
+    }
+    periodsToCheck = Object.entries(shiftsByWeek).map(([key, shifts]) => ({ key, shifts }));
   }
+
+  const periodWeeks = period === 'fortnightly' ? 2 : 1;
+  const periodThresholdMinutes = weeklyThreshold * periodWeeks * 60;
+  const secondBandThresholdMinutes = secondBandThreshold * periodWeeks * 60;
 
   let totalOvertimePay = 0;
   let totalOvertimeMinutes = 0;
   const breakdown = [];
+  let totalMealAllowancesOwed = 0;
 
-  for (const [weekKey, weekShifts] of Object.entries(shiftsByWeek)) {
-    // Daily overtime
-    for (const shift of weekShifts) {
+  for (const { key, shifts } of periodsToCheck) {
+    // Daily overtime (only for individual shifts, regardless of period type)
+    for (const shift of shifts) {
       if (!dailyRates.length) continue;
-      const thresholdMinutes = parseFloat(dailyRates[0].threshold_hours) * 60;
-      if (shift.workedMinutes > thresholdMinutes) {
-        const overtimeMinutes = shift.workedMinutes - thresholdMinutes;
-        const multiplier = parseFloat(dailyRates[0].multiplier);
-        const pay = (overtimeMinutes / 60) * baseHourlyRate * multiplier;
+      const dailyThresholdMinutes = parseFloat(dailyRates[0].threshold_hours) * 60;
+      if (shift.workedMinutes > dailyThresholdMinutes) {
+        const otMinutes = shift.workedMinutes - dailyThresholdMinutes;
+        const dailySecondThresholdMinutes = dailyRates[1]
+          ? (parseFloat(dailyRates[1].threshold_hours) - parseFloat(dailyRates[0].threshold_hours)) * 60
+          : otMinutes;
+        const firstDailyBand = Math.min(otMinutes, dailySecondThresholdMinutes);
+        const secondDailyBand = Math.max(0, otMinutes - firstDailyBand);
+        const m1 = parseFloat(dailyRates[0].multiplier);
+        const m2 = dailyRates[1] ? parseFloat(dailyRates[1].multiplier) : 2.0;
+        // Premium only (base already counted in ordinaryPay)
+        const pay = (firstDailyBand / 60) * baseHourlyRate * (m1 - 1.0)
+                  + (secondDailyBand / 60) * baseHourlyRate * (m2 - 1.0);
         totalOvertimePay += pay;
-        totalOvertimeMinutes += overtimeMinutes;
-        breakdown.push({ type: 'daily', date: shift.date, overtimeMinutes, multiplier, pay });
+        totalOvertimeMinutes += otMinutes;
+        breakdown.push({ type: 'daily', date: shift.date, overtimeMinutes: otMinutes, pay });
       }
     }
 
-    // Weekly overtime
-    const totalWeekMinutes = weekShifts.reduce((s, sh) => s + sh.workedMinutes, 0);
-    if (totalWeekMinutes > 38 * 60) {
-      const overtimeMinutes = totalWeekMinutes - 38 * 60;
-      const firstBand = Math.min(overtimeMinutes, 2 * 60);
-      const secondBand = Math.max(0, overtimeMinutes - 2 * 60);
-      const pay = (firstBand / 60) * baseHourlyRate * 1.5 + (secondBand / 60) * baseHourlyRate * 2.0;
+    // Period (weekly/fortnightly) overtime
+    if (!weeklyRates.length) continue;
+    const totalPeriodMinutes = shifts.reduce((s, sh) => s + sh.workedMinutes, 0);
+    if (totalPeriodMinutes > periodThresholdMinutes) {
+      const overtimeMinutes = totalPeriodMinutes - periodThresholdMinutes;
+      const firstBandCap = secondBandThresholdMinutes - periodThresholdMinutes;
+      const firstBand = Math.min(overtimeMinutes, firstBandCap);
+      const secondBand = Math.max(0, overtimeMinutes - firstBand);
+      // Premium only
+      const pay = (firstBand / 60) * baseHourlyRate * (firstBandMultiplier - 1.0)
+                + (secondBand / 60) * baseHourlyRate * (secondBandMultiplier - 1.0);
       totalOvertimePay += pay;
       totalOvertimeMinutes += overtimeMinutes;
-      breakdown.push({ type: 'weekly', weekKey, overtimeMinutes, firstBandMinutes: firstBand, secondBandMinutes: secondBand, pay });
+
+      // Meal allowance: clause 20.3 — one meal per 4 hours of overtime (or part thereof)
+      // First meal triggers at start of OT; one more for each subsequent 4-hour block
+      const mealAllowancesOwed = Math.ceil(overtimeMinutes / (4 * 60));
+      totalMealAllowancesOwed += mealAllowancesOwed;
+
+      breakdown.push({
+        type: period === 'fortnightly' ? 'fortnightly' : 'weekly',
+        key,
+        overtimeMinutes,
+        firstBandMinutes: firstBand,
+        secondBandMinutes: secondBand,
+        pay,
+        mealAllowancesOwed,
+      });
     }
   }
 
@@ -239,6 +293,7 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
     overtimePay: Math.round(totalOvertimePay * 100) / 100,
     overtimeMinutes: totalOvertimeMinutes,
     overtimeBreakdown: breakdown,
+    mealAllowancesOwed: totalMealAllowancesOwed,
   };
 }
 
@@ -269,6 +324,7 @@ async function calculateEntitlements(input, db) {
     age,
     shifts,
     publicHolidays = [],
+    period = 'weekly',
   } = input;
 
   const juniorMultiplier = getJuniorMultiplier(age);
@@ -406,10 +462,26 @@ async function calculateEntitlements(input, db) {
     });
   }
 
-  const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates);
-  const grandTotal = totalOrdinaryPay + totalPenaltyPay + totalMissedBreakPay + overtimeCalc.overtimePay;
+  const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period);
 
-  // Super: applies to OTE only (ordinary + penalty, not overtime or missed break)
+  // Meal allowance for overtime — FT/PT only, auto-calculated from OT duration
+  // Clause 20.3: one meal allowance per 4 hours of overtime (or part thereof)
+  let mealAllowancePay = 0;
+  let mealAllowanceRate = 0;
+  if (overtimeCalc.mealAllowancesOwed > 0 && employmentType !== 'casual') {
+    const mealResult = await db.query(
+      `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal' ORDER BY effective_date DESC LIMIT 1`,
+      [AWARD_CODE]
+    );
+    if (mealResult.rows.length) {
+      mealAllowanceRate = parseFloat(mealResult.rows[0].amount);
+      mealAllowancePay = Math.round(mealAllowanceRate * overtimeCalc.mealAllowancesOwed * 100) / 100;
+    }
+  }
+
+  const grandTotal = totalOrdinaryPay + totalPenaltyPay + totalMissedBreakPay + overtimeCalc.overtimePay + mealAllowancePay;
+
+  // Super: applies to OTE only (ordinary + penalty, not overtime, missed break, or expense allowances)
   const superEligiblePay = totalOrdinaryPay + totalPenaltyPay;
   const superAmount = Math.round(superEligiblePay * SGC_RATE * 100) / 100;
 
@@ -420,6 +492,7 @@ async function calculateEntitlements(input, db) {
     isJuniorRate: juniorMultiplier < 1.0,
     employmentType,
     effectiveDate,
+    period,
     shifts: processedShifts,
     summary: {
       totalWorkedHours: Math.round(processedShifts.reduce((s, sh) => s + sh.workedMinutes, 0) / 60 * 100) / 100,
@@ -428,6 +501,9 @@ async function calculateEntitlements(input, db) {
       missedBreakPay: Math.round(totalMissedBreakPay * 100) / 100,
       overtimePay: overtimeCalc.overtimePay,
       overtimeMinutes: overtimeCalc.overtimeMinutes,
+      mealAllowancePay,
+      mealAllowancesOwed: overtimeCalc.mealAllowancesOwed,
+      mealAllowanceRate,
       totalPayOwed: Math.round(grandTotal * 100) / 100,
       superEligiblePay: Math.round(superEligiblePay * 100) / 100,
       superAmount,

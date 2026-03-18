@@ -108,7 +108,8 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   <tr><td>Ordinary hours pay</td><td>${formatCurrency(summary.ordinaryPay)}</td><td>Yes</td></tr>
   ${summary.penaltyPay > 0 ? `<tr><td>Penalty rate loading (weekends/public holidays)</td><td>${formatCurrency(summary.penaltyPay)}</td><td>Yes</td></tr>` : ''}
   ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td>${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
-  ${summary.overtimePay > 0 ? `<tr><td>Overtime pay</td><td>${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
+  ${summary.overtimePay > 0 ? `<tr><td>Overtime loading</td><td>${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
+  ${(summary as any).mealAllowancePay > 0 ? `<tr><td>Meal allowance for overtime (${(summary as any).mealAllowancesOwed} × ${formatCurrency((summary as any).mealAllowanceRate)})</td><td>${formatCurrency((summary as any).mealAllowancePay)}</td><td>No (expense allowance)</td></tr>` : ''}
   <tr class="total-row"><td>Total wages owed</td><td>${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>
 </table>
 
@@ -219,8 +220,17 @@ ${hasPaidAmount ? `
           )}
           {summary.overtimePay > 0 && (
             <div className="flex justify-between py-1 border-b border-brand-100">
-              <span className="text-gray-600">Overtime pay</span>
+              <span className="text-gray-600">Overtime loading</span>
               <span className="font-medium">{formatCurrency(summary.overtimePay)}</span>
+            </div>
+          )}
+          {(summary as any).mealAllowancePay > 0 && (
+            <div className="flex justify-between py-1 border-b border-brand-100">
+              <span className="text-gray-600">
+                Meal allowance (overtime)
+                {(summary as any).mealAllowancesOwed > 1 && ` ×${(summary as any).mealAllowancesOwed}`}
+              </span>
+              <span className="font-medium">{formatCurrency((summary as any).mealAllowancePay)}</span>
             </div>
           )}
           <div className="flex justify-between py-1 font-bold text-base">
@@ -286,10 +296,19 @@ ${hasPaidAmount ? `
               </div>
               {summary.overtimePay > 0 && (
                 <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                  <span className="text-gray-600">Overtime pay</span>
+                  <span className="text-gray-600">Overtime loading</span>
                   <span className="flex items-center gap-2">
                     <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
                     <span className="text-gray-500 w-20 text-right">{formatCurrency(summary.overtimePay)}</span>
+                  </span>
+                </div>
+              )}
+              {(summary as any).mealAllowancePay > 0 && (
+                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
+                  <span className="text-gray-600">Meal allowance (overtime)</span>
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
+                    <span className="text-gray-500 w-20 text-right">{formatCurrency((summary as any).mealAllowancePay)}</span>
                   </span>
                 </div>
               )}

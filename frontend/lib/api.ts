@@ -38,6 +38,7 @@ export const api = {
     shifts: unknown[];
     publicHolidays?: string[];
     age?: number;
+    period?: string;
   }) =>
     apiFetch('/api/award/calculate', {
       method: 'POST',

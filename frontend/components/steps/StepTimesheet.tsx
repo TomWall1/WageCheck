@@ -156,6 +156,7 @@ export default function StepTimesheet({
         classificationId: classificationResult.classification.id,
         shifts: apiShifts,
         age: age ?? undefined,
+        period,
       }) as CalculationResult;
 
       setResult(res);
@@ -496,8 +497,17 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
           )}
           {summary.overtimePay > 0 && (
             <div className="flex justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-600">Overtime</span>
+              <span className="text-gray-600">Overtime loading</span>
               <span className="font-medium text-warning-700">+ {formatCurrency(summary.overtimePay)}</span>
+            </div>
+          )}
+          {(summary as any).mealAllowancePay > 0 && (
+            <div className="flex justify-between py-1 border-b border-gray-100">
+              <span className="text-gray-600">
+                Meal allowance for overtime
+                {(summary as any).mealAllowancesOwed > 1 && ` ×${(summary as any).mealAllowancesOwed}`}
+              </span>
+              <span className="font-medium text-warning-700">+ {formatCurrency((summary as any).mealAllowancePay)}</span>
             </div>
           )}
           <div className="flex justify-between pt-1 font-bold text-base">

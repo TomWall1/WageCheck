@@ -151,7 +151,7 @@ router.post('/classify', async (req, res) => {
 // Body: { employmentType, classificationId, shifts, publicHolidays? }
 router.post('/calculate', async (req, res) => {
   try {
-    const { employmentType, classificationId, shifts, publicHolidays, age } = req.body;
+    const { employmentType, classificationId, shifts, publicHolidays, age, period } = req.body;
 
     if (!employmentType || !classificationId || !Array.isArray(shifts)) {
       return res.status(400).json({ error: 'employmentType, classificationId, and shifts are required' });
@@ -176,8 +176,9 @@ router.post('/calculate', async (req, res) => {
       }
     }
 
+    const validPeriod = ['weekly', 'fortnightly'].includes(period) ? period : 'weekly';
     const result = await calculateEntitlements(
-      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null },
+      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null, period: validPeriod },
       pool
     );
 
