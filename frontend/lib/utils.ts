@@ -39,9 +39,10 @@ export function getDayLabel(dayType: string): string {
 export function getMultiplierLabel(multiplier: number): string {
   if (multiplier === 1.0) return 'Ordinary rate';
   if (multiplier === 1.15) return 'Early morning (×1.15)';
+  if (multiplier === 1.2) return '20% penalty (×1.2)';
   if (multiplier === 1.25) return '25% penalty (×1.25)';
+  if (multiplier === 1.4) return '40% penalty (×1.4)';
   if (multiplier === 1.5) return 'Time and a half (×1.5)';
-  if (multiplier === 1.75) return '75% penalty (×1.75)';
   if (multiplier === 2.0) return 'Double time (×2.0)';
   if (multiplier === 2.25) return 'Double time and a quarter (×2.25)';
   return `×${multiplier}`;

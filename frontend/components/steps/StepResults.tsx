@@ -224,9 +224,15 @@ ${hasPaidAmount ? `
             </div>
           )}
           <div className="flex justify-between py-1 font-bold text-base">
-            <span>Total</span>
+            <span>Total wages owed</span>
             <span>{formatCurrency(summary.totalPayOwed)}</span>
           </div>
+          {summary.superAmount !== undefined && (
+            <div className="flex justify-between py-1 border-t border-brand-200 pt-2 mt-1">
+              <span className="text-gray-600 text-sm">Super owed (on top of wages)</span>
+              <span className="font-semibold text-brand-700">{formatCurrency(summary.superAmount)}</span>
+            </div>
+          )}
         </div>
       </div>
 
