@@ -15,6 +15,7 @@ const SGC_RATE = 0.12; // 12%
 // Applied to the base rate. Casual loading applies on top.
 // MA000009 / MA000003: under 16=40%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
 // MA000119:            under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100%
+// MA000004:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 
@@ -26,7 +27,7 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     return JUNIOR_RATES_MA000119[age] || 1.0;
   }
   if (age >= 21) return 1.0;
-  if (age < 16) return 0.40;
+  if (age < 16) return awardCode === 'MA000004' ? 0.45 : 0.40;
   return JUNIOR_RATES_DEFAULT[age] || 1.0;
 }
 
@@ -311,15 +312,15 @@ function getDayLabel(dayType) {
   return { weekday: 'Weekday', saturday: 'Saturday', sunday: 'Sunday', public_holiday: 'Public holiday' }[dayType] || dayType;
 }
 
-function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty) {
+function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType) {
   if (missedBreakPenalty) return `Double time (×2.0) — meal break not taken after 5 hours`;
   if (addition_per_hour === 4.22) return `Night work loading (midnight–7am) +$4.22/hr`;
   if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
   if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
   if (multiplier === 1.15) return 'Late night loading (midnight–6am, ×1.15)';
-  if (multiplier === 1.2) return 'Saturday penalty (×1.2)';
-  if (multiplier === 1.25) return 'Saturday penalty (×1.25)';
+  if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.20)' : 'Saturday penalty (×1.2)';
+  if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
   if (multiplier === 1.5) return 'Sunday / time and a half (×1.5)';
   if (multiplier === 2.0) return 'Double time (×2.0)';
@@ -470,7 +471,7 @@ async function calculateEntitlements(input, db) {
         multiplier: seg.multiplier,
         addition_per_hour,
         effectiveRate: effectiveHourlyRate,
-        rateLabel: getRateLabel(seg.multiplier, addition_per_hour, seg.missedBreakPenalty),
+        rateLabel: getRateLabel(seg.multiplier, addition_per_hour, seg.missedBreakPenalty, seg.dayType),
         missedBreakPenalty: !!seg.missedBreakPenalty,
         minutes: seg.minutes,
         hours: Math.round(hours * 100) / 100,

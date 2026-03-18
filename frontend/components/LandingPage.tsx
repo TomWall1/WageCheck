@@ -28,6 +28,14 @@ const AWARDS = [
     examples: 'Waitstaff, cooks, kitchen hands, bar attendants, storepersons, cleaners',
     badge: 'MA000119',
   },
+  {
+    code: 'MA000004' as AwardCode,
+    name: 'General Retail Industry Award 2020',
+    shortName: 'Retail Award',
+    description: 'Covers retail businesses selling goods to the public, including supermarkets, specialty stores, and department stores.',
+    examples: 'Sales assistants, cashiers, department supervisors, store managers, key holders',
+    badge: 'MA000004',
+  },
 ];
 
 interface Props {

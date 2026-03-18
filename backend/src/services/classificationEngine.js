@@ -269,6 +269,22 @@ const CLASSIFICATION_RULES_MA000119 = [
 ];
 
 /**
+ * MA000004 — General Retail Industry Award 2020
+ * Classifications: Levels 1–8, all stream='retail'.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000004 = [
+  { conditions: { retail_experience: 'new' }, level: 1, stream: 'retail', rationale: 'New retail employee (less than 3 months experience) — entry level' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'cashier_sales' }, level: 2, stream: 'retail', rationale: 'Experienced sales assistant or cashier' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'specialist' }, level: 3, stream: 'retail', rationale: 'Specialist product adviser' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'senior_specialist' }, level: 4, stream: 'retail', rationale: 'Senior specialist (3+ years or trade qualified)' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'key_holder' }, level: 5, stream: 'retail', rationale: 'Key holder or leading hand' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'supervisor' }, level: 6, stream: 'retail', rationale: 'Department supervisor with ordering/rostering responsibilities' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'dept_manager' }, level: 7, stream: 'retail', rationale: 'Department manager' },
+  { conditions: { retail_experience: 'experienced', retail_role: 'senior_manager' }, level: 8, stream: 'retail', rationale: 'Senior manager with multi-department or store-wide responsibility' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -306,6 +322,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'food_beverage', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000004') {
+    for (const rule of CLASSIFICATION_RULES_MA000004) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'retail', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

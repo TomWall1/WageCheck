@@ -24,6 +24,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
   const isFullTime = employmentType === 'full_time';
   const isFF = awardCode === 'MA000003';
   const isRest = awardCode === 'MA000119';
+  const isRetail = awardCode === 'MA000004';
   const classLevel = classificationResult?.level ?? null;
 
   return (
@@ -74,11 +75,11 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
         {isCasual && (
           <div className="text-sm space-y-2">
             <p className="text-gray-700">
-              <strong>Casuals must be paid for at least 2 hours per shift</strong> — even if you're sent home early.
+              <strong>Casuals must be paid for at least {isRetail ? '3' : '2'} hours per shift</strong> — even if you're sent home early.
             </p>
             <p className="text-gray-600">
-              If you show up for a shift and your employer sends you home after 20 minutes, you are still owed
-              2 full hours at your casual rate (including applicable penalty rates).
+              If you show up for a shift and your employer sends you home early, you are still owed{' '}
+              {isRetail ? '3' : '2'} full hours at your casual rate (including applicable penalty rates).
             </p>
           </div>
         )}
@@ -134,6 +135,12 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
                   { label: 'Weekday evening (10pm–midnight)', rate: '+$2.81/hr loading' },
                   { label: 'Weekday midnight–6am', rate: '+$4.22/hr loading' },
                   { label: 'Saturday', rate: '+25% penalty (×1.25)' },
+                  { label: 'Sunday', rate: '+50% penalty (×1.50)' },
+                  { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
+                ] : isRetail ? [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Weekday evening (after 6pm)', rate: isCasual ? '+20% penalty (×1.20)' : '+25% penalty (×1.25)' },
+                  { label: 'Saturday', rate: isCasual ? '+20% penalty (×1.20)' : '+25% penalty (×1.25)' },
                   { label: 'Sunday', rate: '+50% penalty (×1.50)' },
                   { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
                 ] : [

@@ -3,7 +3,7 @@ services:
     name: wagecheck-api
     env: node
     plan: free
-    buildCommand: npm install && node scripts/migrate.js && node scripts/seed.js && node scripts/seed_ma000003.js && node scripts/seed_ma000119.js
+    buildCommand: npm install && node scripts/migrate.js && node scripts/seed.js && node scripts/seed_ma000003.js && node scripts/seed_ma000119.js && node scripts/seed_ma000004.js
     startCommand: node src/index.js
     envVars:
       - key: NODE_ENV

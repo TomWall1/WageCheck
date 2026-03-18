@@ -77,18 +77,21 @@ const STREAM_LABELS: Record<string, string> = {
   solo: 'Working alone',
   responsible: 'Responsible for 2+ employees',
   introductory: 'Introductory',
+  retail: 'Retail',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
 const STREAM_ORDER_MA000003 = ['general', 'solo', 'responsible'];
 const STREAM_ORDER_MA000119 = ['introductory', 'food_beverage', 'kitchen', 'general'];
+const STREAM_ORDER_MA000004 = ['retail'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
   const isRest = awardCode === 'MA000119';
-  const isParentGated = isFF || isRest;
-  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : STREAM_ORDER_MA000009;
-  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : 'Hospitality Award';
+  const isRetail = awardCode === 'MA000004';
+  const isParentGated = isFF || isRest || isRetail;
+  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : isRetail ? STREAM_ORDER_MA000004 : STREAM_ORDER_MA000009;
+  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : isRetail ? 'Retail Award' : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
 
@@ -233,10 +236,11 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   function renderRateBox(result: ClassificationResult) {
     if (!result.classification?.base_rate) return null;
     const JUNIOR_DEFAULT: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    const JUNIOR_MA000004: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000119: Record<number, number> = { 17: 0.60, 18: 0.70, 19: 0.85 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : JUNIOR_DEFAULT;
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : JUNIOR_DEFAULT;
     const juniorCutoff = isRest ? 20 : 21;
-    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : 0.40)) : 1.0;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isRetail ? 0.45 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     const effectiveDate = result.classification.rate_effective_date
       ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -339,7 +343,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
               ? ' Levels run from Grade 1 (entry level) to Grade 3 (experienced/supervising).'
               : isRest
                 ? ' Levels run from Introductory (new starters) to Level 6 (specialist tradespeople).'
-                : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                : isRetail
+                  ? ' Levels run from Level 1 (new starters) to Level 8 (senior management).'
+                  : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -351,7 +357,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
               ? ' It might say something like "Grade 1" or "Fast Food Employee Grade 2".'
               : isRest
                 ? ' It might say something like "Introductory" or "Food and Beverage Attendant Grade 3".'
-                : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                : isRetail
+                  ? ' It might say something like "Retail Employee Level 2" or "Level 3".'
+                  : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button
