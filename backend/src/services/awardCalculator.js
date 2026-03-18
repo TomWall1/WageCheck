@@ -5,6 +5,12 @@
 
 const AWARD_CODE = 'MA000009';
 
+// ── Superannuation ────────────────────────────────────────────────────────
+// SGC rate from 1 July 2025. Super applies to OTE (ordinary time earnings).
+// OTE includes: ordinary hours pay + penalty rates on ordinary hours.
+// OTE excludes: overtime, missed-break double time, expense allowances.
+const SGC_RATE = 0.115; // 11.5%
+
 // ── Junior rates — Schedule E of the Award ────────────────────────────────
 // Applied to the base rate. Casual loading applies on top.
 const JUNIOR_RATE_MULTIPLIERS = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
@@ -387,6 +393,10 @@ async function calculateEntitlements(input, db) {
   const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates);
   const grandTotal = totalOrdinaryPay + totalPenaltyPay + totalMissedBreakPay + overtimeCalc.overtimePay;
 
+  // Super: applies to OTE only (ordinary + penalty, not overtime or missed break)
+  const superEligiblePay = totalOrdinaryPay + totalPenaltyPay;
+  const superAmount = Math.round(superEligiblePay * SGC_RATE * 100) / 100;
+
   return {
     baseHourlyRate,
     rawBaseRate,
@@ -403,6 +413,9 @@ async function calculateEntitlements(input, db) {
       overtimePay: overtimeCalc.overtimePay,
       overtimeMinutes: overtimeCalc.overtimeMinutes,
       totalPayOwed: Math.round(grandTotal * 100) / 100,
+      superEligiblePay: Math.round(superEligiblePay * 100) / 100,
+      superAmount,
+      sgcRate: SGC_RATE,
       overtimeBreakdown: overtimeCalc.overtimeBreakdown,
       allBreakViolations: processedShifts.flatMap(s => s.breakViolations.map(v => ({ ...v, date: s.date }))),
     },

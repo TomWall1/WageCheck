@@ -57,9 +57,13 @@ export interface CalculationResult {
     totalWorkedHours: number;
     ordinaryPay: number;
     penaltyPay: number;
+    missedBreakPay: number;
     overtimePay: number;
     overtimeMinutes: number;
     totalPayOwed: number;
+    superEligiblePay: number;
+    superAmount: number;
+    sgcRate: number;
     overtimeBreakdown: unknown[];
     allBreakViolations: Array<{
       type: string;

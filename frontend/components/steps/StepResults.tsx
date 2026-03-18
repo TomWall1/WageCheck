@@ -125,6 +125,100 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
         </div>
       )}
 
+      {/* Superannuation */}
+      {summary.superAmount !== undefined && (
+        <div className="card space-y-4">
+          <div>
+            <h3 className="font-bold text-gray-900">Superannuation estimate</h3>
+            <p className="text-sm text-gray-500 mt-1">
+              Super is paid by your employer on top of your wages — it goes directly to your super fund.
+              Current SGC rate: {(summary.sgcRate * 100).toFixed(1)}% (from 1 July 2025).
+            </p>
+          </div>
+
+          <div className="space-y-1 text-sm">
+            <p className="font-semibold text-gray-700 text-xs uppercase tracking-wide">Shift pay — super eligibility</p>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
+                <span className="text-gray-600">Ordinary hours + penalty rates</span>
+                <span className="flex items-center gap-2">
+                  <span className="text-xs bg-success-100 text-success-700 px-2 py-0.5 rounded-full font-medium">super ✓</span>
+                  <span className="font-medium w-20 text-right">{formatCurrency(summary.superEligiblePay)}</span>
+                </span>
+              </div>
+              {summary.overtimePay > 0 && (
+                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
+                  <span className="text-gray-600">Overtime pay</span>
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
+                    <span className="text-gray-500 w-20 text-right">{formatCurrency(summary.overtimePay)}</span>
+                  </span>
+                </div>
+              )}
+              {summary.missedBreakPay > 0 && (
+                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
+                  <span className="text-gray-600">Missed break double time</span>
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
+                    <span className="text-gray-500 w-20 text-right">{formatCurrency(summary.missedBreakPay)}</span>
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {triggeredAllowances.length > 0 && (
+              <>
+                <p className="font-semibold text-gray-700 text-xs uppercase tracking-wide pt-3">Allowances — super eligibility</p>
+                <div className="space-y-1">
+                  {triggeredAllowances.map(a => {
+                    const info = allowanceInfoByType[a.type];
+                    if (!info) return null;
+                    // Expense reimbursements: no super. Shift/responsibility loadings: super applies.
+                    const superApplies = a.type === 'split_shift' || a.type === 'first_aid';
+                    return (
+                      <div key={a.type} className="flex justify-between items-center py-1.5 border-b border-gray-100">
+                        <span className="text-gray-600">{info.name}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          superApplies ? 'bg-success-100 text-success-700' : 'bg-gray-100 text-gray-500'
+                        }`}>
+                          {superApplies ? 'super ✓' : 'no super'}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="bg-brand-50 rounded-lg p-4 space-y-1">
+            <div className="flex justify-between items-baseline">
+              <span className="font-semibold text-gray-900">Estimated super owed</span>
+              <span className="text-2xl font-bold text-brand-700">{formatCurrency(summary.superAmount)}</span>
+            </div>
+            <p className="text-xs text-gray-500">
+              {formatCurrency(summary.superEligiblePay)} ordinary/penalty pay × {(summary.sgcRate * 100).toFixed(1)}% SGC
+            </p>
+          </div>
+
+          <div className="info-box text-xs space-y-1.5">
+            <p>
+              <strong>Why isn't super paid on overtime?</strong> The ATO defines super-eligible earnings as
+              "ordinary time earnings" (OTE). Overtime is excluded from OTE, so no super is payable on it.
+              Penalty rates on ordinary hours (weekends, public holidays) are OTE and do attract super.
+            </p>
+            <p>
+              <strong>Expense allowances</strong> (meal, vehicle, laundry) are not OTE — they reimburse your actual costs.
+              Shift allowances (split shift, first aid) are OTE and attract super.
+            </p>
+            <p>
+              If your employer isn't paying your super, contact the ATO on <strong>13 28 65</strong> or check your super fund balance.
+              Unpaid super is recoverable for up to 4 years.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Break violations */}
       {summary.allBreakViolations.length > 0 && (
         <div className="warning-box space-y-2">
@@ -301,7 +395,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
           situation, any agreements with your employer, and the accuracy of the information you entered.
         </p>
         <p>
-          Pay rates shown are effective <strong>1 July 2024</strong>. Rates are updated each July —
+          Pay rates shown are effective <strong>1 July 2025</strong>. Rates are updated each July —
           check <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">fairwork.gov.au</a> for the latest.
         </p>
       </div>

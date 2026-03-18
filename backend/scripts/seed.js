@@ -355,27 +355,30 @@ async function seed() {
     // ── Pay rates ─────────────────────────────────────────────────────────────
     // Casual loading: 25% on top of base rate (combined into base_hourly for casual)
 
+    // Rates sourced from Fair Work Ombudsman Pay Guide, MA000009, published 15 Jan 2026.
+    // 2025 rates (effective 1 July 2025) verified against official pay guide.
+    // 2024 rates back-calculated from 2025 ÷ 1.035 (3.5% AWR) as best estimate.
     const ratesByYear = [
       {
         effectiveDate: EFFECTIVE_DATE,
-        label: '2024 (3.75% AWR increase)',
+        label: '2024 (3.75% AWR increase — estimated from 2025 official rates)',
         rates: {
-          '1_general': 23.23, '1_food_beverage': 23.23, '1_kitchen': 23.23, '1_front_office': 23.23,
-          '2_general': 24.10, '2_food_beverage': 24.10, '2_kitchen': 24.10, '2_front_office': 24.10,
-          '3_general': 25.41, '3_food_beverage': 25.41, '3_kitchen': 25.41, '3_front_office': 25.41,
-          '4_general': 27.46, '4_food_beverage': 27.46, '4_kitchen': 27.46, '4_front_office': 27.46,
-          '5_general': 29.60, '5_kitchen': 29.60,
+          '1_general': 24.11, '1_food_beverage': 24.11, '1_kitchen': 24.11, '1_front_office': 24.11,
+          '2_general': 24.98, '2_food_beverage': 24.98, '2_kitchen': 24.98, '2_front_office': 24.98,
+          '3_general': 25.80, '3_food_beverage': 25.80, '3_kitchen': 25.80, '3_front_office': 25.80,
+          '4_general': 27.17, '4_food_beverage': 27.17, '4_kitchen': 27.17, '4_front_office': 27.17,
+          '5_general': 28.87, '5_kitchen': 28.87,
         },
       },
       {
         effectiveDate: EFFECTIVE_DATE_2025,
-        label: '2025 (3.5% AWR increase — verify at fairwork.gov.au)',
+        label: '2025 (3.5% AWR increase — verified at fairwork.gov.au, published 15 Jan 2026)',
         rates: {
-          '1_general': 24.04, '1_food_beverage': 24.04, '1_kitchen': 24.04, '1_front_office': 24.04,
-          '2_general': 24.94, '2_food_beverage': 24.94, '2_kitchen': 24.94, '2_front_office': 24.94,
-          '3_general': 26.30, '3_food_beverage': 26.30, '3_kitchen': 26.30, '3_front_office': 26.30,
-          '4_general': 28.42, '4_food_beverage': 28.42, '4_kitchen': 28.42, '4_front_office': 28.42,
-          '5_general': 30.64, '5_kitchen': 30.64,
+          '1_general': 24.95, '1_food_beverage': 24.95, '1_kitchen': 24.95, '1_front_office': 24.95,
+          '2_general': 25.85, '2_food_beverage': 25.85, '2_kitchen': 25.85, '2_front_office': 25.85,
+          '3_general': 26.70, '3_food_beverage': 26.70, '3_kitchen': 26.70, '3_front_office': 26.70,
+          '4_general': 28.12, '4_food_beverage': 28.12, '4_kitchen': 28.12, '4_front_office': 28.12,
+          '5_general': 29.88, '5_kitchen': 29.88,
         },
       },
     ];
@@ -398,20 +401,23 @@ async function seed() {
           await client.query(`
             INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
             VALUES ($1, $2, $3, 'base_hourly', $4, $5)
-            ON CONFLICT DO NOTHING
+            ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
+            DO UPDATE SET rate_amount = EXCLUDED.rate_amount
           `, [AWARD_CODE, cls.id, empType, baseRate, effectiveDate]);
         }
 
         await client.query(`
           INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
           VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
-          ON CONFLICT DO NOTHING
+          ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
+          DO UPDATE SET rate_amount = EXCLUDED.rate_amount
         `, [AWARD_CODE, cls.id, casualRate, effectiveDate]);
 
         await client.query(`
           INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
           VALUES ($1, $2, 'casual', 'casual_loading', 0.25, $3)
-          ON CONFLICT DO NOTHING
+          ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
+          DO UPDATE SET rate_amount = EXCLUDED.rate_amount
         `, [AWARD_CODE, cls.id, effectiveDate]);
       }
     }
