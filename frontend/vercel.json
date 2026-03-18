@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": "@wagecheck-api-url"
+    "NEXT_PUBLIC_API_URL": "echo {"framework": "nextjs"} > C:\Documents\WageCheck\frontend\vercel.json"
   }
 }
