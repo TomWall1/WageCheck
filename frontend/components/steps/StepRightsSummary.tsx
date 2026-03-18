@@ -165,7 +165,7 @@ export default function StepRightsSummary({ employmentType, classificationResult
         </div>
       </section>
 
-      {/* Leave (permanent only) */}
+      {/* Leave entitlements */}
       {(isFullTime || isPartTime) && (
         <section className="card space-y-3">
           <h3 className="font-bold text-lg text-gray-900">Leave entitlements</h3>
@@ -181,6 +181,46 @@ export default function StepRightsSummary({ employmentType, classificationResult
             <div className="flex gap-3">
               <span className="shrink-0 font-bold text-gray-900 w-24">Public holidays</span>
               <p>You must be paid for public holidays even if you don't work them. If you are required to work, you're paid at double time and a quarter.</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Casual — no leave, but casual loading */}
+      {isCasual && (
+        <section className="card space-y-3">
+          <h3 className="font-bold text-lg text-gray-900">Leave entitlements</h3>
+          <div className="text-sm space-y-3">
+            <div className="warning-box">
+              <p className="font-semibold text-gray-900">Casual employees are not entitled to paid leave.</p>
+              <p className="text-gray-700 mt-1">
+                You do not accrue annual leave, sick leave, or paid public holidays. If you don't work a
+                public holiday, you are not paid for it.
+              </p>
+            </div>
+            <div className="bg-brand-50 border border-brand-200 rounded-lg p-3 space-y-2">
+              <p className="font-semibold text-gray-900">Instead, you receive a 25% casual loading.</p>
+              <p className="text-gray-700">
+                The 25% casual loading on top of the base hourly rate is designed to compensate you for
+                the lack of paid leave, sick leave, and other permanent entitlements. It must be paid on
+                every hour you work — including hours that attract penalty rates.
+              </p>
+              <p className="text-gray-700">
+                For example, if the full-time rate is $25.85/hr, your minimum casual rate is
+                $32.31/hr ($25.85 × 1.25).
+              </p>
+            </div>
+            <div className="text-gray-600 space-y-2">
+              <p>
+                <strong>If you work a public holiday</strong>, you are paid at double time (×2.0) of your
+                casual rate — not double time and a quarter like permanent employees.
+              </p>
+              <p>
+                <strong>Conversion to permanent:</strong> If you have worked regular, systematic hours for
+                12 months, you may have the right to request conversion to permanent employment. Your
+                employer must respond in writing and can only refuse on reasonable business grounds.
+                Contact Fair Work for guidance.
+              </p>
             </div>
           </div>
         </section>
