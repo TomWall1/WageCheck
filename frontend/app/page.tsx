@@ -111,6 +111,7 @@ export default function HomePage() {
       {state.step === 4 && (
         <StepAllowances
           employmentType={state.employmentType!}
+          stream={state.classificationResult?.stream ?? null}
           answers={state.allowanceAnswers}
           onAnswersChange={(answers: AllowanceAnswer[]) => updateState({ allowanceAnswers: answers })}
           onNext={nextStep}

@@ -76,6 +76,7 @@ async function migrate() {
         time_band_end   TIME,                  -- NULL = applies all day
         time_band_label VARCHAR(50),           -- e.g. 'midnight_to_7am', 'after_midnight'
         multiplier      NUMERIC(5,4) NOT NULL, -- e.g. 1.25, 1.5, 2.0
+        addition_per_hour NUMERIC(8,4),        -- flat $/hr addition (e.g. 2.81 for evening, 4.22 for night)
         description     TEXT NOT NULL,
         effective_date  DATE NOT NULL,
         created_at      TIMESTAMPTZ DEFAULT NOW()

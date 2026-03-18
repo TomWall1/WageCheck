@@ -8,6 +8,7 @@ import clsx from 'clsx';
 
 interface Props {
   employmentType: EmploymentType;
+  stream: string | null;
   answers: AllowanceAnswer[];
   onAnswersChange: (answers: AllowanceAnswer[]) => void;
   onNext: () => void;
@@ -15,11 +16,12 @@ interface Props {
 }
 
 // Each allowance has a primary question and optional follow-ups.
-// triggered = true only when all follow-up conditions are met.
 interface AllowanceQuestion {
   type: string;
   primary: string;
   primaryHelp?: string;
+  onlyFor?: EmploymentType[];       // if set, question only shown for these employment types
+  onlyForStream?: string[];         // if set, question only shown for these streams
   followUps?: Array<{
     key: string;           // stored as `${type}_${key}`
     question: string;
@@ -31,60 +33,29 @@ interface AllowanceQuestion {
 
 const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
-    type: 'meal',
-    primary: 'Did you work any overtime during this period?',
-    primaryHelp: 'Overtime means hours beyond your ordinary hours — for full-time that\'s beyond 38 hours a week.',
-    followUps: [
-      {
-        key: 'no_notice',
-        question: 'Were you given at least 24 hours\' notice that you\'d need to work overtime?',
-        help: 'If your employer told you the day before or with enough notice, the meal allowance may not apply.',
-        triggeredWhen: 'no', // allowance triggered when answer is 'no' (no notice given)
-      },
-      {
-        key: 'meal_period',
-        question: 'Did a meal time (breakfast, lunch, or dinner) fall during your overtime?',
-        triggeredWhen: 'yes',
-      },
-    ],
-  },
-  {
     type: 'split_shift',
-    primary: 'Was your shift split into two or more separate parts on the same day?',
-    primaryHelp: 'For example, you worked 10am–2pm, went home, then came back for 5pm–9pm.',
+    primary: 'Was your shift split into two or more separate parts on the same day, with a gap of at least 2 hours between them?',
+    primaryHelp: 'For example, you worked 10am–2pm, went home, then came back for 5pm–9pm. Does not apply to casual employees.',
+    onlyFor: ['full_time', 'part_time'],
     followUps: [
       {
-        key: 'gap_over_1hr',
-        question: 'Was the gap between your work periods more than 1 hour?',
+        key: 'long_gap',
+        question: 'Was the gap between your work periods more than 3 hours?',
+        help: 'Gaps of 2–3 hours get $3.53/day. Gaps over 3 hours get $5.34/day.',
         triggeredWhen: 'yes',
       },
     ],
   },
   {
-    type: 'uniform_laundry',
-    primary: 'Does your employer require you to wear a specific uniform or particular clothing for work?',
-    primaryHelp: 'This means your employer tells you what you must wear — not just "wear black" or "look smart".',
-    followUps: [
-      {
-        key: 'employer_provides_cleaning',
-        question: 'Does your employer launder or dry-clean the uniform for you, or pay for you to have it cleaned?',
-        help: 'If your employer provides laundering (or reimburses you), no allowance is owed. If you have to wash it yourself at your own cost, you\'re owed a laundry allowance.',
-        triggeredWhen: 'no', // triggered when employer does NOT provide cleaning
-      },
-    ],
+    type: 'tool',
+    primary: 'Does your employer require you to provide and maintain your own knives or other tools/equipment?',
+    primaryHelp: 'This allowance applies to cooks and apprentice cooks who must supply their own knives or kitchen tools.',
+    onlyForStream: ['kitchen'],
   },
   {
-    type: 'vehicle',
-    primary: 'Did you use your own car, motorbike, or other vehicle for work purposes during this period?',
-    primaryHelp: 'For example, making deliveries or running errands for your employer — not just commuting to work.',
-    followUps: [
-      {
-        key: 'km',
-        question: 'Approximately how many kilometres did you travel for work?',
-        help: 'We\'ll use this to calculate the allowance amount.',
-        triggeredWhen: 'yes', // this is a special numeric follow-up, handled separately
-      },
-    ],
+    type: 'airport_travel',
+    primary: 'Do you work for an airport catering employer?',
+    primaryHelp: 'Airport catering employers provide food, beverages, and related services for airline passengers and crew at an airport.',
   },
   {
     type: 'first_aid',
@@ -98,15 +69,44 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
       },
     ],
   },
+  {
+    type: 'laundry',
+    primary: 'Does your employer require you to wear a specific uniform and do you launder it yourself at your own cost?',
+    primaryHelp: 'If your employer provides laundering or reimburses cleaning costs, no allowance applies. This is for catering employees.',
+  },
+  {
+    type: 'vehicle',
+    primary: 'Did you use your own car or vehicle for work purposes during this period?',
+    primaryHelp: 'Note: The vehicle allowance under this award applies specifically to managerial staff in hotels. If you are not a hotel manager, check your contract or enterprise agreement.',
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
 ];
 
 type FollowUpAnswers = Record<string, string>;
 
-export default function StepAllowances({ employmentType, answers, onAnswersChange, onNext, onBack }: Props) {
+export default function StepAllowances({ employmentType, stream, answers, onAnswersChange, onNext, onBack }: Props) {
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  // Primary yes/no answers
-  const [primaryAnswers, setPrimaryAnswers] = useState<Record<string, boolean | null>>({});
+
+  // Filter questions by employment type and stream
+  const visibleQuestions = ALLOWANCE_QUESTIONS.filter(q => {
+    if (q.onlyFor && !q.onlyFor.includes(employmentType)) return false;
+    if (q.onlyForStream && stream && !q.onlyForStream.includes(stream)) return false;
+    // If onlyForStream set but stream is null, hide the question (can't confirm stream)
+    if (q.onlyForStream && !stream) return false;
+    return true;
+  });
+
+  // Primary yes/no answers — default all to false (No) using visibleQuestions
+  const [primaryAnswers, setPrimaryAnswers] = useState<Record<string, boolean | null>>(
+    () => Object.fromEntries(visibleQuestions.map(q => [q.type, false]))
+  );
   // Follow-up answers
   const [followUpAnswers, setFollowUpAnswers] = useState<FollowUpAnswers>({});
   // Vehicle km
@@ -122,7 +122,7 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
   useEffect(() => {
     const result: AllowanceAnswer[] = [];
 
-    for (const q of ALLOWANCE_QUESTIONS) {
+    for (const q of visibleQuestions) {
       const primary = primaryAnswers[q.type];
       if (primary === null || primary === undefined) continue;
 
@@ -134,7 +134,14 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
 
       // Primary is 'yes' — check follow-ups
       if (!q.followUps || q.followUps.length === 0) {
-        result.push({ type: q.type, triggered: true });
+        // No follow-ups: allowance is triggered (airport_travel, laundry)
+        // For laundry, emit employment-type-specific type
+        if (q.type === 'laundry') {
+          const laundryType = employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
+          result.push({ type: laundryType, triggered: true });
+        } else {
+          result.push({ type: q.type, triggered: true });
+        }
         continue;
       }
 
@@ -145,7 +152,34 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
         continue;
       }
 
-      // Check all follow-ups are answered and conditions met
+      // split_shift is special — two tiers depending on long_gap follow-up
+      if (q.type === 'split_shift') {
+        const fuKey = `split_shift_long_gap`;
+        const fuAnswer = followUpAnswers[fuKey];
+        if (!fuAnswer) continue; // not yet answered
+        if (fuAnswer === 'yes') {
+          result.push({ type: 'split_shift_long', triggered: true });
+        } else {
+          result.push({ type: 'split_shift_short', triggered: true });
+        }
+        continue;
+      }
+
+      // first_aid is special — type depends on employment type
+      if (q.type === 'first_aid') {
+        const fuKey = `first_aid_appointed`;
+        const fuAnswer = followUpAnswers[fuKey];
+        if (!fuAnswer) continue;
+        if (fuAnswer === 'yes') {
+          const firstAidType = employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual';
+          result.push({ type: firstAidType, triggered: true });
+        } else {
+          result.push({ type: 'first_aid', triggered: false });
+        }
+        continue;
+      }
+
+      // Generic follow-up logic
       let allAnswered = true;
       let triggered = true;
 
@@ -153,7 +187,6 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
         const fuKey = `${q.type}_${fu.key}`;
         const fuAnswer = followUpAnswers[fuKey];
         if (!fuAnswer) { allAnswered = false; break; }
-        // Check if the follow-up condition is met
         if (fuAnswer !== fu.triggeredWhen) triggered = false;
       }
 
@@ -179,9 +212,6 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
     setFollowUpAnswers(prev => ({ ...prev, [`${type}_${key}`]: val }));
   }
 
-  const allowanceInfoByType = Object.fromEntries(
-    allowanceInfo.map(a => [`${a.allowance_type}_${a.effective_date?.substring(0, 4)}`, a])
-  );
   // Get latest rate for each type
   const latestAllowance = (type: string): AllowanceInfo | undefined => {
     const matches = allowanceInfo.filter(a => a.allowance_type === type).sort(
@@ -190,8 +220,24 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
     return matches[0];
   };
 
+  // For display in the result box — map question type to the effective DB allowance_type
+  function getEffectiveAllowanceType(qType: string): string {
+    if (qType === 'laundry') {
+      return employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
+    }
+    if (qType === 'first_aid') {
+      return employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual';
+    }
+    if (qType === 'split_shift') {
+      const fuAnswer = followUpAnswers['split_shift_long_gap'];
+      return fuAnswer === 'yes' ? 'split_shift_long' : 'split_shift_short';
+    }
+    return qType;
+  }
+
   const triggeredAllowances = answers.filter(a => a.triggered);
-  const allQuestionsAnswered = ALLOWANCE_QUESTIONS.every(q => {
+
+  const allQuestionsAnswered = visibleQuestions.every(q => {
     const primary = primaryAnswers[q.type];
     if (primary === null || primary === undefined) return false;
     if (!primary) return true; // 'no' = done
@@ -213,9 +259,10 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
       </div>
 
       <div className="space-y-4">
-        {ALLOWANCE_QUESTIONS.map(q => {
+        {visibleQuestions.map(q => {
           const primary = primaryAnswers[q.type];
-          const info = latestAllowance(q.type);
+          const effectiveType = getEffectiveAllowanceType(q.type);
+          const info = latestAllowance(effectiveType);
 
           return (
             <div key={q.type} className="card space-y-4">
@@ -298,7 +345,16 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
 
               {/* Result for this allowance */}
               {(() => {
-                const thisAnswer = answers.find(a => a.type === q.type);
+                // Find the answer that corresponds to this question (may have remapped type)
+                const thisAnswer = answers.find(a =>
+                  a.type === q.type ||
+                  a.type === 'split_shift_short' && q.type === 'split_shift' ||
+                  a.type === 'split_shift_long' && q.type === 'split_shift' ||
+                  a.type === 'first_aid_ft' && q.type === 'first_aid' ||
+                  a.type === 'first_aid_ptcasual' && q.type === 'first_aid' ||
+                  a.type === 'laundry_ft' && q.type === 'laundry' ||
+                  a.type === 'laundry_ptcasual' && q.type === 'laundry'
+                );
                 if (!thisAnswer) return null;
 
                 if (thisAnswer.triggered && info) {
@@ -308,7 +364,7 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
                       <p className="text-gray-700">{info.description}</p>
                       {info.amount && q.type !== 'vehicle' && (
                         <p className="font-semibold text-success-700">
-                          Rate: {formatCurrency(info.amount)} {info.per_unit?.replace('_', ' ')}
+                          Rate: {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
                         </p>
                       )}
                       {q.type === 'vehicle' && info.amount && vehicleKm && (
@@ -346,7 +402,7 @@ export default function StepAllowances({ employmentType, answers, onAnswersChang
                   <span className="text-gray-700">{info.name}</span>
                   {info.amount && a.type !== 'vehicle' && (
                     <span className="font-semibold text-success-700 shrink-0">
-                      {formatCurrency(info.amount)} {info.per_unit?.replace('_', ' ')}
+                      {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
                     </span>
                   )}
                   {a.type === 'vehicle' && info.amount && a.detail && (

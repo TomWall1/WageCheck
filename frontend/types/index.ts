@@ -36,6 +36,7 @@ export interface ShiftResult {
   segments: Array<{
     dayType: string;
     multiplier: number;
+    addition_per_hour?: number;
     minutes: number;
     hours: number;
     pay: number;

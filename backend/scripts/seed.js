@@ -426,23 +426,37 @@ async function seed() {
     // ── Penalty rates ─────────────────────────────────────────────────────────
     // Source: MA000009 clause 29 — Penalty rates
 
+    // Source: Fair Work Ombudsman pay guide for MA000009, effective 1 July 2025 (published 15 Jan 2026).
+    // Evening (7pm–midnight) and night (midnight–7am) are FLAT ADDITIONS per hour, not multipliers.
+    // All other day-type penalties are multipliers of the base rate.
     const penaltyRates = [
-      // Full-time and Part-time
+      // ── Full-time ──────────────────────────────────────────────────────────
       {
         employment_type: 'full_time',
         day_type: 'weekday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 1.0,
+        addition_per_hour: null,
         description: 'Ordinary weekday rate — no penalty',
       },
       {
         employment_type: 'full_time',
         day_type: 'weekday',
+        time_band_start: '19:00', time_band_end: '00:00',
+        time_band_label: 'evening_7pm_to_midnight',
+        multiplier: 1.0,
+        addition_per_hour: 2.81,
+        description: 'Weekday evening (7pm–midnight) — +$2.81/hr flat addition',
+      },
+      {
+        employment_type: 'full_time',
+        day_type: 'weekday',
         time_band_start: '00:00', time_band_end: '07:00',
-        time_band_label: 'midnight_to_7am',
-        multiplier: 1.15,
-        description: 'Early morning shift (midnight to 7am on a weekday) — 15% loading',
+        time_band_label: 'night_midnight_to_7am',
+        multiplier: 1.0,
+        addition_per_hour: 4.22,
+        description: 'Weekday night (midnight–7am) — +$4.22/hr flat addition',
       },
       {
         employment_type: 'full_time',
@@ -450,15 +464,17 @@ async function seed() {
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 1.25,
-        description: 'Saturday — 25% penalty rate',
+        addition_per_hour: null,
+        description: 'Saturday — 25% penalty rate (×1.25)',
       },
       {
         employment_type: 'full_time',
         day_type: 'sunday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
-        multiplier: 1.75,
-        description: 'Sunday — 75% penalty rate (time and three-quarters)',
+        multiplier: 1.5,
+        addition_per_hour: null,
+        description: 'Sunday — 50% penalty rate (time and a half, ×1.5)',
       },
       {
         employment_type: 'full_time',
@@ -466,24 +482,36 @@ async function seed() {
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 2.25,
-        description: 'Public holiday — double time and a quarter',
+        addition_per_hour: null,
+        description: 'Public holiday — double time and a quarter (×2.25)',
       },
-      // Part-time same as full-time for penalties
+      // ── Part-time (same penalty structure as full-time) ────────────────────
       {
         employment_type: 'part_time',
         day_type: 'weekday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 1.0,
+        addition_per_hour: null,
         description: 'Ordinary weekday rate — no penalty',
       },
       {
         employment_type: 'part_time',
         day_type: 'weekday',
+        time_band_start: '19:00', time_band_end: '00:00',
+        time_band_label: 'evening_7pm_to_midnight',
+        multiplier: 1.0,
+        addition_per_hour: 2.81,
+        description: 'Weekday evening (7pm–midnight) — +$2.81/hr flat addition',
+      },
+      {
+        employment_type: 'part_time',
+        day_type: 'weekday',
         time_band_start: '00:00', time_band_end: '07:00',
-        time_band_label: 'midnight_to_7am',
-        multiplier: 1.15,
-        description: 'Early morning shift (midnight to 7am on a weekday) — 15% loading',
+        time_band_label: 'night_midnight_to_7am',
+        multiplier: 1.0,
+        addition_per_hour: 4.22,
+        description: 'Weekday night (midnight–7am) — +$4.22/hr flat addition',
       },
       {
         employment_type: 'part_time',
@@ -491,15 +519,17 @@ async function seed() {
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 1.25,
-        description: 'Saturday — 25% penalty rate',
+        addition_per_hour: null,
+        description: 'Saturday — 25% penalty rate (×1.25)',
       },
       {
         employment_type: 'part_time',
         day_type: 'sunday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
-        multiplier: 1.75,
-        description: 'Sunday — 75% penalty rate (time and three-quarters)',
+        multiplier: 1.5,
+        addition_per_hour: null,
+        description: 'Sunday — 50% penalty rate (time and a half, ×1.5)',
       },
       {
         employment_type: 'part_time',
@@ -507,60 +537,81 @@ async function seed() {
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 2.25,
-        description: 'Public holiday — double time and a quarter',
+        addition_per_hour: null,
+        description: 'Public holiday — double time and a quarter (×2.25)',
       },
-      // Casual — base rate already includes 25% loading, penalties are on top of ordinary casual rate
+      // ── Casual ────────────────────────────────────────────────────────────
+      // Casual base rate already includes 25% casual loading.
+      // Evening/night flat additions confirmed from FWO pay guide casual pay tables.
+      // Casual Saturday = casual base × 1.2; Sunday = × 1.4; PH = × 2.0
       {
         employment_type: 'casual',
         day_type: 'weekday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
         multiplier: 1.0,
+        addition_per_hour: null,
         description: 'Ordinary casual weekday rate (includes 25% loading)',
       },
       {
         employment_type: 'casual',
         day_type: 'weekday',
+        time_band_start: '19:00', time_band_end: '00:00',
+        time_band_label: 'evening_7pm_to_midnight',
+        multiplier: 1.0,
+        addition_per_hour: 2.81,
+        description: 'Casual weekday evening (7pm–midnight) — +$2.81/hr flat addition',
+      },
+      {
+        employment_type: 'casual',
+        day_type: 'weekday',
         time_band_start: '00:00', time_band_end: '07:00',
-        time_band_label: 'midnight_to_7am',
-        multiplier: 1.15,
-        description: 'Casual — early morning weekday (midnight to 7am) — 15% on top of casual rate',
+        time_band_label: 'night_midnight_to_7am',
+        multiplier: 1.0,
+        addition_per_hour: 4.22,
+        description: 'Casual weekday night (midnight–7am) — +$4.22/hr flat addition',
       },
       {
         employment_type: 'casual',
         day_type: 'saturday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
-        multiplier: 1.25,
-        description: 'Casual Saturday — 25% on top of casual rate',
+        multiplier: 1.2,
+        addition_per_hour: null,
+        description: 'Casual Saturday — ×1.2 of casual base rate',
       },
       {
         employment_type: 'casual',
         day_type: 'sunday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
-        multiplier: 1.75,
-        description: 'Casual Sunday — 75% on top of casual rate',
+        multiplier: 1.4,
+        addition_per_hour: null,
+        description: 'Casual Sunday — ×1.4 of casual base rate',
       },
       {
         employment_type: 'casual',
         day_type: 'public_holiday',
         time_band_start: null, time_band_end: null,
         time_band_label: null,
-        multiplier: 2.25,
-        description: 'Casual public holiday — double time and a quarter on top of casual rate',
+        multiplier: 2.0,
+        addition_per_hour: null,
+        description: 'Casual public holiday — ×2.0 of casual base rate',
       },
     ];
+
+    // Clear existing penalty rates to avoid duplicate/stale rows — no unique constraint on this table
+    await client.query(`DELETE FROM penalty_rates WHERE award_code = $1`, [AWARD_CODE]);
 
     for (const r of penaltyRates) {
       await client.query(`
         INSERT INTO penalty_rates
-          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, description, effective_date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, addition_per_hour, description, effective_date)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       `, [
         AWARD_CODE, r.employment_type, r.day_type,
         r.time_band_start, r.time_band_end, r.time_band_label,
-        r.multiplier, r.description, EFFECTIVE_DATE
+        r.multiplier, r.addition_per_hour || null, r.description, EFFECTIVE_DATE
       ]);
     }
     console.log(`✓ Inserted ${penaltyRates.length} penalty rate rules`);
@@ -616,30 +667,58 @@ async function seed() {
 
     // ── Allowances ────────────────────────────────────────────────────────────
     // Source: MA000009 clause 19 — Allowances
+    // ── Allowances ────────────────────────────────────────────────────────────
+    // Source: Fair Work Ombudsman pay guide for MA000009, effective 1 July 2025 (published 15 Jan 2026).
+    // 2024 amounts back-calculated from 2025 amounts by dividing by 1.035, rounded to 2dp.
     const allowancesByYear = [
       {
         effectiveDate: EFFECTIVE_DATE,
         allowances: [
-          { allowance_type: 'meal', name: 'Meal allowance', description: 'If you work overtime and you were not told about it the day before, your employer must pay you a meal allowance for each meal time that falls during the overtime.', trigger_condition: 'Overtime worked without prior day\'s notice, for each meal period that falls in the overtime period', amount: 16.92, amount_type: 'fixed', per_unit: 'per_meal' },
-          { allowance_type: 'split_shift', name: 'Split shift allowance', description: 'If your employer splits your shift into two or more separate work periods on the same day (with a break of more than 1 hour between them), you get a split shift allowance.', trigger_condition: 'Work broken into 2+ separate periods on the same day with more than 1 hour unpaid break between them', amount: 3.19, amount_type: 'fixed', per_unit: 'per_shift' },
-          { allowance_type: 'uniform_laundry', name: 'Uniform and laundry allowance', description: 'If your employer requires you to wear a uniform and does not launder it for you, or pay the cost of laundering it, they must pay a laundry allowance.', trigger_condition: 'Required to wear a uniform that employer does not provide laundering for', amount: 1.42, amount_type: 'fixed', per_unit: 'per_shift' },
-          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'If your employer asks you to use your own car or motorbike for work purposes, you must be paid a vehicle allowance per kilometre.', trigger_condition: 'Using own vehicle for work purposes as directed by employer', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
-          { allowance_type: 'first_aid', name: 'First aid allowance', description: 'If you hold a first aid certificate and your employer asks you to be responsible for first aid at the workplace, you must be paid a first aid allowance.', trigger_condition: 'Hold a first aid certificate AND appointed as first aider by employer', amount: 15.03, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'live_in', name: 'Board and lodging deduction', description: 'If your employer provides accommodation and/or meals, certain amounts may be deducted from your wages. These deductions have maximum limits.', trigger_condition: 'Employer provides accommodation and/or meals', amount: null, amount_type: 'fixed', per_unit: null },
+          // Split/broken shift — FT/PT only, two tiers. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.41, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.16, amount_type: 'fixed', per_unit: 'per_day' },
+          // First aid — different rates by employment type. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.38, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.47, amount_type: 'fixed', per_unit: 'per_day' },
+          // Tool allowance — cooks/apprentice cooks only. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 1.96, amount_type: 'fixed', per_unit: 'per_day' },
+          // Airport travel. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.16, amount_type: 'fixed', per_unit: 'per_day' },
+          // Laundry — catering employees. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 5.80, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 1.98, amount_type: 'fixed', per_unit: 'per_uniform' },
+          // Meal allowance — overtime only, not casual. 2024 = 2025 / 1.035 rounded to 2dp
+          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.17, amount_type: 'fixed', per_unit: 'per_meal' },
+          // Vehicle — managerial hotel staff only
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
         ],
       },
       {
         effectiveDate: EFFECTIVE_DATE_2025,
         allowances: [
-          { allowance_type: 'meal', name: 'Meal allowance', description: 'If you work overtime and you were not told about it the day before, your employer must pay you a meal allowance for each meal time that falls during the overtime.', trigger_condition: 'Overtime worked without prior day\'s notice, for each meal period that falls in the overtime period', amount: 17.51, amount_type: 'fixed', per_unit: 'per_meal' },
-          { allowance_type: 'split_shift', name: 'Split shift allowance', description: 'If your employer splits your shift into two or more separate work periods on the same day (with a break of more than 1 hour between them), you get a split shift allowance.', trigger_condition: 'Work broken into 2+ separate periods on the same day with more than 1 hour unpaid break between them', amount: 3.30, amount_type: 'fixed', per_unit: 'per_shift' },
-          { allowance_type: 'uniform_laundry', name: 'Uniform and laundry allowance', description: 'If your employer requires you to wear a uniform and does not launder it for you, or pay the cost of laundering it, they must pay a laundry allowance.', trigger_condition: 'Required to wear a uniform that employer does not provide laundering for', amount: 1.47, amount_type: 'fixed', per_unit: 'per_shift' },
-          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'If your employer asks you to use your own car or motorbike for work purposes, you must be paid a vehicle allowance per kilometre.', trigger_condition: 'Using own vehicle for work purposes as directed by employer', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
-          { allowance_type: 'first_aid', name: 'First aid allowance', description: 'If you hold a first aid certificate and your employer asks you to be responsible for first aid at the workplace, you must be paid a first aid allowance.', trigger_condition: 'Hold a first aid certificate AND appointed as first aider by employer', amount: 15.56, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'live_in', name: 'Board and lodging deduction', description: 'If your employer provides accommodation and/or meals, certain amounts may be deducted from your wages. These deductions have maximum limits.', trigger_condition: 'Employer provides accommodation and/or meals', amount: null, amount_type: 'fixed', per_unit: null },
+          // Split/broken shift — FT/PT only, two tiers. Source: FWO pay guide MA000009 eff. 1 Jul 2025
+          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.53, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.34, amount_type: 'fixed', per_unit: 'per_day' },
+          // First aid — different rates by employment type
+          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.82, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.56, amount_type: 'fixed', per_unit: 'per_day' },
+          // Tool allowance — cooks/apprentice cooks only
+          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 2.03, amount_type: 'fixed', per_unit: 'per_day' },
+          // Airport travel
+          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.45, amount_type: 'fixed', per_unit: 'per_day' },
+          // Laundry — catering employees
+          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 6.00, amount_type: 'weekly', per_unit: 'per_week' },
+          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 2.05, amount_type: 'fixed', per_unit: 'per_uniform' },
+          // Meal allowance — overtime only, not casual
+          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.73, amount_type: 'fixed', per_unit: 'per_meal' },
+          // Vehicle — managerial hotel staff only
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
         ],
       },
     ];
+
+    // Clear existing allowances to remove old/renamed types (split_shift, uniform_laundry, first_aid, live_in)
+    await client.query(`DELETE FROM allowances WHERE award_code = $1`, [AWARD_CODE]);
 
     for (const { effectiveDate, allowances: yearAllowances } of allowancesByYear) {
       for (const a of yearAllowances) {

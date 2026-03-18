@@ -54,7 +54,10 @@ function getISOWeek(dateStr) {
 }
 
 // ── Segment calculation ───────────────────────────────────────────────────
-// Returns minute-by-minute segments grouped by {dayType, multiplier}
+// Returns minute-by-minute segments grouped by {dayType, multiplier, addition_per_hour}.
+// Evening/night loadings are flat $/hr additions (addition_per_hour > 0) with multiplier=1.0.
+// Multiplier-based rates and addition-based rates are mutually exclusive by design
+// (addition rates always have multiplier=1.0 and apply only on weekdays).
 function calculateShiftSegments(dateStr, startTime, endTime, employmentType, penaltyRates, publicHolidays = []) {
   const startMinutes = timeToMinutes(startTime);
   let endMinutes = timeToMinutes(endTime);
@@ -87,16 +90,23 @@ function calculateShiftSegments(dateStr, startTime, endTime, employmentType, pen
       return true;
     });
 
-    const multiplier = applicableRates.length > 0
-      ? Math.max(...applicableRates.map(r => parseFloat(r.multiplier)))
-      : 1.0;
+    // Separate multiplier-based rates from flat-addition rates
+    const multiplierRates = applicableRates.filter(r => !parseFloat(r.addition_per_hour));
+    const additionRates = applicableRates.filter(r => parseFloat(r.addition_per_hour) > 0);
 
-    const key = `${dayType}_${multiplier}`;
+    const multiplier = multiplierRates.length > 0
+      ? Math.max(...multiplierRates.map(r => parseFloat(r.multiplier)))
+      : 1.0;
+    const addition_per_hour = additionRates.length > 0
+      ? Math.max(...additionRates.map(r => parseFloat(r.addition_per_hour)))
+      : 0;
+
+    const key = `${dayType}_${multiplier}_${addition_per_hour}`;
     if (currentGroup && currentGroup.key === key) {
       currentGroup.minutes++;
     } else {
       if (currentGroup) segments.push(currentGroup);
-      currentGroup = { key, dayType, multiplier, minutes: 1 };
+      currentGroup = { key, dayType, multiplier, addition_per_hour, minutes: 1 };
     }
   }
   if (currentGroup) segments.push(currentGroup);
@@ -237,15 +247,17 @@ function getDayLabel(dayType) {
   return { weekday: 'Weekday', saturday: 'Saturday', sunday: 'Sunday', public_holiday: 'Public holiday' }[dayType] || dayType;
 }
 
-function getRateLabel(multiplier, missedBreakPenalty) {
+function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty) {
   if (missedBreakPenalty) return `Double time (×2.0) — meal break not taken after 5 hours`;
+  if (addition_per_hour === 4.22) return `Night work loading (midnight–7am) +$4.22/hr`;
+  if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
-  if (multiplier === 1.15) return 'Early morning loading (×1.15)';
-  if (multiplier === 1.25) return '25% penalty rate (×1.25)';
-  if (multiplier === 1.5) return 'Time and a half (×1.5)';
-  if (multiplier === 1.75) return 'Sunday penalty (×1.75)';
+  if (multiplier === 1.2) return 'Saturday penalty (×1.2)';
+  if (multiplier === 1.25) return 'Saturday penalty (×1.25)';
+  if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
+  if (multiplier === 1.5) return 'Sunday / time and a half (×1.5)';
   if (multiplier === 2.0) return 'Double time (×2.0)';
-  if (multiplier === 2.25) return 'Double time and a quarter (×2.25)';
+  if (multiplier === 2.25) return 'Public holiday — double time and a quarter (×2.25)';
   return `×${multiplier}`;
 }
 
@@ -337,8 +349,10 @@ async function calculateEntitlements(input, db) {
     for (const seg of finalSegments) {
       if (seg.minutes <= 0) continue;
       const hours = seg.minutes / 60;
+      const addition_per_hour = seg.addition_per_hour || 0;
+      const effectiveHourlyRate = baseHourlyRate * seg.multiplier + addition_per_hour;
+      const actualPay = hours * effectiveHourlyRate;
       const ordinaryPay = hours * baseHourlyRate;
-      const actualPay = hours * baseHourlyRate * seg.multiplier;
       const extra = actualPay - ordinaryPay;
 
       shiftOrdinaryPay += ordinaryPay;
@@ -352,7 +366,9 @@ async function calculateEntitlements(input, db) {
         dayType: seg.dayType,
         dayLabel: getDayLabel(seg.dayType),
         multiplier: seg.multiplier,
-        rateLabel: getRateLabel(seg.multiplier, seg.missedBreakPenalty),
+        addition_per_hour,
+        effectiveRate: effectiveHourlyRate,
+        rateLabel: getRateLabel(seg.multiplier, addition_per_hour, seg.missedBreakPenalty),
         missedBreakPenalty: !!seg.missedBreakPenalty,
         minutes: seg.minutes,
         hours: Math.round(hours * 100) / 100,

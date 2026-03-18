@@ -521,29 +521,32 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-xs text-gray-500 border-b border-gray-100">
-                      <th className="text-left pb-2">Period</th>
-                      <th className="text-right pb-2">Hours</th>
-                      <th className="text-right pb-2">Rate</th>
+                      <th className="text-left pb-2">Period / Rate type</th>
+                      <th className="text-right pb-2">Calculation</th>
                       <th className="text-right pb-2">Amount</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
-                    {shift.segments.map((seg: any, j: number) => (
-                      <tr key={j} className={clsx(seg.missedBreakPenalty && 'bg-warning-50')}>
-                        <td className="py-1.5 text-gray-700">
-                          <div>{seg.dayLabel}</div>
-                          <div className={clsx('text-xs', seg.missedBreakPenalty ? 'text-warning-600 font-medium' : 'text-gray-400')}>
-                            {seg.rateLabel}
-                          </div>
-                          {seg.explanation && (
-                            <div className="text-xs text-warning-700 mt-0.5 italic">{seg.explanation}</div>
-                          )}
-                        </td>
-                        <td className="py-1.5 text-right text-gray-600">{formatHours(seg.hours)}</td>
-                        <td className="py-1.5 text-right text-gray-600">{formatCurrency(seg.baseRate)}</td>
-                        <td className="py-1.5 text-right font-medium">{formatCurrency(seg.pay)}</td>
-                      </tr>
-                    ))}
+                    {shift.segments.map((seg: any, j: number) => {
+                      const effectiveRate = seg.baseRate * seg.multiplier + (seg.addition_per_hour || 0);
+                      return (
+                        <tr key={j} className={clsx(seg.missedBreakPenalty && 'bg-warning-50')}>
+                          <td className="py-1.5 text-gray-700">
+                            <div className="font-medium">{seg.dayLabel}</div>
+                            <div className={clsx('text-xs', seg.missedBreakPenalty ? 'text-warning-600 font-medium' : 'text-gray-400')}>
+                              {seg.rateLabel}
+                            </div>
+                            {seg.explanation && (
+                              <div className="text-xs text-warning-700 mt-0.5 italic">{seg.explanation}</div>
+                            )}
+                          </td>
+                          <td className="py-1.5 text-right text-gray-600 text-sm">
+                            {formatHours(seg.hours)} × {formatCurrency(effectiveRate)}/hr
+                          </td>
+                          <td className="py-1.5 text-right font-medium">{formatCurrency(seg.pay)}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                   <tfoot>
                     <tr className="border-t border-gray-200 font-bold">
