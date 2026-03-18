@@ -15,6 +15,7 @@ interface ClassificationResult {
 }
 
 interface Props {
+  awardCode: string;
   employmentType: EmploymentType;
   age: number | null;
   classificationResult: ClassificationResult;
@@ -97,6 +98,7 @@ function formatDisplayDate(dateStr: string): string {
 }
 
 export default function StepTimesheet({
+  awardCode,
   employmentType,
   age,
   classificationResult,
@@ -157,6 +159,7 @@ export default function StepTimesheet({
         shifts: apiShifts,
         age: age ?? undefined,
         period,
+        awardCode,
       }) as CalculationResult;
 
       setResult(res);

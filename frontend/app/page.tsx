@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { WageCheckState, EmploymentType, AllowanceAnswer } from '@/types';
+import { WageCheckState, EmploymentType, AllowanceAnswer, AwardCode } from '@/types';
 import { api } from '@/lib/api';
+import LandingPage from '@/components/LandingPage';
 import StepEmploymentType from '@/components/steps/StepEmploymentType';
 import StepClassification from '@/components/steps/StepClassification';
 import StepTimesheet from '@/components/steps/StepTimesheet';
@@ -24,6 +25,7 @@ const STEP_LABELS = [
 
 const INITIAL_STATE: WageCheckState = {
   step: 1,
+  awardCode: null,
   employmentType: null,
   age: null,
   classificationAnswers: {},
@@ -35,15 +37,18 @@ const INITIAL_STATE: WageCheckState = {
 };
 
 export default function HomePage() {
+  const [awardCode, setAwardCode] = useState<AwardCode | null>(null);
   const [state, setState] = useState<WageCheckState>(INITIAL_STATE);
   const [prefetchedQuestions, setPrefetchedQuestions] = useState<unknown[] | null>(null);
 
-  // Warm up the backend and prefetch questions while user is on step 1
+  // Warm up the backend and prefetch questions when award is selected
   useEffect(() => {
-    api.getQuestions()
+    if (!awardCode) return;
+    setPrefetchedQuestions(null);
+    api.getQuestions(awardCode)
       .then((data: unknown) => setPrefetchedQuestions(data as unknown[]))
       .catch(() => { /* will fall back to fetching in StepClassification */ });
-  }, []);
+  }, [awardCode]);
 
   function updateState(updates: Partial<WageCheckState>) {
     setState(prev => ({ ...prev, ...updates }));
@@ -62,15 +67,43 @@ export default function HomePage() {
     goToStep(state.step - 1);
   }
 
+  function handleAwardSelect(code: AwardCode) {
+    setAwardCode(code);
+    setState({ ...INITIAL_STATE, awardCode: code });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleStartOver() {
+    setAwardCode(null);
+    setState(INITIAL_STATE);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Landing page — award selection
+  if (!awardCode) {
+    return <LandingPage onSelect={handleAwardSelect} />;
+  }
+
+  const awardName = awardCode === 'MA000003' ? 'Fast Food Award' : 'Hospitality Award';
+
   return (
     <div className="space-y-6">
-      {state.step > 1 && (
-        <ProgressBar
-          currentStep={state.step}
-          totalSteps={TOTAL_STEPS}
-          labels={STEP_LABELS}
-        />
-      )}
+      {/* Award label + restart */}
+      <div className="flex items-center justify-between text-xs text-gray-400">
+        <span className="font-mono bg-gray-100 px-2 py-1 rounded">{awardCode} — {awardName}</span>
+        <button
+          onClick={handleStartOver}
+          className="underline hover:text-gray-600 transition-colors"
+        >
+          Change award
+        </button>
+      </div>
+
+      <ProgressBar
+        currentStep={state.step}
+        totalSteps={TOTAL_STEPS}
+        labels={STEP_LABELS}
+      />
 
       {state.step === 1 && (
         <StepEmploymentType
@@ -84,6 +117,7 @@ export default function HomePage() {
 
       {state.step === 2 && state.employmentType && (
         <StepClassification
+          awardCode={awardCode}
           employmentType={state.employmentType}
           age={state.age}
           answers={state.classificationAnswers}
@@ -97,6 +131,7 @@ export default function HomePage() {
 
       {state.step === 3 && state.employmentType && state.classificationResult && (
         <StepTimesheet
+          awardCode={awardCode}
           employmentType={state.employmentType}
           age={state.age}
           classificationResult={state.classificationResult}
@@ -110,6 +145,7 @@ export default function HomePage() {
 
       {state.step === 4 && (
         <StepAllowances
+          awardCode={awardCode}
           employmentType={state.employmentType!}
           stream={state.classificationResult?.stream ?? null}
           answers={state.allowanceAnswers}
@@ -121,6 +157,7 @@ export default function HomePage() {
 
       {state.step === 5 && state.employmentType && state.classificationResult && (
         <StepRightsSummary
+          awardCode={awardCode}
           employmentType={state.employmentType}
           classificationResult={state.classificationResult}
           onNext={nextStep}
@@ -132,7 +169,7 @@ export default function HomePage() {
         <StepResults
           state={state}
           onAmountPaidChange={(amount) => updateState({ amountActuallyPaid: amount })}
-          onStartOver={() => setState(INITIAL_STATE)}
+          onStartOver={handleStartOver}
         />
       )}
     </div>

@@ -16,15 +16,27 @@ function employmentLabel(type: string) {
   return { full_time: 'Full-time', part_time: 'Part-time', casual: 'Casual' }[type] || type;
 }
 
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function formatTime(t: string) {
+  const [h, m] = t.split(':').map(Number);
+  const period = h >= 12 ? 'pm' : 'am';
+  const hour = h % 12 || 12;
+  return `${hour}:${m.toString().padStart(2, '0')}${period}`;
+}
+
 export default function StepResults({ state, onAmountPaidChange, onStartOver }: Props) {
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const { calculationResult, employmentType, classificationResult, allowanceAnswers, amountActuallyPaid } = state;
 
   useEffect(() => {
-    api.getAllowances()
+    api.getAllowances(state.awardCode)
       .then((data: unknown) => setAllowanceInfo(data as AllowanceInfo[]))
       .catch(() => {});
-  }, []);
+  }, [state.awardCode]);
 
   if (!calculationResult || !employmentType || !classificationResult) {
     return (
@@ -35,7 +47,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
     );
   }
 
-  const { summary, baseHourlyRate } = calculationResult;
+  const { summary, baseHourlyRate, shifts } = calculationResult;
   const triggeredAllowances = allowanceAnswers.filter(a => a.triggered);
   const allowanceInfoByType = Object.fromEntries(allowanceInfo.map(a => [a.allowance_type, a]));
 
@@ -44,6 +56,8 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const underpayment = hasPaidAmount ? summary.totalPayOwed - paidAmount : null;
   const wasUnderpaid = underpayment !== null && underpayment > 0.50;
   const wasOverpaid = underpayment !== null && underpayment < -0.50;
+
+  const sgcPct = `${(summary.sgcRate * 100).toFixed(0)}%`;
 
   function handleDownloadReport() {
     const dateGenerated = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -58,6 +72,42 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
       return `<tr><td>${info.name}</td><td>${amt}</td><td>${superApplies ? 'Yes' : 'No (expense reimbursement)'}</td></tr>`;
     }).join('');
 
+    // Build per-shift breakdown HTML
+    const shiftBreakdownHtml = shifts.map(shift => {
+      const segRows = shift.segments.map(seg =>
+        `<tr>
+          <td>${seg.rateLabel || seg.dayType}</td>
+          <td style="text-align:right">${seg.hours.toFixed(2)}</td>
+          <td style="text-align:right">${formatCurrency(seg.effectiveRate)}/hr</td>
+          <td style="text-align:right">${formatCurrency(seg.pay)}</td>
+        </tr>`
+      ).join('');
+      return `
+        <tr style="background:#f8fafc">
+          <td colspan="4"><strong>${formatDate(shift.date)}</strong> — ${formatTime(shift.startTime)}–${formatTime(shift.endTime)} (${formatHours(shift.workedHours)} worked)</td>
+        </tr>
+        ${segRows}
+      `;
+    }).join('');
+
+    // Super breakdown HTML
+    const superRows = (summary.superBreakdown || []).map(row =>
+      `<tr>
+        <td>${row.rateLabel}</td>
+        <td style="text-align:right">${row.effectiveRate !== null ? formatCurrency(row.effectiveRate) + '/hr' : '—'}</td>
+        <td style="text-align:right">${row.hours.toFixed(2)}</td>
+        <td style="text-align:right">${formatCurrency(row.totalPay)}</td>
+        <td style="text-align:right">${row.superApplies ? sgcPct : '0%'}</td>
+        <td style="text-align:right">${row.superApplies ? formatCurrency(row.superAmount) : '—'}</td>
+      </tr>`
+    ).join('');
+
+    const awardLabel = state.awardCode === 'MA000003'
+      ? 'Fast Food Industry Award 2020 [MA000003]'
+      : state.awardCode === 'MA000119'
+        ? 'Restaurant Industry Award 2020 [MA000119]'
+        : 'Hospitality Industry (General) Award 2020 [MA000009]';
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,11 +121,13 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   .disclaimer strong { color: #854d0e; }
   table { width: 100%; border-collapse: collapse; margin-top: 8px; }
   th { background: #eff6ff; text-align: left; padding: 6px 8px; font-size: 12px; color: #1e40af; }
-  td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; }
+  th.r { text-align: right; }
+  td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
   .total-row td { font-weight: bold; background: #eff6ff; }
   .super-row td { color: #166534; }
   .footer { margin-top: 32px; font-size: 11px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 12px; }
   .meta { color: #6b7280; font-size: 12px; }
+  .info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px 12px; font-size: 12px; margin-top: 8px; }
   @media print { body { margin: 20px; } }
 </style>
 </head>
@@ -89,7 +141,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   It is <strong>not legal advice</strong> and should not be relied upon as a definitive statement of entitlements.
   Actual entitlements depend on the specific facts of your employment, any enterprise agreement or IFA in place,
   correct classification, accurate shift records, and current award rates. Pay rates are based on the
-  Hospitality Industry (General) Award 2020 [MA000009], effective 1 July 2025.
+  ${awardLabel}, effective 1 July 2025.
   Always verify at <strong>fairwork.gov.au</strong> or seek independent legal advice before taking action.
 </div>
 
@@ -104,13 +156,24 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
 
 <h2>Pay Summary</h2>
 <table>
-  <tr><th>Component</th><th>Amount</th><th>Super applies?</th></tr>
-  <tr><td>Ordinary hours pay</td><td>${formatCurrency(summary.ordinaryPay)}</td><td>Yes</td></tr>
-  ${summary.penaltyPay > 0 ? `<tr><td>Penalty rate loading (weekends/public holidays)</td><td>${formatCurrency(summary.penaltyPay)}</td><td>Yes</td></tr>` : ''}
-  ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td>${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
-  ${summary.overtimePay > 0 ? `<tr><td>Overtime loading</td><td>${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
-  ${(summary as any).mealAllowancePay > 0 ? `<tr><td>Meal allowance for overtime (${(summary as any).mealAllowancesOwed} × ${formatCurrency((summary as any).mealAllowanceRate)})</td><td>${formatCurrency((summary as any).mealAllowancePay)}</td><td>No (expense allowance)</td></tr>` : ''}
-  <tr class="total-row"><td>Total wages owed</td><td>${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>
+  <tr><th>Component</th><th class="r">Amount</th><th>Super applies?</th></tr>
+  <tr><td>Ordinary hours pay</td><td style="text-align:right">${formatCurrency(summary.ordinaryPay)}</td><td>Yes (${sgcPct})</td></tr>
+  ${summary.penaltyPay > 0 ? `<tr><td>Penalty rate loading</td><td style="text-align:right">${formatCurrency(summary.penaltyPay)}</td><td>Yes (${sgcPct})</td></tr>` : ''}
+  ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td style="text-align:right">${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
+  ${summary.overtimePay > 0 ? `<tr><td>Overtime loading</td><td style="text-align:right">${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
+  ${summary.mealAllowancePay > 0 ? `<tr><td>Meal allowance for overtime (${summary.mealAllowancesOwed} × ${formatCurrency(summary.mealAllowanceRate)})</td><td style="text-align:right">${formatCurrency(summary.mealAllowancePay)}</td><td>No (expense allowance)</td></tr>` : ''}
+  <tr class="total-row"><td>Total wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>
+</table>
+
+<h2>Pay Breakdown by Shift</h2>
+<table>
+  <tr>
+    <th>Date / Pay category</th>
+    <th class="r">Hours</th>
+    <th class="r">Rate</th>
+    <th class="r">Pay</th>
+  </tr>
+  ${shiftBreakdownHtml}
 </table>
 
 ${triggeredAllowances.length > 0 ? `
@@ -121,14 +184,33 @@ ${triggeredAllowances.length > 0 ? `
 </table>
 ` : ''}
 
-<h2>Superannuation Estimate</h2>
+<h2>Superannuation Breakdown</h2>
 <table>
-  <tr><td>Super-eligible earnings (OTE)</td><td>${formatCurrency(summary.superEligiblePay)}</td></tr>
-  <tr><td>SGC rate</td><td>${(summary.sgcRate * 100).toFixed(1)}%</td></tr>
-  <tr class="super-row total-row"><td><strong>Estimated super owed</strong></td><td><strong>${formatCurrency(summary.superAmount)}</strong></td></tr>
+  <tr>
+    <th>Pay category</th>
+    <th class="r">Rate</th>
+    <th class="r">Hours</th>
+    <th class="r">Total pay</th>
+    <th class="r">Super %</th>
+    <th class="r">Super $</th>
+  </tr>
+  ${superRows}
+  <tr class="super-row total-row">
+    <td colspan="3"><strong>Super-eligible earnings (OTE)</strong></td>
+    <td style="text-align:right"><strong>${formatCurrency(summary.superEligiblePay)}</strong></td>
+    <td style="text-align:right"><strong>${sgcPct}</strong></td>
+    <td style="text-align:right"><strong>${formatCurrency(summary.superAmount)}</strong></td>
+  </tr>
 </table>
-<p style="font-size:11px;color:#6b7280;">Super is the employer's obligation, payable on top of wages, directly to the employee's super fund.
-Overtime and expense allowances are excluded from the super calculation per ATO OTE definitions.</p>
+<div class="info-box">
+  <strong>Super is paid on top of your wages — it goes directly to your super fund account.</strong><br>
+  <strong>Due dates:</strong> Super must be paid into your fund on or before the <strong>28th day of the month following each quarter</strong>
+  (i.e. by 28 October, 28 January, 28 April, and 28 July each year).<br>
+  <strong>From 1 July 2026 — Payday Super:</strong> Super will be required to be in your account within <strong>7 days of each pay day</strong>.
+  This is a significant change — late super will attract penalties for employers.<br>
+  If your super is missing or late, contact the <strong>ATO on 13 28 65</strong> or check your super fund balance online.
+  Unpaid super is recoverable for up to 4 years.
+</div>
 
 ${summary.allBreakViolations.length > 0 ? `
 <h2>Break Entitlement Concerns</h2>
@@ -138,10 +220,10 @@ ${summary.allBreakViolations.length > 0 ? `
 ${hasPaidAmount ? `
 <h2>Underpayment Comparison</h2>
 <table>
-  <tr><td>Award minimum wages owed</td><td>${formatCurrency(summary.totalPayOwed)}</td></tr>
-  <tr><td>Amount actually paid (as entered)</td><td>${formatCurrency(paidAmount)}</td></tr>
+  <tr><td>Award minimum wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td></tr>
+  <tr><td>Amount actually paid (as entered)</td><td style="text-align:right">${formatCurrency(paidAmount)}</td></tr>
   <tr class="total-row"><td>${wasUnderpaid ? 'Estimated shortfall' : wasOverpaid ? 'Paid above award' : 'Difference'}</td>
-    <td>${formatCurrency(Math.abs(underpayment!))}</td></tr>
+    <td style="text-align:right">${formatCurrency(Math.abs(underpayment!))}</td></tr>
 </table>
 ` : ''}
 
@@ -155,8 +237,8 @@ ${hasPaidAmount ? `
 
 <div class="footer">
   <strong>Disclaimer:</strong> This document is an automated estimate based solely on information entered by the user into WageCheck (wagecheck.vercel.app).
-  It is not legal advice and is subject to the accuracy of the inputs provided. The Hospitality Industry (General) Award 2020 [MA000009] applies to most
-  hospitality workers in Australia, but enterprise agreements, IFAs, or annualised salary arrangements may override award rates.
+  It is not legal advice and is subject to the accuracy of the inputs provided. The ${awardLabel} rates shown are effective 1 July 2025.
+  Enterprise agreements, IFAs, or annualised salary arrangements may override award rates.
   Always verify your entitlements at fairwork.gov.au or seek advice from a qualified employment lawyer or the Fair Work Ombudsman before taking action.
   WageCheck accepts no liability for any decisions made based on this report.
 </div>
@@ -218,19 +300,25 @@ ${hasPaidAmount ? `
               <span className="font-medium">{formatCurrency(summary.penaltyPay)}</span>
             </div>
           )}
+          {summary.missedBreakPay > 0 && (
+            <div className="flex justify-between py-1 border-b border-brand-100">
+              <span className="text-gray-600">Missed break double time</span>
+              <span className="font-medium">{formatCurrency(summary.missedBreakPay)}</span>
+            </div>
+          )}
           {summary.overtimePay > 0 && (
             <div className="flex justify-between py-1 border-b border-brand-100">
               <span className="text-gray-600">Overtime loading</span>
               <span className="font-medium">{formatCurrency(summary.overtimePay)}</span>
             </div>
           )}
-          {(summary as any).mealAllowancePay > 0 && (
+          {summary.mealAllowancePay > 0 && (
             <div className="flex justify-between py-1 border-b border-brand-100">
               <span className="text-gray-600">
                 Meal allowance (overtime)
-                {(summary as any).mealAllowancesOwed > 1 && ` ×${(summary as any).mealAllowancesOwed}`}
+                {summary.mealAllowancesOwed > 1 && ` ×${summary.mealAllowancesOwed}`}
               </span>
-              <span className="font-medium">{formatCurrency((summary as any).mealAllowancePay)}</span>
+              <span className="font-medium">{formatCurrency(summary.mealAllowancePay)}</span>
             </div>
           )}
           <div className="flex justify-between py-1 font-bold text-base">
@@ -243,6 +331,63 @@ ${hasPaidAmount ? `
               <span className="font-semibold text-brand-700">{formatCurrency(summary.superAmount)}</span>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Pay breakdown by shift */}
+      <div className="card space-y-3">
+        <h3 className="font-bold text-gray-900">Pay breakdown by shift</h3>
+        <p className="text-sm text-gray-500">
+          Hours worked in each pay category, with the rate and total for each.
+        </p>
+        <div className="space-y-4">
+          {shifts.map((shift, si) => (
+            <details key={si} open={shifts.length === 1}>
+              <summary className="cursor-pointer list-none flex justify-between items-center py-2 border-b border-gray-200">
+                <div>
+                  <span className="font-semibold text-gray-900 text-sm">{formatDate(shift.date)}</span>
+                  <span className="text-gray-500 text-sm ml-2">
+                    {formatTime(shift.startTime)}–{formatTime(shift.endTime)}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-semibold text-gray-900">{formatCurrency(shift.totalPay)}</span>
+                  <span className="text-xs text-gray-400 ml-1">{formatHours(shift.workedHours)}</span>
+                </div>
+              </summary>
+              <div className="mt-2 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-gray-50 text-gray-600 text-xs">
+                      <th className="text-left px-2 py-1.5 rounded-l font-medium">Pay category</th>
+                      <th className="text-right px-2 py-1.5 font-medium">Hours</th>
+                      <th className="text-right px-2 py-1.5 font-medium">Rate</th>
+                      <th className="text-right px-2 py-1.5 rounded-r font-medium">Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {shift.segments.map((seg, gi) => (
+                      <tr key={gi}>
+                        <td className="px-2 py-1.5 text-gray-700">{seg.rateLabel}</td>
+                        <td className="px-2 py-1.5 text-right text-gray-600">{seg.hours.toFixed(2)}</td>
+                        <td className="px-2 py-1.5 text-right text-gray-600">{formatCurrency(seg.effectiveRate)}/hr</td>
+                        <td className="px-2 py-1.5 text-right font-medium text-gray-900">{formatCurrency(seg.pay)}</td>
+                      </tr>
+                    ))}
+                    <tr className="bg-gray-50 font-semibold text-sm">
+                      <td className="px-2 py-1.5 text-gray-900" colSpan={3}>Shift total</td>
+                      <td className="px-2 py-1.5 text-right text-gray-900">{formatCurrency(shift.totalPay)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                {shift.mealBreakMinutes > 0 && (
+                  <p className="text-xs text-gray-400 mt-1 px-2">
+                    Includes {shift.mealBreakMinutes} min unpaid meal break deducted.
+                  </p>
+                )}
+              </div>
+            </details>
+          ))}
         </div>
       </div>
 
@@ -273,88 +418,76 @@ ${hasPaidAmount ? `
         </div>
       )}
 
-      {/* Superannuation */}
+      {/* Superannuation — detailed breakdown */}
       {summary.superAmount !== undefined && (
         <div className="card space-y-4">
           <div>
-            <h3 className="font-bold text-gray-900">Superannuation estimate</h3>
+            <h3 className="font-bold text-gray-900">Superannuation breakdown</h3>
             <p className="text-sm text-gray-500 mt-1">
               Super is paid by your employer on top of your wages — it goes directly to your super fund.
-              Current SGC rate: {(summary.sgcRate * 100).toFixed(1)}% (from 1 July 2025).
+              Current SGC rate: {sgcPct} (from 1 July 2025).
             </p>
           </div>
 
-          <div className="space-y-1 text-sm">
-            <p className="font-semibold text-gray-700 text-xs uppercase tracking-wide">Shift pay — super eligibility</p>
-            <div className="space-y-1">
-              <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                <span className="text-gray-600">Ordinary hours + penalty rates</span>
-                <span className="flex items-center gap-2">
-                  <span className="text-xs bg-success-100 text-success-700 px-2 py-0.5 rounded-full font-medium">super ✓</span>
-                  <span className="font-medium w-20 text-right">{formatCurrency(summary.superEligiblePay)}</span>
-                </span>
-              </div>
-              {summary.overtimePay > 0 && (
-                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                  <span className="text-gray-600">Overtime loading</span>
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
-                    <span className="text-gray-500 w-20 text-right">{formatCurrency(summary.overtimePay)}</span>
-                  </span>
-                </div>
-              )}
-              {(summary as any).mealAllowancePay > 0 && (
-                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                  <span className="text-gray-600">Meal allowance (overtime)</span>
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
-                    <span className="text-gray-500 w-20 text-right">{formatCurrency((summary as any).mealAllowancePay)}</span>
-                  </span>
-                </div>
-              )}
-              {summary.missedBreakPay > 0 && (
-                <div className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                  <span className="text-gray-600">Missed break double time</span>
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">no super</span>
-                    <span className="text-gray-500 w-20 text-right">{formatCurrency(summary.missedBreakPay)}</span>
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {triggeredAllowances.length > 0 && (
-              <>
-                <p className="font-semibold text-gray-700 text-xs uppercase tracking-wide pt-3">Allowances — super eligibility</p>
-                <div className="space-y-1">
-                  {triggeredAllowances.map(a => {
-                    const info = allowanceInfoByType[a.type];
-                    if (!info) return null;
-                    // Expense reimbursements: no super. Shift/responsibility loadings: super applies.
-                    const superApplies = a.type === 'split_shift' || a.type === 'first_aid';
-                    return (
-                      <div key={a.type} className="flex justify-between items-center py-1.5 border-b border-gray-100">
-                        <span className="text-gray-600">{info.name}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          superApplies ? 'bg-success-100 text-success-700' : 'bg-gray-100 text-gray-500'
-                        }`}>
-                          {superApplies ? 'super ✓' : 'no super'}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            )}
+          {/* Per-category table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 text-gray-600 text-xs">
+                  <th className="text-left px-2 py-2 rounded-l font-medium">Pay category</th>
+                  <th className="text-right px-2 py-2 font-medium">Hours</th>
+                  <th className="text-right px-2 py-2 font-medium">Rate</th>
+                  <th className="text-right px-2 py-2 font-medium">Total pay</th>
+                  <th className="text-right px-2 py-2 font-medium">Super %</th>
+                  <th className="text-right px-2 py-2 rounded-r font-medium">Super $</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {(summary.superBreakdown || []).map((row, i) => (
+                  <tr key={i}>
+                    <td className="px-2 py-2 text-gray-700">{row.rateLabel}</td>
+                    <td className="px-2 py-2 text-right text-gray-600">{row.hours.toFixed(2)}</td>
+                    <td className="px-2 py-2 text-right text-gray-600">
+                      {row.effectiveRate !== null ? `${formatCurrency(row.effectiveRate)}/hr` : '—'}
+                    </td>
+                    <td className="px-2 py-2 text-right text-gray-900 font-medium">{formatCurrency(row.totalPay)}</td>
+                    <td className="px-2 py-2 text-right">
+                      {row.superApplies
+                        ? <span className="text-success-700 font-semibold">{sgcPct}</span>
+                        : <span className="text-gray-400">0%</span>}
+                    </td>
+                    <td className="px-2 py-2 text-right font-medium">
+                      {row.superApplies
+                        ? <span className="text-success-700">{formatCurrency(row.superAmount)}</span>
+                        : <span className="text-gray-400">—</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="bg-brand-50 font-bold text-sm">
+                  <td className="px-2 py-2 text-gray-900" colSpan={3}>Super-eligible earnings (OTE)</td>
+                  <td className="px-2 py-2 text-right text-gray-900">{formatCurrency(summary.superEligiblePay)}</td>
+                  <td className="px-2 py-2 text-right text-brand-700">{sgcPct}</td>
+                  <td className="px-2 py-2 text-right text-brand-700">{formatCurrency(summary.superAmount)}</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
 
-          <div className="bg-brand-50 rounded-lg p-4 space-y-1">
-            <div className="flex justify-between items-baseline">
-              <span className="font-semibold text-gray-900">Estimated super owed</span>
-              <span className="text-2xl font-bold text-brand-700">{formatCurrency(summary.superAmount)}</span>
-            </div>
-            <p className="text-xs text-gray-500">
-              {formatCurrency(summary.superEligiblePay)} ordinary/penalty pay × {(summary.sgcRate * 100).toFixed(1)}% SGC
+          {/* Super due dates notice */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-2 text-sm">
+            <p className="font-semibold text-amber-900">When must super be paid?</p>
+            <p className="text-amber-800">
+              <strong>Currently:</strong> Super must be in your super fund account on or before the{' '}
+              <strong>28th day of the month following each quarter</strong> (i.e. by 28 October,
+              28 January, 28 April, and 28 July each year).
+            </p>
+            <p className="text-amber-800">
+              <strong>From 1 July 2026 — Payday Super:</strong> Super must be paid into your fund{' '}
+              <strong>within 7 days of each pay day</strong>. This is a major change — employers who
+              pay late will face automatic penalties. Check your super fund balance regularly
+              to confirm contributions are arriving on time.
             </p>
           </div>
 

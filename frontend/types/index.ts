@@ -23,6 +23,20 @@ export interface Shift {
   restBreakTaken: boolean;
 }
 
+export interface ShiftSegment {
+  dayType: string;
+  dayLabel: string;
+  multiplier: number;
+  addition_per_hour: number;
+  effectiveRate: number;
+  rateLabel: string;
+  missedBreakPenalty: boolean;
+  baseRate: number;
+  minutes: number;
+  hours: number;
+  pay: number;
+}
+
 export interface ShiftResult {
   date: string;
   startTime: string;
@@ -30,23 +44,27 @@ export interface ShiftResult {
   workedHours: number;
   ordinaryPay: number;
   penaltyExtra: number;
+  missedBreakExtra: number;
   totalPay: number;
   mealBreakMinutes: number;
   restBreakTaken: boolean;
-  segments: Array<{
-    dayType: string;
-    multiplier: number;
-    addition_per_hour?: number;
-    minutes: number;
-    hours: number;
-    pay: number;
-  }>;
+  segments: ShiftSegment[];
   breakViolations: Array<{
     type: string;
     severity: string;
     message: string;
     entitlement: string;
   }>;
+}
+
+export interface SuperBreakdownRow {
+  rateLabel: string;
+  effectiveRate: number | null;
+  hours: number;
+  totalPay: number;
+  superApplies: boolean;
+  superRate: number;
+  superAmount: number;
 }
 
 export interface CalculationResult {
@@ -68,6 +86,7 @@ export interface CalculationResult {
     superEligiblePay: number;
     superAmount: number;
     sgcRate: number;
+    superBreakdown: SuperBreakdownRow[];
     overtimeBreakdown: unknown[];
     allBreakViolations: Array<{
       type: string;
@@ -103,8 +122,11 @@ export interface ClassificationOutcome {
   confidence: string;
 }
 
+export type AwardCode = 'MA000009' | 'MA000003' | 'MA000119';
+
 export interface WageCheckState {
   step: number;
+  awardCode: AwardCode | null;
   employmentType: EmploymentType | null;
   age: number | null;
   classificationAnswers: Record<string, string>;

@@ -4,14 +4,21 @@ const pool = require('../db/pool');
 const { calculateEntitlements } = require('../services/awardCalculator');
 const { classifyAndFetch } = require('../services/classificationEngine');
 
-const AWARD_CODE = 'MA000009';
+const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119'];
+const DEFAULT_AWARD = 'MA000009';
+
+function getAwardCode(req) {
+  const code = req.query.award || req.body?.award || DEFAULT_AWARD;
+  return VALID_AWARDS.includes(code) ? code : DEFAULT_AWARD;
+}
 
 // GET /api/award/metadata
 router.get('/metadata', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const result = await pool.query(
       'SELECT * FROM award_metadata WHERE award_code = $1',
-      [AWARD_CODE]
+      [awardCode]
     );
     res.json(result.rows[0] || null);
   } catch (err) {
@@ -23,11 +30,12 @@ router.get('/metadata', async (req, res) => {
 // Returns all classifications, optionally filtered by stream
 router.get('/classifications', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const { stream } = req.query;
     const query = stream
       ? 'SELECT * FROM classifications WHERE award_code = $1 AND stream = $2 ORDER BY sort_order'
       : 'SELECT * FROM classifications WHERE award_code = $1 ORDER BY sort_order';
-    const params = stream ? [AWARD_CODE, stream] : [AWARD_CODE];
+    const params = stream ? [awardCode, stream] : [awardCode];
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
@@ -38,6 +46,7 @@ router.get('/classifications', async (req, res) => {
 // GET /api/award/rates?classification_id=X&employment_type=Y
 router.get('/rates', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const { classification_id, employment_type } = req.query;
     if (!classification_id || !employment_type) {
       return res.status(400).json({ error: 'classification_id and employment_type are required' });
@@ -51,7 +60,7 @@ router.get('/rates', async (req, res) => {
         AND pr.classification_id = $2
         AND pr.employment_type = $3
       ORDER BY pr.effective_date DESC
-    `, [AWARD_CODE, classification_id, employment_type]);
+    `, [awardCode, classification_id, employment_type]);
 
     res.json(result.rows);
   } catch (err) {
@@ -62,11 +71,12 @@ router.get('/rates', async (req, res) => {
 // GET /api/award/penalty-rates?employment_type=Y
 router.get('/penalty-rates', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const { employment_type } = req.query;
     const query = employment_type
       ? 'SELECT * FROM penalty_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC'
       : 'SELECT * FROM penalty_rates WHERE award_code = $1 ORDER BY effective_date DESC';
-    const params = employment_type ? [AWARD_CODE, employment_type] : [AWARD_CODE];
+    const params = employment_type ? [awardCode, employment_type] : [awardCode];
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
@@ -77,9 +87,10 @@ router.get('/penalty-rates', async (req, res) => {
 // GET /api/award/allowances
 router.get('/allowances', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const result = await pool.query(
       'SELECT * FROM allowances WHERE award_code = $1 ORDER BY allowance_type',
-      [AWARD_CODE]
+      [awardCode]
     );
     res.json(result.rows);
   } catch (err) {
@@ -90,9 +101,10 @@ router.get('/allowances', async (req, res) => {
 // GET /api/award/break-entitlements
 router.get('/break-entitlements', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const result = await pool.query(
       'SELECT * FROM break_entitlements WHERE award_code = $1 ORDER BY shift_hours_min',
-      [AWARD_CODE]
+      [awardCode]
     );
     res.json(result.rows);
   } catch (err) {
@@ -104,12 +116,16 @@ router.get('/break-entitlements', async (req, res) => {
 // Returns classification questionnaire questions and answers
 router.get('/questions', async (req, res) => {
   try {
+    const awardCode = getAwardCode(req);
     const questions = await pool.query(`
-      SELECT * FROM classification_questions ORDER BY sort_order
-    `);
+      SELECT * FROM classification_questions WHERE award_code = $1 ORDER BY sort_order
+    `, [awardCode]);
     const answers = await pool.query(`
-      SELECT * FROM classification_answers ORDER BY question_id, sort_order
-    `);
+      SELECT ca.* FROM classification_answers ca
+      JOIN classification_questions cq ON cq.id = ca.question_id
+      WHERE cq.award_code = $1
+      ORDER BY ca.question_id, ca.sort_order
+    `, [awardCode]);
 
     const answersByQuestion = {};
     for (const a of answers.rows) {
@@ -129,17 +145,18 @@ router.get('/questions', async (req, res) => {
 });
 
 // POST /api/award/classify
-// Body: { answers: { [question_key]: answer_key }, employmentType?: string }
+// Body: { answers: { [question_key]: answer_key }, employmentType?: string, award?: string }
 router.post('/classify', async (req, res) => {
   try {
     const { answers, employmentType } = req.body;
+    const awardCode = getAwardCode(req);
     if (!answers || typeof answers !== 'object') {
       return res.status(400).json({ error: 'answers object is required' });
     }
     const empType = ['full_time', 'part_time', 'casual'].includes(employmentType)
       ? employmentType
       : 'full_time';
-    const result = await classifyAndFetch(answers, pool, empType);
+    const result = await classifyAndFetch(answers, pool, empType, awardCode);
     res.json(result);
   } catch (err) {
     console.error('Classification error:', err);
@@ -177,8 +194,9 @@ router.post('/calculate', async (req, res) => {
     }
 
     const validPeriod = ['weekly', 'fortnightly'].includes(period) ? period : 'weekly';
+    const awardCode = getAwardCode(req);
     const result = await calculateEntitlements(
-      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null, period: validPeriod },
+      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null, period: validPeriod, awardCode },
       pool
     );
 

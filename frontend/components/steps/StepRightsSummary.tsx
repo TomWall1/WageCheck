@@ -11,16 +11,20 @@ interface ClassificationResult {
 }
 
 interface Props {
+  awardCode: string;
   employmentType: EmploymentType;
   classificationResult: ClassificationResult;
   onNext: () => void;
   onBack: () => void;
 }
 
-export default function StepRightsSummary({ employmentType, classificationResult, onNext, onBack }: Props) {
+export default function StepRightsSummary({ awardCode, employmentType, classificationResult, onNext, onBack }: Props) {
   const isCasual = employmentType === 'casual';
   const isPartTime = employmentType === 'part_time';
   const isFullTime = employmentType === 'full_time';
+  const isFF = awardCode === 'MA000003';
+  const isRest = awardCode === 'MA000119';
+  const classLevel = classificationResult?.level ?? null;
 
   return (
     <div className="space-y-6">
@@ -118,13 +122,28 @@ export default function StepRightsSummary({ employmentType, classificationResult
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {[
+                {(isFF ? [
                   { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
-                  { label: 'Weekday midnight–7am', rate: '+15% loading' },
-                  { label: 'Saturday', rate: '+25% penalty' },
-                  { label: 'Sunday', rate: '+75% penalty (time and ¾)' },
-                  { label: 'Public holiday', rate: 'Double time and a quarter' },
-                ].map(row => (
+                  { label: 'Weekday evening (10pm–midnight)', rate: '+10% loading (×1.10)' },
+                  { label: 'Weekday night (midnight–6am)', rate: '+15% loading (×1.15)' },
+                  { label: 'Saturday', rate: '+25% penalty (×1.25)' },
+                  { label: 'Sunday', rate: classLevel === 1 ? '+25% penalty (×1.25)' : '+50% penalty (×1.50)' },
+                  { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
+                ] : isRest ? [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Weekday evening (10pm–midnight)', rate: '+$2.81/hr loading' },
+                  { label: 'Weekday midnight–6am', rate: '+$4.22/hr loading' },
+                  { label: 'Saturday', rate: '+25% penalty (×1.25)' },
+                  { label: 'Sunday', rate: '+50% penalty (×1.50)' },
+                  { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
+                ] : [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Weekday evening (7pm–midnight)', rate: '+$2.81/hr loading' },
+                  { label: 'Weekday midnight–7am', rate: '+$4.22/hr loading' },
+                  { label: 'Saturday', rate: '+25% penalty (×1.25)' },
+                  { label: 'Sunday', rate: '+50% penalty (time and a half, ×1.5)' },
+                  { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
+                ]).map(row => (
                   <tr key={row.label}>
                     <td className="px-3 py-2 text-gray-700">{row.label}</td>
                     <td className="px-3 py-2 text-right font-semibold text-gray-900">{row.rate}</td>
@@ -133,6 +152,16 @@ export default function StepRightsSummary({ employmentType, classificationResult
               </tbody>
             </table>
           </div>
+          {isFF && classLevel === 1 && (
+            <p className="text-gray-500 text-xs">
+              Grade 1 employees have the same Sunday rate as Saturday (×1.25). Grade 2 and 3 employees are paid ×1.50 on Sunday.
+            </p>
+          )}
+          {isRest && isCasual && classLevel !== null && classLevel <= 2 && (
+            <p className="text-gray-500 text-xs">
+              Casual Introductory, Level 1, and Level 2 employees: Sunday rate is ×1.20 of your casual base (150% of the FT rate). Level 3 and above: ×1.40 of your casual base (175% of the FT rate).
+            </p>
+          )}
           {isCasual && (
             <p className="text-gray-500 text-xs">
               For casual employees, penalty rates are applied on top of your base casual rate

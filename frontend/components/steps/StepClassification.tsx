@@ -12,6 +12,8 @@ interface Question {
   help_text: string | null;
   question_type: string;
   stream: string | null;
+  parent_question_key: string | null;
+  parent_answer_key: string | null;
   sort_order: number;
   answers: Array<{
     id: number;
@@ -56,6 +58,7 @@ interface ClassificationResult {
 }
 
 interface Props {
+  awardCode: string;
   employmentType: EmploymentType;
   age: number | null;
   answers: Record<string, string>;
@@ -71,11 +74,21 @@ const STREAM_LABELS: Record<string, string> = {
   kitchen: 'Kitchen',
   front_office: 'Front Office',
   general: 'General',
+  solo: 'Working alone',
+  responsible: 'Responsible for 2+ employees',
+  introductory: 'Introductory',
 };
 
-const STREAM_ORDER = ['kitchen', 'food_beverage', 'front_office', 'general'];
+const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
+const STREAM_ORDER_MA000003 = ['general', 'solo', 'responsible'];
+const STREAM_ORDER_MA000119 = ['introductory', 'food_beverage', 'kitchen', 'general'];
 
-export default function StepClassification({ employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
+export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
+  const isFF = awardCode === 'MA000003';
+  const isRest = awardCode === 'MA000119';
+  const isParentGated = isFF || isRest;
+  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : STREAM_ORDER_MA000009;
+  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
 
@@ -97,11 +110,11 @@ export default function StepClassification({ employmentType, age, answers, prefe
   // Fetch questions if not prefetched
   useEffect(() => {
     if (prefetchedQuestions) return;
-    api.getQuestions()
+    api.getQuestions(awardCode)
       .then((data: unknown) => setQuestions(data as Question[]))
       .catch(() => setError('Could not load questions. Please check your connection.'))
       .finally(() => setQuestionsLoading(false));
-  }, [prefetchedQuestions]);
+  }, [prefetchedQuestions, awardCode]);
 
   // Fetch all classifications when user selects "yes, I know"
   async function handleKnowsAnswer(knows: boolean) {
@@ -109,7 +122,7 @@ export default function StepClassification({ employmentType, age, answers, prefe
     if (knows && allClassifications.length === 0) {
       setDirectLoading(true);
       try {
-        const data = await api.getClassifications() as ClassificationFull[];
+        const data = await api.getClassifications(undefined, awardCode) as ClassificationFull[];
         setAllClassifications(data);
       } catch {
         setError('Could not load classifications. Please check your connection.');
@@ -125,7 +138,7 @@ export default function StepClassification({ employmentType, age, answers, prefe
     setDirectLoading(true);
     setError(null);
     try {
-      const ratesData = await api.getRates(selectedClassId as number, employmentType) as PayRateRow[];
+      const ratesData = await api.getRates(selectedClassId as number, employmentType, awardCode) as PayRateRow[];
       const baseRateRow = ratesData
         .filter(r => r.rate_type === 'base_hourly')
         .sort((a, b) => b.effective_date.localeCompare(a.effective_date))[0];
@@ -159,7 +172,16 @@ export default function StepClassification({ employmentType, age, answers, prefe
 
   // Questionnaire helpers
   const selectedStream = answers.stream;
+
   const visibleQuestions = questions.filter(q => {
+    if (isParentGated) {
+      // MA000003 & MA000119: parent-based gating
+      if (q.parent_question_key) {
+        return answers[q.parent_question_key] === q.parent_answer_key;
+      }
+      return true;
+    }
+    // MA000009: stream-based gating
     if (q.question_key === 'stream') return true;
     if (!selectedStream) return false;
     if (q.stream === null) return true;
@@ -168,8 +190,16 @@ export default function StepClassification({ employmentType, age, answers, prefe
 
   function handleAnswer(questionKey: string, answerKey: string) {
     const newAnswers = { ...answers, [questionKey]: answerKey };
+    // Reset any child questions when a parent question changes
+    const childKeys = questions
+      .filter(q => q.parent_question_key === questionKey)
+      .map(q => q.question_key);
+    childKeys.forEach(k => delete newAnswers[k]);
+    // MA000009: also reset stream-specific answers when stream changes
     if (questionKey === 'stream') {
-      const keysToReset = Object.keys(newAnswers).filter(k => k !== 'stream' && k !== 'experience');
+      const keysToReset = Object.keys(newAnswers).filter(
+        k => k !== 'stream' && k !== 'experience' && !childKeys.includes(k)
+      );
       keysToReset.forEach(k => delete newAnswers[k]);
     }
     onAnswersChange(newAnswers);
@@ -180,7 +210,7 @@ export default function StepClassification({ employmentType, age, answers, prefe
     setClassifying(true);
     setError(null);
     try {
-      const res = await api.classify(answers, employmentType) as ClassificationResult;
+      const res = await api.classify(answers, employmentType, awardCode) as ClassificationResult;
       setQuestionResult(res);
       onResult(res);
     } catch {
@@ -192,16 +222,21 @@ export default function StepClassification({ employmentType, age, answers, prefe
 
   const streamQuestions = visibleQuestions.filter(q => q.question_key !== 'stream');
   const answeredStreamQuestions = streamQuestions.filter(q => answers[q.question_key]);
-  const canClassify = selectedStream && streamQuestions.length > 0 &&
-    answeredStreamQuestions.length >= Math.min(streamQuestions.length, 2);
+  const canClassify = isParentGated
+    ? visibleQuestions.length > 0 && visibleQuestions.every(q => answers[q.question_key])
+    : (selectedStream && streamQuestions.length > 0 &&
+        answeredStreamQuestions.length >= Math.min(streamQuestions.length, 2));
 
   // ── Shared result display ───────────────────────────────────────────────────
   const activeResult = directResult || questionResult;
 
   function renderRateBox(result: ClassificationResult) {
     if (!result.classification?.base_rate) return null;
-    const JUNIOR: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
-    const juniorMult = (age && age < 21) ? (JUNIOR[age] ?? 1.0) : 1.0;
+    const JUNIOR_DEFAULT: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    const JUNIOR_MA000119: Record<number, number> = { 17: 0.60, 18: 0.70, 19: 0.85 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : JUNIOR_DEFAULT;
+    const juniorCutoff = isRest ? 20 : 21;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     const effectiveDate = result.classification.rate_effective_date
       ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -298,8 +333,13 @@ export default function StepClassification({ employmentType, age, answers, prefe
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-gray-900">Your role</h2>
           <p className="text-gray-600">
-            Under the Hospitality Award, your pay rate depends on your <strong>classification level</strong>.
-            Levels run from 1 (entry level) to 5 (senior/management).
+            Under the {awardShortName}, your pay rate depends on your{' '}
+            <strong>classification level</strong>.
+            {isFF
+              ? ' Levels run from Grade 1 (entry level) to Grade 3 (experienced/supervising).'
+              : isRest
+                ? ' Levels run from Introductory (new starters) to Level 6 (specialist tradespeople).'
+                : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -307,7 +347,11 @@ export default function StepClassification({ employmentType, age, answers, prefe
           <p className="font-semibold text-gray-900">Do you know your classification level?</p>
           <p className="text-sm text-gray-500">
             Your classification is sometimes listed on your payslip, contract, or letter of engagement.
-            It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".
+            {isFF
+              ? ' It might say something like "Grade 1" or "Fast Food Employee Grade 2".'
+              : isRest
+                ? ' It might say something like "Introductory" or "Food and Beverage Attendant Grade 3".'
+                : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

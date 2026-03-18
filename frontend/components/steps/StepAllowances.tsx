@@ -7,6 +7,7 @@ import { formatCurrency } from '@/lib/utils';
 import clsx from 'clsx';
 
 interface Props {
+  awardCode: string;
   employmentType: EmploymentType;
   stream: string | null;
   answers: AllowanceAnswer[];
@@ -90,7 +91,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
 
 type FollowUpAnswers = Record<string, string>;
 
-export default function StepAllowances({ employmentType, stream, answers, onAnswersChange, onNext, onBack }: Props) {
+export default function StepAllowances({ awardCode, employmentType, stream, answers, onAnswersChange, onNext, onBack }: Props) {
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -113,10 +114,10 @@ export default function StepAllowances({ employmentType, stream, answers, onAnsw
   const [vehicleKm, setVehicleKm] = useState<string>('');
 
   useEffect(() => {
-    api.getAllowances()
+    api.getAllowances(awardCode)
       .then((data: unknown) => setAllowanceInfo(data as AllowanceInfo[]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [awardCode]);
 
   // Derive triggered allowances and sync to parent whenever answers change
   useEffect(() => {

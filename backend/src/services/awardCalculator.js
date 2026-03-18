@@ -1,24 +1,33 @@
 /**
  * Award calculator — deterministic wage calculation engine
- * Hospitality Industry (General) Award 2020 [MA000009]
+ * Supports: MA000009 (Hospitality), MA000003 (Fast Food), MA000119 (Restaurant)
  */
 
-const AWARD_CODE = 'MA000009';
+const DEFAULT_AWARD_CODE = 'MA000009';
 
 // ── Superannuation ────────────────────────────────────────────────────────
 // SGC rate from 1 July 2025. Super applies to OTE (ordinary time earnings).
 // OTE includes: ordinary hours pay + penalty rates on ordinary hours.
 // OTE excludes: overtime, missed-break double time, expense allowances.
-const SGC_RATE = 0.115; // 11.5%
+const SGC_RATE = 0.12; // 12%
 
-// ── Junior rates — Schedule E of the Award ────────────────────────────────
+// ── Junior rates ──────────────────────────────────────────────────────────
 // Applied to the base rate. Casual loading applies on top.
-const JUNIOR_RATE_MULTIPLIERS = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+// MA000009 / MA000003: under 16=40%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
+// MA000119:            under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100%
+const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 
-function getJuniorMultiplier(age) {
-  if (!age || age >= 21) return 1.0;
+function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
+  if (!age) return 1.0;
+  if (awardCode === 'MA000119') {
+    if (age >= 20) return 1.0;
+    if (age < 17) return 0.50;
+    return JUNIOR_RATES_MA000119[age] || 1.0;
+  }
+  if (age >= 21) return 1.0;
   if (age < 16) return 0.40;
-  return JUNIOR_RATE_MULTIPLIERS[age] || 1.0;
+  return JUNIOR_RATES_DEFAULT[age] || 1.0;
 }
 
 // ── Day type ──────────────────────────────────────────────────────────────
@@ -307,6 +316,8 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty) {
   if (addition_per_hour === 4.22) return `Night work loading (midnight–7am) +$4.22/hr`;
   if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
+  if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
+  if (multiplier === 1.15) return 'Late night loading (midnight–6am, ×1.15)';
   if (multiplier === 1.2) return 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return 'Saturday penalty (×1.25)';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
@@ -325,16 +336,17 @@ async function calculateEntitlements(input, db) {
     shifts,
     publicHolidays = [],
     period = 'weekly',
+    awardCode = DEFAULT_AWARD_CODE,
   } = input;
 
-  const juniorMultiplier = getJuniorMultiplier(age);
+  const juniorMultiplier = getJuniorMultiplier(age, awardCode);
 
   // Fetch the most current base rate
   const rateResult = await db.query(`
     SELECT rate_amount FROM pay_rates
     WHERE award_code = $1 AND classification_id = $2 AND employment_type = $3 AND rate_type = 'base_hourly'
     ORDER BY effective_date DESC LIMIT 1
-  `, [AWARD_CODE, classificationId, employmentType]);
+  `, [awardCode, classificationId, employmentType]);
 
   if (!rateResult.rows.length) throw new Error('No pay rate found for this classification and employment type');
 
@@ -346,22 +358,56 @@ async function calculateEntitlements(input, db) {
     SELECT effective_date FROM pay_rates
     WHERE award_code = $1 AND classification_id = $2 AND employment_type = $3 AND rate_type = 'base_hourly'
     ORDER BY effective_date DESC LIMIT 1
-  `, [AWARD_CODE, classificationId, employmentType]);
+  `, [awardCode, classificationId, employmentType]);
   const effectiveDate = rateDateResult.rows[0]?.effective_date?.toISOString().split('T')[0] || '2025-07-01';
 
   const penaltyResult = await db.query(
     `SELECT * FROM penalty_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC`,
-    [AWARD_CODE, employmentType]
+    [awardCode, employmentType]
   );
-  const penaltyRates = penaltyResult.rows;
+  let penaltyRates = penaltyResult.rows;
+
+  // MA000003 special case: Grade 1 has a lower Sunday rate than Grade 2/3.
+  // FT/PT L1 Sunday = ×1.25 (same as Saturday); Casual L1 Sunday = ×1.20 (same as Saturday).
+  // Default penalty_rates store the L2/L3 rates; override here for L1.
+  if (awardCode === 'MA000003') {
+    const levelResult = await db.query(
+      'SELECT level FROM classifications WHERE id = $1', [classificationId]
+    );
+    const classLevel = parseInt(levelResult.rows[0]?.level || 2);
+    if (classLevel === 1) {
+      const sundayOverride = employmentType === 'casual' ? 1.20 : 1.25;
+      penaltyRates = penaltyRates.map(r =>
+        r.day_type === 'sunday'
+          ? { ...r, multiplier: sundayOverride.toString(), addition_per_hour: null }
+          : r
+      );
+    }
+  }
+
+  // MA000119: casual Introductory/L1/L2 Sunday = ×1.20 (150% of FT = 150/125 of casual base).
+  // DB stores ×1.40 (L3–L6 default); override here for ≤L2.
+  if (awardCode === 'MA000119' && employmentType === 'casual') {
+    const levelResult = await db.query(
+      'SELECT level FROM classifications WHERE id = $1', [classificationId]
+    );
+    const classLevel = parseInt(levelResult.rows[0]?.level ?? 3);
+    if (classLevel <= 2) {
+      penaltyRates = penaltyRates.map(r =>
+        r.day_type === 'sunday'
+          ? { ...r, multiplier: '1.20', addition_per_hour: null }
+          : r
+      );
+    }
+  }
 
   const overtimeResult = await db.query(
     `SELECT * FROM overtime_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC`,
-    [AWARD_CODE, employmentType]
+    [awardCode, employmentType]
   );
   const overtimeRates = overtimeResult.rows;
 
-  const breakResult = await db.query(`SELECT * FROM break_entitlements WHERE award_code = $1`, [AWARD_CODE]);
+  const breakResult = await db.query(`SELECT * FROM break_entitlements WHERE award_code = $1`, [awardCode]);
   const breakEntitlements = breakResult.rows;
 
   const processedShifts = [];
@@ -471,7 +517,7 @@ async function calculateEntitlements(input, db) {
   if (overtimeCalc.mealAllowancesOwed > 0 && employmentType !== 'casual') {
     const mealResult = await db.query(
       `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal' ORDER BY effective_date DESC LIMIT 1`,
-      [AWARD_CODE]
+      [awardCode]
     );
     if (mealResult.rows.length) {
       mealAllowanceRate = parseFloat(mealResult.rows[0].amount);
@@ -484,6 +530,58 @@ async function calculateEntitlements(input, db) {
   // Super: applies to OTE only (ordinary + penalty, not overtime, missed break, or expense allowances)
   const superEligiblePay = totalOrdinaryPay + totalPenaltyPay;
   const superAmount = Math.round(superEligiblePay * SGC_RATE * 100) / 100;
+
+  // ── Per-category super breakdown ────────────────────────────────────────
+  // Aggregate all shift segments across all shifts, grouped by rate category.
+  // Each entry shows hours, effective rate, total pay, and whether super applies.
+  const categoryAgg = new Map();
+  for (const shift of processedShifts) {
+    for (const seg of shift.segments) {
+      const key = `${seg.dayType}_${seg.multiplier}_${seg.addition_per_hour}_${seg.missedBreakPenalty}`;
+      if (!categoryAgg.has(key)) {
+        categoryAgg.set(key, {
+          rateLabel: seg.rateLabel,
+          effectiveRate: seg.effectiveRate,
+          missedBreakPenalty: !!seg.missedBreakPenalty,
+          superApplies: !seg.missedBreakPenalty,
+          totalHours: 0,
+          totalPay: 0,
+        });
+      }
+      const entry = categoryAgg.get(key);
+      entry.totalHours += seg.hours;
+      entry.totalPay += seg.pay;
+    }
+  }
+  if (overtimeCalc.overtimePay > 0) {
+    categoryAgg.set('_overtime', {
+      rateLabel: 'Overtime loading (premium only)',
+      effectiveRate: null,
+      missedBreakPenalty: false,
+      superApplies: false,
+      totalHours: Math.round(overtimeCalc.overtimeMinutes / 60 * 100) / 100,
+      totalPay: overtimeCalc.overtimePay,
+    });
+  }
+  if (mealAllowancePay > 0) {
+    categoryAgg.set('_meal_allowance', {
+      rateLabel: `Meal allowance (${overtimeCalc.mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)})`,
+      effectiveRate: mealAllowanceRate,
+      missedBreakPenalty: false,
+      superApplies: false,
+      totalHours: overtimeCalc.mealAllowancesOwed,
+      totalPay: mealAllowancePay,
+    });
+  }
+  const superBreakdown = Array.from(categoryAgg.values()).map(cat => ({
+    rateLabel: cat.rateLabel,
+    effectiveRate: cat.effectiveRate !== null ? Math.round(cat.effectiveRate * 10000) / 10000 : null,
+    hours: Math.round(cat.totalHours * 100) / 100,
+    totalPay: Math.round(cat.totalPay * 100) / 100,
+    superApplies: cat.superApplies,
+    superRate: cat.superApplies ? SGC_RATE : 0,
+    superAmount: cat.superApplies ? Math.round(cat.totalPay * SGC_RATE * 100) / 100 : 0,
+  }));
 
   return {
     baseHourlyRate,
@@ -508,6 +606,7 @@ async function calculateEntitlements(input, db) {
       superEligiblePay: Math.round(superEligiblePay * 100) / 100,
       superAmount,
       sgcRate: SGC_RATE,
+      superBreakdown,
       overtimeBreakdown: overtimeCalc.overtimeBreakdown,
       allBreakViolations: processedShifts.flatMap(s => s.breakViolations.map(v => ({ ...v, date: s.date }))),
     },

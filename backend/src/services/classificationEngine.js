@@ -6,14 +6,12 @@
  * Output: { level, stream, confidence, alternateLevel }
  */
 
-const AWARD_CODE = 'MA000009';
-
 /**
+ * MA000009 — Hospitality Industry (General) Award 2020
  * Core rules — maps answer patterns to (level, stream) outcomes.
  * Evaluated in order; first match wins.
- * Each rule is: { conditions: { [question_key]: answer_key | answer_key[] }, level, stream }
  */
-const CLASSIFICATION_RULES = [
+const CLASSIFICATION_RULES_MA000009 = [
 
   // ── KITCHEN STREAM ──────────────────────────────────────────────────────────
   {
@@ -201,6 +199,76 @@ const CLASSIFICATION_RULES = [
 ];
 
 /**
+ * MA000003 — Fast Food Industry Award 2020
+ * Classifications: Grade 1 (L1), Grade 2 (L2), Grade 3 solo (L3/stream=solo),
+ * Grade 3 responsible (L3/stream=responsible).
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000003 = [
+  {
+    conditions: { ff_experience: 'experienced', ff_role: 'supervises_2plus' },
+    level: 3,
+    stream: 'responsible',
+    rationale: 'Experienced employee responsible for supervising 2 or more other employees',
+  },
+  {
+    conditions: { ff_experience: 'experienced', ff_role: 'works_alone' },
+    level: 3,
+    stream: 'solo',
+    rationale: 'Experienced employee who works alone or opens/closes the store without other employees present',
+  },
+  {
+    conditions: { ff_experience: 'experienced', ff_role: 'team_member' },
+    level: 2,
+    stream: 'general',
+    rationale: 'Experienced team member (3+ months) working alongside other staff',
+  },
+  {
+    conditions: { ff_experience: 'experienced' },
+    level: 2,
+    stream: 'general',
+    rationale: 'Experienced fast food employee (3+ months)',
+  },
+  {
+    conditions: { ff_experience: 'new' },
+    level: 1,
+    stream: 'general',
+    rationale: 'New employee (less than 3 months experience) — entry level Grade 1',
+  },
+];
+
+/**
+ * MA000119 — Restaurant Industry Award 2020
+ * Classifications: Introductory (L0), Level 1–6 across food_beverage, kitchen, general streams.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000119 = [
+  // Introductory
+  { conditions: { rest_experience: 'introductory' }, level: 0, stream: 'introductory', rationale: 'Introductory employee — new to the restaurant industry' },
+
+  // Food & Beverage
+  { conditions: { rest_experience: 'experienced', rest_stream: 'food_beverage', rest_fb_level: 'grade5' }, level: 5, stream: 'food_beverage', rationale: 'Food & Beverage Supervisor — supervises staff or manages a service section' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'food_beverage', rest_fb_level: 'grade4' }, level: 4, stream: 'food_beverage', rationale: 'Food & Beverage Grade 4 — specialist skills (wine, cocktails, trade qualifications)' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'food_beverage', rest_fb_level: 'grade3' }, level: 3, stream: 'food_beverage', rationale: 'Food & Beverage Grade 3 (trained) — experienced server with full table service' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'food_beverage', rest_fb_level: 'grade2' }, level: 2, stream: 'food_beverage', rationale: 'Food & Beverage Grade 2 — general food service, counter service, basic cashier duties' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'food_beverage', rest_fb_level: 'grade1' }, level: 1, stream: 'food_beverage', rationale: 'Food & Beverage Grade 1 — basic delivery of food/drinks, no order-taking' },
+
+  // Kitchen
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'cook5' }, level: 6, stream: 'kitchen', rationale: 'Cook Grade 5 — specialist cook (advanced pastry or artisan)' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'cook4' }, level: 5, stream: 'kitchen', rationale: 'Cook Grade 4 — advanced tradesperson, section head' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'cook3' }, level: 4, stream: 'kitchen', rationale: 'Cook Grade 3 — trade qualified cook/chef' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'cook2' }, level: 3, stream: 'kitchen', rationale: 'Cook Grade 2 — cooks menu items from recipes independently' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'attendant2_cook1' }, level: 2, stream: 'kitchen', rationale: 'Kitchen Attendant Grade 2 / Cook Grade 1 — prepares vegetables, basic cooking' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'kitchen', rest_kitchen_level: 'attendant1' }, level: 1, stream: 'kitchen', rationale: 'Kitchen Attendant Grade 1 — dishwashing, basic cleaning, simple food prep' },
+
+  // General
+  { conditions: { rest_experience: 'experienced', rest_stream: 'general', rest_general_level: 'level5' }, level: 5, stream: 'general', rationale: 'General Service Grade 5 — manages a section or is a senior tradesperson' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'general', rest_general_level: 'level4' }, level: 4, stream: 'general', rationale: 'General Service Grade 4 — supervises general service staff or advanced functions' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'general', rest_general_level: 'level3' }, level: 3, stream: 'general', rationale: 'General Service Grade 3 — experienced, handles transactions or specialist equipment' },
+  { conditions: { rest_experience: 'experienced', rest_stream: 'general', rest_general_level: 'level2' }, level: 2, stream: 'general', rationale: 'General Service Grade 2 — cleaning, storeperson, or laundry with some experience' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -221,9 +289,27 @@ function matchesRule(answers, conditions) {
  * Classify the worker based on their questionnaire answers.
  * Returns the best matching classification.
  */
-function classify(answers) {
-  const stream = answers.stream;
+function classify(answers, awardCode = 'MA000009') {
+  if (awardCode === 'MA000003') {
+    for (const rule of CLASSIFICATION_RULES_MA000003) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
+  }
 
+  if (awardCode === 'MA000119') {
+    for (const rule of CLASSIFICATION_RULES_MA000119) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'food_beverage', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
+  }
+
+  // MA000009 (and default)
+  const stream = answers.stream;
   if (!stream) {
     return {
       level: null,
@@ -234,7 +320,7 @@ function classify(answers) {
     };
   }
 
-  for (const rule of CLASSIFICATION_RULES) {
+  for (const rule of CLASSIFICATION_RULES_MA000009) {
     if (rule.stream !== stream) continue;
     if (matchesRule(answers, rule.conditions)) {
       return {
@@ -258,8 +344,8 @@ function classify(answers) {
 /**
  * Full classification lookup — enriches with DB data
  */
-async function classifyAndFetch(answers, db, employmentType = 'full_time') {
-  const result = classify(answers);
+async function classifyAndFetch(answers, db, employmentType = 'full_time', awardCode = 'MA000009') {
+  const result = classify(answers, awardCode);
   if (!result.level) return result;
 
   // Fetch rate for the actual employment type requested
@@ -272,7 +358,7 @@ async function classifyAndFetch(answers, db, employmentType = 'full_time') {
     WHERE c.award_code = $1 AND c.level = $2 AND c.stream = $3
     ORDER BY pr.effective_date DESC
     LIMIT 1
-  `, [AWARD_CODE, result.level, stream, employmentType]);
+  `, [awardCode, result.level, stream, employmentType]);
 
   let classRow = await fetchRate(result.stream);
 

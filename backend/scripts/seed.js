@@ -931,9 +931,10 @@ async function seed() {
 
     for (const q of questions) {
       const qResult = await client.query(`
-        INSERT INTO classification_questions (question_key, question_text, help_text, question_type, stream, sort_order)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO classification_questions (award_code, question_key, question_text, help_text, question_type, stream, sort_order)
+        VALUES ('MA000009', $1, $2, $3, $4, $5, $6)
         ON CONFLICT (question_key) DO UPDATE SET
+          award_code = 'MA000009',
           question_text = EXCLUDED.question_text,
           help_text = EXCLUDED.help_text,
           sort_order = EXCLUDED.sort_order
