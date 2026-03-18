@@ -43,6 +43,7 @@ interface Props {
   employmentType: EmploymentType;
   age: number | null;
   answers: Record<string, string>;
+  prefetchedQuestions?: unknown[] | null;
   onAnswersChange: (answers: Record<string, string>) => void;
   onResult: (result: ClassificationResult) => void;
   onNext: () => void;
@@ -56,19 +57,22 @@ const STREAM_LABELS: Record<string, string> = {
   general: 'General',
 };
 
-export default function StepClassification({ employmentType, age, answers, onAnswersChange, onResult, onNext, onBack }: Props) {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function StepClassification({ employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
+  const [questions, setQuestions] = useState<Question[]>(
+    prefetchedQuestions ? (prefetchedQuestions as Question[]) : []
+  );
+  const [loading, setLoading] = useState(!prefetchedQuestions);
   const [classifying, setClassifying] = useState(false);
   const [result, setResult] = useState<ClassificationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (prefetchedQuestions) return; // already have data
     api.getQuestions()
       .then((data: unknown) => setQuestions(data as Question[]))
       .catch(() => setError('Could not load questions. Please check your connection.'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [prefetchedQuestions]);
 
   const selectedStream = answers.stream;
 

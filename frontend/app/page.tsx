@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WageCheckState, EmploymentType, AllowanceAnswer } from '@/types';
+import { api } from '@/lib/api';
 import StepEmploymentType from '@/components/steps/StepEmploymentType';
 import StepClassification from '@/components/steps/StepClassification';
 import StepTimesheet from '@/components/steps/StepTimesheet';
@@ -35,6 +36,14 @@ const INITIAL_STATE: WageCheckState = {
 
 export default function HomePage() {
   const [state, setState] = useState<WageCheckState>(INITIAL_STATE);
+  const [prefetchedQuestions, setPrefetchedQuestions] = useState<unknown[] | null>(null);
+
+  // Warm up the backend and prefetch questions while user is on step 1
+  useEffect(() => {
+    api.getQuestions()
+      .then((data: unknown) => setPrefetchedQuestions(data as unknown[]))
+      .catch(() => { /* will fall back to fetching in StepClassification */ });
+  }, []);
 
   function updateState(updates: Partial<WageCheckState>) {
     setState(prev => ({ ...prev, ...updates }));
@@ -78,6 +87,7 @@ export default function HomePage() {
           employmentType={state.employmentType}
           age={state.age}
           answers={state.classificationAnswers}
+          prefetchedQuestions={prefetchedQuestions}
           onAnswersChange={(answers) => updateState({ classificationAnswers: answers })}
           onResult={(result) => updateState({ classificationResult: result })}
           onNext={nextStep}

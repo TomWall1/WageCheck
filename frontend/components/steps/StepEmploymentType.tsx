@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { EmploymentType } from '@/types';
 import clsx from 'clsx';
 
@@ -22,6 +23,7 @@ const EMPLOYMENT_TYPES: Array<{
   summary: string;
   detail: string;
   importantNote?: string;
+  learnMore?: string[];
 }> = [
   {
     type: 'full_time',
@@ -30,7 +32,6 @@ const EMPLOYMENT_TYPES: Array<{
     summary: 'I work regular hours every week — usually around 38 hours.',
     detail:
       'Full-time employees have set hours and are entitled to paid annual leave (4 weeks per year), paid sick leave (10 days per year), and paid public holidays. You should have a written contract.',
-    importantNote: undefined,
   },
   {
     type: 'part_time',
@@ -41,6 +42,12 @@ const EMPLOYMENT_TYPES: Array<{
       'Part-time employees have agreed, regular hours (less than 38 per week). You get the same entitlements as full-time workers, just proportional to your hours. Your hours should be agreed in writing.',
     importantNote:
       "If your hours change week to week and you don't have guaranteed shifts, you might actually be casual — even if your employer hasn't told you that.",
+    learnMore: [
+      "Under the Hospitality Award, part-time workers must have their regular hours and days of work agreed in writing before they start. This written agreement should specify at least the number of hours guaranteed each week and which days those hours fall on.",
+      "If your hours change from week to week — or you're called in based on demand with no set schedule — you may legally be a casual employee, regardless of what your employer calls you.",
+      "The distinction matters significantly. Casual employees receive a 25% casual loading on their hourly rate to compensate for the lack of paid leave. If you're being treated as casual without that loading, but also without guaranteed hours, something may not be right.",
+      "If you believe you're genuinely part-time but your employer is treating you as casual (or vice versa), you can contact the Fair Work Ombudsman on 13 13 94 for free advice.",
+    ],
   },
   {
     type: 'casual',
@@ -51,11 +58,18 @@ const EMPLOYMENT_TYPES: Array<{
       'Casual employees get 25% extra on top of the base hourly rate (called casual loading). This compensates for not having paid leave or job security. You still get penalty rates, overtime, and allowances on top of this loading.',
     importantNote:
       "If you've been working regular shifts at the same time each week for a long time, you may have the right to request conversion to permanent employment.",
+    learnMore: [
+      "Under the Fair Work Act, if you've been employed as a casual for 12 months and have worked a regular and systematic pattern of hours for at least the last 6 months, you can formally request to convert to permanent employment (part-time or full-time).",
+      "Your employer must respond in writing within 21 days. They can only refuse on genuine operational grounds — for example, if the business genuinely can't commit to regular hours for that role.",
+      "A 'regular pattern of work' doesn't have to be exactly the same hours every week. Courts and the Fair Work Commission look at whether your shifts were predictable and systematic over time.",
+      "Even if you haven't formally requested conversion, working a regular casual roster for an extended period can sometimes create legal entitlements. If you think this applies to you, the Fair Work Ombudsman (13 13 94) can give you free, confidential advice.",
+    ],
   },
 ];
 
 export default function StepEmploymentType({ selected, age, onSelect, onAgeChange, onNext }: Props) {
-  const juniorRate = age && JUNIOR_RATES[age];
+  const [expandedNote, setExpandedNote] = useState<string | null>(null);
+  const juniorRate = age !== null && age < 21 ? JUNIOR_RATES[age] ?? null : null;
 
   return (
     <div className="space-y-6">
@@ -74,8 +88,8 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
       </div>
 
       <div className="space-y-3">
-        {EMPLOYMENT_TYPES.map(({ type, label, icon, summary, detail, importantNote }) => (
-          <button
+        {EMPLOYMENT_TYPES.map(({ type, label, icon, summary, detail, importantNote, learnMore }) => (
+          <div
             key={type}
             onClick={() => onSelect(type)}
             className={clsx(
@@ -94,12 +108,30 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
               <p className="text-gray-700 font-medium">{summary}</p>
               <p className="text-gray-500 text-sm">{detail}</p>
               {importantNote && (
-                <div className="warning-box text-sm">
-                  <strong>Worth knowing:</strong> {importantNote}
+                <div
+                  className="warning-box text-sm"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <p><strong>Worth knowing:</strong> {importantNote}</p>
+                  {learnMore && (
+                    <button
+                      onClick={() => setExpandedNote(expandedNote === type ? null : type)}
+                      className="text-warning-700 underline font-medium mt-1 text-sm"
+                    >
+                      {expandedNote === type ? '↑ Show less' : '↓ Learn more'}
+                    </button>
+                  )}
+                  {expandedNote === type && learnMore && (
+                    <div className="mt-3 pt-3 border-t border-warning-200 space-y-2">
+                      {learnMore.map((para, i) => (
+                        <p key={i} className="text-gray-700">{para}</p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          </button>
+          </div>
         ))}
       </div>
 
@@ -112,29 +144,31 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
         </div>
       )}
 
-      {/* Age input */}
+      {/* Age dropdown */}
       <div className="card space-y-3">
         <div>
           <label className="block font-semibold text-gray-900 mb-1">How old are you?</label>
           <p className="text-sm text-gray-500 mb-3">
-            Under-21s are paid a percentage of the adult rate under the award. Enter your age
-            so we can calculate the right rate for you. If you're 21 or over, junior rates don't apply.
+            Under-21s are paid a percentage of the adult rate under the award.
+            If you're 21 or over, junior rates don't apply.
           </p>
-          <div className="flex items-center gap-3">
-            <input
-              type="number"
-              min={14}
-              max={70}
-              placeholder="e.g. 19"
-              value={age ?? ''}
-              onChange={e => {
-                const val = parseInt(e.target.value);
-                onAgeChange(isNaN(val) ? null : val);
-              }}
-              className="input-field max-w-[120px]"
-            />
-            <span className="text-gray-500 text-sm">years old</span>
-          </div>
+          <select
+            value={age === null ? '21' : String(age)}
+            onChange={e => {
+              const val = e.target.value;
+              onAgeChange(val === '21' ? null : parseInt(val));
+            }}
+            className="select-field max-w-[200px]"
+          >
+            <option value="21">21+ (adult rate)</option>
+            <option value="20">20 years old</option>
+            <option value="19">19 years old</option>
+            <option value="18">18 years old</option>
+            <option value="17">17 years old</option>
+            <option value="16">16 years old</option>
+            <option value="15">15 years old</option>
+            <option value="14">14 years old</option>
+          </select>
         </div>
 
         {juniorRate && (
@@ -144,7 +178,7 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
             This is automatically factored into your calculation.
           </div>
         )}
-        {age && age >= 21 && (
+        {(age === null || age >= 21) && (
           <div className="success-box text-sm">
             Adult rate applies — no junior rate reduction.
           </div>
