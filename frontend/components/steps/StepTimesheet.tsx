@@ -41,19 +41,34 @@ interface DayEntry {
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const SHORT_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+function toLocalDateStr(d: Date): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function getMostRecentMonday(): string {
   const today = new Date();
   const dow = today.getDay(); // 0=Sun, 1=Mon...
   const diff = dow === 0 ? 6 : dow - 1; // days since Monday
   const monday = new Date(today);
   monday.setDate(today.getDate() - diff);
-  return monday.toISOString().split('T')[0];
+  return toLocalDateStr(monday);
 }
 
 function addDays(dateStr: string, days: number): string {
   const d = new Date(dateStr + 'T00:00:00');
   d.setDate(d.getDate() + days);
-  return d.toISOString().split('T')[0];
+  return toLocalDateStr(d);
+}
+
+function snapToMonday(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  const dow = d.getDay(); // 0=Sun, 1=Mon...
+  const diff = dow === 0 ? 6 : dow - 1;
+  d.setDate(d.getDate() - diff);
+  return toLocalDateStr(d);
 }
 
 function buildWeekDays(mondayStr: string): DayEntry[] {
@@ -214,10 +229,10 @@ export default function StepTimesheet({
           <input
             type="date"
             value={weekStart}
-            onChange={e => setWeekStart(e.target.value)}
+            onChange={e => e.target.value && setWeekStart(snapToMonday(e.target.value))}
             className="input-field max-w-xs"
           />
-          <p className="text-xs text-gray-400 mt-1">Pick any Monday — we'll show you Mon–Sun from there.</p>
+          <p className="text-xs text-gray-400 mt-1">Pick any day in the week — we'll automatically use the Monday.</p>
         </div>
       </div>
 
