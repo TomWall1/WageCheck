@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             <div className="text-xs text-gray-500 text-right">
               <div>Hospitality Award 2020</div>
-              <div>Rates effective 1 July 2024</div>
+              <div>Rates effective 1 July 2025</div>
             </div>
           </div>
         </header>
@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <p>
               <strong className="text-gray-700">This tool provides general information only — not legal advice.</strong>{' '}
               Pay rates shown are minimum rates under the Hospitality Industry (General) Award 2020,
-              effective 1 July 2024. Always verify current rates at{' '}
+              effective 1 July 2025. Always verify current rates at{' '}
               <a
                 href="https://www.fairwork.gov.au"
                 target="_blank"
@@ -68,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               session and are not sent to any server.
             </p>
             <p className="text-gray-400 text-xs">
-              Rates last updated: 1 July 2024 &middot; Next review: July 2025 &middot;{' '}
+              Rates last updated: 1 July 2025 &middot; Next review: July 2026 &middot;{' '}
               Need help?{' '}
               <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">
                 Fair Work Ombudsman
