@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --no-git --no-turbopack)",
+      "Bash(mkdir -p C:/Documents/WageCheck/frontend)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(node --check src/index.js)",
+      "Bash(node --check src/routes/award.js)",
+      "Bash(node --check src/routes/admin.js)",
+      "Bash(node --check src/services/awardCalculator.js)",
+      "Bash(node --check src/services/classificationEngine.js)",
+      "Bash(node --check scripts/migrate.js)",
+      "Bash(node --check scripts/seed.js)",
+      "Bash(node --check scripts/scrape.js)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(node -e \"require\\(''dotenv''\\).config\\(\\); console.log\\(''DATABASE_URL set:'', !!process.env.DATABASE_URL\\); console.log\\(''URL starts with:'', process.env.DATABASE_URL?.substring\\(0, 30\\)\\)\")",
+      "Bash(node -e \"require\\(''dotenv''\\).config\\(\\); console.log\\(''DATABASE_URL set:'', !!process.env.DATABASE_URL\\);\")",
+      "Bash(node scripts/debug.js)",
+      "Bash(node scripts/migrate.js)",
+      "Bash(node scripts/seed.js)",
+      "Bash(git config:*)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}
