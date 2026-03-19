@@ -78,20 +78,23 @@ const STREAM_LABELS: Record<string, string> = {
   responsible: 'Responsible for 2+ employees',
   introductory: 'Introductory',
   retail: 'Retail',
+  fitness: 'Fitness Industry',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
 const STREAM_ORDER_MA000003 = ['general', 'solo', 'responsible'];
 const STREAM_ORDER_MA000119 = ['introductory', 'food_beverage', 'kitchen', 'general'];
 const STREAM_ORDER_MA000004 = ['retail'];
+const STREAM_ORDER_MA000094 = ['fitness'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
   const isRest = awardCode === 'MA000119';
   const isRetail = awardCode === 'MA000004';
-  const isParentGated = isFF || isRest || isRetail;
-  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : isRetail ? STREAM_ORDER_MA000004 : STREAM_ORDER_MA000009;
-  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : isRetail ? 'Retail Award' : 'Hospitality Award';
+  const isFitness = awardCode === 'MA000094';
+  const isParentGated = isFF || isRest || isRetail || isFitness;
+  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : isRetail ? STREAM_ORDER_MA000004 : isFitness ? STREAM_ORDER_MA000094 : STREAM_ORDER_MA000009;
+  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : isRetail ? 'Retail Award' : isFitness ? 'Fitness Industry Award' : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
 
@@ -238,9 +241,10 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_DEFAULT: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000004: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000119: Record<number, number> = { 17: 0.60, 18: 0.70, 19: 0.85 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : JUNIOR_DEFAULT;
-    const juniorCutoff = isRest ? 20 : 21;
-    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isRetail ? 0.45 : 0.40)) : 1.0;
+    const JUNIOR_MA000094: Record<number, number> = { 17: 0.65, 18: 0.75, 19: 0.85 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isFitness ? JUNIOR_MA000094 : JUNIOR_DEFAULT;
+    const juniorCutoff = (isRest || isFitness) ? 20 : 21;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : isRetail ? 0.45 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     const effectiveDate = result.classification.rate_effective_date
       ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -273,7 +277,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-semibold uppercase tracking-wide text-brand-600 bg-brand-100 px-2 py-1 rounded">
-                {STREAM_LABELS[result.stream || ''] || result.stream} — Level {result.level}
+                {isFitness
+                  ? (STREAM_LABELS[result.stream || ''] || result.stream)
+                  : `${STREAM_LABELS[result.stream || ''] || result.stream} — Level ${result.level}`}
               </span>
             </div>
             <h3 className="text-xl font-bold text-gray-900">{result.classification.title}</h3>
@@ -345,7 +351,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                 ? ' Levels run from Introductory (new starters) to Level 6 (specialist tradespeople).'
                 : isRetail
                   ? ' Levels run from Level 1 (new starters) to Level 8 (senior management).'
-                  : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                  : isFitness
+                    ? ' Levels run from Level 1 (new starters) to Level 7 (centre managers). Levels 3A and 4A recognise formal qualifications (Cert III and Cert IV).'
+                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -359,7 +367,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                 ? ' It might say something like "Introductory" or "Food and Beverage Attendant Grade 3".'
                 : isRetail
                   ? ' It might say something like "Retail Employee Level 2" or "Level 3".'
-                  : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                  : isFitness
+                    ? ' It might say something like "Fitness Industry Employee Level 3A" or "Level 4A".'
+                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button
@@ -425,7 +435,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
               <optgroup key={group.stream} label={group.label}>
                 {group.items.map(cls => (
                   <option key={cls.id} value={cls.id}>
-                    Level {cls.level} — {cls.title}
+                    {isFitness ? cls.title : `Level ${cls.level} — ${cls.title}`}
                   </option>
                 ))}
               </optgroup>
@@ -437,7 +447,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
           <div className="card bg-gray-50 space-y-3">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wide text-brand-600 bg-brand-100 px-2 py-1 rounded">
-                {STREAM_LABELS[selectedCls.stream]} — Level {selectedCls.level}
+                {isFitness ? STREAM_LABELS[selectedCls.stream] : `${STREAM_LABELS[selectedCls.stream]} — Level ${selectedCls.level}`}
               </span>
             </div>
             <h3 className="font-bold text-gray-900">{selectedCls.title}</h3>

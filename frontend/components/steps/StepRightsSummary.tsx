@@ -25,6 +25,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
   const isFF = awardCode === 'MA000003';
   const isRest = awardCode === 'MA000119';
   const isRetail = awardCode === 'MA000004';
+  const isFitness = awardCode === 'MA000094';
   const classLevel = classificationResult?.level ?? null;
 
   return (
@@ -75,11 +76,11 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
         {isCasual && (
           <div className="text-sm space-y-2">
             <p className="text-gray-700">
-              <strong>Casuals must be paid for at least {isRetail ? '3' : '2'} hours per shift</strong> — even if you're sent home early.
+              <strong>Casuals must be paid for at least {(isRetail || isFitness) ? '3' : '2'} hours per shift</strong> — even if you're sent home early.
             </p>
             <p className="text-gray-600">
               If you show up for a shift and your employer sends you home early, you are still owed{' '}
-              {isRetail ? '3' : '2'} full hours at your casual rate (including applicable penalty rates).
+              {(isRetail || isFitness) ? '3' : '2'} full hours at your casual rate (including applicable penalty rates).
             </p>
           </div>
         )}
@@ -143,6 +144,11 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
                   { label: 'Saturday', rate: isCasual ? '+20% penalty (×1.20)' : '+25% penalty (×1.25)' },
                   { label: 'Sunday', rate: '+50% penalty (×1.50)' },
                   { label: 'Public holiday', rate: 'Double time and a quarter (×2.25)' },
+                ] : isFitness ? [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Saturday', rate: '+25% penalty (×1.25)' },
+                  { label: 'Sunday', rate: '+50% penalty (×1.50)' },
+                  { label: 'Public holiday', rate: isCasual ? '+30% casual loading (×1.04 of casual base)' : 'Double time and a half (×2.50)' },
                 ] : [
                   { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
                   { label: 'Weekday evening (7pm–midnight)', rate: '+$2.81/hr loading' },
@@ -169,7 +175,12 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
               Casual Introductory, Level 1, and Level 2 employees: Sunday rate is ×1.20 of your casual base (150% of the FT rate). Level 3 and above: ×1.40 of your casual base (175% of the FT rate).
             </p>
           )}
-          {isCasual && (
+          {isFitness && isCasual && (
+            <p className="text-gray-500 text-xs">
+              Under the Fitness Award, casual employees receive a 25% casual loading on weekdays and 30% on weekends and public holidays. The Saturday, Sunday, and public holiday rate is ×1.04 of your casual base rate (which already includes the 25% loading). This is lower than the FT/PT penalty rate — if you work public holidays frequently, permanent employment may be more beneficial.
+            </p>
+          )}
+          {isCasual && !isFitness && (
             <p className="text-gray-500 text-xs">
               For casual employees, penalty rates are applied on top of your base casual rate
               (which already includes the 25% loading).

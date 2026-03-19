@@ -285,6 +285,23 @@ const CLASSIFICATION_RULES_MA000004 = [
 ];
 
 /**
+ * MA000094 — Fitness Industry Award 2020
+ * Classifications: Levels 1–9 (internal), mapping to Award Levels L1, L2, L3, L3A, L4, L4A, L5, L6, L7.
+ * All in a single 'fitness' stream. Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000094 = [
+  { conditions: { fitness_experience: 'new' }, level: 1, stream: 'fitness', rationale: 'New fitness industry employee — entry level (Award Level 1)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'reception_support' }, level: 2, stream: 'fitness', rationale: 'Experienced reception or support employee (Award Level 2)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'instructor_unqualified' }, level: 3, stream: 'fitness', rationale: 'Qualified instructor, swim teacher, lifeguard, or gymnastics coach (Award Level 3)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'instructor_cert3' }, level: 4, stream: 'fitness', rationale: 'Certificate III qualified fitness instructor or swim teacher (Award Level 3A)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'advanced_instructor' }, level: 5, stream: 'fitness', rationale: 'Advanced instructor under limited supervision (Award Level 4)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'personal_trainer_cert4' }, level: 6, stream: 'fitness', rationale: 'Certificate IV personal trainer or fitness specialist (Award Level 4A)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'diploma_qualified' }, level: 7, stream: 'fitness', rationale: 'Diploma-qualified fitness specialist with high autonomy (Award Level 5)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'coordinator' }, level: 8, stream: 'fitness', rationale: 'Area coordinator or department supervisor (Award Level 6)' },
+  { conditions: { fitness_experience: 'experienced', fitness_role: 'manager' }, level: 9, stream: 'fitness', rationale: 'Fitness centre or operations manager (Award Level 7)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -331,6 +348,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'retail', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000094') {
+    for (const rule of CLASSIFICATION_RULES_MA000094) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'fitness', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

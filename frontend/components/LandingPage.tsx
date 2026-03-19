@@ -36,6 +36,14 @@ const AWARDS = [
     examples: 'Sales assistants, cashiers, department supervisors, store managers, key holders',
     badge: 'MA000004',
   },
+  {
+    code: 'MA000094' as AwardCode,
+    name: 'Fitness Industry Award 2020',
+    shortName: 'Fitness Award',
+    description: 'Covers gyms, fitness centres, aquatic centres, tennis clubs, and other fitness facilities.',
+    examples: 'Personal trainers, fitness instructors, swim teachers, lifeguards, gym reception staff, centre managers',
+    badge: 'MA000094',
+  },
 ];
 
 interface Props {
