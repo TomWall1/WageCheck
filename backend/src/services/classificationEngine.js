@@ -328,6 +328,45 @@ const CLASSIFICATION_RULES_MA000080 = [
 ];
 
 /**
+ * MA000081 — Live Performance Award 2020
+ * Three streams: general (production & support staff), touring_sl (touring S&L), dancer (company dancers).
+ * Performers, musicians, and other artists are out of scope (per-call structures).
+ */
+const CLASSIFICATION_RULES_MA000081 = [
+  // ── Performers/other (out of scope) ────────────────────────────────────────
+  { conditions: { lp_worker_type: 'other' }, level: null, stream: null,
+    rationale: 'Performers, musicians, and other per-call artists have complex payment structures not supported by this calculator. Please seek specialist advice.' },
+  // ── Production & Support Staff — general stream ──────────────────────────
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level1' },  level: 1, stream: 'general', rationale: 'Level 1 — induction/training period for production & support staff' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level2' },  level: 2, stream: 'general', rationale: 'Level 2 — general production support (stagehand, bump-in/out crew)' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level3' },  level: 3, stream: 'general', rationale: 'Level 3 — higher-level production support (specific equipment, vehicle driving)' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level4' },  level: 4, stream: 'general', rationale: 'Level 4 — skilled production technician (rigging, wardrobe, props, equipment)' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level5' },  level: 5, stream: 'general', rationale: 'Level 5 — experienced technician or junior head of department' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level6' },  level: 6, stream: 'general', rationale: 'Level 6 — senior technician or department head (stage manager, head rigger)' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level7' },  level: 7, stream: 'general', rationale: 'Level 7 — head of department (lighting, sound, staging, wardrobe, etc.)' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'level8' },  level: 8, stream: 'general', rationale: 'Level 8 — very senior HOD or experienced production manager' },
+  { conditions: { lp_worker_type: 'production_support', lp_ps_level: 'tech_mgr' }, level: 9, stream: 'general', rationale: 'Technical Manager — the designated overall technical manager for the venue or production' },
+  // ── Touring Sound & Lighting stream ─────────────────────────────────────────
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level1' },  level: 1, stream: 'touring_sl', rationale: 'Touring S&L Level 1 — induction/training (embedded S&L OT/penalty allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level2' },  level: 2, stream: 'touring_sl', rationale: 'Touring S&L Level 2 — general touring crew (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level3' },  level: 3, stream: 'touring_sl', rationale: 'Touring S&L Level 3 — skilled touring operator (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level4' },  level: 4, stream: 'touring_sl', rationale: 'Touring S&L Level 4 — independent touring operator (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level5' },  level: 5, stream: 'touring_sl', rationale: 'Touring S&L Level 5 — experienced touring operator, FOH/LD entry (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level6' },  level: 6, stream: 'touring_sl', rationale: 'Touring S&L Level 6 — senior touring operator (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level7' },  level: 7, stream: 'touring_sl', rationale: 'Touring S&L Level 7 — touring S&L department head (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'level8' },  level: 8, stream: 'touring_sl', rationale: 'Touring S&L Level 8 — very senior touring S&L specialist (embedded S&L allowance included)' },
+  { conditions: { lp_worker_type: 'sound_lighting_tour', lp_sl_level: 'tech_mgr' }, level: 9, stream: 'touring_sl', rationale: 'Technical Manager (Touring S&L) — designated overall technical manager (embedded S&L allowance included)' },
+  // ── Company Dancers ─────────────────────────────────────────────────────────
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer1' }, level: 1, stream: 'dancer', rationale: 'Company Dancer Level 1 — $1,165.70/week minimum ($30.68/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer2' }, level: 2, stream: 'dancer', rationale: 'Company Dancer Level 2 — $1,208.30/week minimum ($31.80/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer3' }, level: 3, stream: 'dancer', rationale: 'Company Dancer Level 3 — $1,250.00/week minimum ($32.89/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer4' }, level: 4, stream: 'dancer', rationale: 'Company Dancer Level 4 — $1,289.40/week minimum ($33.93/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer5' }, level: 5, stream: 'dancer', rationale: 'Company Dancer Level 5 — $1,332.70/week minimum ($35.07/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer6' }, level: 6, stream: 'dancer', rationale: 'Company Dancer Level 6 — $1,381.10/week minimum ($36.34/hr)' },
+  { conditions: { lp_worker_type: 'company_dancer', lp_dancer_level: 'dancer7' }, level: 7, stream: 'dancer', rationale: 'Company Dancer Level 7 — $1,438.40/week minimum ($37.85/hr)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -392,6 +431,18 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000081') {
+    for (const rule of CLASSIFICATION_RULES_MA000081) {
+      if (matchesRule(answers, rule.conditions)) {
+        if (rule.level === null) {
+          return { level: null, stream: null, rationale: rule.rationale, confidence: 'low' };
+        }
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'general', rationale: 'Unable to determine classification — defaulting to Level 1 production & support. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

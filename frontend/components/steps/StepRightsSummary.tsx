@@ -27,6 +27,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
   const isRetail = awardCode === 'MA000004';
   const isFitness = awardCode === 'MA000094';
   const isAmusement = awardCode === 'MA000080';
+  const isLivePerf = awardCode === 'MA000081';
   const classLevel = classificationResult?.level ?? null;
 
   return (
@@ -77,11 +78,12 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
         {isCasual && (
           <div className="text-sm space-y-2">
             <p className="text-gray-700">
-              <strong>Casuals must be paid for at least {(isRetail || isFitness) ? '3' : '2'} hours per shift</strong> — even if you're sent home early.
+              <strong>Casuals must be paid for at least {(isRetail || isFitness) ? '3' : isLivePerf ? '4' : '2'} hours per shift</strong> — even if you're sent home early.
             </p>
             <p className="text-gray-600">
               If you show up for a shift and your employer sends you home early, you are still owed{' '}
-              {(isRetail || isFitness) ? '3' : '2'} full hours at your casual rate (including applicable penalty rates).
+              {(isRetail || isFitness) ? '3' : isLivePerf ? '4' : '2'} full hours at your casual rate (including applicable penalty rates).
+              {isLivePerf && ' Note: the 4-hour minimum applies to production & support staff. Company dancers and other artists may have different minimum engagement rules.'}
             </p>
           </div>
         )}
@@ -155,6 +157,11 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
                   { label: 'Saturday', rate: 'Ordinary rate (no Saturday penalty for this award)' },
                   { label: 'Sunday', rate: isCasual ? '×1.40 of casual base (175% of FT rate)' : '+50% penalty (×1.50)' },
                   { label: 'Public holiday', rate: isCasual ? '×2.20 of casual base (275% of FT rate)' : 'Double time and a half (×2.50)' },
+                ] : isLivePerf ? [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Saturday', rate: 'Ordinary rate (no Saturday penalty for this award)' },
+                  { label: 'Sunday', rate: isCasual ? '×1.80 of casual base (225% of FT rate)' : 'Double time (×2.00)' },
+                  { label: 'Public holiday', rate: isCasual ? '×1.80 of casual base (225% of FT rate)' : 'Double time (×2.00)' },
                 ] : [
                   { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
                   { label: 'Weekday evening (7pm–midnight)', rate: '+$2.81/hr loading' },
@@ -196,7 +203,17 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
               Note: Unlike most awards, the Amusement, Events and Recreation Award does not have a Saturday penalty rate. Saturday is paid at the same ordinary rate as weekdays.
             </p>
           )}
-          {isCasual && !isFitness && !isAmusement && (
+          {isLivePerf && (
+            <p className="text-gray-500 text-xs">
+              Note: The Live Performance Award does not have a Saturday penalty rate. Saturday is paid at the same ordinary rate as weekdays. Touring sound & lighting employees have a higher base rate that already includes an embedded overtime and penalty allowance. Company dancers have complex per-performance Sunday and public holiday entitlements under the award — the rates shown here are a simplified approximation using your hourly rate.
+            </p>
+          )}
+          {isLivePerf && isCasual && (
+            <p className="text-gray-500 text-xs">
+              For casual production & support staff: your casual base already includes 25% loading. Sunday and public holiday rates are ×1.80 of your casual base (equivalent to 225% of the full-time base rate).
+            </p>
+          )}
+          {isCasual && !isFitness && !isAmusement && !isLivePerf && (
             <p className="text-gray-500 text-xs">
               For casual employees, penalty rates are applied on top of your base casual rate
               (which already includes the 25% loading).
@@ -243,7 +260,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
             </div>
             <div className="flex gap-3">
               <span className="shrink-0 font-bold text-gray-900 w-24">Public holidays</span>
-              <p>You must be paid for public holidays even if you don't work them. If you are required to work, you're paid at double time and a quarter.</p>
+              <p>You must be paid for public holidays even if you don't work them. If you are required to work, you're paid at {isLivePerf ? 'double time (×2.00)' : 'double time and a quarter (×2.25)'}.</p>
             </div>
           </div>
         </section>

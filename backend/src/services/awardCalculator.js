@@ -18,6 +18,7 @@ const SGC_RATE = 0.12; // 12%
 // MA000004:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
 // MA000094:            under 17=55%, 17=65%, 18=75%, 19=85%, 20+=100%
 // MA000080:            under 17=55%, 17=65%, 18=75%, 19=85%, 20+=100% (same as MA000094)
+// MA000081:            no junior rates — adult rate applies to all ages
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -39,6 +40,9 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age >= 20) return 1.0;
     if (age < 17) return 0.55;
     return JUNIOR_RATES_MA000080[age] || 1.0;
+  }
+  if (awardCode === 'MA000081') {
+    return 1.0; // No junior rates under the Live Performance Award
   }
   if (age >= 21) return 1.0;
   if (age < 16) return awardCode === 'MA000004' ? 0.45 : 0.40;

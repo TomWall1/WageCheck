@@ -52,6 +52,14 @@ const AWARDS = [
     examples: 'Ride operators, ticket sellers, exhibition workers, show hands, tradespersons, event supervisors',
     badge: 'MA000080',
   },
+  {
+    code: 'MA000081' as AwardCode,
+    name: 'Live Performance Award 2020',
+    shortName: 'Live Performance Award',
+    description: 'Covers production and support staff, company dancers, performers, and musicians working in live performance venues, touring productions, and entertainment facilities.',
+    examples: 'Stagehands, riggers, touring sound & lighting crew, company dancers, wardrobe staff, production managers',
+    badge: 'MA000081',
+  },
 ];
 
 interface Props {

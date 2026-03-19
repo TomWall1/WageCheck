@@ -22,6 +22,7 @@ const JUNIOR_RATES_BY_AWARD: Record<string, { rates: Record<number, number>; cut
   MA000119: { rates: { 17: 0.60, 18: 0.70, 19: 0.85 }, cutoff: 20, underMin: 0.50 },
   MA000094: { rates: { 17: 0.65, 18: 0.75, 19: 0.85 }, cutoff: 20, underMin: 0.55 },
   MA000080: { rates: { 17: 0.65, 18: 0.75, 19: 0.85 }, cutoff: 20, underMin: 0.55 },
+  // MA000081: no junior rates — adult rate applies at all ages
 };
 
 function getJuniorRate(awardCode: string, age: number | null): number | null {

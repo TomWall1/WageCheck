@@ -148,7 +148,9 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
             ? 'Fitness Industry Award 2020 [MA000094]'
             : state.awardCode === 'MA000080'
               ? 'Amusement, Events and Recreation Award 2020 [MA000080]'
-              : 'Hospitality Industry (General) Award 2020 [MA000009]';
+              : state.awardCode === 'MA000081'
+                ? 'Live Performance Award 2020 [MA000081]'
+                : 'Hospitality Industry (General) Award 2020 [MA000009]';
 
     const html = `<!DOCTYPE html>
 <html lang="en">
