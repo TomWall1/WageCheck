@@ -73,9 +73,24 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
 
   const paidSuper = parseFloat(superPaid.replace(/[^0-9.]/g, ''));
   const hasPaidSuper = !isNaN(paidSuper) && paidSuper >= 0 && superPaid !== '';
-  const superDiff = hasPaidSuper ? (summary.superAmount ?? 0) - paidSuper : null;
+  const superDiff = hasPaidSuper ? totalSuperAmount - paidSuper : null;
 
   const sgcPct = `${(summary.sgcRate * 100).toFixed(0)}%`;
+
+  // OTE allowances: shift/role allowances that attract super (not expense reimbursements)
+  const OTE_ALLOWANCE_TYPES = new Set([
+    'broken_shift', 'first_aid',
+    'leading_hand_1to5', 'leading_hand_6to10', 'leading_hand_11plus',
+  ]);
+  const oteAllowances = triggeredAllowances.filter(a => OTE_ALLOWANCE_TYPES.has(a.type));
+  const oteAllowancesTotal = oteAllowances.reduce((sum, a) => {
+    const info = allowanceInfoByType[a.type];
+    if (!info || !info.amount) return sum;
+    return sum + info.amount;
+  }, 0);
+  const oteAllowancesSuperAmount = Math.round(oteAllowancesTotal * summary.sgcRate * 100) / 100;
+  const totalSuperAmount = Math.round((summary.superAmount + oteAllowancesSuperAmount) * 100) / 100;
+  const totalSuperEligiblePay = Math.round((summary.superEligiblePay + oteAllowancesTotal) * 100) / 100;
 
   function handleDownloadReport() {
     const dateGenerated = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -222,9 +237,9 @@ ${triggeredAllowances.length > 0 ? `
   ${superRows}
   <tr class="super-row total-row">
     <td colspan="3"><strong>Super-eligible earnings (OTE)</strong></td>
-    <td style="text-align:right"><strong>${formatCurrency(summary.superEligiblePay)}</strong></td>
+    <td style="text-align:right"><strong>${formatCurrency(totalSuperEligiblePay)}</strong></td>
     <td style="text-align:right"><strong>${sgcPct}</strong></td>
-    <td style="text-align:right"><strong>${formatCurrency(summary.superAmount)}</strong></td>
+    <td style="text-align:right"><strong>${formatCurrency(totalSuperAmount)}</strong></td>
   </tr>
 </table>
 <div class="info-box">
@@ -260,7 +275,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
   </tr>` : ''}
   ${hasPaidSuper ? `<tr>
     <td>Superannuation</td>
-    <td style="text-align:right">${formatCurrency(summary.superAmount)}</td>
+    <td style="text-align:right">${formatCurrency(totalSuperAmount)}</td>
     <td style="text-align:right">${formatCurrency(paidSuper)}</td>
     <td style="text-align:right;${(superDiff ?? 0) > 0.50 ? 'color:#dc2626;font-weight:bold' : ''}">${(superDiff ?? 0) > 0.50 ? '-' : ''}${formatCurrency(Math.abs(superDiff ?? 0))}</td>
   </tr>` : ''}
@@ -368,7 +383,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           {summary.superAmount !== undefined && (
             <div className="flex justify-between py-1 border-t border-brand-200 pt-2 mt-1">
               <span className="text-gray-600 text-sm">Super owed (on top of wages)</span>
-              <span className="font-semibold text-brand-700">{formatCurrency(summary.superAmount)}</span>
+              <span className="font-semibold text-brand-700">{formatCurrency(totalSuperAmount)}</span>
             </div>
           )}
         </div>
@@ -520,13 +535,31 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
                     </td>
                   </tr>
                 ))}
+                {oteAllowances.map(a => {
+                  const info = allowanceInfoByType[a.type];
+                  if (!info || !info.amount) return null;
+                  return (
+                    <tr key={a.type}>
+                      <td className="px-2 py-2 text-gray-700">{info.name} (OTE allowance)</td>
+                      <td className="px-2 py-2 text-right text-gray-400">—</td>
+                      <td className="px-2 py-2 text-right text-gray-400">—</td>
+                      <td className="px-2 py-2 text-right text-gray-900 font-medium">{formatCurrency(info.amount)}</td>
+                      <td className="px-2 py-2 text-right">
+                        <span className="text-success-700 font-semibold">{sgcPct}</span>
+                      </td>
+                      <td className="px-2 py-2 text-right font-medium">
+                        <span className="text-success-700">{formatCurrency(info.amount * summary.sgcRate)}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
               <tfoot>
                 <tr className="bg-brand-50 font-bold text-sm">
                   <td className="px-2 py-2 text-gray-900" colSpan={3}>Super-eligible earnings (OTE)</td>
-                  <td className="px-2 py-2 text-right text-gray-900">{formatCurrency(summary.superEligiblePay)}</td>
+                  <td className="px-2 py-2 text-right text-gray-900">{formatCurrency(totalSuperEligiblePay)}</td>
                   <td className="px-2 py-2 text-right text-brand-700">{sgcPct}</td>
-                  <td className="px-2 py-2 text-right text-brand-700">{formatCurrency(summary.superAmount)}</td>
+                  <td className="px-2 py-2 text-right text-brand-700">{formatCurrency(totalSuperAmount)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -555,8 +588,8 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
               Penalty rates on ordinary hours (weekends, public holidays) are OTE and do attract super.
             </p>
             <p>
-              <strong>Expense allowances</strong> (meal, vehicle, laundry) are not OTE — they reimburse your actual costs.
-              Shift allowances (split shift, first aid) are OTE and attract super.
+              <strong>OTE allowances</strong> (broken shift, first aid, leading hand/supervisor) attract super — they are compensation for the nature of the role, not expense reimbursements.
+              Vehicle and meal-for-overtime allowances are expense reimbursements and are excluded from OTE.
             </p>
             <p>
               If your employer isn't paying your super, contact the ATO on <strong>13 28 65</strong> or check your super fund balance.
@@ -682,7 +715,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-900">
                 Superannuation received
-                <span className="text-gray-400 font-normal ml-2">(estimated owed: {formatCurrency(summary.superAmount)})</span>
+                <span className="text-gray-400 font-normal ml-2">(estimated owed: {formatCurrency(totalSuperAmount)})</span>
               </label>
               <p className="text-xs text-gray-400">
                 Check your super fund account or payslip for the amount contributed this period.

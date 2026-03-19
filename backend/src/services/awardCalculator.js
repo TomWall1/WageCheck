@@ -536,13 +536,12 @@ async function calculateEntitlements(input, db) {
 
   const grandTotal = totalOrdinaryPay + totalPenaltyPay + totalMissedBreakPay + overtimeCalc.overtimePay + mealAllowancePay;
 
-  // Super: applies to OTE only (ordinary + penalty, not overtime, missed break, or expense allowances)
-  const superEligiblePay = totalOrdinaryPay + totalPenaltyPay;
-  const superAmount = Math.round(superEligiblePay * SGC_RATE * 100) / 100;
-
   // ── Per-category super breakdown ────────────────────────────────────────
   // Aggregate all shift segments across all shifts, grouped by rate category.
   // Each entry shows hours, effective rate, total pay, and whether super applies.
+  // OTE (ordinary time earnings) = ordinary + penalty rate hours.
+  // NOT OTE: overtime (premium and base), missed-break double time (extra only),
+  //           expense allowances (meal, vehicle).
   const categoryAgg = new Map();
   for (const shift of processedShifts) {
     for (const seg of shift.segments) {
@@ -562,19 +561,43 @@ async function calculateEntitlements(input, db) {
       entry.totalPay += seg.pay;
     }
   }
-  if (overtimeCalc.overtimePay > 0) {
+
+  // Overtime correction: the segment categories above contain base pay for ALL
+  // worked hours, including overtime hours (since overtime is computed as premium-only
+  // and added separately). We must deduct the OT base pay from OTE categories and
+  // fold it into the overtime entry so the breakdown sums correctly.
+  if (overtimeCalc.overtimeMinutes > 0) {
+    const otHours = overtimeCalc.overtimeMinutes / 60;
+    const otBase = otHours * baseHourlyRate;
+
+    // Deduct from the largest OTE category (almost always ordinary weekday rate)
+    let remainingDeduction = otBase;
+    for (const cat of categoryAgg.values()) {
+      if (!cat.superApplies || remainingDeduction <= 0) continue;
+      const deduction = Math.min(cat.totalPay, remainingDeduction);
+      cat.totalPay -= deduction;
+      cat.totalHours = Math.max(0, cat.totalHours - (deduction / baseHourlyRate));
+      remainingDeduction -= deduction;
+    }
+  }
+
+  // Overtime entry: premium + base pay for OT hours (none is OTE)
+  if (overtimeCalc.overtimePay > 0 || overtimeCalc.overtimeMinutes > 0) {
+    const otHours = overtimeCalc.overtimeMinutes / 60;
+    const otBase = otHours * baseHourlyRate;
     categoryAgg.set('_overtime', {
-      rateLabel: 'Overtime loading (premium only)',
+      rateLabel: 'Overtime (not OTE — excluded from super)',
       effectiveRate: null,
       missedBreakPenalty: false,
       superApplies: false,
-      totalHours: Math.round(overtimeCalc.overtimeMinutes / 60 * 100) / 100,
-      totalPay: overtimeCalc.overtimePay,
+      totalHours: Math.round(otHours * 100) / 100,
+      totalPay: overtimeCalc.overtimePay + otBase,
     });
   }
+
   if (mealAllowancePay > 0) {
     categoryAgg.set('_meal_allowance', {
-      rateLabel: `Meal allowance (${overtimeCalc.mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)})`,
+      rateLabel: `Meal allowance (${overtimeCalc.mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`,
       effectiveRate: mealAllowanceRate,
       missedBreakPenalty: false,
       superApplies: false,
@@ -582,6 +605,7 @@ async function calculateEntitlements(input, db) {
       totalPay: mealAllowancePay,
     });
   }
+
   const superBreakdown = Array.from(categoryAgg.values()).map(cat => ({
     rateLabel: cat.rateLabel,
     effectiveRate: cat.effectiveRate !== null ? Math.round(cat.effectiveRate * 10000) / 10000 : null,
@@ -591,6 +615,14 @@ async function calculateEntitlements(input, db) {
     superRate: cat.superApplies ? SGC_RATE : 0,
     superAmount: cat.superApplies ? Math.round(cat.totalPay * SGC_RATE * 100) / 100 : 0,
   }));
+
+  // Derive totals from the breakdown so the footer always equals the sum of rows.
+  const superEligiblePay = Math.round(
+    superBreakdown.filter(r => r.superApplies).reduce((s, r) => s + r.totalPay, 0) * 100
+  ) / 100;
+  const superAmount = Math.round(
+    superBreakdown.reduce((s, r) => s + r.superAmount, 0) * 100
+  ) / 100;
 
   return {
     baseHourlyRate,
