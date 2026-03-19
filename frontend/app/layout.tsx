@@ -12,71 +12,99 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-AU">
       <body className="min-h-screen flex flex-col">
-        {/* Disclaimer banner — persistent */}
-        <div className="bg-warning-50 border-b border-warning-400 px-4 py-2 text-center text-sm text-warning-800">
-          <strong>General information only — not legal advice.</strong> If you think you've been underpaid,{' '}
+
+        {/* Legal disclaimer — quiet strip */}
+        <div style={{
+          background: '#FFFBEB',
+          borderBottom: '1px solid #FDE68A',
+          padding: '5px 16px',
+          textAlign: 'center',
+          fontSize: '11.5px',
+          color: '#92400E',
+          letterSpacing: '0.01em',
+        }}>
+          General information only — not legal advice. If you think you&apos;ve been underpaid,{' '}
           <a
             href="https://www.fairwork.gov.au"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline font-semibold hover:text-warning-600"
+            style={{ textDecoration: 'underline', fontWeight: 600 }}
           >
             contact Fair Work
           </a>{' '}
           or an employment lawyer.
         </div>
 
-        <header className="bg-white border-b border-gray-200 px-4 py-4">
-          <div className="max-w-2xl mx-auto flex items-center justify-between">
-            <a href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">W</span>
-              </div>
-              <span className="font-bold text-xl text-gray-900">WageCheck</span>
+        {/* Header — typographic wordmark */}
+        <header style={{
+          background: '#FFFFFF',
+          borderBottom: '1px solid #E4DFD8',
+          padding: '14px 16px',
+        }}>
+          <div className="max-w-2xl mx-auto flex items-baseline justify-between">
+            <a href="/" style={{ textDecoration: 'none' }}>
+              <span style={{
+                fontFamily: 'Fraunces, Georgia, serif',
+                fontWeight: 500,
+                fontSize: '1.375rem',
+                color: '#111111',
+                letterSpacing: '-0.03em',
+              }}>
+                WageCheck
+              </span>
             </a>
-            <div className="text-xs text-gray-500 text-right">
-              <div>Fair Work modern awards</div>
-              <div>Rates effective 1 July 2025</div>
+            <div style={{
+              fontSize: '11px',
+              color: '#6B6560',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              fontWeight: 500,
+              textAlign: 'right',
+              lineHeight: 1.5,
+            }}>
+              <div>Fair Work Modern Awards</div>
+              <div style={{ color: '#A09890' }}>Effective 1 July 2025</div>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 px-4 py-8">
+        {/* Main content */}
+        <main className="flex-1 px-4 py-10">
           <div className="max-w-2xl mx-auto">
             {children}
           </div>
         </main>
 
-        <footer className="bg-white border-t border-gray-200 px-4 py-6 mt-8">
-          <div className="max-w-2xl mx-auto text-sm text-gray-500 space-y-2">
-            <p>
-              <strong className="text-gray-700">This tool provides general information only — not legal advice.</strong>{' '}
-              Pay rates shown are minimum rates under the applicable Fair Work modern award,
-              effective 1 July 2025. Always verify current rates at{' '}
+        {/* Footer */}
+        <footer style={{
+          background: '#FFFFFF',
+          borderTop: '1px solid #E4DFD8',
+          padding: '24px 16px',
+          marginTop: '2rem',
+        }}>
+          <div className="max-w-2xl mx-auto" style={{ fontSize: '12px', color: '#6B6560', lineHeight: 1.7 }}>
+            <p style={{ marginBottom: '8px' }}>
+              <span style={{ color: '#44403C', fontWeight: 600 }}>This tool provides general information only — not legal advice.</span>{' '}
+              Pay rates shown are minimum rates under the applicable Fair Work modern award, effective 1 July 2025.
+              Always verify current rates at{' '}
               <a
                 href="https://www.fairwork.gov.au"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline"
+                style={{ textDecoration: 'underline', color: '#1B5A9C' }}
               >
                 fairwork.gov.au
               </a>
               . Rates are updated each July.
             </p>
-            <p>
-              WageCheck does not store any personal information. Your shift details exist only in your browser
-              session and are not sent to any server.
-            </p>
-            <p className="text-gray-400 text-xs">
-              Rates last updated: 1 July 2025 &middot; Next review: July 2026 &middot;{' '}
-              Need help?{' '}
-              <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">
-                Fair Work Ombudsman
-              </a>{' '}
-              &middot; 13 13 94
+            <p style={{ color: '#A09890' }}>
+              WageCheck does not store any personal information. Your shift details exist only in your browser session.
+              {' '}·{' '}
+              Fair Work Ombudsman: 13 13 94
             </p>
           </div>
         </footer>
+
       </body>
     </html>
   );

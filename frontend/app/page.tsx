@@ -96,11 +96,42 @@ export default function HomePage() {
   return (
     <div className="space-y-6">
       {/* Award label + restart */}
-      <div className="flex items-center justify-between text-xs text-gray-400">
-        <span className="font-mono bg-gray-100 px-2 py-1 rounded">{awardCode} — {awardName}</span>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingBottom: '1rem',
+        borderBottom: '1px solid #E4DFD8',
+        marginBottom: '1.5rem',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{
+            fontSize: '10px',
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#FFFFFF',
+            background: '#1B5A9C',
+            padding: '2px 7px',
+            borderRadius: '2px',
+          }}>
+            {awardCode}
+          </span>
+          <span style={{ fontSize: '13px', color: '#6B6560' }}>{awardName}</span>
+        </div>
         <button
           onClick={handleStartOver}
-          className="underline hover:text-gray-600 transition-colors"
+          style={{
+            fontSize: '12px',
+            color: '#A09890',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+            textUnderlineOffset: '2px',
+          }}
+          onMouseOver={e => (e.currentTarget.style.color = '#111111')}
+          onMouseOut={e => (e.currentTarget.style.color = '#A09890')}
         >
           Change award
         </button>

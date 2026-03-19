@@ -1,63 +1,156 @@
+/* ─── Typefaces ─────────────────────────────────────────────────────────────
+   Fraunces   — variable optical-size serif for display headings
+   Hanken Grotesk — clean humanist grotesque for UI and body text
+   ──────────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
+  :root {
+    --surface-bg: #F5F4F0;
+    --surface-card: #FFFFFF;
+    --border-subtle: #E4DFD8;
+    --border-muted: #D5D0C8;
+    --text-primary: #111111;
+    --text-muted: #6B6560;
+    --brand-primary: #1B5A9C;
+    --brand-left-accent: 3px solid #1B5A9C;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #D5D0C8 transparent;
+  }
+
   body {
-    @apply text-gray-800 bg-gray-50;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    background-color: var(--surface-bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 15px;
+    line-height: 1.6;
   }
 
   h1, h2, h3 {
-    @apply font-semibold;
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
+
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.375rem; }
+  h3 { font-size: 1.125rem; }
 }
 
+/* ─── Components ────────────────────────────────────────────────────────────── */
 @layer components {
+
+  /* ── Buttons ─────────────────────────────────────────────────────────────── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-white bg-brand-600 hover:bg-brand-700 active:bg-brand-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-2.5 font-semibold text-sm text-white
+           bg-brand-600 hover:bg-brand-700 active:bg-brand-900
+           transition-colors duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    border-radius: 4px;
+    letter-spacing: 0.01em;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-brand-700 bg-white border-2 border-brand-600 hover:bg-brand-50 active:bg-brand-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-6 py-2.5 font-semibold text-sm
+           text-brand-700 bg-white border border-brand-200
+           hover:bg-brand-50 hover:border-brand-400
+           active:bg-brand-100
+           transition-colors duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2;
+    border-radius: 4px;
+    letter-spacing: 0.01em;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors;
+    @apply inline-flex items-center justify-center px-3 py-2 font-medium text-sm
+           text-gray-500 hover:text-gray-900 hover:bg-gray-100
+           transition-colors duration-150;
+    border-radius: 4px;
   }
 
+  /* ── Cards ───────────────────────────────────────────────────────────────── */
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 1.5rem;
   }
 
+  /* ── Form fields ─────────────────────────────────────────────────────────── */
   .input-field {
-    @apply w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent;
+    @apply w-full px-4 py-2.5 text-gray-900 bg-white placeholder-gray-400
+           border border-[#D5D0C8]
+           focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500
+           transition-colors duration-150 text-sm;
+    border-radius: 4px;
   }
 
   .select-field {
-    @apply w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent appearance-none;
+    @apply w-full px-4 py-2.5 text-gray-900 bg-white
+           border border-[#D5D0C8]
+           focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500
+           appearance-none transition-colors duration-150 text-sm;
+    border-radius: 4px;
   }
 
+  /* ── Choice cards ────────────────────────────────────────────────────────── */
+  /* Selected state: left-border accent — more refined than border-all highlight */
   .choice-card {
-    @apply flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-brand-400 hover:bg-brand-50;
+    @apply flex items-start gap-4 p-5 cursor-pointer bg-white
+           border border-[#E4DFD8]
+           hover:border-brand-300 hover:bg-brand-50
+           transition-all duration-150;
+    border-radius: 4px;
   }
 
   .choice-card.selected {
-    @apply border-brand-600 bg-brand-50;
+    @apply bg-brand-50 border-brand-400;
+    box-shadow: inset 3px 0 0 #1B5A9C;
   }
 
+  /* ── Status boxes ────────────────────────────────────────────────────────── */
   .warning-box {
-    @apply rounded-xl p-4 bg-warning-50 border border-warning-400;
+    @apply p-4 text-sm;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-left: 3px solid #FBBF24;
+    border-radius: 4px;
   }
 
   .info-box {
-    @apply rounded-xl p-4 bg-brand-50 border border-brand-200;
+    @apply p-4 text-sm;
+    background: #EEF4FB;
+    border: 1px solid #ABCAE9;
+    border-left: 3px solid #1B5A9C;
+    border-radius: 4px;
   }
 
   .success-box {
-    @apply rounded-xl p-4 bg-success-50 border border-success-100;
+    @apply p-4 text-sm;
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-left: 3px solid #16A34A;
+    border-radius: 4px;
   }
 
   .danger-box {
-    @apply rounded-xl p-4 bg-danger-50 border border-danger-100;
+    @apply p-4 text-sm;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-left: 3px solid #EF4444;
+    border-radius: 4px;
   }
 }

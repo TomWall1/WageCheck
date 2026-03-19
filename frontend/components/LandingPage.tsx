@@ -86,28 +86,45 @@ export default function LandingPage({ onSelect }: Props) {
   }
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Hero */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Check your pay</h1>
-        <p className="text-lg text-gray-600">
-          Find out if you're being paid correctly under the Fair Work Act.
-          Answer a few questions about your job and shifts — we'll calculate what you're owed.
+      <div style={{ paddingBottom: '1.5rem', borderBottom: '1px solid #E4DFD8' }}>
+        <h1 style={{
+          fontFamily: 'Fraunces, Georgia, serif',
+          fontWeight: 500,
+          fontSize: '2rem',
+          letterSpacing: '-0.03em',
+          color: '#111111',
+          marginBottom: '0.5rem',
+          lineHeight: 1.15,
+        }}>
+          Check your pay
+        </h1>
+        <p style={{ fontSize: '15px', color: '#6B6560', lineHeight: 1.65, maxWidth: '480px' }}>
+          Find out if you&apos;re being paid correctly under the Fair Work Act.
+          Answer a few questions about your job and shifts — we&apos;ll calculate what you&apos;re owed.
         </p>
       </div>
 
       {/* Fair Work disclosure notice */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
-        <p className="text-sm font-semibold text-amber-900">Not sure which award covers you?</p>
-        <p className="text-sm text-amber-800">
+      <div style={{
+        padding: '14px 16px',
+        background: '#FFFBEB',
+        border: '1px solid #FDE68A',
+        borderLeft: '3px solid #FBBF24',
+        borderRadius: '4px',
+        fontSize: '13px',
+      }}>
+        <p style={{ fontWeight: 600, color: '#92400E', marginBottom: '4px' }}>Not sure which award covers you?</p>
+        <p style={{ color: '#78350F', lineHeight: 1.6 }}>
           Under the <strong>Fair Work Act 2009</strong>, your employer is legally required to tell you
-          which award and classification you are paid under. You can ask them directly — or check
-          your payslip, letter of engagement, or employment contract. If you're still unsure,{' '}
+          which award and classification you are paid under. Check your payslip, letter of engagement, or contract.
+          If you&apos;re still unsure,{' '}
           <a
             href="https://www.fairwork.gov.au/employment-conditions/awards/find-my-award"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline text-amber-900 font-medium"
+            style={{ textDecoration: 'underline', color: '#92400E', fontWeight: 600 }}
           >
             use the Fair Work Award Finder
           </a>
@@ -116,54 +133,95 @@ export default function LandingPage({ onSelect }: Props) {
       </div>
 
       {/* Award selection */}
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="block font-semibold text-gray-900">Select your award</label>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <label style={{
+            display: 'block',
+            fontSize: '11px',
+            fontWeight: 600,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#6B6560',
+            marginBottom: '8px',
+          }}>
+            Select your award
+          </label>
           <input
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search awards (e.g. restaurant, fast food, hotel...)"
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+            placeholder="Search by industry or job type (e.g. restaurant, fast food, gym...)"
+            style={{
+              width: '100%',
+              padding: '10px 14px',
+              border: '1px solid #D5D0C8',
+              borderRadius: '4px',
+              fontSize: '14px',
+              color: '#111111',
+              background: '#FFFFFF',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = '#1B5A9C'; e.currentTarget.style.boxShadow = '0 0 0 1px #1B5A9C'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = '#D5D0C8'; e.currentTarget.style.boxShadow = 'none'; }}
           />
         </div>
 
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filtered.length === 0 && (
-            <p className="text-sm text-gray-500 py-4 text-center">
-              No awards match your search. Try "hospitality" or "fast food".
+            <p style={{ fontSize: '13px', color: '#A09890', textAlign: 'center', padding: '20px 0' }}>
+              No awards match your search. Try &quot;hospitality&quot; or &quot;fast food&quot;.
             </p>
           )}
-          {filtered.map(award => (
-            <button
-              key={award.code}
-              onClick={() => setSelected(award.code)}
-              className={[
-                'w-full text-left rounded-xl border-2 p-4 transition-all space-y-1',
-                selected === award.code
-                  ? 'border-brand-600 bg-brand-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50',
-              ].join(' ')}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    {selected === award.code && (
-                      <span className="text-brand-600 font-bold text-sm">✓</span>
-                    )}
-                    <span className="font-semibold text-gray-900">{award.shortName}</span>
-                    <span className="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
-                      {award.badge}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600">{award.description}</p>
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">Covers: </span>{award.examples}
-                  </p>
+          {filtered.map(award => {
+            const isSelected = selected === award.code;
+            return (
+              <button
+                key={award.code}
+                onClick={() => setSelected(award.code)}
+                style={{
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '14px 16px',
+                  background: isSelected ? '#EEF4FB' : '#FFFFFF',
+                  border: isSelected ? '1px solid #ABCAE9' : '1px solid #E4DFD8',
+                  borderLeft: isSelected ? '3px solid #1B5A9C' : '1px solid #E4DFD8',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  display: 'block',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  {isSelected && (
+                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="#1B5A9C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                  <span style={{ fontWeight: 600, fontSize: '14px', color: '#111111' }}>
+                    {award.shortName}
+                  </span>
+                  <span style={{
+                    fontSize: '10px',
+                    fontFamily: 'monospace',
+                    color: '#A09890',
+                    background: '#F5F4F0',
+                    padding: '1px 5px',
+                    borderRadius: '2px',
+                    letterSpacing: '0.03em',
+                  }}>
+                    {award.badge}
+                  </span>
                 </div>
-              </div>
-            </button>
-          ))}
+                <p style={{ fontSize: '13px', color: '#6B6560', lineHeight: 1.5, margin: 0 }}>
+                  {award.description}
+                </p>
+                <p style={{ fontSize: '11.5px', color: '#A09890', marginTop: '4px', margin: '4px 0 0 0' }}>
+                  <span style={{ fontWeight: 600 }}>Covers: </span>{award.examples}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -171,17 +229,18 @@ export default function LandingPage({ onSelect }: Props) {
       <button
         onClick={handleStart}
         disabled={!selected}
-        className="btn-primary w-full text-base py-3"
+        className="btn-primary w-full"
+        style={{ padding: '13px 24px', fontSize: '15px' }}
       >
         {selected
-          ? `Start checking — ${AWARDS.find(a => a.code === selected)?.shortName} →`
+          ? `Continue — ${AWARDS.find(a => a.code === selected)?.shortName} →`
           : 'Select an award to continue'}
       </button>
 
-      <p className="text-xs text-center text-gray-400">
-        This tool provides general information only and is not legal advice.
-        Rates are effective 1 July 2025. Always verify at{' '}
-        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">
+      <p style={{ fontSize: '11.5px', textAlign: 'center', color: '#A09890' }}>
+        General information only — not legal advice.
+        Rates effective 1 July 2025. Always verify at{' '}
+        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
           fairwork.gov.au
         </a>
         .
