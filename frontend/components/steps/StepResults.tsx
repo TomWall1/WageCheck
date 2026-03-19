@@ -71,10 +71,6 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const hasPaidAllowances = !isNaN(paidAllowances) && paidAllowances >= 0 && allowancesPaid !== '';
   const allowanceDiff = hasPaidAllowances ? totalAllowancesOwed - paidAllowances : null;
 
-  const paidSuper = parseFloat(superPaid.replace(/[^0-9.]/g, ''));
-  const hasPaidSuper = !isNaN(paidSuper) && paidSuper >= 0 && superPaid !== '';
-  const superDiff = hasPaidSuper ? totalSuperAmount - paidSuper : null;
-
   const sgcPct = `${(summary.sgcRate * 100).toFixed(0)}%`;
 
   // OTE allowances: shift/role allowances that attract super (not expense reimbursements)
@@ -91,6 +87,10 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const oteAllowancesSuperAmount = Math.round(oteAllowancesTotal * summary.sgcRate * 100) / 100;
   const totalSuperAmount = Math.round((summary.superAmount + oteAllowancesSuperAmount) * 100) / 100;
   const totalSuperEligiblePay = Math.round((summary.superEligiblePay + oteAllowancesTotal) * 100) / 100;
+
+  const paidSuper = parseFloat(superPaid.replace(/[^0-9.]/g, ''));
+  const hasPaidSuper = !isNaN(paidSuper) && paidSuper >= 0 && superPaid !== '';
+  const superDiff = hasPaidSuper ? totalSuperAmount - paidSuper : null;
 
   function handleDownloadReport() {
     const dateGenerated = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
