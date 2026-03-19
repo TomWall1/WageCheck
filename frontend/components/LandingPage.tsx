@@ -5,12 +5,20 @@ import { AwardCode } from '@/types';
 
 const AWARDS = [
   {
-    code: 'MA000009' as AwardCode,
-    name: 'Hospitality Industry (General) Award 2020',
-    shortName: 'Hospitality Award',
-    description: 'Covers hotels, restaurants, cafés, bars, clubs, function centres, and most hospitality venues.',
-    examples: 'Waitstaff, cooks, bartenders, front office staff, kitchen hands, hotel workers',
-    badge: 'MA000009',
+    code: 'MA000080' as AwardCode,
+    name: 'Amusement, Events and Recreation Award 2020',
+    shortName: 'Amusement & Events Award',
+    description: 'Covers amusement parks, carnivals, shows, theme parks, events, trade shows and exhibitions, and recreation facilities.',
+    examples: 'Ride operators, ticket sellers, exhibition workers, show hands, tradespersons, event supervisors',
+    badge: 'MA000080',
+  },
+  {
+    code: 'MA000022' as AwardCode,
+    name: 'Cleaning Services Award 2020',
+    shortName: 'Cleaning Award',
+    description: 'Covers employees of contract cleaning businesses — companies whose core business is providing cleaning services. If you work for a dedicated cleaning contractor, this is your award.',
+    examples: 'Commercial cleaners, office cleaners, building cleaners, industrial cleaners, high-access window cleaners, shopping trolley collectors, cleaning leading hands',
+    badge: 'MA000022',
   },
   {
     code: 'MA000003' as AwardCode,
@@ -19,6 +27,30 @@ const AWARDS = [
     description: 'Covers fast food outlets, takeaway food businesses, and quick service restaurants.',
     examples: 'Counter staff, drive-through operators, kitchen team members, delivery crew',
     badge: 'MA000003',
+  },
+  {
+    code: 'MA000094' as AwardCode,
+    name: 'Fitness Industry Award 2020',
+    shortName: 'Fitness Award',
+    description: 'Covers gyms, fitness centres, aquatic centres, tennis clubs, and other fitness facilities.',
+    examples: 'Personal trainers, fitness instructors, swim teachers, lifeguards, gym reception staff, centre managers',
+    badge: 'MA000094',
+  },
+  {
+    code: 'MA000009' as AwardCode,
+    name: 'Hospitality Industry (General) Award 2020',
+    shortName: 'Hospitality Award',
+    description: 'Covers hotels, restaurants, cafés, bars, clubs, function centres, and most hospitality venues.',
+    examples: 'Waitstaff, cooks, bartenders, front office staff, kitchen hands, hotel workers',
+    badge: 'MA000009',
+  },
+  {
+    code: 'MA000081' as AwardCode,
+    name: 'Live Performance Award 2020',
+    shortName: 'Live Performance Award',
+    description: 'Covers production and support staff, company dancers, performers, and musicians working in live performance venues, touring productions, and entertainment facilities.',
+    examples: 'Stagehands, riggers, touring sound & lighting crew, company dancers, wardrobe staff, production managers',
+    badge: 'MA000081',
   },
   {
     code: 'MA000119' as AwardCode,
@@ -37,44 +69,12 @@ const AWARDS = [
     badge: 'MA000004',
   },
   {
-    code: 'MA000094' as AwardCode,
-    name: 'Fitness Industry Award 2020',
-    shortName: 'Fitness Award',
-    description: 'Covers gyms, fitness centres, aquatic centres, tennis clubs, and other fitness facilities.',
-    examples: 'Personal trainers, fitness instructors, swim teachers, lifeguards, gym reception staff, centre managers',
-    badge: 'MA000094',
-  },
-  {
-    code: 'MA000080' as AwardCode,
-    name: 'Amusement, Events and Recreation Award 2020',
-    shortName: 'Amusement & Events Award',
-    description: 'Covers amusement parks, carnivals, shows, theme parks, events, trade shows and exhibitions, and recreation facilities.',
-    examples: 'Ride operators, ticket sellers, exhibition workers, show hands, tradespersons, event supervisors',
-    badge: 'MA000080',
-  },
-  {
-    code: 'MA000081' as AwardCode,
-    name: 'Live Performance Award 2020',
-    shortName: 'Live Performance Award',
-    description: 'Covers production and support staff, company dancers, performers, and musicians working in live performance venues, touring productions, and entertainment facilities.',
-    examples: 'Stagehands, riggers, touring sound & lighting crew, company dancers, wardrobe staff, production managers',
-    badge: 'MA000081',
-  },
-  {
     code: 'MA000084' as AwardCode,
     name: 'Storage Services and Wholesale Award 2020',
     shortName: 'Storage & Wholesale Award',
     description: 'Covers employees in storage, warehousing, distribution, and wholesale trading businesses, including transport and clerical roles within those businesses.',
     examples: 'Storeworkers, warehouse operatives, forklift drivers, distribution centre staff, wholesale sales assistants, storepersons',
     badge: 'MA000084',
-  },
-  {
-    code: 'MA000022' as AwardCode,
-    name: 'Cleaning Services Award 2020',
-    shortName: 'Cleaning Award',
-    description: 'Covers employees of contract cleaning businesses — companies whose core business is providing cleaning services. If you work for a dedicated cleaning contractor, this is your award.',
-    examples: 'Commercial cleaners, office cleaners, building cleaners, industrial cleaners, high-access window cleaners, shopping trolley collectors, cleaning leading hands',
-    badge: 'MA000022',
   },
 ];
 
@@ -199,81 +199,80 @@ export default function LandingPage({ onSelect }: Props) {
           {filtered.map(award => {
             const isSelected = selected === award.code;
             return (
-              <button
-                key={award.code}
-                onClick={() => setSelected(award.code)}
-                onMouseEnter={e => {
-                  if (!isSelected) {
-                    e.currentTarget.style.borderColor = 'var(--primary-mid)';
-                    e.currentTarget.style.background = 'var(--primary-light)';
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!isSelected) {
-                    e.currentTarget.style.borderColor = 'rgba(38,50,56,0.18)';
-                    e.currentTarget.style.background = '#FFFFFF';
-                  }
-                }}
-                style={{
-                  width: '100%',
-                  textAlign: 'left',
-                  padding: '16px 18px',
-                  background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
-                  border: isSelected
-                    ? '1.5px solid var(--primary)'
-                    : '1.5px solid rgba(38,50,56,0.18)',
-                  borderLeft: isSelected ? '4px solid var(--primary)' : '1.5px solid rgba(38,50,56,0.18)',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  display: 'block',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  {isSelected && (
-                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
-                      <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--secondary)' }}>
-                    {award.shortName}
-                  </span>
-                  <span style={{
-                    fontSize: '10px',
-                    fontFamily: 'monospace',
-                    color: 'var(--secondary-muted)',
-                    background: 'var(--secondary-light)',
-                    padding: '2px 6px',
-                    borderRadius: '3px',
-                    letterSpacing: '0.03em',
-                    fontWeight: 500,
-                  }}>
-                    {award.badge}
-                  </span>
-                </div>
-                <p style={{ fontSize: '13.5px', color: 'var(--secondary)', lineHeight: 1.55, margin: 0 }}>
-                  {award.description}
-                </p>
-                <p style={{ fontSize: '12px', color: 'var(--secondary-muted)', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
-                  <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>Covers: </span>{award.examples}
-                </p>
-              </button>
+              <div key={award.code}>
+                <button
+                  onClick={() => setSelected(award.code)}
+                  onMouseEnter={e => {
+                    if (!isSelected) {
+                      e.currentTarget.style.borderColor = 'var(--primary-mid)';
+                      e.currentTarget.style.background = 'var(--primary-light)';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isSelected) {
+                      e.currentTarget.style.borderColor = 'rgba(38,50,56,0.18)';
+                      e.currentTarget.style.background = '#FFFFFF';
+                    }
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '16px 18px',
+                    background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
+                    border: isSelected
+                      ? '1.5px solid var(--primary)'
+                      : '1.5px solid rgba(38,50,56,0.18)',
+                    borderLeft: isSelected ? '4px solid var(--primary)' : '1.5px solid rgba(38,50,56,0.18)',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    display: 'block',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                    {isSelected && (
+                      <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
+                        <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                    <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--secondary)' }}>
+                      {award.shortName}
+                    </span>
+                    <span style={{
+                      fontSize: '10px',
+                      fontFamily: 'monospace',
+                      color: 'var(--secondary-muted)',
+                      background: 'var(--secondary-light)',
+                      padding: '2px 6px',
+                      borderRadius: '3px',
+                      letterSpacing: '0.03em',
+                      fontWeight: 500,
+                    }}>
+                      {award.badge}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '13.5px', color: 'var(--secondary)', lineHeight: 1.55, margin: 0 }}>
+                    {award.description}
+                  </p>
+                  <p style={{ fontSize: '12px', color: 'var(--secondary-muted)', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
+                    <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>Covers: </span>{award.examples}
+                  </p>
+                </button>
+
+                {isSelected && (
+                  <button
+                    onClick={handleStart}
+                    className="btn-primary w-full"
+                    style={{ padding: '13px 24px', fontSize: '15px', marginTop: '8px' }}
+                  >
+                    Continue — {award.shortName} →
+                  </button>
+                )}
+              </div>
             );
           })}
         </div>
       </div>
-
-      {/* Start button */}
-      <button
-        onClick={handleStart}
-        disabled={!selected}
-        className="btn-primary w-full"
-        style={{ padding: '13px 24px', fontSize: '15px' }}
-      >
-        {selected
-          ? `Continue — ${AWARDS.find(a => a.code === selected)?.shortName} →`
-          : 'Select an award to continue'}
-      </button>
 
       <p style={{ fontSize: '12px', textAlign: 'center', color: 'var(--secondary-muted)' }}>
         General information only — not legal advice.
