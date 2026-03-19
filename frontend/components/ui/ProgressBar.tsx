@@ -35,11 +35,11 @@ export default function ProgressBar({ currentStep, totalSteps, labels }: Progres
                 fontWeight: 600,
                 letterSpacing: '0.01em',
                 transition: 'all 0.2s ease',
-                background: isCompleted ? '#1B5A9C'
-                          : isCurrent   ? '#1B5A9C'
-                          : '#F5F4F0',
-                color: isCompleted || isCurrent ? '#FFFFFF' : '#A09890',
-                border: isUpcoming ? '1.5px solid #D5D0C8' : 'none',
+                background: isCompleted ? 'var(--primary)'
+                          : isCurrent   ? 'var(--primary)'
+                          : 'var(--secondary-light)',
+                color: isCompleted || isCurrent ? '#ffffff' : 'var(--secondary-muted)',
+                border: isUpcoming ? '1.5px solid var(--border-strong)' : 'none',
               }}>
                 {isCompleted ? (
                   /* Checkmark for completed */
@@ -56,7 +56,7 @@ export default function ProgressBar({ currentStep, totalSteps, labels }: Progres
                 <div style={{
                   flex: 1,
                   height: '1.5px',
-                  background: isCompleted ? '#1B5A9C' : '#E4DFD8',
+                  background: isCompleted ? 'var(--primary)' : 'var(--border)',
                   transition: 'background 0.2s ease',
                   margin: '0 2px',
                 }} />
@@ -76,15 +76,16 @@ export default function ProgressBar({ currentStep, totalSteps, labels }: Progres
           fontSize: '11px',
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
-          color: '#1B5A9C',
+          color: 'var(--primary)',
           fontWeight: 600,
         }}>
           {labels[currentStep - 1]}
         </span>
         <span style={{
           fontSize: '11px',
-          color: '#A09890',
+          color: 'var(--secondary-muted)',
           letterSpacing: '0.04em',
+          opacity: 0.75,
         }}>
           {currentStep} / {totalSteps}
         </span>

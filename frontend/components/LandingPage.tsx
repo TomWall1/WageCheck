@@ -104,19 +104,19 @@ export default function LandingPage({ onSelect }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Hero */}
-      <div style={{ paddingBottom: '1.5rem', borderBottom: '1px solid #E4DFD8' }}>
+      <div style={{ paddingBottom: '1.5rem', borderBottom: '1.5px solid var(--border)' }}>
         <h1 style={{
           fontFamily: 'Fraunces, Georgia, serif',
           fontWeight: 500,
           fontSize: '2rem',
           letterSpacing: '-0.03em',
-          color: '#111111',
+          color: 'var(--secondary)',
           marginBottom: '0.5rem',
           lineHeight: 1.15,
         }}>
           Check your pay
         </h1>
-        <p style={{ fontSize: '15px', color: '#3A3530', lineHeight: 1.65, maxWidth: '480px' }}>
+        <p style={{ fontSize: '15px', color: 'var(--secondary-muted)', lineHeight: 1.65, maxWidth: '480px' }}>
           Find out if you&apos;re being paid correctly under the Fair Work Act.
           Answer a few questions about your job and shifts — we&apos;ll calculate what you&apos;re owed.
         </p>
@@ -125,14 +125,14 @@ export default function LandingPage({ onSelect }: Props) {
       {/* Fair Work disclosure notice */}
       <div style={{
         padding: '14px 16px',
-        background: '#FFFBEB',
-        border: '1px solid #FDE68A',
-        borderLeft: '3px solid #FBBF24',
-        borderRadius: '4px',
+        background: 'var(--accent-light)',
+        border: '1px solid rgba(255,183,77,0.35)',
+        borderLeft: '4px solid var(--accent)',
+        borderRadius: '8px',
         fontSize: '13px',
       }}>
-        <p style={{ fontWeight: 600, color: '#92400E', marginBottom: '4px' }}>Not sure which award covers you?</p>
-        <p style={{ color: '#78350F', lineHeight: 1.6 }}>
+        <p style={{ fontWeight: 600, color: 'var(--accent-dark)', marginBottom: '4px' }}>Not sure which award covers you?</p>
+        <p style={{ color: 'var(--secondary)', lineHeight: 1.6 }}>
           Under the <strong>Fair Work Act 2009</strong>, your employer is legally required to tell you
           which award and classification you are paid under. Check your payslip, letter of engagement, or contract.
           If you&apos;re still unsure,{' '}
@@ -140,7 +140,7 @@ export default function LandingPage({ onSelect }: Props) {
             href="https://www.fairwork.gov.au/employment-conditions/awards/find-my-award"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ textDecoration: 'underline', color: '#92400E', fontWeight: 600 }}
+            style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 600 }}
           >
             use the Fair Work Award Finder
           </a>
@@ -157,7 +157,7 @@ export default function LandingPage({ onSelect }: Props) {
             fontWeight: 600,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#44403C',
+            color: 'var(--secondary)',
             marginBottom: '8px',
           }}>
             Select your award
@@ -170,22 +170,29 @@ export default function LandingPage({ onSelect }: Props) {
             style={{
               width: '100%',
               padding: '10px 14px',
-              border: '1px solid #D5D0C8',
-              borderRadius: '4px',
+              border: '1.5px solid var(--border-strong)',
+              borderRadius: '8px',
               fontSize: '14px',
-              color: '#111111',
+              color: 'var(--secondary)',
               background: '#FFFFFF',
               outline: 'none',
               boxSizing: 'border-box',
+              fontFamily: 'inherit',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = '#1B5A9C'; e.currentTarget.style.boxShadow = '0 0 0 1px #1B5A9C'; }}
-            onBlur={e => { e.currentTarget.style.borderColor = '#D5D0C8'; e.currentTarget.style.boxShadow = 'none'; }}
+            onFocus={e => {
+              e.currentTarget.style.borderColor = 'var(--primary)';
+              e.currentTarget.style.boxShadow = '0 0 0 2px rgba(0,77,64,0.15)';
+            }}
+            onBlur={e => {
+              e.currentTarget.style.borderColor = 'var(--border-strong)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filtered.length === 0 && (
-            <p style={{ fontSize: '13px', color: '#6B6560', textAlign: 'center', padding: '20px 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--secondary-muted)', textAlign: 'center', padding: '20px 0' }}>
               No awards match your search. Try &quot;hospitality&quot; or &quot;fast food&quot;.
             </p>
           )}
@@ -197,48 +204,45 @@ export default function LandingPage({ onSelect }: Props) {
                 onClick={() => setSelected(award.code)}
                 onMouseEnter={e => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = '#ABCAE9';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(27,90,156,0.10)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
+                    e.currentTarget.style.borderColor = 'var(--primary-mid)';
+                    e.currentTarget.style.background = 'var(--primary-light)';
                   }
                 }}
                 onMouseLeave={e => {
                   if (!isSelected) {
-                    e.currentTarget.style.borderColor = '#C8C2BA';
-                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.07)';
-                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(38,50,56,0.18)';
+                    e.currentTarget.style.background = '#FFFFFF';
                   }
                 }}
                 style={{
                   width: '100%',
                   textAlign: 'left',
                   padding: '16px 18px',
-                  background: isSelected ? '#EEF4FB' : '#FFFFFF',
-                  border: isSelected ? '1px solid #ABCAE9' : '1px solid #C8C2BA',
-                  borderLeft: isSelected ? '4px solid #1B5A9C' : '1px solid #C8C2BA',
-                  borderRadius: '6px',
+                  background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
+                  border: isSelected
+                    ? '1.5px solid var(--primary)'
+                    : '1.5px solid rgba(38,50,56,0.18)',
+                  borderLeft: isSelected ? '4px solid var(--primary)' : '1.5px solid rgba(38,50,56,0.18)',
+                  borderRadius: '10px',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   display: 'block',
-                  boxShadow: isSelected
-                    ? '0 2px 8px rgba(27,90,156,0.12)'
-                    : '0 1px 3px rgba(0,0,0,0.07)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   {isSelected && (
                     <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
-                      <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="#1B5A9C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   )}
-                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: '#111111' }}>
+                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--secondary)' }}>
                     {award.shortName}
                   </span>
                   <span style={{
                     fontSize: '10px',
                     fontFamily: 'monospace',
-                    color: '#6B6560',
-                    background: '#EDEAE5',
+                    color: 'var(--secondary-muted)',
+                    background: 'var(--secondary-light)',
                     padding: '2px 6px',
                     borderRadius: '3px',
                     letterSpacing: '0.03em',
@@ -247,11 +251,11 @@ export default function LandingPage({ onSelect }: Props) {
                     {award.badge}
                   </span>
                 </div>
-                <p style={{ fontSize: '13.5px', color: '#3A3530', lineHeight: 1.55, margin: 0 }}>
+                <p style={{ fontSize: '13.5px', color: 'var(--secondary)', lineHeight: 1.55, margin: 0 }}>
                   {award.description}
                 </p>
-                <p style={{ fontSize: '12px', color: '#6B6560', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
-                  <span style={{ fontWeight: 600, color: '#44403C' }}>Covers: </span>{award.examples}
+                <p style={{ fontSize: '12px', color: 'var(--secondary-muted)', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
+                  <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>Covers: </span>{award.examples}
                 </p>
               </button>
             );
@@ -271,10 +275,10 @@ export default function LandingPage({ onSelect }: Props) {
           : 'Select an award to continue'}
       </button>
 
-      <p style={{ fontSize: '12px', textAlign: 'center', color: '#6B6560' }}>
+      <p style={{ fontSize: '12px', textAlign: 'center', color: 'var(--secondary-muted)' }}>
         General information only — not legal advice.
         Rates effective 1 July 2025. Always verify at{' '}
-        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#44403C' }}>
+        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'var(--secondary)' }}>
           fairwork.gov.au
         </a>
         .

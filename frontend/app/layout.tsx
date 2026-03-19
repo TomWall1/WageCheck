@@ -15,12 +15,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Legal disclaimer — quiet strip */}
         <div style={{
-          background: '#FFFBEB',
-          borderBottom: '1px solid #FDE68A',
+          background: 'var(--accent-light)',
+          borderBottom: '1px solid rgba(255,183,77,0.35)',
           padding: '5px 16px',
           textAlign: 'center',
           fontSize: '11.5px',
-          color: '#92400E',
+          color: 'var(--accent-dark)',
           letterSpacing: '0.01em',
         }}>
           General information only — not legal advice. If you think you&apos;ve been underpaid,{' '}
@@ -37,8 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Header — typographic wordmark */}
         <header style={{
-          background: '#FFFFFF',
-          borderBottom: '1px solid #E4DFD8',
+          background: '#ffffff',
+          borderBottom: '1.5px solid var(--border)',
           padding: '14px 16px',
         }}>
           <div className="max-w-2xl mx-auto flex items-baseline justify-between">
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 fontFamily: 'Fraunces, Georgia, serif',
                 fontWeight: 500,
                 fontSize: '1.375rem',
-                color: '#111111',
+                color: 'var(--secondary)',
                 letterSpacing: '-0.03em',
               }}>
                 WageCheck
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
             <div style={{
               fontSize: '11px',
-              color: '#6B6560',
+              color: 'var(--secondary-muted)',
               letterSpacing: '0.06em',
               textTransform: 'uppercase',
               fontWeight: 500,
@@ -63,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               lineHeight: 1.5,
             }}>
               <div>Fair Work Modern Awards</div>
-              <div style={{ color: '#A09890' }}>Effective 1 July 2025</div>
+              <div style={{ opacity: 0.65 }}>Effective 1 July 2025</div>
             </div>
           </div>
         </header>
@@ -77,27 +77,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Footer */}
         <footer style={{
-          background: '#FFFFFF',
-          borderTop: '1px solid #E4DFD8',
+          background: '#ffffff',
+          borderTop: '1.5px solid var(--border)',
           padding: '24px 16px',
           marginTop: '2rem',
         }}>
-          <div className="max-w-2xl mx-auto" style={{ fontSize: '12px', color: '#6B6560', lineHeight: 1.7 }}>
+          <div className="max-w-2xl mx-auto" style={{ fontSize: '12px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
             <p style={{ marginBottom: '8px' }}>
-              <span style={{ color: '#44403C', fontWeight: 600 }}>This tool provides general information only — not legal advice.</span>{' '}
+              <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>This tool provides general information only — not legal advice.</span>{' '}
               Pay rates shown are minimum rates under the applicable Fair Work modern award, effective 1 July 2025.
               Always verify current rates at{' '}
               <a
                 href="https://www.fairwork.gov.au"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ textDecoration: 'underline', color: '#1B5A9C' }}
+                style={{ textDecoration: 'underline', color: 'var(--primary)' }}
               >
                 fairwork.gov.au
               </a>
               . Rates are updated each July.
             </p>
-            <p style={{ color: '#A09890' }}>
+            <p style={{ opacity: 0.75 }}>
               WageCheck does not store any personal information. Your shift details exist only in your browser session.
               {' '}·{' '}
               Fair Work Ombudsman: 13 13 94

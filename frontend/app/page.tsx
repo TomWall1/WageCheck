@@ -105,7 +105,7 @@ export default function HomePage() {
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingBottom: '1rem',
-        borderBottom: '1px solid #E4DFD8',
+        borderBottom: '1.5px solid var(--border)',
         marginBottom: '1.5rem',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -114,28 +114,28 @@ export default function HomePage() {
             fontWeight: 600,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#FFFFFF',
-            background: '#1B5A9C',
+            color: '#ffffff',
+            background: 'var(--primary)',
             padding: '2px 7px',
-            borderRadius: '2px',
+            borderRadius: '4px',
           }}>
             {awardCode}
           </span>
-          <span style={{ fontSize: '13px', color: '#6B6560' }}>{awardName}</span>
+          <span style={{ fontSize: '13px', color: 'var(--secondary-muted)' }}>{awardName}</span>
         </div>
         <button
           onClick={handleStartOver}
           style={{
             fontSize: '12px',
-            color: '#A09890',
+            color: 'var(--secondary-muted)',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
             textDecoration: 'underline',
             textUnderlineOffset: '2px',
           }}
-          onMouseOver={e => (e.currentTarget.style.color = '#111111')}
-          onMouseOut={e => (e.currentTarget.style.color = '#A09890')}
+          onMouseOver={e => (e.currentTarget.style.color = 'var(--secondary)')}
+          onMouseOut={e => (e.currentTarget.style.color = 'var(--secondary-muted)')}
         >
           Change award
         </button>
