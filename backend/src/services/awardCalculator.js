@@ -236,9 +236,8 @@ function checkBreakCompliance(shift, breakEntitlements) {
 // period: 'weekly' → 38hr threshold per ISO week
 //         'fortnightly' → 76hr threshold across all shifts (averaging arrangement)
 function calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period = 'weekly') {
-  if (employmentType === 'casual') {
-    return { overtimePay: 0, overtimeMinutes: 0, overtimeBreakdown: [], mealAllowancesOwed: 0 };
-  }
+  // Casuals: check DB for award-specific casual overtime rates (e.g. MA000094, MA000084, MA000022, MA000119).
+  // If no casual rates are seeded, weeklyRates/dailyRates will be empty and nothing is calculated.
 
   const weeklyRates = overtimeRates
     .filter(r => r.employment_type === employmentType && r.period === 'weekly')

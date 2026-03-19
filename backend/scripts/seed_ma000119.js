@@ -499,12 +499,15 @@ async function seed() {
 
     // ── Overtime rates ────────────────────────────────────────────────────────
     // MA000119 clause 28 — Overtime
-    // Weekly overtime for FT/PT (casual employees are not entitled to overtime under this award):
+    // Weekly overtime for FT/PT:
     //   M–F: first 2 hours over 38/week ×1.5, thereafter ×2.0
     //   Saturday: first 2 hours ×1.75, thereafter ×2.0 (complex daily rule — approximated as weekly here)
     //   Sunday and RDO overtime: ×2.0
-    //
     // For simplicity we implement the weekly threshold only (standard weekly overtime).
+    //
+    // Casual overtime — clause 20.4(b):
+    //   Casual employees working in excess of 11 hours on any day are paid overtime.
+    //   First 3 hours beyond 11: ×1.50 of casual rate. Thereafter: ×2.00 of casual rate.
     const overtimeRates = [
       {
         employment_type: 'full_time',
@@ -529,6 +532,19 @@ async function seed() {
         threshold_hours: 40, period: 'weekly',
         multiplier: 2.0,
         description: 'Part-time weekly overtime — after 40 hours (×2.0)',
+      },
+      // Casual daily overtime — clause 20.4(b)
+      {
+        employment_type: 'casual',
+        threshold_hours: 11, period: 'daily',
+        multiplier: 1.5,
+        description: 'Casual daily overtime — first 3 hours over 11 (×1.5 of casual rate)',
+      },
+      {
+        employment_type: 'casual',
+        threshold_hours: 14, period: 'daily',
+        multiplier: 2.0,
+        description: 'Casual daily overtime — after 14 hours (×2.0 of casual rate)',
       },
     ];
 

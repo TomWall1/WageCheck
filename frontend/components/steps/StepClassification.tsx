@@ -79,6 +79,11 @@ const STREAM_LABELS: Record<string, string> = {
   introductory: 'Introductory',
   retail: 'Retail',
   fitness: 'Fitness Industry',
+  cleaning: 'Cleaning',
+  storeworker: 'Storeworker / Wholesale',
+  dancer: 'Company Dancer',
+  touring_sl: 'Touring Sound & Lighting',
+  exhibition: 'Exhibition',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
@@ -86,15 +91,39 @@ const STREAM_ORDER_MA000003 = ['general', 'solo', 'responsible'];
 const STREAM_ORDER_MA000119 = ['introductory', 'food_beverage', 'kitchen', 'general'];
 const STREAM_ORDER_MA000004 = ['retail'];
 const STREAM_ORDER_MA000094 = ['fitness'];
+const STREAM_ORDER_MA000080 = ['general', 'exhibition'];
+const STREAM_ORDER_MA000081 = ['general', 'touring_sl', 'dancer'];
+const STREAM_ORDER_MA000084 = ['storeworker'];
+const STREAM_ORDER_MA000022 = ['cleaning'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
   const isRest = awardCode === 'MA000119';
   const isRetail = awardCode === 'MA000004';
   const isFitness = awardCode === 'MA000094';
-  const isParentGated = isFF || isRest || isRetail || isFitness;
-  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003 : isRest ? STREAM_ORDER_MA000119 : isRetail ? STREAM_ORDER_MA000004 : isFitness ? STREAM_ORDER_MA000094 : STREAM_ORDER_MA000009;
-  const awardShortName = isFF ? 'Fast Food Award' : isRest ? 'Restaurant Industry Award' : isRetail ? 'Retail Award' : isFitness ? 'Fitness Industry Award' : 'Hospitality Award';
+  const isAmusement = awardCode === 'MA000080';
+  const isLivePerf = awardCode === 'MA000081';
+  const isStorage = awardCode === 'MA000084';
+  const isCleaning = awardCode === 'MA000022';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning;
+  const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
+    : isRest ? STREAM_ORDER_MA000119
+    : isRetail ? STREAM_ORDER_MA000004
+    : isFitness ? STREAM_ORDER_MA000094
+    : isAmusement ? STREAM_ORDER_MA000080
+    : isLivePerf ? STREAM_ORDER_MA000081
+    : isStorage ? STREAM_ORDER_MA000084
+    : isCleaning ? STREAM_ORDER_MA000022
+    : STREAM_ORDER_MA000009;
+  const awardShortName = isFF ? 'Fast Food Award'
+    : isRest ? 'Restaurant Industry Award'
+    : isRetail ? 'Retail Award'
+    : isFitness ? 'Fitness Industry Award'
+    : isAmusement ? 'Amusement, Events & Recreation Award'
+    : isLivePerf ? 'Live Performance Award'
+    : isStorage ? 'Storage Services & Wholesale Award'
+    : isCleaning ? 'Cleaning Services Award'
+    : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
 
@@ -353,7 +382,15 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                   ? ' Levels run from Level 1 (new starters) to Level 8 (senior management).'
                   : isFitness
                     ? ' Levels run from Level 1 (new starters) to Level 7 (centre managers). Levels 3A and 4A recognise formal qualifications (Cert III and Cert IV).'
-                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                    : isAmusement
+                      ? ' Levels run from Introductory (first month) to Grade 10 (general manager). Exhibition employees have a separate grade scale.'
+                      : isLivePerf
+                        ? ' Production & support staff run from Level 1 to Level 9 (Technical Manager). Touring sound & lighting staff have their own level scale. Company dancers have separate levels.'
+                        : isStorage
+                          ? ' Grades run from Grade 1 (entry level, 3 sub-levels by tenure) to Grade 4 (most senior).'
+                          : isCleaning
+                            ? ' Levels run from Level 1 (general cleaning) to Level 3 (highly specialised or high-access work).'
+                            : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -369,7 +406,15 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                   ? ' It might say something like "Retail Employee Level 2" or "Level 3".'
                   : isFitness
                     ? ' It might say something like "Fitness Industry Employee Level 3A" or "Level 4A".'
-                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                    : isAmusement
+                      ? ' It might say something like "Grade 2" or "Amusement Employee Grade 5".'
+                      : isLivePerf
+                        ? ' It might say something like "Production & Support Employee Level 3" or "Touring S&L Level 2".'
+                        : isStorage
+                          ? ' It might say something like "Grade 1" or "Storeworker Grade 2".'
+                          : isCleaning
+                            ? ' It might say something like "Cleaning Service Employee Level 1" or "Level 2".'
+                            : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button
