@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'WageCheck — Know Your Hospitality Rights',
+  title: 'WageCheck — Know Your Workplace Rights',
   description:
-    'Find out what you should be paid under the Hospitality Industry General Award 2020. Free, plain-English, and built for workers — not lawyers.',
-  keywords: ['wage theft', 'hospitality award', 'fair work', 'underpaid', 'Australia', 'hospitality worker'],
+    'Find out what you should be paid under your Fair Work modern award. Free, plain-English, and built for workers — not lawyers.',
+  keywords: ['wage theft', 'hospitality award', 'retail award', 'fitness award', 'fair work', 'underpaid', 'Australia', 'award wages'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="font-bold text-xl text-gray-900">WageCheck</span>
             </a>
             <div className="text-xs text-gray-500 text-right">
-              <div>Hospitality Award 2020</div>
+              <div>Fair Work modern awards</div>
               <div>Rates effective 1 July 2025</div>
             </div>
           </div>
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-2xl mx-auto text-sm text-gray-500 space-y-2">
             <p>
               <strong className="text-gray-700">This tool provides general information only — not legal advice.</strong>{' '}
-              Pay rates shown are minimum rates under the Hospitality Industry (General) Award 2020,
+              Pay rates shown are minimum rates under the applicable Fair Work modern award,
               effective 1 July 2025. Always verify current rates at{' '}
               <a
                 href="https://www.fairwork.gov.au"

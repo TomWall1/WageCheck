@@ -5,6 +5,8 @@ import { EmploymentType } from '@/types';
 import clsx from 'clsx';
 
 interface Props {
+  awardCode: string;
+  awardName: string;
   selected: EmploymentType | null;
   age: number | null;
   onSelect: (type: EmploymentType) => void;
@@ -12,9 +14,21 @@ interface Props {
   onNext: () => void;
 }
 
-const JUNIOR_RATES: Record<number, number> = {
-  15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90,
+// Junior rate tables per award — percentage of adult rate by age
+const JUNIOR_RATES_BY_AWARD: Record<string, { rates: Record<number, number>; cutoff: number; underMin: number }> = {
+  MA000009: { rates: { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 }, cutoff: 21, underMin: 0.40 },
+  MA000003: { rates: { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 }, cutoff: 21, underMin: 0.40 },
+  MA000004: { rates: { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 }, cutoff: 21, underMin: 0.45 },
+  MA000119: { rates: { 17: 0.60, 18: 0.70, 19: 0.85 }, cutoff: 20, underMin: 0.50 },
+  MA000094: { rates: { 17: 0.65, 18: 0.75, 19: 0.85 }, cutoff: 20, underMin: 0.55 },
 };
+
+function getJuniorRate(awardCode: string, age: number | null): number | null {
+  if (age === null) return null;
+  const config = JUNIOR_RATES_BY_AWARD[awardCode] ?? JUNIOR_RATES_BY_AWARD.MA000009;
+  if (age >= config.cutoff) return null;
+  return config.rates[age] ?? config.underMin;
+}
 
 const EMPLOYMENT_TYPES: Array<{
   type: EmploymentType;
@@ -43,10 +57,10 @@ const EMPLOYMENT_TYPES: Array<{
     importantNote:
       "If your hours change week to week and you don't have guaranteed shifts, you might actually be casual — even if your employer hasn't told you that.",
     learnMore: [
-      "Under the Hospitality Award, part-time workers must have their regular hours and days of work agreed in writing before they start. This written agreement should specify at least the number of hours guaranteed each week and which days those hours fall on.",
+      'Under the award, part-time workers must have their regular hours and days of work agreed in writing before they start. This written agreement should specify at least the number of hours guaranteed each week and which days those hours fall on.',
       "If your hours change from week to week — or you're called in based on demand with no set schedule — you may legally be a casual employee, regardless of what your employer calls you.",
       "The distinction matters significantly. Casual employees receive a 25% casual loading on their hourly rate to compensate for the lack of paid leave. If you're being treated as casual without that loading, but also without guaranteed hours, something may not be right.",
-      "If you believe you're genuinely part-time but your employer is treating you as casual (or vice versa), you can contact the Fair Work Ombudsman on 13 13 94 for free advice.",
+      'If you believe you\'re genuinely part-time but your employer is treating you as casual (or vice versa), you can contact the Fair Work Ombudsman on 13 13 94 for free advice.',
     ],
   },
   {
@@ -60,27 +74,26 @@ const EMPLOYMENT_TYPES: Array<{
       "If you've been working regular shifts at the same time each week for a long time, you may have the right to request conversion to permanent employment.",
     learnMore: [
       "Under the Fair Work Act, if you've been employed as a casual for 12 months and have worked a regular and systematic pattern of hours for at least the last 6 months, you can formally request to convert to permanent employment (part-time or full-time).",
-      "Your employer must respond in writing within 21 days. They can only refuse on genuine operational grounds — for example, if the business genuinely can't commit to regular hours for that role.",
+      'Your employer must respond in writing within 21 days. They can only refuse on genuine operational grounds — for example, if the business genuinely can\'t commit to regular hours for that role.',
       "A 'regular pattern of work' doesn't have to be exactly the same hours every week. Courts and the Fair Work Commission look at whether your shifts were predictable and systematic over time.",
-      "Even if you haven't formally requested conversion, working a regular casual roster for an extended period can sometimes create legal entitlements. If you think this applies to you, the Fair Work Ombudsman (13 13 94) can give you free, confidential advice.",
+      'Even if you haven\'t formally requested conversion, working a regular casual roster for an extended period can sometimes create legal entitlements. If you think this applies to you, the Fair Work Ombudsman (13 13 94) can give you free, confidential advice.',
     ],
   },
 ];
 
-export default function StepEmploymentType({ selected, age, onSelect, onAgeChange, onNext }: Props) {
+export default function StepEmploymentType({ awardCode, awardName, selected, age, onSelect, onAgeChange, onNext }: Props) {
   const [expandedNote, setExpandedNote] = useState<string | null>(null);
-  const juniorRate = age !== null && age < 21 ? JUNIOR_RATES[age] ?? null : null;
+  const juniorRate = getJuniorRate(awardCode, age);
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-bold text-gray-900">
-          Let's check your pay
+          Let&apos;s check your pay
         </h1>
         <p className="text-gray-600 text-lg">
           This tool checks what you should be paid under the{' '}
-          <strong>Hospitality Industry General Award 2020</strong> — the minimum
-          pay rules that cover most hospitality workers in Australia.
+          <strong>{awardName} 2020</strong> — the minimum pay rules that cover your workplace.
         </p>
         <p className="text-gray-500">
           First, what kind of employment are you in?
@@ -137,10 +150,9 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
 
       {selected && (
         <div className="info-box text-sm">
-          <strong>Not sure?</strong> If you're unsure which category applies to you,
-          casual is common in hospitality — but the label your employer uses isn't always
-          what the law says you are. If you're being treated as casual but work regular
-          set hours each week, seek advice.
+          <strong>Not sure?</strong> If you&apos;re unsure which category applies to you,
+          seek advice from the Fair Work Ombudsman (13 13 94). The label your employer uses
+          isn&apos;t always what the law says you are.
         </div>
       )}
 
@@ -149,8 +161,8 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
         <div>
           <label className="block font-semibold text-gray-900 mb-1">How old are you?</label>
           <p className="text-sm text-gray-500 mb-3">
-            Under-21s are paid a percentage of the adult rate under the award.
-            If you're 21 or over, junior rates don't apply.
+            Junior employees are paid a percentage of the adult rate under the award.
+            If you&apos;re old enough to receive the adult rate, junior rates don&apos;t apply.
           </p>
           <select
             value={age === null ? '21' : String(age)}
@@ -171,14 +183,14 @@ export default function StepEmploymentType({ selected, age, onSelect, onAgeChang
           </select>
         </div>
 
-        {juniorRate && (
+        {juniorRate !== null && age !== null && (
           <div className="warning-box text-sm">
-            <strong>Junior rate applies.</strong> At age {age}, the award sets your minimum pay
+            <strong>Junior rate applies.</strong> At age {age}, the {awardName} sets your minimum pay
             at <strong>{Math.round(juniorRate * 100)}% of the adult rate</strong>.
             This is automatically factored into your calculation.
           </div>
         )}
-        {(age === null || age >= 21) && (
+        {juniorRate === null && (
           <div className="success-box text-sm">
             Adult rate applies — no junior rate reduction.
           </div>

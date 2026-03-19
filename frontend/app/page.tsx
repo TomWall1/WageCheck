@@ -84,7 +84,14 @@ export default function HomePage() {
     return <LandingPage onSelect={handleAwardSelect} />;
   }
 
-  const awardName = awardCode === 'MA000003' ? 'Fast Food Award' : 'Hospitality Award';
+  const AWARD_NAMES: Record<string, string> = {
+    MA000009: 'Hospitality Award',
+    MA000003: 'Fast Food Award',
+    MA000119: 'Restaurant Industry Award',
+    MA000004: 'Retail Award',
+    MA000094: 'Fitness Industry Award',
+  };
+  const awardName = AWARD_NAMES[awardCode] ?? awardCode;
 
   return (
     <div className="space-y-6">
@@ -107,6 +114,8 @@ export default function HomePage() {
 
       {state.step === 1 && (
         <StepEmploymentType
+          awardCode={awardCode}
+          awardName={awardName}
           selected={state.employmentType}
           age={state.age}
           onSelect={(type: EmploymentType) => updateState({ employmentType: type })}
