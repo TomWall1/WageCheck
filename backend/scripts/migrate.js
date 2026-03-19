@@ -136,16 +136,24 @@ async function migrate() {
     // ── Classification decision tree ─────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS classification_questions (
-        id              SERIAL PRIMARY KEY,
-        question_key    VARCHAR(100) NOT NULL UNIQUE,
-        question_text   TEXT NOT NULL,
-        help_text       TEXT,
-        question_type   VARCHAR(20) NOT NULL DEFAULT 'single',  -- 'single', 'multi'
-        stream          VARCHAR(50),  -- NULL = applies to all streams
-        sort_order      INTEGER NOT NULL DEFAULT 0,
-        created_at      TIMESTAMPTZ DEFAULT NOW()
+        id                  SERIAL PRIMARY KEY,
+        award_code          VARCHAR(50) NOT NULL DEFAULT 'MA000009',
+        question_key        VARCHAR(100) NOT NULL UNIQUE,
+        question_text       TEXT NOT NULL,
+        help_text           TEXT,
+        question_type       VARCHAR(20) NOT NULL DEFAULT 'single',  -- 'single', 'multi'
+        stream              VARCHAR(50),  -- NULL = applies to all streams
+        parent_question_key VARCHAR(100),  -- NULL = always show; set = only show when parent answered
+        parent_answer_key   VARCHAR(100),  -- required answer on the parent question to show this question
+        sort_order          INTEGER NOT NULL DEFAULT 0,
+        created_at          TIMESTAMPTZ DEFAULT NOW()
       )
     `);
+
+    // Add new columns to classification_questions if not already present (idempotent)
+    await client.query(`ALTER TABLE classification_questions ADD COLUMN IF NOT EXISTS award_code VARCHAR(50) NOT NULL DEFAULT 'MA000009'`);
+    await client.query(`ALTER TABLE classification_questions ADD COLUMN IF NOT EXISTS parent_question_key VARCHAR(100)`);
+    await client.query(`ALTER TABLE classification_questions ADD COLUMN IF NOT EXISTS parent_answer_key VARCHAR(100)`);
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS classification_answers (
