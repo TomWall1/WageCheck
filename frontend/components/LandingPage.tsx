@@ -100,7 +100,7 @@ export default function LandingPage({ onSelect }: Props) {
         }}>
           Check your pay
         </h1>
-        <p style={{ fontSize: '15px', color: '#6B6560', lineHeight: 1.65, maxWidth: '480px' }}>
+        <p style={{ fontSize: '15px', color: '#3A3530', lineHeight: 1.65, maxWidth: '480px' }}>
           Find out if you&apos;re being paid correctly under the Fair Work Act.
           Answer a few questions about your job and shifts — we&apos;ll calculate what you&apos;re owed.
         </p>
@@ -141,7 +141,7 @@ export default function LandingPage({ onSelect }: Props) {
             fontWeight: 600,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#6B6560',
+            color: '#44403C',
             marginBottom: '8px',
           }}>
             Select your award
@@ -169,7 +169,7 @@ export default function LandingPage({ onSelect }: Props) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filtered.length === 0 && (
-            <p style={{ fontSize: '13px', color: '#A09890', textAlign: 'center', padding: '20px 0' }}>
+            <p style={{ fontSize: '13px', color: '#6B6560', textAlign: 'center', padding: '20px 0' }}>
               No awards match your search. Try &quot;hospitality&quot; or &quot;fast food&quot;.
             </p>
           )}
@@ -179,45 +179,63 @@ export default function LandingPage({ onSelect }: Props) {
               <button
                 key={award.code}
                 onClick={() => setSelected(award.code)}
+                onMouseEnter={e => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = '#ABCAE9';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(27,90,156,0.10)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = '#C8C2BA';
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.07)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
                 style={{
                   width: '100%',
                   textAlign: 'left',
-                  padding: '14px 16px',
+                  padding: '16px 18px',
                   background: isSelected ? '#EEF4FB' : '#FFFFFF',
-                  border: isSelected ? '1px solid #ABCAE9' : '1px solid #E4DFD8',
-                  borderLeft: isSelected ? '3px solid #1B5A9C' : '1px solid #E4DFD8',
-                  borderRadius: '4px',
+                  border: isSelected ? '1px solid #ABCAE9' : '1px solid #C8C2BA',
+                  borderLeft: isSelected ? '4px solid #1B5A9C' : '1px solid #C8C2BA',
+                  borderRadius: '6px',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   display: 'block',
+                  boxShadow: isSelected
+                    ? '0 2px 8px rgba(27,90,156,0.12)'
+                    : '0 1px 3px rgba(0,0,0,0.07)',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   {isSelected && (
                     <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
                       <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="#1B5A9C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   )}
-                  <span style={{ fontWeight: 600, fontSize: '14px', color: '#111111' }}>
+                  <span style={{ fontWeight: 700, fontSize: '14.5px', color: '#111111' }}>
                     {award.shortName}
                   </span>
                   <span style={{
                     fontSize: '10px',
                     fontFamily: 'monospace',
-                    color: '#A09890',
-                    background: '#F5F4F0',
-                    padding: '1px 5px',
-                    borderRadius: '2px',
+                    color: '#6B6560',
+                    background: '#EDEAE5',
+                    padding: '2px 6px',
+                    borderRadius: '3px',
                     letterSpacing: '0.03em',
+                    fontWeight: 500,
                   }}>
                     {award.badge}
                   </span>
                 </div>
-                <p style={{ fontSize: '13px', color: '#6B6560', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: '13.5px', color: '#3A3530', lineHeight: 1.55, margin: 0 }}>
                   {award.description}
                 </p>
-                <p style={{ fontSize: '11.5px', color: '#A09890', marginTop: '4px', margin: '4px 0 0 0' }}>
-                  <span style={{ fontWeight: 600 }}>Covers: </span>{award.examples}
+                <p style={{ fontSize: '12px', color: '#6B6560', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
+                  <span style={{ fontWeight: 600, color: '#44403C' }}>Covers: </span>{award.examples}
                 </p>
               </button>
             );
@@ -237,10 +255,10 @@ export default function LandingPage({ onSelect }: Props) {
           : 'Select an award to continue'}
       </button>
 
-      <p style={{ fontSize: '11.5px', textAlign: 'center', color: '#A09890' }}>
+      <p style={{ fontSize: '12px', textAlign: 'center', color: '#6B6560' }}>
         General information only — not legal advice.
         Rates effective 1 July 2025. Always verify at{' '}
-        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
+        <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: '#44403C' }}>
           fairwork.gov.au
         </a>
         .
