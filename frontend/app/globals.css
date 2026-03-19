@@ -111,7 +111,7 @@
   .choice-card {
     @apply flex items-start gap-4 p-5 cursor-pointer bg-white
            border border-[#E4DFD8]
-           hover:border-brand-300 hover:bg-brand-50
+           hover:border-brand-200 hover:bg-brand-50
            transition-all duration-150;
     border-radius: 4px;
   }
