@@ -90,6 +90,9 @@ export default function HomePage() {
     MA000119: 'Restaurant Industry Award',
     MA000004: 'Retail Award',
     MA000094: 'Fitness Industry Award',
+    MA000080: 'Amusement & Events Award',
+    MA000081: 'Live Performance Award',
+    MA000084: 'Storage & Wholesale Award',
   };
   const awardName = AWARD_NAMES[awardCode] ?? awardCode;
 

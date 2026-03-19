@@ -367,6 +367,25 @@ const CLASSIFICATION_RULES_MA000081 = [
 ];
 
 /**
+ * MA000084 — Storage Services and Wholesale Award 2020
+ * Two streams: storeworkers and wholesale employees (identical rates).
+ * Grade 1 has 3 sub-levels based on length of employment.
+ * Internal levels: 1=G1 commencement, 2=G1 3m, 3=G1 12m, 4=G2, 5=G3, 6=G4.
+ * All in stream 'storeworker'.
+ */
+const CLASSIFICATION_RULES_MA000084 = [
+  // Grade 1 — length of employment determines sub-level
+  { conditions: { sw_grade: 'grade1', sw_grade1_duration: 'after_12_months' }, level: 3, stream: 'storeworker', rationale: 'Grade 1 storeworker/wholesale employee — 12 months or more' },
+  { conditions: { sw_grade: 'grade1', sw_grade1_duration: 'after_3_months' },  level: 2, stream: 'storeworker', rationale: 'Grade 1 storeworker/wholesale employee — 3 to 12 months' },
+  { conditions: { sw_grade: 'grade1', sw_grade1_duration: 'commencement' },    level: 1, stream: 'storeworker', rationale: 'Grade 1 storeworker/wholesale employee — commencement rate (less than 3 months)' },
+  { conditions: { sw_grade: 'grade1' },                                         level: 1, stream: 'storeworker', rationale: 'Grade 1 storeworker/wholesale employee — entry level' },
+  // Grade 2, 3, 4
+  { conditions: { sw_grade: 'grade2' }, level: 4, stream: 'storeworker', rationale: 'Grade 2 storeworker/wholesale employee — experienced operator' },
+  { conditions: { sw_grade: 'grade3' }, level: 5, stream: 'storeworker', rationale: 'Grade 3 storeworker/wholesale employee — senior, may supervise others' },
+  { conditions: { sw_grade: 'grade4' }, level: 6, stream: 'storeworker', rationale: 'Grade 4 storeworker/wholesale employee — most senior classification' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -431,6 +450,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000084') {
+    for (const rule of CLASSIFICATION_RULES_MA000084) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'storeworker', rationale: 'Unable to determine classification — defaulting to Grade 1 commencement. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000081') {

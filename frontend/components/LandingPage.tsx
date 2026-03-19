@@ -60,6 +60,14 @@ const AWARDS = [
     examples: 'Stagehands, riggers, touring sound & lighting crew, company dancers, wardrobe staff, production managers',
     badge: 'MA000081',
   },
+  {
+    code: 'MA000084' as AwardCode,
+    name: 'Storage Services and Wholesale Award 2020',
+    shortName: 'Storage & Wholesale Award',
+    description: 'Covers employees in storage, warehousing, distribution, and wholesale trading businesses, including transport and clerical roles within those businesses.',
+    examples: 'Storeworkers, warehouse operatives, forklift drivers, distribution centre staff, wholesale sales assistants, storepersons',
+    badge: 'MA000084',
+  },
 ];
 
 interface Props {

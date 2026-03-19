@@ -317,6 +317,47 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primaryHelp: 'If your employer requires special clothing but does not supply it, you may be entitled to reimbursement.',
     onlyForAward: ['MA000119'],
   },
+
+  // ── MA000084 (Storage Services and Wholesale) ─────────────────────────────
+  {
+    type: 'cold_work',
+    primary: 'Did you work in refrigerated or cold storage areas during this period?',
+    primaryHelp: 'Cold work allowances apply when you work in refrigerated areas. The rate depends on the temperature.',
+    onlyForAward: ['MA000084'],
+    followUps: [
+      {
+        key: 'below_freezing',
+        question: 'Were temperatures below -18.9°C (-2°F)?',
+        help: 'Temperatures above -18.9°C get $1.07/hr. Between -18.9°C and -23.3°C get $1.61/hr. Below -23.3°C get $2.15/hr.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Do you hold a current first aid certificate?',
+    onlyForAward: ['MA000084'],
+    followUps: [
+      {
+        key: 'appointed',
+        question: 'Has your employer specifically appointed you as the person responsible for first aid at your workplace?',
+        help: 'Simply holding a certificate is not enough — your employer must have asked you to act as first aider.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'protective_clothing',
+    primary: 'Does your employer require you to wear protective clothing or footwear that you had to purchase yourself?',
+    primaryHelp: 'If your employer requires specific protective clothing or footwear but does not supply it, you are entitled to reimbursement of the reasonable cost.',
+    onlyForAward: ['MA000084'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Were you required to travel to a different work location than usual, incurring additional travel costs?',
+    primaryHelp: 'If you are directed to work at a different location, you are entitled to reimbursement for additional fares and travel time (Mon–Sat at your ordinary rate; Sun/PH at ordinary rate + 50%).',
+    onlyForAward: ['MA000084'],
+  },
 ];
 
 type FollowUpAnswers = Record<string, string>;
@@ -424,9 +465,15 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       }
 
       if (q.type === 'cold_work') {
-        const fuAnswer = followUpAnswers['cold_work_below_zero'];
-        if (!fuAnswer) continue;
-        result.push({ type: fuAnswer === 'yes' ? 'cold_work_freezer' : 'cold_work', triggered: true });
+        if (awardCode === 'MA000084') {
+          const fuAnswer = followUpAnswers['cold_work_below_freezing'];
+          if (!fuAnswer) continue;
+          result.push({ type: fuAnswer === 'yes' ? 'cold_work_freezer' : 'cold_work', triggered: true });
+        } else {
+          const fuAnswer = followUpAnswers['cold_work_below_zero'];
+          if (!fuAnswer) continue;
+          result.push({ type: fuAnswer === 'yes' ? 'cold_work_freezer' : 'cold_work', triggered: true });
+        }
         continue;
       }
 
@@ -503,6 +550,9 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       return 'first_aid';
     }
     if (qType === 'cold_work') {
+      if (awardCode === 'MA000084') {
+        return followUpAnswers['cold_work_below_freezing'] === 'yes' ? 'cold_work_freezer' : 'cold_work';
+      }
       return followUpAnswers['cold_work_below_zero'] === 'yes' ? 'cold_work_freezer' : 'cold_work';
     }
     if (qType === 'cold_work_retail') {
@@ -550,6 +600,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       (a.type === 'laundry_ptcasual' && (q.type === 'laundry' || q.type === 'laundry_uniform')) ||
       (a.type === 'laundry_pt_casual' && q.type === 'laundry_lp') ||
       (a.type === 'cold_work' && q.type === 'cold_work') ||
+      (a.type === 'cold_work_mid' && q.type === 'cold_work') ||
       (a.type === 'cold_work_freezer' && q.type === 'cold_work') ||
       (a.type === 'cold_work_above_zero' && q.type === 'cold_work_retail') ||
       (a.type === 'cold_work_below_zero' && q.type === 'cold_work_retail') ||
