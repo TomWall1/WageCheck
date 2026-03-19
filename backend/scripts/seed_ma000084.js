@@ -374,7 +374,7 @@ async function seed() {
     //
     // Casual OT multipliers relative to casual base (same $ as FT OT):
     //   First 2 hrs: $38.78/$32.31 ≈ 1.40 of casual base (= ×1.75 of FT base)
-    //   After 2 hrs: $51.70/$32.31 ≈ 1.60 of casual base (= ×2.00 of FT base)
+    //   After 2 hrs: $51.70/$32.31 ≈ 1.60 of casual base (= ×2.25 of FT base per MA000084 Sch A)
 
     const overtimeRates = [
       { employment_type: 'full_time',  threshold_hours: 38, period: 'weekly', multiplier: 1.50, description: 'Weekly overtime — first 2 hours over 38 (×1.50)' },
@@ -383,7 +383,7 @@ async function seed() {
       { employment_type: 'part_time',  threshold_hours: 40, period: 'weekly', multiplier: 2.00, description: 'Part-time weekly overtime — after 40 hours (×2.00)' },
       // Casual employees receive the same dollar overtime rate as FT, so relative to casual base:
       { employment_type: 'casual', threshold_hours: 38, period: 'weekly', multiplier: 1.40, description: 'Casual weekly overtime — first 2 hours (×1.40 of casual base = 175% of FT)' },
-      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 1.60, description: 'Casual weekly overtime — after 40 hours (×1.60 of casual base = 200% of FT)' },
+      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 1.80, description: 'Casual weekly overtime — after 40 hours (×1.80 of casual base = 225% of FT)' },
     ];
 
     await client.query(`DELETE FROM overtime_rates WHERE award_code = $1`, [AWARD_CODE]);
