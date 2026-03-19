@@ -318,6 +318,97 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000119'],
   },
 
+  // ── MA000022 (Cleaning Services) ──────────────────────────────────────────
+  {
+    type: 'broken_shift',
+    primary: 'Did you work a broken shift — two separate working periods on the same day with a substantial gap in between?',
+    primaryHelp: 'A broken shift allowance applies when your employer requires you to start work, finish, then return later in the same day.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'cold_places',
+    primary: 'Did you work in a cold room or refrigerated area during this period?',
+    primaryHelp: 'A cold places allowance applies for each hour worked in refrigerated or cold storage conditions.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Do you hold a current first aid certificate?',
+    onlyForAward: ['MA000022'],
+    followUps: [
+      {
+        key: 'appointed',
+        question: 'Has your employer specifically appointed you as the first aid officer at your workplace?',
+        help: 'Simply holding a certificate is not enough — your employer must have designated you as the first aider.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'height_low',
+    primary: 'Did you clean the outside of a multi-storied building while working at height?',
+    primaryHelp: 'A height allowance applies when you clean the exterior of a multi-storied building from outside (e.g. using abseiling, swing stages, or elevated platforms).',
+    onlyForAward: ['MA000022'],
+    followUps: [
+      {
+        key: 'above_22nd',
+        question: 'Were you working above the 22nd floor?',
+        help: 'Working above the 22nd floor attracts a higher height allowance ($2.17/hr vs $1.06/hr).',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'hot_places_low',
+    primary: 'Were you required to work in extremely hot conditions (above 46°C) during this period?',
+    primaryHelp: 'A hot places allowance applies when the temperature at your workplace exceeds 46°C.',
+    onlyForAward: ['MA000022'],
+    followUps: [
+      {
+        key: 'above_54',
+        question: 'Did temperatures exceed 54°C?',
+        help: 'Temperatures exceeding 54°C attract a higher rate ($0.80/hr vs $0.66/hr).',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'leading_hand_cleaning',
+    primary: 'Were you required to supervise or direct other cleaning employees during this period?',
+    primaryHelp: 'A leading hand allowance applies to Level 2 employees who are directed by management to be responsible for other cleaning employees.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'refuse_collection',
+    primary: 'Did your duties include collecting and removing refuse (rubbish) as a regular part of your work?',
+    primaryHelp: 'A refuse collection allowance applies per shift when rubbish removal is a regular part of your duties.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'toilet_cleaning',
+    primary: 'Did your duties include cleaning toilet areas as a regular part of your work?',
+    primaryHelp: 'A toilet cleaning allowance applies per shift when cleaning toilet areas is a regular duty.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'uniform',
+    primary: 'Does your employer require you to wear a specific uniform that you had to purchase yourself?',
+    primaryHelp: 'If your employer requires you to wear a specific uniform but does not supply it, you are entitled to reimbursement.',
+    onlyForAward: ['MA000022'],
+  },
+  {
+    type: 'vehicle_car',
+    primary: 'Did you use your own car for work purposes during this period?',
+    onlyForAward: ['MA000022'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
   // ── MA000084 (Storage Services and Wholesale) ─────────────────────────────
   {
     type: 'cold_work',
@@ -464,6 +555,30 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
         continue;
       }
 
+      if (q.type === 'height_low') {
+        const fuAnswer = followUpAnswers['height_low_above_22nd'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'height_high' : 'height_low', triggered: true });
+        continue;
+      }
+
+      if (q.type === 'hot_places_low') {
+        const fuAnswer = followUpAnswers['hot_places_low_above_54'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'hot_places_high' : 'hot_places_low', triggered: true });
+        continue;
+      }
+
+      if (q.type === 'leading_hand_cleaning') {
+        const count = parseInt(leadingHandCount);
+        if (!leadingHandCount || isNaN(count) || count <= 0) continue;
+        let lhType = 'leading_hand_1to10';
+        if (count > 20) lhType = 'leading_hand_21plus';
+        else if (count > 10) lhType = 'leading_hand_11to20';
+        result.push({ type: lhType, triggered: true, detail: leadingHandCount });
+        continue;
+      }
+
       if (q.type === 'cold_work') {
         if (awardCode === 'MA000084') {
           const fuAnswer = followUpAnswers['cold_work_below_freezing'];
@@ -558,6 +673,18 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     if (qType === 'cold_work_retail') {
       return followUpAnswers['cold_work_retail_below_zero'] === 'yes' ? 'cold_work_below_zero' : 'cold_work_above_zero';
     }
+    if (qType === 'height_low') {
+      return followUpAnswers['height_low_above_22nd'] === 'yes' ? 'height_high' : 'height_low';
+    }
+    if (qType === 'hot_places_low') {
+      return followUpAnswers['hot_places_low_above_54'] === 'yes' ? 'hot_places_high' : 'hot_places_low';
+    }
+    if (qType === 'leading_hand_cleaning') {
+      const count = parseInt(leadingHandCount);
+      if (count > 20) return 'leading_hand_21plus';
+      if (count > 10) return 'leading_hand_11to20';
+      return 'leading_hand_1to10';
+    }
     if (qType === 'in_charge') return 'in_charge_golf_bowling_tennis';
     if (qType === 'tool_trades') {
       return followUpAnswers['tool_trades_is_carpenter'] === 'yes' ? 'tool_carpenter' : 'tool_tradesperson';
@@ -583,7 +710,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     if (primary === null || primary === undefined) return false;
     if (!primary) return true;
     if (VEHICLE_TYPES.has(q.type)) return true;
-    if (q.type === 'leading_hand') return !!leadingHandCount && parseInt(leadingHandCount) > 0;
+    if (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning') return !!leadingHandCount && parseInt(leadingHandCount) > 0;
     if (!q.followUps) return true;
     return q.followUps.every(fu => followUpAnswers[`${q.type}_${fu.key}`]);
   });
@@ -613,7 +740,14 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       (a.type === 'meal_travelling' && q.type === 'meal_travelling') ||
       (a.type === 'meal_travelling_weekly' && q.type === 'meal_travelling') ||
       (a.type === 'split_shift' && q.type === 'split_shift_restaurant') ||
-      (a.type === 'tool' && q.type === 'tool_restaurant')
+      (a.type === 'tool' && q.type === 'tool_restaurant') ||
+      (a.type === 'height_low' && q.type === 'height_low') ||
+      (a.type === 'height_high' && q.type === 'height_low') ||
+      (a.type === 'hot_places_low' && q.type === 'hot_places_low') ||
+      (a.type === 'hot_places_high' && q.type === 'hot_places_low') ||
+      (a.type === 'leading_hand_1to10' && q.type === 'leading_hand_cleaning') ||
+      (a.type === 'leading_hand_11to20' && q.type === 'leading_hand_cleaning') ||
+      (a.type === 'leading_hand_21plus' && q.type === 'leading_hand_cleaning')
     );
   }
 
@@ -678,7 +812,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
               </div>
 
               {/* Leading hand count input */}
-              {primary === true && q.type === 'leading_hand' && (
+              {primary === true && (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning') && (
                 <div className="space-y-2 pl-4 border-l-2 border-brand-200">
                   <p className="text-sm font-medium text-gray-900">How many employees are you responsible for supervising?</p>
                   <div className="flex items-center gap-2">
@@ -695,9 +829,13 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                   </div>
                   {leadingHandCount && parseInt(leadingHandCount) > 0 && (
                     <p className="text-xs text-gray-500">
-                      {parseInt(leadingHandCount) >= 11 ? 'Rate: leading hand 11+ employees'
-                        : parseInt(leadingHandCount) >= 6 ? 'Rate: leading hand 6–10 employees'
-                        : 'Rate: leading hand 1–5 employees'}
+                      {q.type === 'leading_hand_cleaning'
+                        ? (parseInt(leadingHandCount) > 20 ? 'Rate: leading hand over 20 employees'
+                          : parseInt(leadingHandCount) > 10 ? 'Rate: leading hand 11–20 employees'
+                          : 'Rate: leading hand 1–10 employees')
+                        : (parseInt(leadingHandCount) >= 11 ? 'Rate: leading hand 11+ employees'
+                          : parseInt(leadingHandCount) >= 6 ? 'Rate: leading hand 6–10 employees'
+                          : 'Rate: leading hand 1–5 employees')}
                     </p>
                   )}
                 </div>

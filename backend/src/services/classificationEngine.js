@@ -367,6 +367,18 @@ const CLASSIFICATION_RULES_MA000081 = [
 ];
 
 /**
+ * MA000022 — Cleaning Services Award 2020
+ * Three levels, all stream='cleaning'.
+ * Level 1: general cleaning. Level 2: specialized or leading hand. Level 3: specialist/high-access.
+ */
+const CLASSIFICATION_RULES_MA000022 = [
+  { conditions: { cleaning_experience: 'new' }, level: 1, stream: 'cleaning', rationale: 'New to cleaning work — Cleaning service employee Level 1' },
+  { conditions: { cleaning_experience: 'experienced', cleaning_role: 'general' }, level: 1, stream: 'cleaning', rationale: 'General cleaning duties — Cleaning service employee Level 1' },
+  { conditions: { cleaning_experience: 'experienced', cleaning_role: 'specialized' }, level: 2, stream: 'cleaning', rationale: 'Specialized cleaning or leading hand — Cleaning service employee Level 2' },
+  { conditions: { cleaning_experience: 'experienced', cleaning_role: 'specialist' }, level: 3, stream: 'cleaning', rationale: 'Highly specialized/high-access cleaning — Cleaning service employee Level 3' },
+];
+
+/**
  * MA000084 — Storage Services and Wholesale Award 2020
  * Two streams: storeworkers and wholesale employees (identical rates).
  * Grade 1 has 3 sub-levels based on length of employment.
@@ -407,6 +419,15 @@ function matchesRule(answers, conditions) {
  * Returns the best matching classification.
  */
 function classify(answers, awardCode = 'MA000009') {
+  if (awardCode === 'MA000022') {
+    for (const rule of CLASSIFICATION_RULES_MA000022) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'cleaning', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
   if (awardCode === 'MA000003') {
     for (const rule of CLASSIFICATION_RULES_MA000003) {
       if (matchesRule(answers, rule.conditions)) {

@@ -68,6 +68,14 @@ const AWARDS = [
     examples: 'Storeworkers, warehouse operatives, forklift drivers, distribution centre staff, wholesale sales assistants, storepersons',
     badge: 'MA000084',
   },
+  {
+    code: 'MA000022' as AwardCode,
+    name: 'Cleaning Services Award 2020',
+    shortName: 'Cleaning Award',
+    description: 'Covers employees in contract cleaning, building cleaning, and related cleaning services. Also covers cleaners employed directly by non-cleaning businesses.',
+    examples: 'Commercial cleaners, office cleaners, building cleaners, industrial cleaners, hospital cleaners, window cleaners, shopping trolley collectors, leading hands',
+    badge: 'MA000022',
+  },
 ];
 
 interface Props {

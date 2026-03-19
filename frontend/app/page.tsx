@@ -93,6 +93,7 @@ export default function HomePage() {
     MA000080: 'Amusement & Events Award',
     MA000081: 'Live Performance Award',
     MA000084: 'Storage & Wholesale Award',
+    MA000022: 'Cleaning Services Award',
   };
   const awardName = AWARD_NAMES[awardCode] ?? awardCode;
 

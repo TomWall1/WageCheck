@@ -122,7 +122,7 @@ export interface ClassificationOutcome {
   confidence: string;
 }
 
-export type AwardCode = 'MA000009' | 'MA000003' | 'MA000119' | 'MA000004' | 'MA000094' | 'MA000080' | 'MA000081' | 'MA000084';
+export type AwardCode = 'MA000009' | 'MA000003' | 'MA000119' | 'MA000004' | 'MA000094' | 'MA000080' | 'MA000081' | 'MA000084' | 'MA000022';
 
 export interface WageCheckState {
   step: number;
