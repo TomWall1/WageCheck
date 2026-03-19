@@ -30,6 +30,8 @@ function formatTime(t: string) {
 
 export default function StepResults({ state, onAmountPaidChange, onStartOver }: Props) {
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
+  const [allowancesPaid, setAllowancesPaid] = useState('');
+  const [superPaid, setSuperPaid] = useState('');
   const { calculationResult, employmentType, classificationResult, allowanceAnswers, amountActuallyPaid } = state;
 
   useEffect(() => {
@@ -57,6 +59,22 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const wasUnderpaid = underpayment !== null && underpayment > 0.50;
   const wasOverpaid = underpayment !== null && underpayment < -0.50;
 
+  // Compute total allowances owed (additional, not included in wages)
+  const totalAllowancesOwed = triggeredAllowances.reduce((sum, a) => {
+    const info = allowanceInfoByType[a.type];
+    if (!info || !info.amount) return sum;
+    if (a.detail && info.amount_type === 'per_km') return sum + info.amount * parseFloat(a.detail || '0');
+    return sum + info.amount;
+  }, 0);
+
+  const paidAllowances = parseFloat(allowancesPaid.replace(/[^0-9.]/g, ''));
+  const hasPaidAllowances = !isNaN(paidAllowances) && paidAllowances >= 0 && allowancesPaid !== '';
+  const allowanceDiff = hasPaidAllowances ? totalAllowancesOwed - paidAllowances : null;
+
+  const paidSuper = parseFloat(superPaid.replace(/[^0-9.]/g, ''));
+  const hasPaidSuper = !isNaN(paidSuper) && paidSuper >= 0 && superPaid !== '';
+  const superDiff = hasPaidSuper ? (summary.superAmount ?? 0) - paidSuper : null;
+
   const sgcPct = `${(summary.sgcRate * 100).toFixed(0)}%`;
 
   function handleDownloadReport() {
@@ -66,10 +84,13 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
       const info = allowanceInfoByType[a.type];
       if (!info) return '';
       const superApplies = a.type === 'split_shift' || a.type === 'first_aid';
-      const amt = a.type === 'vehicle' && info.amount && a.detail
-        ? formatCurrency(parseFloat(a.detail) * info.amount)
-        : info.amount ? `${formatCurrency(info.amount)} ${info.per_unit?.replace('_', ' ') || ''}` : '';
-      return `<tr><td>${info.name}</td><td>${amt}</td><td>${superApplies ? 'Yes' : 'No (expense reimbursement)'}</td></tr>`;
+      let amtStr = '';
+      if (a.detail && info.amount_type === 'per_km' && info.amount) {
+        amtStr = formatCurrency(info.amount * parseFloat(a.detail || '0'));
+      } else if (info.amount) {
+        amtStr = `${formatCurrency(info.amount)} ${info.per_unit?.replace(/_/g, ' ') || ''}`;
+      }
+      return `<tr><td>${info.name}</td><td>${amtStr}</td><td>${superApplies ? 'Yes' : 'No (expense reimbursement)'}</td></tr>`;
     }).join('');
 
     // Build per-shift breakdown HTML
@@ -106,7 +127,11 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
       ? 'Fast Food Industry Award 2020 [MA000003]'
       : state.awardCode === 'MA000119'
         ? 'Restaurant Industry Award 2020 [MA000119]'
-        : 'Hospitality Industry (General) Award 2020 [MA000009]';
+        : state.awardCode === 'MA000004'
+          ? 'General Retail Industry Award 2020 [MA000004]'
+          : state.awardCode === 'MA000094'
+            ? 'Fitness Industry Award 2020 [MA000094]'
+            : 'Hospitality Industry (General) Award 2020 [MA000009]';
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -217,13 +242,28 @@ ${summary.allBreakViolations.length > 0 ? `
 <ul>${summary.allBreakViolations.map(v => `<li>${v.message} (${v.date})</li>`).join('')}</ul>
 ` : ''}
 
-${hasPaidAmount ? `
-<h2>Underpayment Comparison</h2>
+${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
+<h2>Payment Comparison</h2>
 <table>
-  <tr><td>Award minimum wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td></tr>
-  <tr><td>Amount actually paid (as entered)</td><td style="text-align:right">${formatCurrency(paidAmount)}</td></tr>
-  <tr class="total-row"><td>${wasUnderpaid ? 'Estimated shortfall' : wasOverpaid ? 'Paid above award' : 'Difference'}</td>
-    <td style="text-align:right">${formatCurrency(Math.abs(underpayment!))}</td></tr>
+  <tr><th>Component</th><th class="r">Award minimum</th><th class="r">Actually paid</th><th class="r">Difference</th></tr>
+  ${hasPaidAmount ? `<tr>
+    <td>Wages</td>
+    <td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td>
+    <td style="text-align:right">${formatCurrency(paidAmount)}</td>
+    <td style="text-align:right;${wasUnderpaid ? 'color:#dc2626;font-weight:bold' : ''}">${wasUnderpaid ? '-' : ''}${formatCurrency(Math.abs(underpayment!))}</td>
+  </tr>` : ''}
+  ${hasPaidAllowances && totalAllowancesOwed > 0 ? `<tr>
+    <td>Allowances</td>
+    <td style="text-align:right">${formatCurrency(totalAllowancesOwed)}</td>
+    <td style="text-align:right">${formatCurrency(paidAllowances)}</td>
+    <td style="text-align:right;${(allowanceDiff ?? 0) > 0.50 ? 'color:#dc2626;font-weight:bold' : ''}">${(allowanceDiff ?? 0) > 0.50 ? '-' : ''}${formatCurrency(Math.abs(allowanceDiff ?? 0))}</td>
+  </tr>` : ''}
+  ${hasPaidSuper ? `<tr>
+    <td>Superannuation</td>
+    <td style="text-align:right">${formatCurrency(summary.superAmount)}</td>
+    <td style="text-align:right">${formatCurrency(paidSuper)}</td>
+    <td style="text-align:right;${(superDiff ?? 0) > 0.50 ? 'color:#dc2626;font-weight:bold' : ''}">${(superDiff ?? 0) > 0.50 ? '-' : ''}${formatCurrency(Math.abs(superDiff ?? 0))}</td>
+  </tr>` : ''}
 </table>
 ` : ''}
 
@@ -396,25 +436,42 @@ ${hasPaidAmount ? `
         <div className="card space-y-3">
           <h3 className="font-bold text-gray-900">Allowances owed (additional)</h3>
           <p className="text-sm text-gray-500">
-            These are on top of your shift pay and are not included in the total above.
+            These are on top of your shift pay and are not included in the wages total above.
           </p>
-          <ul className="space-y-3">
-            {triggeredAllowances.map(a => {
-              const info = allowanceInfoByType[a.type];
-              if (!info) return null;
-              return (
-                <li key={a.type} className="text-sm">
-                  <p className="font-semibold text-gray-900">{info.name}</p>
-                  <p className="text-gray-600">{info.description}</p>
-                  {info.amount && (
-                    <p className="text-success-700 font-semibold mt-1">
-                      {formatCurrency(info.amount)} {info.per_unit?.replace('_', ' ')}
-                    </p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 text-gray-600 text-xs">
+                <th className="text-left px-2 py-1.5 rounded-l font-medium">Allowance</th>
+                <th className="text-right px-2 py-1.5 rounded-r font-medium">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {triggeredAllowances.map(a => {
+                const info = allowanceInfoByType[a.type];
+                if (!info) return null;
+                let amtDisplay = '—';
+                if (a.detail && info.amount_type === 'per_km' && info.amount) {
+                  amtDisplay = formatCurrency(info.amount * parseFloat(a.detail || '0'));
+                } else if (info.amount) {
+                  amtDisplay = `${formatCurrency(info.amount)} ${info.per_unit?.replace(/_/g, ' ') || ''}`;
+                }
+                return (
+                  <tr key={a.type}>
+                    <td className="px-2 py-1.5 text-gray-700">{info.name}</td>
+                    <td className="px-2 py-1.5 text-right font-medium text-gray-900">{amtDisplay}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            {totalAllowancesOwed > 0 && (
+              <tfoot>
+                <tr className="bg-gray-50 font-semibold text-sm">
+                  <td className="px-2 py-1.5 text-gray-900">Total allowances</td>
+                  <td className="px-2 py-1.5 text-right text-gray-900">{formatCurrency(totalAllowancesOwed)}</td>
+                </tr>
+              </tfoot>
+            )}
+          </table>
         </div>
       )}
 
@@ -526,59 +583,151 @@ ${hasPaidAmount ? `
       )}
 
       {/* What were you actually paid? */}
-      <div className="card space-y-3">
-        <h3 className="font-bold text-gray-900">Were you actually paid this much?</h3>
-        <p className="text-sm text-gray-600">
-          If you know what you were actually paid for this period, enter it below
-          and we'll compare.
-        </p>
-        <div className="flex items-center gap-2">
-          <span className="text-gray-700 font-medium">$</span>
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            placeholder="0.00"
-            value={amountActuallyPaid}
-            onChange={e => onAmountPaidChange(e.target.value)}
-            className="input-field max-w-xs"
-          />
+      <div className="card space-y-4">
+        <div>
+          <h3 className="font-bold text-gray-900">Were you actually paid this much?</h3>
+          <p className="text-sm text-gray-600 mt-1">
+            Enter what you were actually paid for this period and we'll compare each component.
+            Leave any field blank if you don't know it.
+          </p>
         </div>
 
-        {hasPaidAmount && (
-          <div className={clsx(
-            'rounded-xl p-4 space-y-2',
-            wasUnderpaid ? 'bg-danger-50 border border-danger-100' :
-            wasOverpaid ? 'bg-gray-50 border border-gray-200' :
-            'bg-success-50 border border-success-100'
-          )}>
-            {wasUnderpaid && (
-              <>
-                <p className="font-bold text-danger-700">
-                  Possible underpayment: {formatCurrency(Math.abs(underpayment!))}
-                </p>
-                <p className="text-sm text-gray-700">
-                  Based on what you've told us, you may have been paid {formatCurrency(Math.abs(underpayment!))} less
-                  than the award minimum for this period.
-                </p>
-                <p className="text-sm text-gray-600">
-                  This is an estimate based on the information you provided. Your actual entitlements may be
-                  different depending on your specific arrangement with your employer.
-                </p>
-              </>
-            )}
-            {wasOverpaid && (
-              <p className="text-sm text-gray-700">
-                You appear to have been paid more than the award minimum — great! This is allowed.
-                Some employers pay above award rates.
-              </p>
-            )}
-            {!wasUnderpaid && !wasOverpaid && (
-              <p className="text-sm text-gray-700">
-                What you were paid appears to match the award minimum fairly closely.
-              </p>
+        <div className="space-y-3">
+          {/* Wages */}
+          <div className="space-y-1">
+            <label className="text-sm font-semibold text-gray-900">
+              Wages received
+              <span className="text-gray-400 font-normal ml-2">(award minimum: {formatCurrency(summary.totalPayOwed)})</span>
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-700 font-medium">$</span>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                value={amountActuallyPaid}
+                onChange={e => onAmountPaidChange(e.target.value)}
+                className="input-field max-w-xs"
+              />
+            </div>
+            {hasPaidAmount && (
+              <div className={clsx(
+                'rounded-lg px-3 py-2 text-sm',
+                wasUnderpaid ? 'bg-danger-50 border border-danger-100' :
+                wasOverpaid ? 'bg-gray-50 border border-gray-200' :
+                'bg-success-50 border border-success-100'
+              )}>
+                {wasUnderpaid && (
+                  <p className="font-semibold text-danger-700">
+                    Possible underpayment: {formatCurrency(Math.abs(underpayment!))}
+                  </p>
+                )}
+                {wasOverpaid && (
+                  <p className="text-gray-700">Paid above award minimum — {formatCurrency(Math.abs(underpayment!))} over.</p>
+                )}
+                {!wasUnderpaid && !wasOverpaid && (
+                  <p className="text-gray-700">Matches award minimum.</p>
+                )}
+              </div>
             )}
           </div>
+
+          {/* Allowances */}
+          {triggeredAllowances.length > 0 && (
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-gray-900">
+                Allowances received
+                <span className="text-gray-400 font-normal ml-2">
+                  (estimated owed: {totalAllowancesOwed > 0 ? formatCurrency(totalAllowancesOwed) : 'varies'})
+                </span>
+              </label>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-700 font-medium">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={allowancesPaid}
+                  onChange={e => setAllowancesPaid(e.target.value)}
+                  className="input-field max-w-xs"
+                />
+              </div>
+              {hasPaidAllowances && allowanceDiff !== null && (
+                <div className={clsx(
+                  'rounded-lg px-3 py-2 text-sm',
+                  allowanceDiff > 0.50 ? 'bg-danger-50 border border-danger-100' :
+                  allowanceDiff < -0.50 ? 'bg-gray-50 border border-gray-200' :
+                  'bg-success-50 border border-success-100'
+                )}>
+                  {allowanceDiff > 0.50 && (
+                    <p className="font-semibold text-danger-700">
+                      Possible allowance shortfall: {formatCurrency(Math.abs(allowanceDiff))}
+                    </p>
+                  )}
+                  {allowanceDiff < -0.50 && (
+                    <p className="text-gray-700">Paid above estimated allowances — {formatCurrency(Math.abs(allowanceDiff))} over.</p>
+                  )}
+                  {Math.abs(allowanceDiff) <= 0.50 && (
+                    <p className="text-gray-700">Matches estimated allowances.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Superannuation */}
+          {summary.superAmount !== undefined && (
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-gray-900">
+                Superannuation received
+                <span className="text-gray-400 font-normal ml-2">(estimated owed: {formatCurrency(summary.superAmount)})</span>
+              </label>
+              <p className="text-xs text-gray-400">
+                Check your super fund account or payslip for the amount contributed this period.
+              </p>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-700 font-medium">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={superPaid}
+                  onChange={e => setSuperPaid(e.target.value)}
+                  className="input-field max-w-xs"
+                />
+              </div>
+              {hasPaidSuper && superDiff !== null && (
+                <div className={clsx(
+                  'rounded-lg px-3 py-2 text-sm',
+                  superDiff > 0.50 ? 'bg-danger-50 border border-danger-100' :
+                  superDiff < -0.50 ? 'bg-gray-50 border border-gray-200' :
+                  'bg-success-50 border border-success-100'
+                )}>
+                  {superDiff > 0.50 && (
+                    <p className="font-semibold text-danger-700">
+                      Possible super shortfall: {formatCurrency(Math.abs(superDiff))}
+                    </p>
+                  )}
+                  {superDiff < -0.50 && (
+                    <p className="text-gray-700">Super paid above estimated minimum — {formatCurrency(Math.abs(superDiff))} over.</p>
+                  )}
+                  {Math.abs(superDiff) <= 0.50 && (
+                    <p className="text-gray-700">Super matches estimated minimum.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {(wasUnderpaid || (allowanceDiff !== null && allowanceDiff > 0.50) || (superDiff !== null && superDiff > 0.50)) && (
+          <p className="text-xs text-gray-500 pt-1">
+            These are estimates based on the information you provided. Your actual entitlements may differ
+            depending on your specific arrangement, applicable enterprise agreements, and the accuracy of the information entered.
+          </p>
         )}
       </div>
 
@@ -654,7 +803,7 @@ ${hasPaidAmount ? `
       </div>
 
       {/* Call to action */}
-      {wasUnderpaid && (
+      {(wasUnderpaid || (allowanceDiff !== null && allowanceDiff > 0.50) || (superDiff !== null && superDiff > 0.50)) && (
         <div className="card bg-danger-50 border-danger-100 space-y-3">
           <h3 className="font-bold text-danger-700">Think you've been underpaid?</h3>
           <p className="text-sm text-gray-700">Here's what you can do:</p>

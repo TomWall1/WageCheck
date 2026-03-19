@@ -582,8 +582,6 @@ async function seed() {
         await client.query(`
           INSERT INTO classification_answers (question_id, answer_key, answer_text, sort_order)
           VALUES ($1, $2, $3, $4)
-          ON CONFLICT (question_id, answer_key) DO UPDATE SET
-            answer_text = EXCLUDED.answer_text, sort_order = EXCLUDED.sort_order
         `, [questionId, a.answer_key, a.answer_text, a.sort_order]);
       }
     }

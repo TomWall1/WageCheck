@@ -140,6 +140,7 @@ router.get('/questions', async (req, res) => {
 
     res.json(result);
   } catch (err) {
+    console.error('Questions route error:', err);
     res.status(500).json({ error: 'Database error' });
   }
 });
