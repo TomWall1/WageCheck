@@ -44,6 +44,14 @@ const AWARDS = [
     examples: 'Personal trainers, fitness instructors, swim teachers, lifeguards, gym reception staff, centre managers',
     badge: 'MA000094',
   },
+  {
+    code: 'MA000080' as AwardCode,
+    name: 'Amusement, Events and Recreation Award 2020',
+    shortName: 'Amusement & Events Award',
+    description: 'Covers amusement parks, carnivals, shows, theme parks, events, trade shows and exhibitions, and recreation facilities.',
+    examples: 'Ride operators, ticket sellers, exhibition workers, show hands, tradespersons, event supervisors',
+    badge: 'MA000080',
+  },
 ];
 
 interface Props {

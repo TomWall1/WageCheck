@@ -302,6 +302,32 @@ const CLASSIFICATION_RULES_MA000094 = [
 ];
 
 /**
+ * MA000080 — Amusement, Events and Recreation Award 2020
+ * Classifications: Introductory (level 0) + Grade 1–10 (levels 1–10), stream 'general'.
+ * Exhibition employees: Grade 2 (level 2), Grade 4 (level 4), Grade 5 (level 5), stream 'exhibition'.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000080 = [
+  // Introductory
+  { conditions: { am_experience: 'new' }, level: 0, stream: 'general', rationale: 'Introductory level — first month in the industry, receiving on-the-job training' },
+  // Exhibition employees (checked before general grades)
+  { conditions: { am_experience: 'experienced', am_worker_type: 'exhibition', am_exhibition_type: 'general_hand' },          level: 2, stream: 'exhibition', rationale: 'Exhibition general hand — stand setup/packdown, equipment moving (includes flexible loading)' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'exhibition', am_exhibition_type: 'technician' },            level: 4, stream: 'exhibition', rationale: 'Exhibition technician — AV, electrical, rigging (includes flexible and supervisory loadings)' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'exhibition', am_exhibition_type: 'supervisory_technician' }, level: 5, stream: 'exhibition', rationale: 'Supervisory exhibition technician — manages technicians and hands (includes all loadings)' },
+  // General employees (Grades 1–10)
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade1' },  level: 1,  stream: 'general', rationale: 'Grade 1 — general support, tickets, rides under supervision, cash handling, refreshments' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade2' },  level: 2,  stream: 'general', rationale: 'Grade 2 — independent ride/amusement operator, cashier, admissions, first aid officer' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade3' },  level: 3,  stream: 'general', rationale: 'Grade 3 — specialised equipment operator, handyperson, in charge of lower-grade staff' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade4' },  level: 4,  stream: 'general', rationale: 'Grade 4 — apprentice tradesperson (2nd–3rd year) or semi-skilled trades work' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade5' },  level: 5,  stream: 'general', rationale: 'Grade 5 — fully qualified tradesperson (electrician, plumber, carpenter, mechanic, etc.)' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade6' },  level: 6,  stream: 'general', rationale: 'Grade 6 — senior tradesperson or leading hand (up to 3 employees)' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade7' },  level: 7,  stream: 'general', rationale: 'Grade 7 — leading hand responsible for 4 or more employees' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade8' },  level: 8,  stream: 'general', rationale: 'Grade 8 — supervisor or section manager' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade9' },  level: 9,  stream: 'general', rationale: 'Grade 9 — senior supervisor or operations/department manager' },
+  { conditions: { am_experience: 'experienced', am_worker_type: 'grade10' }, level: 10, stream: 'general', rationale: 'Grade 10 — general manager, venue director, or senior manager' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -357,6 +383,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'fitness', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000080') {
+    for (const rule of CLASSIFICATION_RULES_MA000080) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to Grade 1. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

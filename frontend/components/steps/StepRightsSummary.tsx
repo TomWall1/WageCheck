@@ -26,6 +26,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
   const isRest = awardCode === 'MA000119';
   const isRetail = awardCode === 'MA000004';
   const isFitness = awardCode === 'MA000094';
+  const isAmusement = awardCode === 'MA000080';
   const classLevel = classificationResult?.level ?? null;
 
   return (
@@ -149,6 +150,11 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
                   { label: 'Saturday', rate: '+25% penalty (×1.25)' },
                   { label: 'Sunday', rate: '+50% penalty (×1.50)' },
                   { label: 'Public holiday', rate: isCasual ? '+30% casual loading (×1.04 of casual base)' : 'Double time and a half (×2.50)' },
+                ] : isAmusement ? [
+                  { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
+                  { label: 'Saturday', rate: 'Ordinary rate (no Saturday penalty for this award)' },
+                  { label: 'Sunday', rate: isCasual ? '×1.40 of casual base (175% of FT rate)' : '+50% penalty (×1.50)' },
+                  { label: 'Public holiday', rate: isCasual ? '×2.20 of casual base (275% of FT rate)' : 'Double time and a half (×2.50)' },
                 ] : [
                   { label: 'Weekday (ordinary hours)', rate: 'Ordinary rate' },
                   { label: 'Weekday evening (7pm–midnight)', rate: '+$2.81/hr loading' },
@@ -180,7 +186,17 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
               Under the Fitness Award, casual employees receive a 25% casual loading on weekdays and 30% on weekends and public holidays. The Saturday, Sunday, and public holiday rate is ×1.04 of your casual base rate (which already includes the 25% loading). This is lower than the FT/PT penalty rate — if you work public holidays frequently, permanent employment may be more beneficial.
             </p>
           )}
-          {isCasual && !isFitness && (
+          {isAmusement && isCasual && (
+            <p className="text-gray-500 text-xs">
+              Under the Amusement Award, casual rates are calculated by adding the 25% casual loading on top of the penalty rate (not multiplying). Sunday: 100% base + 25% casual + 50% Sunday = 175% of the FT rate (×1.40 of your casual base). Public holiday: 100% + 25% + 150% = 275% of FT rate (×2.20 of your casual base). Note: Saturday is paid at the ordinary rate — there is no Saturday penalty under this award.
+            </p>
+          )}
+          {isAmusement && !isCasual && (
+            <p className="text-gray-500 text-xs">
+              Note: Unlike most awards, the Amusement, Events and Recreation Award does not have a Saturday penalty rate. Saturday is paid at the same ordinary rate as weekdays.
+            </p>
+          )}
+          {isCasual && !isFitness && !isAmusement && (
             <p className="text-gray-500 text-xs">
               For casual employees, penalty rates are applied on top of your base casual rate
               (which already includes the 25% loading).
