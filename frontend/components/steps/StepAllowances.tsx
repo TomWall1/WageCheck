@@ -16,28 +16,31 @@ interface Props {
   onBack: () => void;
 }
 
-// Each allowance has a primary question and optional follow-ups.
 interface AllowanceQuestion {
   type: string;
   primary: string;
   primaryHelp?: string;
-  onlyFor?: EmploymentType[];       // if set, question only shown for these employment types
-  onlyForStream?: string[];         // if set, question only shown for these streams
+  onlyFor?: EmploymentType[];
+  onlyForStream?: string[];
+  onlyForAward?: string[];
   followUps?: Array<{
-    key: string;           // stored as `${type}_${key}`
+    key: string;
     question: string;
     help?: string;
-    // Answer that means the allowance IS triggered (default: 'no' = allowance triggered)
     triggeredWhen: 'yes' | 'no';
   }>;
 }
 
+const VEHICLE_TYPES = new Set(['vehicle', 'vehicle_delivery', 'vehicle_car']);
+
 const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
+  // ── MA000009 (Hospitality) ────────────────────────────────────────────────
   {
     type: 'split_shift',
     primary: 'Was your shift split into two or more separate parts on the same day, with a gap of at least 2 hours between them?',
     primaryHelp: 'For example, you worked 10am–2pm, went home, then came back for 5pm–9pm. Does not apply to casual employees.',
     onlyFor: ['full_time', 'part_time'],
+    onlyForAward: ['MA000009'],
     followUps: [
       {
         key: 'long_gap',
@@ -52,15 +55,18 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primary: 'Does your employer require you to provide and maintain your own knives or other tools/equipment?',
     primaryHelp: 'This allowance applies to cooks and apprentice cooks who must supply their own knives or kitchen tools.',
     onlyForStream: ['kitchen'],
+    onlyForAward: ['MA000009'],
   },
   {
     type: 'airport_travel',
     primary: 'Do you work for an airport catering employer?',
     primaryHelp: 'Airport catering employers provide food, beverages, and related services for airline passengers and crew at an airport.',
+    onlyForAward: ['MA000009'],
   },
   {
     type: 'first_aid',
     primary: 'Do you hold a current first aid certificate?',
+    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080'],
     followUps: [
       {
         key: 'appointed',
@@ -73,12 +79,14 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'laundry',
     primary: 'Does your employer require you to wear a specific uniform and do you launder it yourself at your own cost?',
-    primaryHelp: 'If your employer provides laundering or reimburses cleaning costs, no allowance applies. This is for catering employees.',
+    primaryHelp: 'If your employer provides laundering or reimburses cleaning costs, no allowance applies. This applies to catering employees.',
+    onlyForAward: ['MA000009'],
   },
   {
     type: 'vehicle',
     primary: 'Did you use your own car or vehicle for work purposes during this period?',
-    primaryHelp: 'Note: The vehicle allowance under this award applies specifically to managerial staff in hotels. If you are not a hotel manager, check your contract or enterprise agreement.',
+    primaryHelp: 'The vehicle allowance under the Hospitality Award applies specifically to managerial hotel staff. If you are not a hotel manager, check your contract.',
+    onlyForAward: ['MA000009'],
     followUps: [
       {
         key: 'km',
@@ -86,6 +94,228 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
         triggeredWhen: 'yes',
       },
     ],
+  },
+
+  // ── MA000003 (Fast Food) ──────────────────────────────────────────────────
+  {
+    type: 'cold_work',
+    primary: 'Did you work in cold storage, a cool room, or refrigerated area during this period?',
+    primaryHelp: 'A cold work allowance applies to employees who spend time working in refrigerated or freezer conditions.',
+    onlyForAward: ['MA000003'],
+    followUps: [
+      {
+        key: 'below_zero',
+        question: 'Was the temperature below 0°C (i.e., freezer conditions)?',
+        help: 'Temperatures at or below 0°C (freezer) attract a higher rate than cool room/above-zero conditions.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'laundry_uniform',
+    primary: 'Does your employer require you to wear a specific uniform and do you launder it yourself at your own cost?',
+    primaryHelp: 'If your employer provides laundering or reimburses cleaning costs, no allowance applies.',
+    onlyForAward: ['MA000003', 'MA000004'],
+  },
+  {
+    type: 'vehicle_delivery',
+    primary: 'Did you use your own vehicle to make deliveries during this period?',
+    primaryHelp: 'A vehicle allowance applies to employees who use their own car, motorcycle, or bicycle for food deliveries.',
+    onlyForAward: ['MA000003'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for deliveries?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
+  // ── MA000004 (Retail) ─────────────────────────────────────────────────────
+  {
+    type: 'cold_work_retail',
+    primary: 'Did you work in a refrigerated cool room or freezer during this period?',
+    primaryHelp: 'A cold work allowance applies to retail employees who work in cold storage or refrigerated areas.',
+    onlyForAward: ['MA000004'],
+    followUps: [
+      {
+        key: 'below_zero',
+        question: 'Was the temperature below 0°C (freezer conditions)?',
+        help: 'Below-zero (freezer) conditions attract a higher allowance than cool room / above-zero conditions.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'liquor_licence',
+    primary: 'Does your employer require you to hold a liquor licence as part of your duties?',
+    primaryHelp: 'If your employer requires you to hold a responsible service of alcohol (RSA) or liquor licence, an allowance may apply.',
+    onlyForAward: ['MA000004'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Did you use your own vehicle for work purposes during this period?',
+    onlyForAward: ['MA000004'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
+  // ── MA000094 (Fitness) ─────────────────────────────────────────────────────
+  {
+    type: 'broken_shift',
+    primary: 'Was your shift broken into two or more separate periods on the same day?',
+    primaryHelp: 'A broken shift allowance applies when you work two separate periods in a day with a substantial unpaid break in between.',
+    onlyForAward: ['MA000094'],
+  },
+  {
+    type: 'leading_hand',
+    primary: 'Have you been directed by management to supervise or be responsible for other employees?',
+    primaryHelp: 'A leading hand allowance applies if management has specifically asked you to be in charge of other employees.',
+    onlyForAward: ['MA000094'],
+  },
+  {
+    type: 'vehicle_car',
+    primary: 'Did you use your own car or motorcycle for work purposes during this period?',
+    onlyForAward: ['MA000094'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
+  // ── MA000080 (Amusement & Events) ─────────────────────────────────────────
+  {
+    type: 'uniform_laundering',
+    primary: 'Does your employer require you to wear a uniform and do you launder it yourself at your own cost?',
+    onlyForAward: ['MA000080'],
+  },
+  {
+    type: 'in_charge',
+    primary: 'Are you required to be in charge of a golf, bowling, or tennis facility operation?',
+    primaryHelp: 'An in-charge allowance applies to employees responsible for managing a golf, bowling, or tennis facility.',
+    onlyForAward: ['MA000080'],
+  },
+  {
+    type: 'tool_trades',
+    primary: 'Are you a carpenter or tradesperson required to provide your own tools?',
+    onlyForAward: ['MA000080'],
+    followUps: [
+      {
+        key: 'is_carpenter',
+        question: 'Are you specifically a carpenter (as opposed to another trade)?',
+        help: 'Carpenters attract a higher tool allowance rate than other tradespersons.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'tractor_plant',
+    primary: 'Do you operate a tractor or plant machinery as part of your duties?',
+    onlyForAward: ['MA000080'],
+  },
+  {
+    type: 'cancelled_shift',
+    primary: 'Was any of your casual shifts cancelled at short notice (without required notice)?',
+    onlyFor: ['casual'],
+    onlyForAward: ['MA000080'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Did you use your own vehicle for work purposes during this period?',
+    onlyForAward: ['MA000080'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
+  // ── MA000081 (Live Performance) ───────────────────────────────────────────
+  {
+    type: 'tools_hod',
+    primary: 'Are you a Head of Department required to provide your own tools or equipment?',
+    primaryHelp: 'Heads of Department who must supply and maintain their own tools are entitled to a weekly tools allowance.',
+    onlyForAward: ['MA000081'],
+  },
+  {
+    type: 'tools_other',
+    primary: 'Does your employer require you (as a non-HOD employee) to provide your own tools or equipment?',
+    primaryHelp: 'Production and support staff other than Heads of Department who must supply their own tools are entitled to a daily tools allowance.',
+    onlyForAward: ['MA000081'],
+  },
+  {
+    type: 'meal_working',
+    primary: 'Were you required to work overtime or past 6pm without a meal break being provided?',
+    primaryHelp: 'If you worked overtime and a meal time fell during that period without a break being provided, a meal allowance applies.',
+    onlyForAward: ['MA000081'],
+  },
+  {
+    type: 'meal_travelling',
+    primary: 'Did you travel away from your home base for touring or work engagements during this period?',
+    primaryHelp: 'A meal allowance applies when you are required to travel away from home for work. The rate depends on the length of travel.',
+    onlyForAward: ['MA000081'],
+    followUps: [
+      {
+        key: 'five_or_more_days',
+        question: 'Was the travel or touring engagement for 5 or more consecutive working days?',
+        help: 'Travel of 5+ consecutive working days attracts a higher weekly meal allowance.',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'laundry_lp',
+    primary: 'Are you required to launder your own costume or uniform at your own expense?',
+    primaryHelp: 'If your employer provides laundering or reimburses the cost, no allowance applies.',
+    onlyForAward: ['MA000081'],
+  },
+  {
+    type: 'incidentals_touring',
+    primary: 'Were you required to stay away from home overnight for touring or work engagements?',
+    primaryHelp: 'An incidentals allowance applies for each overnight stay away from your home base as part of touring or work.',
+    onlyForAward: ['MA000081'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Did you use your own vehicle for work purposes during this period?',
+    onlyForAward: ['MA000081'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+
+  // ── MA000119 (Restaurant) ─────────────────────────────────────────────────
+  {
+    type: 'split_shift_restaurant',
+    primary: 'Was your shift split into two or more separate periods on the same day?',
+    primaryHelp: 'A split shift allowance applies when you are required to work two separate periods during the same day with a break in between.',
+    onlyFor: ['full_time', 'part_time'],
+    onlyForAward: ['MA000119'],
+  },
+  {
+    type: 'tool_restaurant',
+    primary: 'Does your employer require you to provide and maintain your own knives or kitchen tools?',
+    onlyForAward: ['MA000119'],
+  },
+  {
+    type: 'special_clothing',
+    primary: 'Did your employer require you to purchase special clothing or a uniform at your own expense?',
+    primaryHelp: 'If your employer requires special clothing but does not supply it, you may be entitled to reimbursement.',
+    onlyForAward: ['MA000119'],
   },
 ];
 
@@ -95,23 +325,21 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter questions by employment type and stream
+  // Filter questions by award, employment type, and stream
   const visibleQuestions = ALLOWANCE_QUESTIONS.filter(q => {
+    if (q.onlyForAward && !q.onlyForAward.includes(awardCode)) return false;
     if (q.onlyFor && !q.onlyFor.includes(employmentType)) return false;
     if (q.onlyForStream && stream && !q.onlyForStream.includes(stream)) return false;
-    // If onlyForStream set but stream is null, hide the question (can't confirm stream)
     if (q.onlyForStream && !stream) return false;
     return true;
   });
 
-  // Primary yes/no answers — default all to false (No) using visibleQuestions
   const [primaryAnswers, setPrimaryAnswers] = useState<Record<string, boolean | null>>(
     () => Object.fromEntries(visibleQuestions.map(q => [q.type, false]))
   );
-  // Follow-up answers
   const [followUpAnswers, setFollowUpAnswers] = useState<FollowUpAnswers>({});
-  // Vehicle km
   const [vehicleKm, setVehicleKm] = useState<string>('');
+  const [leadingHandCount, setLeadingHandCount] = useState<string>('');
 
   useEffect(() => {
     api.getAllowances(awardCode)
@@ -119,7 +347,6 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       .finally(() => setLoading(false));
   }, [awardCode]);
 
-  // Derive triggered allowances and sync to parent whenever answers change
   useEffect(() => {
     const result: AllowanceAnswer[] = [];
 
@@ -128,80 +355,119 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       if (primary === null || primary === undefined) continue;
 
       if (!primary) {
-        // Primary is 'no' — allowance definitely doesn't apply
         result.push({ type: q.type, triggered: false });
         continue;
       }
 
-      // Primary is 'yes' — check follow-ups
+      // Vehicle-like questions (need km)
+      if (VEHICLE_TYPES.has(q.type)) {
+        const km = parseFloat(vehicleKm);
+        result.push({ type: q.type, triggered: !isNaN(km) && km > 0, detail: vehicleKm });
+        continue;
+      }
+
+      // Leading hand — needs count input
+      if (q.type === 'leading_hand') {
+        const count = parseInt(leadingHandCount);
+        if (!leadingHandCount || isNaN(count) || count <= 0) continue;
+        let lhType = 'leading_hand_1to5';
+        if (count >= 11) lhType = 'leading_hand_11plus';
+        else if (count >= 6) lhType = 'leading_hand_6to10';
+        result.push({ type: lhType, triggered: true, detail: leadingHandCount });
+        continue;
+      }
+
+      // No follow-ups: direct trigger
       if (!q.followUps || q.followUps.length === 0) {
-        // No follow-ups: allowance is triggered (airport_travel, laundry)
-        // For laundry, emit employment-type-specific type
+        // Remap types that differ from DB allowance_type
         if (q.type === 'laundry') {
-          const laundryType = employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
-          result.push({ type: laundryType, triggered: true });
+          const t = employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
+          result.push({ type: t, triggered: true });
+        } else if (q.type === 'laundry_uniform') {
+          const t = employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
+          result.push({ type: t, triggered: true });
+        } else if (q.type === 'laundry_lp') {
+          const t = employmentType === 'full_time' ? 'laundry_ft' : 'laundry_pt_casual';
+          result.push({ type: t, triggered: true });
+        } else if (q.type === 'in_charge') {
+          result.push({ type: 'in_charge_golf_bowling_tennis', triggered: true });
+        } else if (q.type === 'split_shift_restaurant') {
+          result.push({ type: 'split_shift', triggered: true });
+        } else if (q.type === 'tool_restaurant') {
+          result.push({ type: 'tool', triggered: true });
         } else {
           result.push({ type: q.type, triggered: true });
         }
         continue;
       }
 
-      // Vehicle is special — just needs km > 0
-      if (q.type === 'vehicle') {
-        const km = parseFloat(vehicleKm);
-        result.push({ type: q.type, triggered: !isNaN(km) && km > 0, detail: vehicleKm });
-        continue;
-      }
-
-      // split_shift is special — two tiers depending on long_gap follow-up
+      // Follow-up questions
       if (q.type === 'split_shift') {
-        const fuKey = `split_shift_long_gap`;
-        const fuAnswer = followUpAnswers[fuKey];
-        if (!fuAnswer) continue; // not yet answered
-        if (fuAnswer === 'yes') {
-          result.push({ type: 'split_shift_long', triggered: true });
-        } else {
-          result.push({ type: 'split_shift_short', triggered: true });
-        }
+        const fuAnswer = followUpAnswers['split_shift_long_gap'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'split_shift_long' : 'split_shift_short', triggered: true });
         continue;
       }
 
-      // first_aid is special — type depends on employment type
       if (q.type === 'first_aid') {
-        const fuKey = `first_aid_appointed`;
-        const fuAnswer = followUpAnswers[fuKey];
+        const fuAnswer = followUpAnswers['first_aid_appointed'];
         if (!fuAnswer) continue;
         if (fuAnswer === 'yes') {
-          const firstAidType = employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual';
-          result.push({ type: firstAidType, triggered: true });
+          const t = awardCode === 'MA000009'
+            ? (employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual')
+            : 'first_aid';
+          result.push({ type: t, triggered: true });
         } else {
           result.push({ type: 'first_aid', triggered: false });
         }
         continue;
       }
 
+      if (q.type === 'cold_work') {
+        const fuAnswer = followUpAnswers['cold_work_below_zero'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'cold_work_freezer' : 'cold_work', triggered: true });
+        continue;
+      }
+
+      if (q.type === 'cold_work_retail') {
+        const fuAnswer = followUpAnswers['cold_work_retail_below_zero'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'cold_work_below_zero' : 'cold_work_above_zero', triggered: true });
+        continue;
+      }
+
+      if (q.type === 'tool_trades') {
+        const fuAnswer = followUpAnswers['tool_trades_is_carpenter'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'tool_carpenter' : 'tool_tradesperson', triggered: true });
+        continue;
+      }
+
+      if (q.type === 'meal_travelling') {
+        const fuAnswer = followUpAnswers['meal_travelling_five_or_more_days'];
+        if (!fuAnswer) continue;
+        result.push({ type: fuAnswer === 'yes' ? 'meal_travelling_weekly' : 'meal_travelling', triggered: true });
+        continue;
+      }
+
       // Generic follow-up logic
       let allAnswered = true;
       let triggered = true;
-
       for (const fu of q.followUps) {
         const fuKey = `${q.type}_${fu.key}`;
         const fuAnswer = followUpAnswers[fuKey];
         if (!fuAnswer) { allAnswered = false; break; }
         if (fuAnswer !== fu.triggeredWhen) triggered = false;
       }
-
-      if (allAnswered) {
-        result.push({ type: q.type, triggered });
-      }
+      if (allAnswered) result.push({ type: q.type, triggered });
     }
 
     onAnswersChange(result);
-  }, [primaryAnswers, followUpAnswers, vehicleKm]);
+  }, [primaryAnswers, followUpAnswers, vehicleKm, leadingHandCount]);
 
   function setPrimary(type: string, val: boolean) {
     setPrimaryAnswers(prev => ({ ...prev, [type]: val }));
-    // Reset follow-ups if primary changes
     setFollowUpAnswers(prev => {
       const next = { ...prev };
       Object.keys(next).forEach(k => { if (k.startsWith(`${type}_`)) delete next[k]; });
@@ -213,7 +479,6 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     setFollowUpAnswers(prev => ({ ...prev, [`${type}_${key}`]: val }));
   }
 
-  // Get latest rate for each type
   const latestAllowance = (type: string): AllowanceInfo | undefined => {
     const matches = allowanceInfo.filter(a => a.allowance_type === type).sort(
       (a, b) => (b.effective_date || '').localeCompare(a.effective_date || '')
@@ -221,18 +486,43 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     return matches[0];
   };
 
-  // For display in the result box — map question type to the effective DB allowance_type
   function getEffectiveAllowanceType(qType: string): string {
-    if (qType === 'laundry') {
+    if (qType === 'laundry' || qType === 'laundry_uniform') {
       return employmentType === 'full_time' ? 'laundry_ft' : 'laundry_ptcasual';
     }
-    if (qType === 'first_aid') {
-      return employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual';
+    if (qType === 'laundry_lp') {
+      return employmentType === 'full_time' ? 'laundry_ft' : 'laundry_pt_casual';
     }
     if (qType === 'split_shift') {
-      const fuAnswer = followUpAnswers['split_shift_long_gap'];
-      return fuAnswer === 'yes' ? 'split_shift_long' : 'split_shift_short';
+      return followUpAnswers['split_shift_long_gap'] === 'yes' ? 'split_shift_long' : 'split_shift_short';
     }
+    if (qType === 'first_aid') {
+      if (awardCode === 'MA000009') {
+        return employmentType === 'full_time' ? 'first_aid_ft' : 'first_aid_ptcasual';
+      }
+      return 'first_aid';
+    }
+    if (qType === 'cold_work') {
+      return followUpAnswers['cold_work_below_zero'] === 'yes' ? 'cold_work_freezer' : 'cold_work';
+    }
+    if (qType === 'cold_work_retail') {
+      return followUpAnswers['cold_work_retail_below_zero'] === 'yes' ? 'cold_work_below_zero' : 'cold_work_above_zero';
+    }
+    if (qType === 'in_charge') return 'in_charge_golf_bowling_tennis';
+    if (qType === 'tool_trades') {
+      return followUpAnswers['tool_trades_is_carpenter'] === 'yes' ? 'tool_carpenter' : 'tool_tradesperson';
+    }
+    if (qType === 'leading_hand') {
+      const count = parseInt(leadingHandCount);
+      if (count >= 11) return 'leading_hand_11plus';
+      if (count >= 6) return 'leading_hand_6to10';
+      return 'leading_hand_1to5';
+    }
+    if (qType === 'meal_travelling') {
+      return followUpAnswers['meal_travelling_five_or_more_days'] === 'yes' ? 'meal_travelling_weekly' : 'meal_travelling';
+    }
+    if (qType === 'split_shift_restaurant') return 'split_shift';
+    if (qType === 'tool_restaurant') return 'tool';
     return qType;
   }
 
@@ -241,13 +531,59 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
   const allQuestionsAnswered = visibleQuestions.every(q => {
     const primary = primaryAnswers[q.type];
     if (primary === null || primary === undefined) return false;
-    if (!primary) return true; // 'no' = done
-    if (q.type === 'vehicle') return true;
+    if (!primary) return true;
+    if (VEHICLE_TYPES.has(q.type)) return true;
+    if (q.type === 'leading_hand') return !!leadingHandCount && parseInt(leadingHandCount) > 0;
     if (!q.followUps) return true;
     return q.followUps.every(fu => followUpAnswers[`${q.type}_${fu.key}`]);
   });
 
+  function findAnswer(q: AllowanceQuestion) {
+    return answers.find(a =>
+      a.type === q.type ||
+      (a.type === 'split_shift_short' && q.type === 'split_shift') ||
+      (a.type === 'split_shift_long' && q.type === 'split_shift') ||
+      (a.type === 'first_aid_ft' && q.type === 'first_aid') ||
+      (a.type === 'first_aid_ptcasual' && q.type === 'first_aid') ||
+      (a.type === 'first_aid' && q.type === 'first_aid') ||
+      (a.type === 'laundry_ft' && (q.type === 'laundry' || q.type === 'laundry_uniform' || q.type === 'laundry_lp')) ||
+      (a.type === 'laundry_ptcasual' && (q.type === 'laundry' || q.type === 'laundry_uniform')) ||
+      (a.type === 'laundry_pt_casual' && q.type === 'laundry_lp') ||
+      (a.type === 'cold_work' && q.type === 'cold_work') ||
+      (a.type === 'cold_work_freezer' && q.type === 'cold_work') ||
+      (a.type === 'cold_work_above_zero' && q.type === 'cold_work_retail') ||
+      (a.type === 'cold_work_below_zero' && q.type === 'cold_work_retail') ||
+      (a.type === 'in_charge_golf_bowling_tennis' && q.type === 'in_charge') ||
+      (a.type === 'tool_carpenter' && q.type === 'tool_trades') ||
+      (a.type === 'tool_tradesperson' && q.type === 'tool_trades') ||
+      (a.type === 'leading_hand_1to5' && q.type === 'leading_hand') ||
+      (a.type === 'leading_hand_6to10' && q.type === 'leading_hand') ||
+      (a.type === 'leading_hand_11plus' && q.type === 'leading_hand') ||
+      (a.type === 'meal_travelling' && q.type === 'meal_travelling') ||
+      (a.type === 'meal_travelling_weekly' && q.type === 'meal_travelling') ||
+      (a.type === 'split_shift' && q.type === 'split_shift_restaurant') ||
+      (a.type === 'tool' && q.type === 'tool_restaurant')
+    );
+  }
+
   if (loading) return <div className="text-center py-12 text-gray-500">Loading...</div>;
+
+  if (visibleQuestions.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold text-gray-900">Allowances</h2>
+        </div>
+        <div className="info-box text-sm">
+          No additional allowance questions apply for your award and employment type.
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onBack} className="btn-secondary flex-1">← Back</button>
+          <button onClick={onNext} className="btn-primary flex-1">Next — Your rights →</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -264,6 +600,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
           const primary = primaryAnswers[q.type];
           const effectiveType = getEffectiveAllowanceType(q.type);
           const info = latestAllowance(effectiveType);
+          const thisAnswer = findAnswer(q);
 
           return (
             <div key={q.type} className="card space-y-4">
@@ -289,12 +626,38 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                 </div>
               </div>
 
+              {/* Leading hand count input */}
+              {primary === true && q.type === 'leading_hand' && (
+                <div className="space-y-2 pl-4 border-l-2 border-brand-200">
+                  <p className="text-sm font-medium text-gray-900">How many employees are you responsible for supervising?</p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min={1}
+                      step={1}
+                      placeholder="0"
+                      value={leadingHandCount}
+                      onChange={e => setLeadingHandCount(e.target.value)}
+                      className="input-field max-w-[120px]"
+                    />
+                    <span className="text-gray-500 text-sm">employees</span>
+                  </div>
+                  {leadingHandCount && parseInt(leadingHandCount) > 0 && (
+                    <p className="text-xs text-gray-500">
+                      {parseInt(leadingHandCount) >= 11 ? 'Rate: leading hand 11+ employees'
+                        : parseInt(leadingHandCount) >= 6 ? 'Rate: leading hand 6–10 employees'
+                        : 'Rate: leading hand 1–5 employees'}
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Follow-up questions */}
               {primary === true && q.followUps && q.followUps.map(fu => {
                 const fuKey = `${q.type}_${fu.key}`;
 
-                // Vehicle km input is special
-                if (q.type === 'vehicle' && fu.key === 'km') {
+                // Vehicle km input
+                if (VEHICLE_TYPES.has(q.type) && fu.key === 'km') {
                   return (
                     <div key={fu.key} className="space-y-2 pl-4 border-l-2 border-brand-200">
                       <p className="text-sm font-medium text-gray-900">{fu.question}</p>
@@ -346,16 +709,6 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
 
               {/* Result for this allowance */}
               {(() => {
-                // Find the answer that corresponds to this question (may have remapped type)
-                const thisAnswer = answers.find(a =>
-                  a.type === q.type ||
-                  a.type === 'split_shift_short' && q.type === 'split_shift' ||
-                  a.type === 'split_shift_long' && q.type === 'split_shift' ||
-                  a.type === 'first_aid_ft' && q.type === 'first_aid' ||
-                  a.type === 'first_aid_ptcasual' && q.type === 'first_aid' ||
-                  a.type === 'laundry_ft' && q.type === 'laundry' ||
-                  a.type === 'laundry_ptcasual' && q.type === 'laundry'
-                );
                 if (!thisAnswer) return null;
 
                 if (thisAnswer.triggered && info) {
@@ -363,12 +716,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                     <div className="success-box text-sm space-y-1">
                       <p className="font-semibold text-success-700">✓ {info.name} applies</p>
                       <p className="text-gray-700">{info.description}</p>
-                      {info.amount && q.type !== 'vehicle' && (
+                      {info.amount && !VEHICLE_TYPES.has(q.type) && (
                         <p className="font-semibold text-success-700">
                           Rate: {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
                         </p>
                       )}
-                      {q.type === 'vehicle' && info.amount && vehicleKm && (
+                      {VEHICLE_TYPES.has(q.type) && info.amount && vehicleKm && (
                         <p className="font-semibold text-success-700">
                           {parseFloat(vehicleKm).toFixed(1)} km × {formatCurrency(info.amount)}/km = {formatCurrency(parseFloat(vehicleKm) * info.amount)}
                         </p>
@@ -401,12 +754,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
               return (
                 <li key={a.type} className="flex justify-between items-start gap-2">
                   <span className="text-gray-700">{info.name}</span>
-                  {info.amount && a.type !== 'vehicle' && (
+                  {info.amount && !VEHICLE_TYPES.has(a.type) && (
                     <span className="font-semibold text-success-700 shrink-0">
                       {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
                     </span>
                   )}
-                  {a.type === 'vehicle' && info.amount && a.detail && (
+                  {VEHICLE_TYPES.has(a.type) && info.amount && a.detail && (
                     <span className="font-semibold text-success-700 shrink-0">
                       {formatCurrency(parseFloat(a.detail) * info.amount)}
                     </span>
