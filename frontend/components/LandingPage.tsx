@@ -72,8 +72,8 @@ const AWARDS = [
     code: 'MA000022' as AwardCode,
     name: 'Cleaning Services Award 2020',
     shortName: 'Cleaning Award',
-    description: 'Covers employees in contract cleaning, building cleaning, and related cleaning services. Also covers cleaners employed directly by non-cleaning businesses.',
-    examples: 'Commercial cleaners, office cleaners, building cleaners, industrial cleaners, hospital cleaners, window cleaners, shopping trolley collectors, leading hands',
+    description: 'Covers employees of contract cleaning businesses — companies whose core business is providing cleaning services. If you work for a dedicated cleaning contractor, this is your award.',
+    examples: 'Commercial cleaners, office cleaners, building cleaners, industrial cleaners, high-access window cleaners, shopping trolley collectors, cleaning leading hands',
     badge: 'MA000022',
   },
 ];
