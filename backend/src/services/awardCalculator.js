@@ -265,6 +265,7 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
 
   for (const { key, shifts } of periodsToCheck) {
     // Daily overtime (only for individual shifts, regardless of period type)
+    let dailyOtMinutesInPeriod = 0;
     for (const shift of shifts) {
       if (!dailyRates.length) continue;
       const dailyThresholdMinutes = parseFloat(dailyRates[0].threshold_hours) * 60;
@@ -282,7 +283,11 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
                   + (secondDailyBand / 60) * baseHourlyRate * (m2 - 1.0);
         totalOvertimePay += pay;
         totalOvertimeMinutes += otMinutes;
-        breakdown.push({ type: 'daily', date: shift.date, overtimeMinutes: otMinutes, pay });
+        dailyOtMinutesInPeriod += otMinutes;
+        // Meal allowance: one per 4 hours of daily OT on this shift (or part thereof)
+        const dailyMeals = Math.ceil(otMinutes / (4 * 60));
+        totalMealAllowancesOwed += dailyMeals;
+        breakdown.push({ type: 'daily', date: shift.date, overtimeMinutes: otMinutes, pay, mealAllowancesOwed: dailyMeals });
       }
     }
 
@@ -300,9 +305,12 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
       totalOvertimePay += pay;
       totalOvertimeMinutes += overtimeMinutes;
 
-      // Meal allowance: clause 20.3 — one meal per 4 hours of overtime (or part thereof)
-      // First meal triggers at start of OT; one more for each subsequent 4-hour block
-      const mealAllowancesOwed = Math.ceil(overtimeMinutes / (4 * 60));
+      // Meal allowance: one per 4 hours of weekly OT (or part thereof).
+      // Deduct daily OT minutes already counted above to avoid double-counting.
+      const uncoveredWeeklyOtMinutes = Math.max(0, overtimeMinutes - dailyOtMinutesInPeriod);
+      const mealAllowancesOwed = uncoveredWeeklyOtMinutes > 0
+        ? Math.ceil(uncoveredWeeklyOtMinutes / (4 * 60))
+        : 0;
       totalMealAllowancesOwed += mealAllowancesOwed;
 
       breakdown.push({
@@ -530,14 +538,16 @@ async function calculateEntitlements(input, db) {
 
   const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period);
 
-  // Meal allowance for overtime — FT/PT only, auto-calculated from OT duration
-  // Clause 20.3: one meal allowance per 4 hours of overtime (or part thereof)
+  // Meal allowance for overtime — FT/PT only, auto-calculated from OT duration.
+  // One meal per 4 hours of overtime (or part thereof), per shift (daily OT) or per period (weekly OT).
+  // Award-specific type: most awards use 'meal'; MA000081 uses 'meal_working'.
+  const MEAL_ALLOWANCE_TYPE = awardCode === 'MA000081' ? 'meal_working' : 'meal';
   let mealAllowancePay = 0;
   let mealAllowanceRate = 0;
   if (overtimeCalc.mealAllowancesOwed > 0 && employmentType !== 'casual') {
     const mealResult = await db.query(
-      `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal' ORDER BY effective_date DESC LIMIT 1`,
-      [awardCode]
+      `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = $2 ORDER BY effective_date DESC LIMIT 1`,
+      [awardCode, MEAL_ALLOWANCE_TYPE]
     );
     if (mealResult.rows.length) {
       mealAllowanceRate = parseFloat(mealResult.rows[0].amount);
