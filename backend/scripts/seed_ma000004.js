@@ -453,10 +453,17 @@ async function seed() {
       },
       {
         allowance_type: 'meal',
-        name: 'Meal allowance (overtime)',
-        description: 'If you are required to work overtime without prior notice, you are entitled to a meal allowance when overtime commences, and an additional amount if overtime exceeds 4 hours. Not payable to casual employees.',
-        trigger_condition: 'Overtime worked without prior notice — FT/PT only. First meal: $23.59; second meal (>4 hrs OT): additional $21.39.',
+        name: 'Meal allowance (overtime — first meal)',
+        description: 'If you are required to work overtime without prior notice, you are entitled to a meal allowance when overtime commences. Not payable to casual employees.',
+        trigger_condition: 'Overtime worked without prior notice — FT/PT only. First meal on commencement of overtime.',
         amount: 23.59, amount_type: 'fixed', per_unit: 'per_meal',
+      },
+      {
+        allowance_type: 'meal_second',
+        name: 'Meal allowance (overtime — second meal)',
+        description: 'If overtime extends beyond 4 hours, an additional meal allowance applies. Not payable to casual employees.',
+        trigger_condition: 'Overtime exceeds 4 hours — FT/PT only. Second meal after 4 hours of overtime.',
+        amount: 21.39, amount_type: 'fixed', per_unit: 'per_meal',
       },
       {
         allowance_type: 'vehicle',

@@ -538,20 +538,68 @@ async function calculateEntitlements(input, db) {
 
   const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period);
 
-  // Meal allowance for overtime — FT/PT only, auto-calculated from OT duration.
-  // One meal per 4 hours of overtime (or part thereof), per shift (daily OT) or per period (weekly OT).
-  // Award-specific type: most awards use 'meal'; MA000081 uses 'meal_working'.
-  const MEAL_ALLOWANCE_TYPE = awardCode === 'MA000081' ? 'meal_working' : 'meal';
+  // ── Meal allowance — award-specific rules ────────────────────────────────
+  // FT/PT only (casuals excluded for all awards).
   let mealAllowancePay = 0;
   let mealAllowanceRate = 0;
-  if (overtimeCalc.mealAllowancesOwed > 0 && employmentType !== 'casual') {
-    const mealResult = await db.query(
-      `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = $2 ORDER BY effective_date DESC LIMIT 1`,
-      [awardCode, MEAL_ALLOWANCE_TYPE]
-    );
-    if (mealResult.rows.length) {
-      mealAllowanceRate = parseFloat(mealResult.rows[0].amount);
-      mealAllowancePay = Math.round(mealAllowanceRate * overtimeCalc.mealAllowancesOwed * 100) / 100;
+  let mealAllowancesOwed = 0; // may differ from overtimeCalc.mealAllowancesOwed for some awards
+  let mealAllowanceLabel = '';
+
+  if (employmentType !== 'casual') {
+    if (awardCode === 'MA000081') {
+      // MA000081 (Live Performance): meal_working triggers when a shift extends past 8pm,
+      // not based on overtime hours. One meal per 4-hour interval worked after 8pm.
+      const EIGHT_PM = 20 * 60;
+      for (const shift of processedShifts) {
+        const startMins = timeToMinutes(shift.startTime);
+        let endMins = timeToMinutes(shift.endTime);
+        if (endMins < startMins) endMins += 24 * 60; // overnight shift
+        const workAfter8pmStart = Math.max(startMins, EIGHT_PM);
+        if (endMins > EIGHT_PM) {
+          const minutesWorkedAfter8pm = endMins - workAfter8pmStart;
+          mealAllowancesOwed += Math.ceil(minutesWorkedAfter8pm / (4 * 60));
+        }
+      }
+      if (mealAllowancesOwed > 0) {
+        const r = await db.query(
+          `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal_working' ORDER BY effective_date DESC LIMIT 1`,
+          [awardCode]
+        );
+        if (r.rows.length) {
+          mealAllowanceRate = parseFloat(r.rows[0].amount);
+          mealAllowancePay = Math.round(mealAllowanceRate * mealAllowancesOwed * 100) / 100;
+          mealAllowanceLabel = `Meal allowance — working past 8pm (${mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`;
+        }
+      }
+    } else if (awardCode === 'MA000004' && overtimeCalc.mealAllowancesOwed > 0) {
+      // MA000004 (Retail): two-tier meal pricing.
+      // First meal at 'meal' rate ($23.59); subsequent meals at 'meal_second' rate ($21.39).
+      mealAllowancesOwed = overtimeCalc.mealAllowancesOwed;
+      const [firstR, secondR] = await Promise.all([
+        db.query(`SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal' ORDER BY effective_date DESC LIMIT 1`, [awardCode]),
+        db.query(`SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal_second' ORDER BY effective_date DESC LIMIT 1`, [awardCode]),
+      ]);
+      if (firstR.rows.length) {
+        mealAllowanceRate = parseFloat(firstR.rows[0].amount);
+        const secondRate = secondR.rows.length ? parseFloat(secondR.rows[0].amount) : mealAllowanceRate;
+        const extraMeals = Math.max(0, mealAllowancesOwed - 1);
+        mealAllowancePay = Math.round((mealAllowanceRate + secondRate * extraMeals) * 100) / 100;
+        mealAllowanceLabel = mealAllowancesOwed > 1
+          ? `Meal allowance (1 × $${mealAllowanceRate.toFixed(2)} + ${extraMeals} × $${secondRate.toFixed(2)}) — expense, not OTE`
+          : `Meal allowance (1 × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`;
+      }
+    } else if (overtimeCalc.mealAllowancesOwed > 0) {
+      // All other awards: one meal per 4 hours of overtime at a flat rate.
+      mealAllowancesOwed = overtimeCalc.mealAllowancesOwed;
+      const r = await db.query(
+        `SELECT amount FROM allowances WHERE award_code = $1 AND allowance_type = 'meal' ORDER BY effective_date DESC LIMIT 1`,
+        [awardCode]
+      );
+      if (r.rows.length) {
+        mealAllowanceRate = parseFloat(r.rows[0].amount);
+        mealAllowancePay = Math.round(mealAllowanceRate * mealAllowancesOwed * 100) / 100;
+        mealAllowanceLabel = `Meal allowance (${mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`;
+      }
     }
   }
 
@@ -618,11 +666,11 @@ async function calculateEntitlements(input, db) {
 
   if (mealAllowancePay > 0) {
     categoryAgg.set('_meal_allowance', {
-      rateLabel: `Meal allowance (${overtimeCalc.mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`,
+      rateLabel: mealAllowanceLabel,
       effectiveRate: mealAllowanceRate,
       missedBreakPenalty: false,
       superApplies: false,
-      totalHours: overtimeCalc.mealAllowancesOwed,
+      totalHours: mealAllowancesOwed,
       totalPay: mealAllowancePay,
     });
   }
@@ -662,7 +710,7 @@ async function calculateEntitlements(input, db) {
       overtimePay: overtimeCalc.overtimePay,
       overtimeMinutes: overtimeCalc.overtimeMinutes,
       mealAllowancePay,
-      mealAllowancesOwed: overtimeCalc.mealAllowancesOwed,
+      mealAllowancesOwed,
       mealAllowanceRate,
       totalPayOwed: Math.round(grandTotal * 100) / 100,
       superEligiblePay: Math.round(superEligiblePay * 100) / 100,
