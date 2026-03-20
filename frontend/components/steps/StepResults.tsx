@@ -417,37 +417,27 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
               <span className="font-medium">{formatCurrency(summary.mealAllowancePay)}</span>
             </div>
           )}
+          {triggeredAllowances.map(a => {
+            const info = allowanceInfoByType[a.type];
+            if (!info) return null;
+            let amt = 0;
+            if (a.detail && info.amount_type === 'per_km' && info.amount) {
+              amt = info.amount * parseFloat(a.detail || '0');
+            } else if (info.amount) {
+              amt = info.amount;
+            }
+            if (!amt) return null;
+            return (
+              <div key={a.type} className="flex justify-between py-1 border-b border-brand-100">
+                <span className="text-gray-600">{info.name}</span>
+                <span className="font-medium">{formatCurrency(amt)}</span>
+              </div>
+            );
+          })}
           <div className="flex justify-between py-1 font-bold text-base">
-            <span>{totalAllowancesOwed > 0 ? 'Total wages owed' : 'Total owed'}</span>
-            <span>{formatCurrency(summary.totalPayOwed)}</span>
+            <span>Total owed</span>
+            <span>{formatCurrency(grandTotal)}</span>
           </div>
-          {triggeredAllowances.length > 0 && (
-            <>
-              {triggeredAllowances.map(a => {
-                const info = allowanceInfoByType[a.type];
-                if (!info) return null;
-                let amt = 0;
-                if (a.detail && info.amount_type === 'per_km' && info.amount) {
-                  amt = info.amount * parseFloat(a.detail || '0');
-                } else if (info.amount) {
-                  amt = info.amount;
-                }
-                if (!amt) return null;
-                return (
-                  <div key={a.type} className="flex justify-between py-1 border-b border-brand-100">
-                    <span className="text-gray-600">{info.name}</span>
-                    <span className="font-medium">{formatCurrency(amt)}</span>
-                  </div>
-                );
-              })}
-              {totalAllowancesOwed > 0 && (
-                <div className="flex justify-between py-1 pt-1 font-bold text-base border-t-2 border-brand-200">
-                  <span>Total owed (incl. allowances)</span>
-                  <span className="text-brand-700">{formatCurrency(grandTotal)}</span>
-                </div>
-              )}
-            </>
-          )}
           {summary.superAmount !== undefined && (
             <div className="flex justify-between py-1 border-t border-brand-200 pt-2 mt-1">
               <span className="text-gray-600 text-sm">Super owed (on top of wages)</span>
