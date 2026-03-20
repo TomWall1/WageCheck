@@ -48,6 +48,8 @@ export interface ShiftResult {
   totalPay: number;
   mealBreakMinutes: number;
   restBreakTaken: boolean;
+  minimumEngagementApplied?: boolean;
+  minimumShiftHours?: number | null;
   segments: ShiftSegment[];
   breakViolations: Array<{
     type: string;

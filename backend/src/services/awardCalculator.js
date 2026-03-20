@@ -262,6 +262,33 @@ function checkBreakCompliance(shift, breakEntitlements) {
   return violations;
 }
 
+// ── Minimum shift (minimum engagement) ───────────────────────────────────
+// If an employee works less than the minimum engagement period, they must still
+// be paid for the full minimum at the applicable penalty rate for that day.
+// Values are in HOURS. Full-time is omitted (contracted hours apply).
+const MINIMUM_SHIFT_HOURS = {
+  MA000009: { casual: 2, part_time: 2 },
+  MA000003: { casual: 3, part_time: 3 },
+  MA000119: { casual: 2, part_time: 2 },
+  MA000004: { casual: 3, part_time: 3 },
+  MA000094: { casual: 2, part_time: 2 },
+  MA000080: { casual: 2, part_time: 2 },
+  MA000081: { casual: 2, part_time: 2 },
+  MA000084: { casual: 2, part_time: 2 },
+  MA000022: { casual: 2, part_time: 2 },
+  MA000028: { casual: 2, part_time: 2 },
+  MA000033: { casual: 2, part_time: 2 },
+  MA000002: { casual: 3, part_time: 3 },
+  MA000104: { casual: 2, part_time: 2 },
+  MA000013: { casual: 4, part_time: 4, full_time: 4 },
+};
+
+function getMinimumShiftMinutes(awardCode, employmentType) {
+  const map = MINIMUM_SHIFT_HOURS[awardCode];
+  if (!map) return 0;
+  return (map[employmentType] || 0) * 60;
+}
+
 // ── Overtime ──────────────────────────────────────────────────────────────
 // Only the PREMIUM above ordinary rate is added here — ordinary pay for all
 // worked hours is already included in totalOrdinaryPay. Adding the full OT rate
@@ -601,6 +628,29 @@ async function calculateEntitlements(input, db) {
       shift.mealBreakTaken
     );
 
+    // Apply minimum engagement — if worked < minimum, extend the last segment
+    // at whatever rate applies (preserves the correct penalty rate for that day).
+    const minimumShiftMinutes = getMinimumShiftMinutes(awardCode, employmentType);
+    let minimumEngagementApplied = false;
+    let payableMinutes = workedMinutes;
+    if (minimumShiftMinutes > 0 && workedMinutes < minimumShiftMinutes) {
+      const extra = minimumShiftMinutes - workedMinutes;
+      if (finalSegments.length > 0) {
+        finalSegments[finalSegments.length - 1] = {
+          ...finalSegments[finalSegments.length - 1],
+          minutes: finalSegments[finalSegments.length - 1].minutes + extra,
+        };
+      } else {
+        // No segments (zero-length shift) — create one at the day's ordinary rate
+        const dayType = getDayType(shift.date, publicHolidays);
+        const applicable = penaltyRates.filter(r => r.employment_type === employmentType && r.day_type === dayType && !r.time_band_start);
+        const multiplier = applicable.length > 0 ? Math.max(...applicable.map(r => parseFloat(r.multiplier))) : 1.0;
+        finalSegments.push({ dayType, multiplier, addition_per_hour: 0, minutes: minimumShiftMinutes });
+      }
+      payableMinutes = minimumShiftMinutes;
+      minimumEngagementApplied = true;
+    }
+
     // Calculate pay per segment
     const segmentBreakdown = [];
     let shiftOrdinaryPay = 0;
@@ -652,16 +702,18 @@ async function calculateEntitlements(input, db) {
       date: shift.date,
       startTime: shift.startTime,
       endTime: shift.endTime,
-      workedMinutes,
-      workedHours: Math.round(workedMinutes / 60 * 100) / 100,
+      workedMinutes: payableMinutes,
+      workedHours: Math.round(payableMinutes / 60 * 100) / 100,
       mealBreakMinutes,
       restBreakTaken: !!shift.restBreakTaken,
-      ordinaryMinutes: workedMinutes,
+      ordinaryMinutes: payableMinutes,
       ordinaryPay: Math.round(shiftOrdinaryPay * 100) / 100,
       penaltyExtra: Math.round(shiftPenaltyExtra * 100) / 100,
       missedBreakExtra: Math.round(shiftMissedBreakExtra * 100) / 100,
       totalPay: Math.round(totalShiftPay * 100) / 100,
       missedBreakApplied,
+      minimumEngagementApplied,
+      minimumShiftHours: minimumEngagementApplied ? minimumShiftMinutes / 60 : null,
       segments: segmentBreakdown,
       breakViolations,
     });

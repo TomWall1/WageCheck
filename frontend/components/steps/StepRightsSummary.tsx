@@ -18,6 +18,25 @@ interface Props {
   onBack: () => void;
 }
 
+// Minimum engagement hours per award, per employment type.
+// Must mirror MINIMUM_SHIFT_HOURS in awardCalculator.js.
+const MIN_SHIFT: Record<string, { casual?: number; part_time?: number; full_time?: number }> = {
+  MA000009: { casual: 2, part_time: 2 },
+  MA000003: { casual: 3, part_time: 3 },
+  MA000119: { casual: 2, part_time: 2 },
+  MA000004: { casual: 3, part_time: 3 },
+  MA000094: { casual: 2, part_time: 2 },
+  MA000080: { casual: 2, part_time: 2 },
+  MA000081: { casual: 2, part_time: 2 },
+  MA000084: { casual: 2, part_time: 2 },
+  MA000022: { casual: 2, part_time: 2 },
+  MA000028: { casual: 2, part_time: 2 },
+  MA000033: { casual: 2, part_time: 2 },
+  MA000002: { casual: 3, part_time: 3 },
+  MA000104: { casual: 2, part_time: 2 },
+  MA000013: { casual: 4, part_time: 4, full_time: 4 },
+};
+
 export default function StepRightsSummary({ awardCode, employmentType, classificationResult, onNext, onBack }: Props) {
   const isCasual = employmentType === 'casual';
   const isPartTime = employmentType === 'part_time';
@@ -28,7 +47,10 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
   const isFitness = awardCode === 'MA000094';
   const isAmusement = awardCode === 'MA000080';
   const isLivePerf = awardCode === 'MA000081';
+  const isRacing = awardCode === 'MA000013';
   const classLevel = classificationResult?.level ?? null;
+
+  const minShiftHours = MIN_SHIFT[awardCode]?.[employmentType] ?? 2;
 
   return (
     <div className="space-y-6">
@@ -78,12 +100,13 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
         {isCasual && (
           <div className="text-sm space-y-2">
             <p className="text-gray-700">
-              <strong>Casuals must be paid for at least {(isRetail || isFitness) ? '3' : isLivePerf ? '4' : '2'} hours per shift</strong> — even if you're sent home early.
+              <strong>Casuals must be paid for at least {minShiftHours} hours per shift</strong> — even if you&apos;re sent home early.
             </p>
             <p className="text-gray-600">
               If you show up for a shift and your employer sends you home early, you are still owed{' '}
-              {(isRetail || isFitness) ? '3' : isLivePerf ? '4' : '2'} full hours at your casual rate (including applicable penalty rates).
-              {isLivePerf && ' Note: the 4-hour minimum applies to production & support staff. Company dancers and other artists may have different minimum engagement rules.'}
+              {minShiftHours} full hours at your casual rate (including applicable penalty rates).
+              {isRacing && ' For Racing Clubs employees, the minimum applies per race meeting engagement.'}
+              {isLivePerf && ' This applies to production & support staff. Company dancers and other artists may have different minimum engagement rules.'}
             </p>
           </div>
         )}
@@ -91,7 +114,7 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
         {isPartTime && (
           <div className="text-sm space-y-2">
             <p className="text-gray-700">
-              <strong>Part-time employees must be paid for at least 3 hours per shift.</strong>
+              <strong>Part-time employees must be paid for at least {minShiftHours} hours per shift.</strong>
             </p>
             <p className="text-gray-600">
               Your agreed hours should also be set out in writing. If your employer regularly asks you to work

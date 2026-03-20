@@ -584,6 +584,13 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
                   </tfoot>
                 </table>
 
+                {/* Minimum engagement notice */}
+                {(shift as any).minimumEngagementApplied && (
+                  <div className="warning-box text-xs">
+                    Minimum engagement applied — paid for {(shift as any).minimumShiftHours}h (award minimum), not actual shift length.
+                  </div>
+                )}
+
                 {/* Break violations */}
                 {shift.breakViolations.length > 0 && (
                   <div className="space-y-1">
