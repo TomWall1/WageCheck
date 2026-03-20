@@ -398,6 +398,19 @@ const CLASSIFICATION_RULES_MA000084 = [
 ];
 
 /**
+ * MA000028 — Horticulture Award 2020
+ * Classifications: Levels 1–5, all stream='horticulture'.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000028 = [
+  { conditions: { hort_experience: 'entry' }, level: 1, stream: 'horticulture', rationale: 'New to horticulture — entry-level worker (Level 1)' },
+  { conditions: { hort_experience: 'skilled', hort_role: 'level2' }, level: 2, stream: 'horticulture', rationale: 'Skilled field or nursery hand — 12+ months experience or Certificate I/II (Level 2)' },
+  { conditions: { hort_experience: 'skilled', hort_role: 'level3' }, level: 3, stream: 'horticulture', rationale: 'Higher skilled — operates machinery, applies chemicals, or holds Cert II/III (Level 3)' },
+  { conditions: { hort_experience: 'skilled', hort_role: 'level4' }, level: 4, stream: 'horticulture', rationale: 'Advanced worker — independently manages programs, may act as leading hand (Level 4)' },
+  { conditions: { hort_experience: 'skilled', hort_role: 'level5' }, level: 5, stream: 'horticulture', rationale: 'Foreperson or specialist — team management or Certificate IV equivalent (Level 5)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -492,6 +505,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'general', rationale: 'Unable to determine classification — defaulting to Level 1 production & support. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000028') {
+    for (const rule of CLASSIFICATION_RULES_MA000028) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'horticulture', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

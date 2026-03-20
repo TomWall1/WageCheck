@@ -116,6 +116,11 @@ async function migrate() {
       )
     `);
 
+    // Add is_all_purpose column if it does not yet exist (idempotent)
+    await client.query(`
+      ALTER TABLE allowances ADD COLUMN IF NOT EXISTS is_all_purpose BOOLEAN NOT NULL DEFAULT FALSE
+    `);
+
     // ── Break entitlements ───────────────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS break_entitlements (

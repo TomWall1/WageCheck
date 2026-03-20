@@ -21,6 +21,7 @@ const SGC_RATE = 0.12; // 12%
 // MA000081:            no junior rates — adult rate applies to all ages
 // MA000084:            under 16=40%, 16=50%, 17=60%, 18=70%, 19+=100%
 // MA000022:            shopping trolley collection only: under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
+// MA000028:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -59,6 +60,13 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 16) return 0.45;
     const MA000022_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     return MA000022_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000028') {
+    // MA000028 junior rates: <16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
+    if (age >= 20) return 1.0;
+    if (age < 16) return 0.50;
+    const MA000028_RATES = { 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
+    return MA000028_RATES[age] || 1.0;
   }
   if (age >= 21) return 1.0;
   if (age < 16) return awardCode === 'MA000004' ? 0.45 : 0.40;
@@ -359,12 +367,14 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
   if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
-  if (multiplier === 1.15) return 'Late night loading (midnight–6am, ×1.15)';
+  if (multiplier === 1.12) return 'Outside span of hours — Sunday (×1.12 of casual base)';
+  if (multiplier === 1.15) return dayType === 'weekday' ? 'Afternoon/night shift Mon–Fri (×1.15)' : 'Late night loading (midnight–6am, ×1.15)';
   if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.20)' : 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
   if (multiplier === 1.5) return 'Sunday / time and a half (×1.5)';
-  if (multiplier === 2.0) return 'Double time (×2.0)';
+  if (multiplier === 1.8) return 'Public holiday — casual (×1.80 of casual base = 225% of FT)';
+  if (multiplier === 2.0) return dayType === 'sunday' ? 'Sunday — double time (×2.0)' : 'Double time (×2.0)';
   if (multiplier === 2.25) return 'Public holiday — double time and a quarter (×2.25)';
   if (multiplier === 2.5) return 'Public holiday — double time and a half (×2.50)';
   return `×${multiplier}`;
@@ -380,6 +390,7 @@ async function calculateEntitlements(input, db) {
     publicHolidays = [],
     period = 'weekly',
     awardCode = DEFAULT_AWARD_CODE,
+    allPurposeAllowancesPerHour = 0,  // All-purpose allowances (e.g. MA000028 first aid, leading hand, wet work)
   } = input;
 
   const juniorMultiplier = getJuniorMultiplier(age, awardCode);
@@ -394,7 +405,30 @@ async function calculateEntitlements(input, db) {
   if (!rateResult.rows.length) throw new Error('No pay rate found for this classification and employment type');
 
   const rawBaseRate = parseFloat(rateResult.rows[0].rate_amount);
-  const baseHourlyRate = parseFloat((rawBaseRate * juniorMultiplier).toFixed(4));
+
+  // ── All-purpose allowance handling ────────────────────────────────────────
+  // All-purpose allowances (e.g. MA000028 first aid, leading hand, wet work) must be
+  // added to the FT/PT base rate BEFORE casual loading, penalties, and overtime.
+  // For casual employees, the stored base_hourly rate already includes the 25% casual
+  // loading. To correctly apply the all-purpose allowance, we fetch the FT base rate,
+  // add the allowance, then reapply the casual loading.
+  let effectiveBaseRate = rawBaseRate;
+  if (allPurposeAllowancesPerHour > 0) {
+    if (employmentType === 'casual') {
+      // Fetch the FT base rate to correctly add allowance before loading
+      const ftRateResult = await db.query(`
+        SELECT rate_amount FROM pay_rates
+        WHERE award_code = $1 AND classification_id = $2 AND employment_type = 'full_time' AND rate_type = 'base_hourly'
+        ORDER BY effective_date DESC LIMIT 1
+      `, [awardCode, classificationId]);
+      const ftBase = ftRateResult.rows.length ? parseFloat(ftRateResult.rows[0].rate_amount) : rawBaseRate / 1.25;
+      effectiveBaseRate = parseFloat(((ftBase + allPurposeAllowancesPerHour) * 1.25).toFixed(4));
+    } else {
+      effectiveBaseRate = parseFloat((rawBaseRate + allPurposeAllowancesPerHour).toFixed(4));
+    }
+  }
+
+  const baseHourlyRate = parseFloat((effectiveBaseRate * juniorMultiplier).toFixed(4));
 
   // Fetch the effective date of the rate
   const rateDateResult = await db.query(`

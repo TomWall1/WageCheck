@@ -4,7 +4,7 @@ const pool = require('../db/pool');
 const { calculateEntitlements } = require('../services/awardCalculator');
 const { classifyAndFetch } = require('../services/classificationEngine');
 
-const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119', 'MA000004', 'MA000094', 'MA000080', 'MA000081', 'MA000084', 'MA000022'];
+const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119', 'MA000004', 'MA000094', 'MA000080', 'MA000081', 'MA000084', 'MA000022', 'MA000028'];
 const DEFAULT_AWARD = 'MA000009';
 
 function getAwardCode(req) {
@@ -166,10 +166,10 @@ router.post('/classify', async (req, res) => {
 });
 
 // POST /api/award/calculate
-// Body: { employmentType, classificationId, shifts, publicHolidays? }
+// Body: { employmentType, classificationId, shifts, publicHolidays?, allPurposeAllowancesPerHour? }
 router.post('/calculate', async (req, res) => {
   try {
-    const { employmentType, classificationId, shifts, publicHolidays, age, period } = req.body;
+    const { employmentType, classificationId, shifts, publicHolidays, age, period, allPurposeAllowancesPerHour } = req.body;
 
     if (!employmentType || !classificationId || !Array.isArray(shifts)) {
       return res.status(400).json({ error: 'employmentType, classificationId, and shifts are required' });
@@ -196,8 +196,10 @@ router.post('/calculate', async (req, res) => {
 
     const validPeriod = ['weekly', 'fortnightly'].includes(period) ? period : 'weekly';
     const awardCode = getAwardCode(req);
+    const validAllPurpose = typeof allPurposeAllowancesPerHour === 'number' && allPurposeAllowancesPerHour >= 0
+      ? allPurposeAllowancesPerHour : 0;
     const result = await calculateEntitlements(
-      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null, period: validPeriod, awardCode },
+      { employmentType, classificationId, shifts, publicHolidays: publicHolidays || [], age: age || null, period: validPeriod, awardCode, allPurposeAllowancesPerHour: validAllPurpose },
       pool
     );
 

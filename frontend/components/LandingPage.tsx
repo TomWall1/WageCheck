@@ -76,6 +76,14 @@ const AWARDS = [
     examples: 'Storeworkers, warehouse operatives, forklift drivers, distribution centre staff, wholesale sales assistants, storepersons',
     badge: 'MA000084',
   },
+  {
+    code: 'MA000028' as AwardCode,
+    name: 'Horticulture Award 2020',
+    shortName: 'Horticulture Award',
+    description: 'Covers employees working in horticulture, including field crop growing, fruit and vegetable growing, nursery operations, and turf management businesses.',
+    examples: 'Fruit pickers, vegetable harvesters, nursery hands, tractor/machinery operators, spray operators, forepersons, orchard workers',
+    badge: 'MA000028',
+  },
 ];
 
 interface Props {
@@ -116,7 +124,7 @@ export default function LandingPage({ onSelect }: Props) {
         }}>
           Check your pay
         </h1>
-        <p style={{ fontSize: '15px', color: 'var(--secondary-muted)', lineHeight: 1.65, maxWidth: '480px' }}>
+        <p style={{ fontSize: '15px', color: '#37474F', lineHeight: 1.65, maxWidth: '480px' }}>
           Find out if you&apos;re being paid correctly under the Fair Work Act.
           Answer a few questions about your job and shifts — we&apos;ll calculate what you&apos;re owed.
         </p>
@@ -206,12 +214,14 @@ export default function LandingPage({ onSelect }: Props) {
                     if (!isSelected) {
                       e.currentTarget.style.borderColor = 'var(--primary-mid)';
                       e.currentTarget.style.background = 'var(--primary-light)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,77,64,0.12)';
                     }
                   }}
                   onMouseLeave={e => {
                     if (!isSelected) {
-                      e.currentTarget.style.borderColor = 'rgba(38,50,56,0.18)';
+                      e.currentTarget.style.borderColor = 'rgba(38,50,56,0.28)';
                       e.currentTarget.style.background = '#FFFFFF';
+                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(38,50,56,0.08)';
                     }
                   }}
                   style={{
@@ -221,12 +231,15 @@ export default function LandingPage({ onSelect }: Props) {
                     background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
                     border: isSelected
                       ? '1.5px solid var(--primary)'
-                      : '1.5px solid rgba(38,50,56,0.18)',
-                    borderLeft: isSelected ? '4px solid var(--primary)' : '1.5px solid rgba(38,50,56,0.18)',
+                      : '1.5px solid rgba(38,50,56,0.28)',
+                    borderLeft: isSelected ? '4px solid var(--primary)' : '4px solid rgba(38,50,56,0.12)',
                     borderRadius: '10px',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
                     display: 'block',
+                    boxShadow: isSelected
+                      ? '0 2px 8px rgba(0,77,64,0.15)'
+                      : '0 1px 3px rgba(38,50,56,0.08)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
@@ -241,21 +254,21 @@ export default function LandingPage({ onSelect }: Props) {
                     <span style={{
                       fontSize: '10px',
                       fontFamily: 'monospace',
-                      color: 'var(--secondary-muted)',
-                      background: 'var(--secondary-light)',
-                      padding: '2px 6px',
+                      color: '#FFFFFF',
+                      background: 'var(--primary)',
+                      padding: '2px 7px',
                       borderRadius: '3px',
                       letterSpacing: '0.03em',
-                      fontWeight: 500,
+                      fontWeight: 600,
                     }}>
                       {award.badge}
                     </span>
                   </div>
-                  <p style={{ fontSize: '13.5px', color: 'var(--secondary)', lineHeight: 1.55, margin: 0 }}>
+                  <p style={{ fontSize: '13.5px', color: '#263238', lineHeight: 1.55, margin: 0 }}>
                     {award.description}
                   </p>
-                  <p style={{ fontSize: '12px', color: 'var(--secondary-muted)', marginTop: '5px', margin: '5px 0 0 0', lineHeight: 1.5 }}>
-                    <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>Covers: </span>{award.examples}
+                  <p style={{ fontSize: '12.5px', color: '#37474F', marginTop: '5px', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+                    <span style={{ fontWeight: 600, color: '#263238' }}>Covers: </span>{award.examples}
                   </p>
                 </button>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { WageCheckState, AllowanceInfo } from '@/types';
+import { WageCheckState, AllowanceInfo, CalculationResult } from '@/types';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { formatCurrency, formatHours, employmentTypeLabel } from '@/lib/utils';
@@ -32,7 +32,12 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceInfo[]>([]);
   const [allowancesPaid, setAllowancesPaid] = useState('');
   const [superPaid, setSuperPaid] = useState('');
-  const { calculationResult, employmentType, classificationResult, allowanceAnswers, amountActuallyPaid } = state;
+  // For awards with all-purpose allowances (e.g. MA000028), we recalculate
+  // with the allowance included in the base rate after the user's allowance step.
+  const [refinedResult, setRefinedResult] = useState<CalculationResult | null>(null);
+  const [allPurposePerHour, setAllPurposePerHour] = useState(0);
+
+  const { calculationResult, employmentType, classificationResult, allowanceAnswers, amountActuallyPaid, awardCode, shifts: rawShifts, age } = state;
 
   useEffect(() => {
     api.getAllowances(state.awardCode)
@@ -40,7 +45,34 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
       .catch(() => {});
   }, [state.awardCode]);
 
-  if (!calculationResult || !employmentType || !classificationResult) {
+  // Recalculate when all-purpose allowances are present (e.g. MA000028)
+  useEffect(() => {
+    if (!allowanceInfo.length || !calculationResult || !classificationResult?.classification?.id || !employmentType) return;
+    const allowanceInfoByType = Object.fromEntries(allowanceInfo.map(a => [a.allowance_type, a]));
+    const total = allowanceAnswers
+      .filter(a => a.triggered)
+      .reduce((sum, a) => {
+        const info = allowanceInfoByType[a.type];
+        if (!info || !info.is_all_purpose || !info.amount || info.amount_type !== 'per_hour') return sum;
+        return sum + info.amount;
+      }, 0);
+    setAllPurposePerHour(total);
+    if (total <= 0) { setRefinedResult(null); return; }
+    api.calculate({
+      employmentType,
+      classificationId: classificationResult.classification.id,
+      shifts: rawShifts,
+      age: age ?? undefined,
+      awardCode,
+      allPurposeAllowancesPerHour: total,
+    })
+      .then(r => setRefinedResult(r as CalculationResult))
+      .catch(() => {});
+  }, [allowanceInfo, allowanceAnswers]);
+
+  const activeResult = refinedResult ?? calculationResult;
+
+  if (!activeResult || !employmentType || !classificationResult) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">Something went wrong. Please start over.</p>
@@ -49,9 +81,10 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
     );
   }
 
-  const { summary, baseHourlyRate, shifts } = calculationResult;
-  const triggeredAllowances = allowanceAnswers.filter(a => a.triggered);
+  const { summary, baseHourlyRate, shifts } = activeResult;
   const allowanceInfoByType = Object.fromEntries(allowanceInfo.map(a => [a.allowance_type, a]));
+  // All-purpose allowances are factored into the base rate calculation — exclude from "additional allowances" table
+  const triggeredAllowances = allowanceAnswers.filter(a => a.triggered && !allowanceInfoByType[a.type]?.is_all_purpose);
 
   const paidAmount = parseFloat(amountActuallyPaid.replace(/[^0-9.]/g, ''));
   const hasPaidAmount = !isNaN(paidAmount) && paidAmount > 0;
@@ -334,6 +367,9 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           </p>
           <p className="text-sm text-gray-500 mt-1">
             Base rate: {formatCurrency(baseHourlyRate)}/hr
+            {allPurposePerHour > 0 && (
+              <span className="text-brand-700 font-medium ml-1">(incl. {formatCurrency(allPurposePerHour)}/hr all-purpose allowances)</span>
+            )}
           </p>
         </div>
 

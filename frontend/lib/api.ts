@@ -62,6 +62,7 @@ export const api = {
     age?: number;
     period?: string;
     awardCode?: string | null;
+    allPurposeAllowancesPerHour?: number;
   }) => {
     const { awardCode, ...rest } = payload;
     return apiFetch('/api/award/calculate', {

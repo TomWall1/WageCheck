@@ -409,6 +409,27 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     ],
   },
 
+  // ── MA000028 (Horticulture) ───────────────────────────────────────────────
+  // All-purpose allowances: added to base rate BEFORE casual loading, penalties, and overtime.
+  {
+    type: 'hort_first_aid',
+    primary: 'Has your employer appointed you as the person responsible for first aid?',
+    primaryHelp: 'A first aid allowance of $0.33/hr applies if your employer has designated you as the first aider AND you hold a current first aid certificate. This is an all-purpose allowance — it affects your base rate and is included in overtime and penalty calculations.',
+    onlyForAward: ['MA000028'],
+  },
+  {
+    type: 'hort_leading_hand',
+    primary: 'Has your employer directed you to be responsible for supervising other employees?',
+    primaryHelp: 'A leading hand allowance applies if you are directed by management to be in charge of 2 or more employees. This is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
+    onlyForAward: ['MA000028'],
+  },
+  {
+    type: 'hort_wet_work',
+    primary: 'Do you regularly work in wet conditions as a normal part of your duties?',
+    primaryHelp: 'A wet work allowance of $2.50/hr applies if working in wet conditions is a regular part of your job (e.g. harvesting in rain, washing produce, water-based irrigation work). This is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
+    onlyForAward: ['MA000028'],
+  },
+
   // ── MA000084 (Storage Services and Wholesale) ─────────────────────────────
   {
     type: 'cold_work',
@@ -506,6 +527,30 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
         if (count >= 11) lhType = 'leading_hand_11plus';
         else if (count >= 6) lhType = 'leading_hand_6to10';
         result.push({ type: lhType, triggered: true, detail: leadingHandCount });
+        continue;
+      }
+
+      // Horticulture leading hand — all-purpose, 4 tiers (2-6, 7-10, 11-20, 21+)
+      if (q.type === 'hort_leading_hand') {
+        const count = parseInt(leadingHandCount);
+        if (!leadingHandCount || isNaN(count) || count < 2) continue;
+        let lhType = 'leading_hand_2to6';
+        if (count > 20) lhType = 'leading_hand_21plus';
+        else if (count > 10) lhType = 'leading_hand_11to20';
+        else if (count > 6) lhType = 'leading_hand_7to10';
+        result.push({ type: lhType, triggered: true, detail: leadingHandCount });
+        continue;
+      }
+
+      // Horticulture first aid — all-purpose $0.33/hr
+      if (q.type === 'hort_first_aid') {
+        result.push({ type: 'first_aid', triggered: true });
+        continue;
+      }
+
+      // Horticulture wet work — all-purpose $2.50/hr
+      if (q.type === 'hort_wet_work') {
+        result.push({ type: 'wet_work', triggered: true });
         continue;
       }
 
@@ -695,6 +740,15 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       if (count >= 6) return 'leading_hand_6to10';
       return 'leading_hand_1to5';
     }
+    if (qType === 'hort_leading_hand') {
+      const count = parseInt(leadingHandCount);
+      if (count > 20) return 'leading_hand_21plus';
+      if (count > 10) return 'leading_hand_11to20';
+      if (count > 6) return 'leading_hand_7to10';
+      return 'leading_hand_2to6';
+    }
+    if (qType === 'hort_first_aid') return 'first_aid';
+    if (qType === 'hort_wet_work') return 'wet_work';
     if (qType === 'meal_travelling') {
       return followUpAnswers['meal_travelling_five_or_more_days'] === 'yes' ? 'meal_travelling_weekly' : 'meal_travelling';
     }
@@ -711,6 +765,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     if (!primary) return true;
     if (VEHICLE_TYPES.has(q.type)) return true;
     if (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning') return !!leadingHandCount && parseInt(leadingHandCount) > 0;
+    if (q.type === 'hort_leading_hand') return !!leadingHandCount && parseInt(leadingHandCount) >= 2;
     if (!q.followUps) return true;
     return q.followUps.every(fu => followUpAnswers[`${q.type}_${fu.key}`]);
   });
@@ -747,7 +802,13 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       (a.type === 'hot_places_high' && q.type === 'hot_places_low') ||
       (a.type === 'leading_hand_1to10' && q.type === 'leading_hand_cleaning') ||
       (a.type === 'leading_hand_11to20' && q.type === 'leading_hand_cleaning') ||
-      (a.type === 'leading_hand_21plus' && q.type === 'leading_hand_cleaning')
+      (a.type === 'leading_hand_21plus' && q.type === 'leading_hand_cleaning') ||
+      (a.type === 'first_aid' && q.type === 'hort_first_aid') ||
+      (a.type === 'wet_work' && q.type === 'hort_wet_work') ||
+      (a.type === 'leading_hand_2to6' && q.type === 'hort_leading_hand') ||
+      (a.type === 'leading_hand_7to10' && q.type === 'hort_leading_hand') ||
+      (a.type === 'leading_hand_11to20' && q.type === 'hort_leading_hand') ||
+      (a.type === 'leading_hand_21plus' && q.type === 'hort_leading_hand')
     );
   }
 
@@ -779,6 +840,17 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
           allowances. Answer these questions to find out if any apply.
         </p>
       </div>
+
+      {awardCode === 'MA000028' && (
+        <div style={{ padding: '12px 14px', background: 'var(--accent-light)', borderLeft: '4px solid var(--accent)', borderRadius: '8px', fontSize: '13px' }}>
+          <p style={{ fontWeight: 600, color: 'var(--accent-dark)', marginBottom: '4px' }}>Important — all-purpose allowances</p>
+          <p style={{ color: 'var(--secondary)', lineHeight: 1.6 }}>
+            The Horticulture Award has <strong>all-purpose allowances</strong> (first aid, leading hand, and wet work).
+            These are added to your base rate <em>before</em> casual loading, penalty rates, and overtime are calculated.
+            Your results will be automatically recalculated to reflect any that apply.
+          </p>
+        </div>
+      )}
 
       <div className="space-y-4">
         {visibleQuestions.map(q => {
@@ -812,13 +884,16 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
               </div>
 
               {/* Leading hand count input */}
-              {primary === true && (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning') && (
+              {primary === true && (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning' || q.type === 'hort_leading_hand') && (
                 <div className="space-y-2 pl-4 border-l-2 border-brand-200">
                   <p className="text-sm font-medium text-gray-900">How many employees are you responsible for supervising?</p>
+                  {q.type === 'hort_leading_hand' && (
+                    <p className="text-xs text-gray-500">The leading hand allowance applies when you are in charge of 2 or more employees.</p>
+                  )}
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
-                      min={1}
+                      min={q.type === 'hort_leading_hand' ? 2 : 1}
                       step={1}
                       placeholder="0"
                       value={leadingHandCount}
@@ -833,6 +908,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                         ? (parseInt(leadingHandCount) > 20 ? 'Rate: leading hand over 20 employees'
                           : parseInt(leadingHandCount) > 10 ? 'Rate: leading hand 11–20 employees'
                           : 'Rate: leading hand 1–10 employees')
+                        : q.type === 'hort_leading_hand'
+                        ? (parseInt(leadingHandCount) > 20 ? 'All-purpose rate: $1.58/hr (21+ employees)'
+                          : parseInt(leadingHandCount) > 10 ? 'All-purpose rate: $1.25/hr (11–20 employees)'
+                          : parseInt(leadingHandCount) > 6 ? 'All-purpose rate: $0.88/hr (7–10 employees)'
+                          : parseInt(leadingHandCount) >= 2 ? 'All-purpose rate: $0.76/hr (2–6 employees)'
+                          : 'Allowance applies from 2 employees')
                         : (parseInt(leadingHandCount) >= 11 ? 'Rate: leading hand 11+ employees'
                           : parseInt(leadingHandCount) >= 6 ? 'Rate: leading hand 6–10 employees'
                           : 'Rate: leading hand 1–5 employees')}
