@@ -23,6 +23,7 @@ const SGC_RATE = 0.12; // 12%
 // MA000022:            shopping trolley collection only: under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
 // MA000028:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
+// MA000002:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100% (same as MA000004)
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -77,7 +78,7 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     return MA000033_RATES[age] || 1.0;
   }
   if (age >= 21) return 1.0;
-  if (age < 16) return awardCode === 'MA000004' ? 0.45 : 0.40;
+  if (age < 16) return (awardCode === 'MA000004' || awardCode === 'MA000002') ? 0.45 : 0.40;
   return JUNIOR_RATES_DEFAULT[age] || 1.0;
 }
 
@@ -380,7 +381,7 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.20)' : 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
-  if (multiplier === 1.5) return 'Sunday / time and a half (×1.5)';
+  if (multiplier === 1.5) return dayType === 'saturday' ? 'Saturday afternoon — time and a half (×1.5)' : 'Sunday / time and a half (×1.5)';
   if (multiplier === 1.8) return 'Public holiday — casual (×1.80 of casual base = 225% of FT)';
   if (multiplier === 2.0) return dayType === 'sunday' ? 'Sunday — double time (×2.0)' : 'Double time (×2.0)';
   if (multiplier === 2.25) return 'Public holiday — double time and a quarter (×2.25)';
@@ -628,8 +629,8 @@ async function calculateEntitlements(input, db) {
           mealAllowanceLabel = `Meal allowance — working past 8pm (${mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`;
         }
       }
-    } else if (awardCode === 'MA000004' && overtimeCalc.mealAllowancesOwed > 0) {
-      // MA000004 (Retail): two-tier meal pricing.
+    } else if ((awardCode === 'MA000004' || awardCode === 'MA000002') && overtimeCalc.mealAllowancesOwed > 0) {
+      // MA000004 (Retail) / MA000002 (Clerks): two-tier meal pricing.
       // First meal at 'meal' rate ($23.59); subsequent meals at 'meal_second' rate ($21.39).
       mealAllowancesOwed = overtimeCalc.mealAllowancesOwed;
       const [firstR, secondR] = await Promise.all([

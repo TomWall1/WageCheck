@@ -21,6 +21,14 @@ const AWARDS = [
     badge: 'MA000022',
   },
   {
+    code: 'MA000002' as AwardCode,
+    name: 'Clerks—Private Sector Award 2020',
+    shortName: 'Clerks Award',
+    description: 'Covers clerical and administrative employees in the private sector, including data entry operators, call centre workers, receptionists, and office administrators.',
+    examples: 'Receptionists, data entry operators, call centre agents, payroll officers, administrative assistants, office managers, executive assistants',
+    badge: 'MA000002',
+  },
+  {
     code: 'MA000003' as AwardCode,
     name: 'Fast Food Industry Award 2020',
     shortName: 'Fast Food Award',

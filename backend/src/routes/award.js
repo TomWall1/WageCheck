@@ -4,7 +4,7 @@ const pool = require('../db/pool');
 const { calculateEntitlements } = require('../services/awardCalculator');
 const { classifyAndFetch } = require('../services/classificationEngine');
 
-const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119', 'MA000004', 'MA000094', 'MA000080', 'MA000081', 'MA000084', 'MA000022', 'MA000028', 'MA000033'];
+const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119', 'MA000004', 'MA000094', 'MA000080', 'MA000081', 'MA000084', 'MA000022', 'MA000028', 'MA000033', 'MA000002'];
 const DEFAULT_AWARD = 'MA000009';
 
 function getAwardCode(req) {

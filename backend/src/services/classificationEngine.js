@@ -427,6 +427,27 @@ const CLASSIFICATION_RULES_MA000033 = [
 ];
 
 /**
+ * MA000002 — Clerks—Private Sector Award 2020
+ * Two streams: clerical (levels 1–8) and call_centre (levels 1–2).
+ * Levels 1–8 correspond to Award L1Y1, L1Y2, L1Y3, L2Y1, L2Y2, L3, L4, L5.
+ * Call centre: level 1 = Principal Specialist, level 2 = Technical Specialist.
+ */
+const CLASSIFICATION_RULES_MA000002 = [
+  // Regular clerical / administrative
+  { conditions: { clerks_type: 'regular', clerks_level: 'l1y1' }, level: 1, stream: 'clerical', rationale: 'Clerical/Administrative Level 1 Year 1 — entry level, first year' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l1y2' }, level: 2, stream: 'clerical', rationale: 'Clerical/Administrative Level 1 Year 2 — routine tasks with more confidence' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l1y3' }, level: 3, stream: 'clerical', rationale: 'Clerical/Administrative Level 1 Year 3 — broadening duties or 3+ years at Level 1' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l2y1' }, level: 4, stream: 'clerical', rationale: 'Clerical/Administrative Level 2 Year 1 — more complex duties with greater independence' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l2y2' }, level: 5, stream: 'clerical', rationale: 'Clerical/Administrative Level 2 Year 2 — Level 2 with greater proficiency' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l3'   }, level: 6, stream: 'clerical', rationale: 'Clerical/Administrative Level 3 — senior, substantial experience, may supervise others' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l4'   }, level: 7, stream: 'clerical', rationale: 'Clerical/Administrative Level 4 — advanced specialist or team leader' },
+  { conditions: { clerks_type: 'regular', clerks_level: 'l5'   }, level: 8, stream: 'clerical', rationale: 'Clerical/Administrative Level 5 — most senior clerical level' },
+  // Call centre
+  { conditions: { clerks_type: 'call_centre', clerks_cc_role: 'principal' }, level: 1, stream: 'call_centre', rationale: 'Call Centre Principal Specialist — handles escalated/complex cases, coaches others' },
+  { conditions: { clerks_type: 'call_centre', clerks_cc_role: 'technical' }, level: 2, stream: 'call_centre', rationale: 'Call Centre Technical Specialist — highest technical expertise in the call centre' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -539,6 +560,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'nursery', rationale: 'Unable to determine classification — defaulting to Grade 1A. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000002') {
+    for (const rule of CLASSIFICATION_RULES_MA000002) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'clerical', rationale: 'Unable to determine classification — defaulting to Level 1 Year 1. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)

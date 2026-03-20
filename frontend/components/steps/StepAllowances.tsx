@@ -31,7 +31,7 @@ interface AllowanceQuestion {
   }>;
 }
 
-const VEHICLE_TYPES = new Set(['vehicle', 'vehicle_delivery', 'vehicle_car']);
+const VEHICLE_TYPES = new Set(['vehicle', 'vehicle_delivery', 'vehicle_car', 'vehicle_motorcycle']);
 
 const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   // ── MA000009 (Hospitality) ────────────────────────────────────────────────
@@ -66,7 +66,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'first_aid',
     primary: 'Do you hold a current first aid certificate?',
-    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080'],
+    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080', 'MA000002'],
     followUps: [
       {
         key: 'appointed',
@@ -115,7 +115,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     type: 'laundry_uniform',
     primary: 'Does your employer require you to wear a specific uniform and do you launder it yourself at your own cost?',
     primaryHelp: 'If your employer provides laundering or reimburses cleaning costs, no allowance applies.',
-    onlyForAward: ['MA000003', 'MA000004'],
+    onlyForAward: ['MA000003', 'MA000004', 'MA000002'],
   },
   {
     type: 'vehicle_delivery',
@@ -399,7 +399,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'vehicle_car',
     primary: 'Did you use your own car for work purposes during this period?',
-    onlyForAward: ['MA000022'],
+    onlyForAward: ['MA000022', 'MA000002'],
     followUps: [
       {
         key: 'km',
@@ -407,6 +407,27 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
         triggeredWhen: 'yes',
       },
     ],
+  },
+
+  // ── MA000002 (Clerks) ─────────────────────────────────────────────────────
+  {
+    type: 'vehicle_motorcycle',
+    primary: 'Did you use your own motorcycle for work purposes during this period?',
+    primaryHelp: 'A separate motorcycle allowance of $0.33/km applies if you used a motorcycle rather than (or as well as) a car.',
+    onlyForAward: ['MA000002'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel by motorcycle for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'protective_footwear',
+    primary: 'Does your employer require you to wear protective footwear that you had to purchase yourself?',
+    primaryHelp: 'If your employer requires specific protective footwear but does not supply it, you are entitled to reimbursement of the reasonable cost.',
+    onlyForAward: ['MA000002'],
   },
 
   // ── MA000028 (Horticulture) ───────────────────────────────────────────────
@@ -507,6 +528,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
   );
   const [followUpAnswers, setFollowUpAnswers] = useState<FollowUpAnswers>({});
   const [vehicleKm, setVehicleKm] = useState<string>('');
+  const [vehicleMotorcycleKm, setVehicleMotorcycleKm] = useState<string>('');
   const [leadingHandCount, setLeadingHandCount] = useState<string>('');
 
   useEffect(() => {
@@ -527,7 +549,14 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
         continue;
       }
 
-      // Vehicle-like questions (need km)
+      // Motorcycle uses its own km state (separate from car km)
+      if (q.type === 'vehicle_motorcycle') {
+        const km = parseFloat(vehicleMotorcycleKm);
+        result.push({ type: q.type, triggered: !isNaN(km) && km > 0, detail: vehicleMotorcycleKm });
+        continue;
+      }
+
+      // Other vehicle-like questions (need km)
       if (VEHICLE_TYPES.has(q.type)) {
         const km = parseFloat(vehicleKm);
         result.push({ type: q.type, triggered: !isNaN(km) && km > 0, detail: vehicleKm });
@@ -698,7 +727,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     }
 
     onAnswersChange(result);
-  }, [primaryAnswers, followUpAnswers, vehicleKm, leadingHandCount]);
+  }, [primaryAnswers, followUpAnswers, vehicleKm, vehicleMotorcycleKm, leadingHandCount]);
 
   function setPrimary(type: string, val: boolean) {
     setPrimaryAnswers(prev => ({ ...prev, [type]: val }));
@@ -956,6 +985,33 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
               {/* Follow-up questions */}
               {primary === true && q.followUps && q.followUps.map(fu => {
                 const fuKey = `${q.type}_${fu.key}`;
+
+                // Motorcycle km input (separate state)
+                if (q.type === 'vehicle_motorcycle' && fu.key === 'km') {
+                  return (
+                    <div key={fu.key} className="space-y-2 pl-4 border-l-2 border-brand-200">
+                      <p className="text-sm font-medium text-gray-900">{fu.question}</p>
+                      {fu.help && <p className="text-xs text-gray-500">{fu.help}</p>}
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min={0}
+                          step={0.1}
+                          placeholder="0"
+                          value={vehicleMotorcycleKm}
+                          onChange={e => setVehicleMotorcycleKm(e.target.value)}
+                          className="input-field max-w-[120px]"
+                        />
+                        <span className="text-gray-500 text-sm">km</span>
+                        {vehicleMotorcycleKm && parseFloat(vehicleMotorcycleKm) > 0 && info?.amount && (
+                          <span className="text-success-600 font-semibold text-sm">
+                            = {formatCurrency(parseFloat(vehicleMotorcycleKm) * info.amount)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
 
                 // Vehicle km input
                 if (VEHICLE_TYPES.has(q.type) && fu.key === 'km') {
