@@ -84,6 +84,7 @@ const STREAM_LABELS: Record<string, string> = {
   dancer: 'Company Dancer',
   touring_sl: 'Touring Sound & Lighting',
   exhibition: 'Exhibition',
+  horticulture: 'Horticulture',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
@@ -95,6 +96,7 @@ const STREAM_ORDER_MA000080 = ['general', 'exhibition'];
 const STREAM_ORDER_MA000081 = ['general', 'touring_sl', 'dancer'];
 const STREAM_ORDER_MA000084 = ['storeworker'];
 const STREAM_ORDER_MA000022 = ['cleaning'];
+const STREAM_ORDER_MA000028 = ['horticulture'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -105,7 +107,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isLivePerf = awardCode === 'MA000081';
   const isStorage = awardCode === 'MA000084';
   const isCleaning = awardCode === 'MA000022';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning;
+  const isHort = awardCode === 'MA000028';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -114,6 +117,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isLivePerf ? STREAM_ORDER_MA000081
     : isStorage ? STREAM_ORDER_MA000084
     : isCleaning ? STREAM_ORDER_MA000022
+    : isHort ? STREAM_ORDER_MA000028
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -123,6 +127,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isLivePerf ? 'Live Performance Award'
     : isStorage ? 'Storage Services & Wholesale Award'
     : isCleaning ? 'Cleaning Services Award'
+    : isHort ? 'Horticulture Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -271,9 +276,10 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000004: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000119: Record<number, number> = { 17: 0.60, 18: 0.70, 19: 0.85 };
     const JUNIOR_MA000094: Record<number, number> = { 17: 0.65, 18: 0.75, 19: 0.85 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isFitness ? JUNIOR_MA000094 : JUNIOR_DEFAULT;
+    const JUNIOR_MA000028: Record<number, number> = { 15: 0.50, 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : JUNIOR_DEFAULT;
     const juniorCutoff = (isRest || isFitness) ? 20 : 21;
-    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : isRetail ? 0.45 : 0.40)) : 1.0;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : isRetail ? 0.45 : isHort ? 0.50 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     const effectiveDate = result.classification.rate_effective_date
       ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -390,7 +396,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                           ? ' Grades run from Grade 1 (entry level, 3 sub-levels by tenure) to Grade 4 (most senior).'
                           : isCleaning
                             ? ' Levels run from Level 1 (general cleaning) to Level 3 (highly specialised or high-access work).'
-                            : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                            : isHort
+                              ? ' Levels run from Level 1 (entry level) to Level 5 (foreperson/specialist).'
+                              : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -414,7 +422,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                           ? ' It might say something like "Grade 1" or "Storeworker Grade 2".'
                           : isCleaning
                             ? ' It might say something like "Cleaning Service Employee Level 1" or "Level 2".'
-                            : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                            : isHort
+                              ? ' It might say something like "Horticultural Employee Level 2" or "Level 3".'
+                              : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button
