@@ -66,7 +66,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'first_aid',
     primary: 'Do you hold a current first aid certificate?',
-    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080', 'MA000002', 'MA000104'],
+    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080', 'MA000002', 'MA000104', 'MA000013'],
     followUps: [
       {
         key: 'appointed',
@@ -436,6 +436,30 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primary: 'Were you required to supervise or be responsible for 3 or more other employees?',
     primaryHelp: 'A leading hand allowance applies if management has directed you to be in charge of at least 3 employees. The rate depends on how many employees you are responsible for.',
     onlyForAward: ['MA000104'],
+  },
+
+  // ── MA000013 (Racing Clubs Events) ───────────────────────────────────────
+  {
+    type: 'wet_work_footwear',
+    primary: 'Were you required to work in rain or wet conditions at a race meeting, and your employer did not provide waterproof footwear?',
+    primaryHelp: 'An allowance of $6.00 per meeting (maximum $12.00/week) applies if you work in wet conditions and your employer does not supply waterproof footwear.',
+    onlyForAward: ['MA000013'],
+  },
+  {
+    type: 'supervisor_liquor',
+    primary: 'Were you directed to supervise or be responsible for bar attendants or cashiers during this period?',
+    primaryHelp: 'A liquor supervisor allowance of $25.64/week applies to casual liquor employees who are directed to supervise bar attendants or cashiers.',
+    onlyFor: ['casual'],
+    onlyForStream: ['liquor'],
+    onlyForAward: ['MA000013'],
+  },
+  {
+    type: 'late_finish_liquor',
+    primary: 'Did you finish work after 10:00 pm during this period?',
+    primaryHelp: 'A late finish allowance of $5.62 per engagement applies to casual liquor employees who finish work after 10:00 pm.',
+    onlyFor: ['casual'],
+    onlyForStream: ['liquor'],
+    onlyForAward: ['MA000013'],
   },
 
   // ── MA000028 (Horticulture) ───────────────────────────────────────────────

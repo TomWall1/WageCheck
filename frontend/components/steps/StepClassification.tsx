@@ -88,6 +88,9 @@ const STREAM_LABELS: Record<string, string> = {
   nursery: 'Nursery',
   clerical: 'Clerical / Administrative',
   call_centre: 'Call Centre',
+  racecourse: 'Racecourse Attendant',
+  official: 'Raceday Official',
+  liquor: 'Liquor Employee',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
@@ -103,6 +106,7 @@ const STREAM_ORDER_MA000028 = ['horticulture'];
 const STREAM_ORDER_MA000033 = ['nursery'];
 const STREAM_ORDER_MA000002 = ['clerical', 'call_centre'];
 const STREAM_ORDER_MA000104 = ['general'];
+const STREAM_ORDER_MA000013 = ['racecourse', 'official', 'liquor'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -117,7 +121,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isNursery = awardCode === 'MA000033';
   const isClerks = awardCode === 'MA000002';
   const isMisc = awardCode === 'MA000104';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc;
+  const isRacing = awardCode === 'MA000013';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -130,6 +135,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isNursery ? STREAM_ORDER_MA000033
     : isClerks ? STREAM_ORDER_MA000002
     : isMisc ? STREAM_ORDER_MA000104
+    : isRacing ? STREAM_ORDER_MA000013
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -143,6 +149,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isNursery ? 'Nursery Industry Award'
     : isClerks ? 'Clerks Award'
     : isMisc ? 'Miscellaneous Award'
+    : isRacing ? 'Racing Clubs Events Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -287,6 +294,46 @@ export default function StepClassification({ awardCode, employmentType, age, ans
 
   function renderRateBox(result: ClassificationResult) {
     if (!result.classification?.base_rate) return null;
+    const effectiveDate = result.classification.rate_effective_date
+      ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
+      : '1 July 2025';
+
+    // MA000013 liquor: all-in casual rate — no loading display, no junior multiplier
+    if (isRacing && result.classification.stream === 'liquor') {
+      return (
+        <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
+          <p className="text-sm text-gray-600">Your all-inclusive hourly rate (Mon–Sat)</p>
+          <p className="text-3xl font-bold text-gray-900">
+            ${Number(result.classification.base_rate).toFixed(2)}
+            <span className="text-lg text-gray-500 font-normal">/hr</span>
+          </p>
+          <p className="text-sm text-gray-500">All-inclusive rate — casual loading, leave, and weekend penalties are already built in (clause 12.9).</p>
+          <p className="text-xs text-gray-400">Effective {effectiveDate} — verify at fairwork.gov.au</p>
+        </div>
+      );
+    }
+
+    // MA000013 non-liquor under-19: junior rate = 75% of introductory FT rate ($24.28 × 0.75 = $18.21)
+    if (isRacing && age && age < 19) {
+      const INTRO_FT = 24.28;
+      const juniorFT = INTRO_FT * 0.75;
+      const displayRate = employmentType === 'casual' ? juniorFT * 1.25 : juniorFT;
+      return (
+        <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
+          <p className="text-sm text-gray-600">Your minimum hourly rate (under-19 junior)</p>
+          <p className="text-3xl font-bold text-gray-900">
+            ${displayRate.toFixed(2)}
+            <span className="text-lg text-gray-500 font-normal">/hr</span>
+          </p>
+          <p className="text-sm text-warning-700">Junior rate: 75% of the introductory rate (${INTRO_FT.toFixed(2)}/hr), regardless of your grade.</p>
+          {employmentType === 'casual' && (
+            <p className="text-sm text-gray-500">Includes the 25% casual loading (base: ${juniorFT.toFixed(2)}/hr + 25%).</p>
+          )}
+          <p className="text-xs text-gray-400">Effective {effectiveDate} — verify at fairwork.gov.au</p>
+        </div>
+      );
+    }
+
     const JUNIOR_DEFAULT: Record<number, number> = { 15: 0.40, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000004: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     const JUNIOR_MA000002: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
@@ -299,9 +346,6 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const juniorCutoff = (isRest || isFitness) ? 20 : isMisc ? 21 : 21;
     const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
-    const effectiveDate = result.classification.rate_effective_date
-      ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
-      : '1 July 2025';
     return (
       <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
         <p className="text-sm text-gray-600">Your minimum hourly rate</p>
@@ -330,7 +374,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-semibold uppercase tracking-wide text-brand-600 bg-brand-100 px-2 py-1 rounded">
-                {isFitness
+                {(isFitness || isRacing)
                   ? (STREAM_LABELS[result.stream || ''] || result.stream)
                   : `${STREAM_LABELS[result.stream || ''] || result.stream} — Level ${result.level}`}
               </span>
@@ -422,7 +466,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                   ? ' Levels run from Level 1 Year 1 (new starters) to Level 5 (office/section managers). Call centre specialists have separate Principal and Technical Specialist classifications.'
                                   : isMisc
                                     ? ' Levels run from Level 1 (new starters, under 3 months) to Level 4 (advanced trade or sub-professional). Levels 1–2 are based on tenure; Levels 3–4 require trade qualifications.'
-                                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                    : isRacing
+                                      ? ' Racecourse Attendants: Introductory + Grades 1–4. Raceday Officials: Grades 1–4. Liquor employees (bar, cashier, glass collectors) always work as casuals on all-inclusive rates.'
+                                      : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -454,7 +500,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                   ? ' It might say something like "Clerical Employee Level 2" or "Level 1 Year 3".'
                                   : isMisc
                                     ? ' It might say something like "Miscellaneous Award Level 2" or "Level 3 — trade qualified".'
-                                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                    : isRacing
+                                      ? ' It might say something like "Grade 2 Racecourse Attendant" or "Grade 3 Raceday Official".'
+                                      : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button
@@ -520,7 +568,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
               <optgroup key={group.stream} label={group.label}>
                 {group.items.map(cls => (
                   <option key={cls.id} value={cls.id}>
-                    {isFitness ? cls.title : `Level ${cls.level} — ${cls.title}`}
+                    {(isFitness || isRacing) ? cls.title : `Level ${cls.level} — ${cls.title}`}
                   </option>
                 ))}
               </optgroup>
@@ -532,7 +580,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
           <div className="card bg-gray-50 space-y-3">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wide text-brand-600 bg-brand-100 px-2 py-1 rounded">
-                {isFitness ? STREAM_LABELS[selectedCls.stream] : `${STREAM_LABELS[selectedCls.stream]} — Level ${selectedCls.level}`}
+                {(isFitness || isRacing) ? STREAM_LABELS[selectedCls.stream] : `${STREAM_LABELS[selectedCls.stream]} — Level ${selectedCls.level}`}
               </span>
             </div>
             <h3 className="font-bold text-gray-900">{selectedCls.title}</h3>

@@ -25,6 +25,8 @@ const SGC_RATE = 0.12; // 12%
 // MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000002:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100% (same as MA000004)
 // MA000104:            under 16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
+// MA000013:            no simple junior multiplier — non-liquor under-19 = 75% of introductory rate ($24.28);
+//                      handled as a special base-rate override in calculateEntitlements().
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -85,6 +87,12 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 16) return 0.368;
     const MA000104_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
     return MA000104_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000013') {
+    // MA000013: junior rate is NOT a simple multiplier of own classification rate.
+    // Non-liquor under-19 = 75% of introductory rate — handled in calculateEntitlements().
+    // Liquor employees use separate junior classification (level 2) with own base_hourly.
+    return 1.0;
   }
   if (age >= 21) return 1.0;
   if (age < 16) return (awardCode === 'MA000004' || awardCode === 'MA000002') ? 0.45 : 0.40;
@@ -383,6 +391,10 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (missedBreakPenalty) return `Double time (×2.0) — meal break not taken after 5 hours`;
   if (addition_per_hour === 4.22) return `Night work loading (midnight–7am) +$4.22/hr`;
   if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
+  if (addition_per_hour === 12.3)  return 'Sunday — liquor bar (+$12.30/hr above Mon–Sat all-in rate)';
+  if (addition_per_hour === 9.86)  return 'Sunday — junior liquor (+$9.86/hr above Mon–Sat all-in rate)';
+  if (addition_per_hour === 24.13) return 'Public holiday — liquor bar (+$24.13/hr above Mon–Sat all-in rate)';
+  if (addition_per_hour === 19.32) return 'Public holiday — junior liquor (+$19.32/hr above Mon–Sat all-in rate)';
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
   if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
   if (multiplier === 1.12) return 'Outside span of hours — Sunday (×1.12 of casual base)';
@@ -390,7 +402,9 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (multiplier === 1.16) return dayType === 'weekday' ? 'Evening/night loading — casual (7pm–7am, ×1.16 of casual base)' : 'Saturday penalty — casual (×1.16 of casual base = ×1.45 of FT)';
   if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening/night loading (7pm–7am, ×1.20)' : 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
+  if (multiplier === 1.24) return 'Night cleaning (11pm–7am, casual) — ×1.24 of casual base';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
+  if (multiplier === 1.6) return dayType === 'sunday' ? 'Casual Sunday (×1.60 of casual base = 200% FT base)' : 'Rate ×1.60';
   if (multiplier === 1.5) return dayType === 'saturday' ? 'Saturday afternoon — time and a half (×1.5)' : 'Sunday / time and a half (×1.5)';
   if (multiplier === 1.8) return 'Public holiday — casual (×1.80 of casual base = 225% of FT)';
   if (multiplier === 2.0) return dayType === 'sunday' ? 'Sunday — double time (×2.0)' : 'Double time (×2.0)';
@@ -444,6 +458,30 @@ async function calculateEntitlements(input, db) {
       effectiveBaseRate = parseFloat(((ftBase + allPurposeAllowancesPerHour) * 1.25).toFixed(4));
     } else {
       effectiveBaseRate = parseFloat((rawBaseRate + allPurposeAllowancesPerHour).toFixed(4));
+    }
+  }
+
+  // MA000013: junior rates for non-liquor employees (clause 17.2)
+  // Under-19 pay = 75% of the introductory rate ($24.28 FT), regardless of classification grade.
+  // This overrides effectiveBaseRate before baseHourlyRate is calculated.
+  if (awardCode === 'MA000013' && age && age < 19) {
+    const streamResult = await db.query('SELECT stream FROM classifications WHERE id = $1', [classificationId]);
+    const classStream = streamResult.rows[0]?.stream;
+    if (classStream !== 'liquor') {
+      const introResult = await db.query(`
+        SELECT pr.rate_amount FROM pay_rates pr
+        JOIN classifications c ON c.id = pr.classification_id
+        WHERE pr.award_code = $1 AND c.level = 0 AND c.stream = 'racecourse'
+          AND pr.employment_type = 'full_time' AND pr.rate_type = 'base_hourly'
+        ORDER BY pr.effective_date DESC LIMIT 1
+      `, [awardCode]);
+      if (introResult.rows.length) {
+        const introFTRate = parseFloat(introResult.rows[0].rate_amount);
+        const juniorFTRate = parseFloat((introFTRate * 0.75).toFixed(4));
+        effectiveBaseRate = employmentType === 'casual'
+          ? parseFloat((juniorFTRate * 1.25).toFixed(4))
+          : juniorFTRate;
+      }
     }
   }
 
@@ -501,7 +539,32 @@ async function calculateEntitlements(input, db) {
     `SELECT * FROM overtime_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC`,
     [awardCode, employmentType]
   );
-  const overtimeRates = overtimeResult.rows;
+  let overtimeRates = overtimeResult.rows;
+
+  // MA000013: liquor employees use all-in Mon–Sat rates (clause 12.9).
+  // Sunday and PH additions are flat dollar amounts on top, not multipliers.
+  // Casual OT for liquor = ×1.75/×2.25 of Mon–Sat rate (not the ×1.40/×1.80 seeded for non-liquor).
+  if (awardCode === 'MA000013' && employmentType === 'casual') {
+    const clsResult = await db.query('SELECT stream, level FROM classifications WHERE id = $1', [classificationId]);
+    const clsStream = clsResult.rows[0]?.stream;
+    const clsLevel = parseInt(clsResult.rows[0]?.level || 1);
+    if (clsStream === 'liquor') {
+      const isAdult = clsLevel === 1;
+      const sundayAdd = isAdult ? 12.30 : 9.86;
+      const phAdd    = isAdult ? 24.13 : 19.32;
+      penaltyRates = penaltyRates.map(r => {
+        if (r.day_type === 'sunday')         return { ...r, multiplier: '1.0', addition_per_hour: String(sundayAdd) };
+        if (r.day_type === 'public_holiday') return { ...r, multiplier: '1.0', addition_per_hour: String(phAdd) };
+        return r;
+      });
+      overtimeRates = overtimeRates.map(r => {
+        const m = parseFloat(r.multiplier);
+        if (m === 1.40) return { ...r, multiplier: '1.75' };
+        if (m === 1.80) return { ...r, multiplier: '2.25' };
+        return r;
+      });
+    }
+  }
 
   const breakResult = await db.query(`SELECT * FROM break_entitlements WHERE award_code = $1`, [awardCode]);
   const breakEntitlements = breakResult.rows;

@@ -571,6 +571,34 @@ function classify(answers, awardCode = 'MA000009') {
     return { level: 1, stream: 'clerical', rationale: 'Unable to determine classification — defaulting to Level 1 Year 1. Please review.', confidence: 'low' };
   }
 
+  if (awardCode === 'MA000013') {
+    // Liquor employees
+    if (answers.race_worker_type === 'liquor') {
+      const isJunior = answers.race_liquor_age === 'junior';
+      return {
+        level: isJunior ? 2 : 1,
+        stream: 'liquor',
+        rationale: isJunior
+          ? 'Junior glass collector (under 19) — casual all-in rate'
+          : 'Adult bar attendant, cashier or glass collector — casual all-in rate',
+        confidence: 'high',
+      };
+    }
+    // Raceday officials
+    if (answers.race_dept === 'official' && answers.race_ro_grade) {
+      const level = { grade1: 1, grade2: 2, grade3: 3, grade4: 4 }[answers.race_ro_grade];
+      const labels = { 1: 'Grade 1 Raceday Official', 2: 'Grade 2 Raceday Official', 3: 'Grade 3 Raceday Official', 4: 'Grade 4 Raceday Official' };
+      if (level) return { level, stream: 'official', rationale: labels[level], confidence: 'high' };
+    }
+    // Racecourse attendants
+    if (answers.race_ra_grade) {
+      const level = { introductory: 0, grade1: 1, grade2: 2, grade3: 3, grade4: 4 }[answers.race_ra_grade];
+      const labels = { 0: 'Introductory Level Employee', 1: 'Grade 1 Racecourse Attendant', 2: 'Grade 2 Racecourse Attendant', 3: 'Grade 3 Racecourse Attendant', 4: 'Grade 4 Racecourse Attendant' };
+      if (level !== undefined) return { level, stream: 'racecourse', rationale: labels[level], confidence: 'high' };
+    }
+    return { level: 0, stream: 'racecourse', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
+  }
+
   if (awardCode === 'MA000104') {
     // MA000104 — Miscellaneous Award 2020
     // Simple single-question dispatch: misc_level maps directly to level 1–4.

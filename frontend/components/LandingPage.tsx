@@ -108,6 +108,14 @@ const AWARDS = [
     examples: 'Nursery hands, propagators, retail nursery staff, plant growers, horticulture assistants, leading hands, forepersons',
     badge: 'MA000033',
   },
+  {
+    code: 'MA000013' as AwardCode,
+    name: 'Racing Clubs Events Award 2020',
+    shortName: 'Racing Clubs Events Award',
+    description: 'Covers employees engaged by horse and greyhound racing clubs at race meetings. Three employee groups: Racecourse Attendants (gate, parking, ticketing, crowd control), Raceday Officials (announcer, inspector, judge, racecaller), and casual Liquor employees (bar, cashier, glass collection). Liquor employees receive all-inclusive hourly rates.',
+    examples: 'Gate attendants, ushers, ticket sellers, barrier attendants, farriers, racecallers, judges, bar attendants, glass collectors',
+    badge: 'MA000013',
+  },
 ];
 
 interface Props {
