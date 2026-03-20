@@ -100,18 +100,21 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
     return sum + info.amount;
   }, 0);
 
+  // Grand total = wages + allowances
+  const grandTotal = summary.totalPayOwed + totalAllowancesOwed;
+
   const paidAllowances = parseFloat(allowancesPaid.replace(/[^0-9.]/g, ''));
   const hasPaidAllowances = !isNaN(paidAllowances) && paidAllowances >= 0 && allowancesPaid !== '';
   const allowanceDiff = hasPaidAllowances ? totalAllowancesOwed - paidAllowances : null;
 
   const sgcPct = `${(summary.sgcRate * 100).toFixed(0)}%`;
 
-  // OTE allowances: shift/role allowances that attract super (not expense reimbursements)
-  const OTE_ALLOWANCE_TYPES = new Set([
-    'broken_shift', 'first_aid',
-    'leading_hand_1to5', 'leading_hand_6to10', 'leading_hand_11plus',
-  ]);
-  const oteAllowances = triggeredAllowances.filter(a => OTE_ALLOWANCE_TYPES.has(a.type));
+  // OTE allowances: role/compensatory allowances (per_hour, per_shift) attract super.
+  // Expense reimbursements (per_meal, per_km, reimbursement) do not.
+  const oteAllowances = triggeredAllowances.filter(a => {
+    const info = allowanceInfoByType[a.type];
+    return info && (info.amount_type === 'per_hour' || info.amount_type === 'per_shift');
+  });
   const oteAllowancesTotal = oteAllowances.reduce((sum, a) => {
     const info = allowanceInfoByType[a.type];
     if (!info || !info.amount) return sum;
@@ -128,18 +131,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   function handleDownloadReport() {
     const dateGenerated = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
     const clsTitle = classificationResult?.classification?.title || `Level ${classificationResult?.level}`;
-    const triggeredAllowanceLines = triggeredAllowances.map(a => {
-      const info = allowanceInfoByType[a.type];
-      if (!info) return '';
-      const superApplies = a.type === 'split_shift' || a.type === 'first_aid';
-      let amtStr = '';
-      if (a.detail && info.amount_type === 'per_km' && info.amount) {
-        amtStr = formatCurrency(info.amount * parseFloat(a.detail || '0'));
-      } else if (info.amount) {
-        amtStr = `${formatCurrency(info.amount)} ${info.per_unit?.replace(/_/g, ' ') || ''}`;
-      }
-      return `<tr><td>${info.name}</td><td>${amtStr}</td><td>${superApplies ? 'Yes' : 'No (expense reimbursement)'}</td></tr>`;
-    }).join('');
+    // (allowances are now inline in the Pay Summary table)
 
     // Build per-shift breakdown HTML
     const shiftBreakdownHtml = shifts.map(shift => {
@@ -239,7 +231,20 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td style="text-align:right">${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
   ${summary.overtimePay > 0 ? `<tr><td>Overtime loading</td><td style="text-align:right">${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
   ${summary.mealAllowancePay > 0 ? `<tr><td>Meal allowance for overtime (${summary.mealAllowancesOwed} × ${formatCurrency(summary.mealAllowanceRate)})</td><td style="text-align:right">${formatCurrency(summary.mealAllowancePay)}</td><td>No (expense allowance)</td></tr>` : ''}
-  <tr class="total-row"><td>Total wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>
+  ${totalAllowancesOwed > 0 ? `<tr class="total-row"><td>Total wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>` : ''}
+  ${triggeredAllowances.map(a => {
+    const info = allowanceInfoByType[a.type];
+    if (!info) return '';
+    const isOte = info.amount_type === 'per_hour' || info.amount_type === 'per_shift';
+    let amtStr = '';
+    if (a.detail && info.amount_type === 'per_km' && info.amount) {
+      amtStr = formatCurrency(info.amount * parseFloat(a.detail || '0'));
+    } else if (info.amount) {
+      amtStr = formatCurrency(info.amount);
+    }
+    return `<tr><td>${info.name}</td><td style="text-align:right">${amtStr}</td><td>${isOte ? `Yes (${sgcPct})` : 'No (expense reimbursement)'}</td></tr>`;
+  }).join('')}
+  <tr class="total-row"><td>${totalAllowancesOwed > 0 ? 'Total owed (incl. allowances)' : 'Total wages owed'}</td><td style="text-align:right">${formatCurrency(grandTotal)}</td><td>—</td></tr>
 </table>
 
 <h2>Pay Breakdown by Shift</h2>
@@ -253,13 +258,6 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   ${shiftBreakdownHtml}
 </table>
 
-${triggeredAllowances.length > 0 ? `
-<h2>Allowances (additional, not included in wages total)</h2>
-<table>
-  <tr><th>Allowance</th><th>Amount</th><th>Super applies?</th></tr>
-  ${triggeredAllowanceLines}
-</table>
-` : ''}
 
 <h2>Superannuation Breakdown</h2>
 <table>
@@ -380,7 +378,10 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           </div>
           <div className="bg-white rounded-lg p-3">
             <p className="text-xs text-gray-500">Total owed (award minimum)</p>
-            <p className="text-2xl font-bold text-brand-700">{formatCurrency(summary.totalPayOwed)}</p>
+            <p className="text-2xl font-bold text-brand-700">{formatCurrency(grandTotal)}</p>
+            {totalAllowancesOwed > 0 && (
+              <p className="text-xs text-gray-400 mt-0.5">incl. {formatCurrency(totalAllowancesOwed)} allowances</p>
+            )}
           </div>
         </div>
 
@@ -417,9 +418,36 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
             </div>
           )}
           <div className="flex justify-between py-1 font-bold text-base">
-            <span>Total wages owed</span>
+            <span>{totalAllowancesOwed > 0 ? 'Total wages owed' : 'Total owed'}</span>
             <span>{formatCurrency(summary.totalPayOwed)}</span>
           </div>
+          {triggeredAllowances.length > 0 && (
+            <>
+              {triggeredAllowances.map(a => {
+                const info = allowanceInfoByType[a.type];
+                if (!info) return null;
+                let amt = 0;
+                if (a.detail && info.amount_type === 'per_km' && info.amount) {
+                  amt = info.amount * parseFloat(a.detail || '0');
+                } else if (info.amount) {
+                  amt = info.amount;
+                }
+                if (!amt) return null;
+                return (
+                  <div key={a.type} className="flex justify-between py-1 border-b border-brand-100">
+                    <span className="text-gray-600">{info.name}</span>
+                    <span className="font-medium">{formatCurrency(amt)}</span>
+                  </div>
+                );
+              })}
+              {totalAllowancesOwed > 0 && (
+                <div className="flex justify-between py-1 pt-1 font-bold text-base border-t-2 border-brand-200">
+                  <span>Total owed (incl. allowances)</span>
+                  <span className="text-brand-700">{formatCurrency(grandTotal)}</span>
+                </div>
+              )}
+            </>
+          )}
           {summary.superAmount !== undefined && (
             <div className="flex justify-between py-1 border-t border-brand-200 pt-2 mt-1">
               <span className="text-gray-600 text-sm">Super owed (on top of wages)</span>
@@ -489,9 +517,9 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
       {/* Allowances */}
       {triggeredAllowances.length > 0 && (
         <div className="card space-y-3">
-          <h3 className="font-bold text-gray-900">Allowances owed (additional)</h3>
+          <h3 className="font-bold text-gray-900">Allowances owed</h3>
           <p className="text-sm text-gray-500">
-            These are on top of your shift pay and are not included in the wages total above.
+            Included in the total above. Applicable role-based allowances also attract superannuation.
           </p>
           <table className="w-full text-sm">
             <thead>
@@ -669,7 +697,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           {/* Wages */}
           <div className="space-y-1">
             <label className="text-sm font-semibold text-gray-900">
-              Wages received
+              Wages received (excl. allowances)
               <span className="text-gray-400 font-normal ml-2">(award minimum: {formatCurrency(summary.totalPayOwed)})</span>
             </label>
             <div className="flex items-center gap-2">
