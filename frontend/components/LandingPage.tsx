@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AwardCode } from '@/types';
 
 const AWARDS = [
@@ -125,6 +125,7 @@ interface Props {
 export default function LandingPage({ onSelect }: Props) {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<AwardCode | null>(null);
+  const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const filtered = AWARDS.filter(a => {
     if (!query) return true;
@@ -136,6 +137,23 @@ export default function LandingPage({ onSelect }: Props) {
       a.examples.toLowerCase().includes(q)
     );
   });
+
+  // Group filtered awards by first letter of shortName (sorted)
+  const grouped: Record<string, typeof AWARDS> = {};
+  for (const award of filtered) {
+    const letter = award.shortName[0].toUpperCase();
+    if (!grouped[letter]) grouped[letter] = [];
+    grouped[letter].push(award);
+  }
+  const letters = Object.keys(grouped).sort();
+
+  // All letters present in the full (unfiltered) list
+  const allLetters = Array.from(new Set(AWARDS.map(a => a.shortName[0].toUpperCase()))).sort();
+
+  function scrollToLetter(letter: string) {
+    const el = letterRefs.current[letter];
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   function handleStart() {
     if (selected) onSelect(selected);
@@ -173,8 +191,8 @@ export default function LandingPage({ onSelect }: Props) {
       }}>
         <p style={{ fontWeight: 600, color: 'var(--accent-dark)', marginBottom: '4px' }}>Not sure which award covers you?</p>
         <p style={{ color: 'var(--secondary)', lineHeight: 1.6 }}>
-          Under the <strong>Fair Work Act 2009</strong>, your employer is legally required to tell you
-          which award and classification you are paid under. Check your payslip, letter of engagement, or contract.
+          Unsure of your Award and classification? Ask your employer, they should tell you.
+          Alternatively check your payslip, letter of engagement, or contract.
           If you&apos;re still unsure,{' '}
           <a
             href="https://www.fairwork.gov.au/employment-conditions/awards/find-my-award"
@@ -230,92 +248,150 @@ export default function LandingPage({ onSelect }: Props) {
           />
         </div>
 
+        {/* A-Z letter nav */}
+        {!query && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+            {allLetters.map(letter => (
+              <button
+                key={letter}
+                onClick={() => scrollToLetter(letter)}
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  border: '1.5px solid var(--border-strong)',
+                  borderRadius: '6px',
+                  background: '#FFFFFF',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--primary)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.12s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--primary-light)';
+                  e.currentTarget.style.borderColor = 'var(--primary)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = '#FFFFFF';
+                  e.currentTarget.style.borderColor = 'var(--border-strong)';
+                }}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filtered.length === 0 && (
             <p style={{ fontSize: '13px', color: 'var(--secondary-muted)', textAlign: 'center', padding: '20px 0' }}>
               No awards match your search. Try &quot;hospitality&quot; or &quot;fast food&quot;.
             </p>
           )}
-          {filtered.map(award => {
-            const isSelected = selected === award.code;
-            return (
-              <div key={award.code}>
-                <button
-                  onClick={() => setSelected(award.code)}
-                  onMouseEnter={e => {
-                    if (!isSelected) {
-                      e.currentTarget.style.borderColor = 'var(--primary-mid)';
-                      e.currentTarget.style.background = 'var(--primary-light)';
-                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,77,64,0.12)';
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isSelected) {
-                      e.currentTarget.style.borderColor = 'rgba(38,50,56,0.28)';
-                      e.currentTarget.style.background = '#FFFFFF';
-                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(38,50,56,0.08)';
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '16px 18px',
-                    background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
-                    border: isSelected
-                      ? '1.5px solid var(--primary)'
-                      : '1.5px solid rgba(38,50,56,0.28)',
-                    borderLeft: isSelected ? '4px solid var(--primary)' : '4px solid rgba(38,50,56,0.12)',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                    display: 'block',
-                    boxShadow: isSelected
-                      ? '0 2px 8px rgba(0,77,64,0.15)'
-                      : '0 1px 3px rgba(38,50,56,0.08)',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    {isSelected && (
-                      <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
-                        <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    )}
-                    <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--secondary)' }}>
-                      {award.shortName}
-                    </span>
-                    <span style={{
-                      fontSize: '10px',
-                      fontFamily: 'monospace',
-                      color: '#FFFFFF',
-                      background: 'var(--primary)',
-                      padding: '2px 7px',
-                      borderRadius: '3px',
-                      letterSpacing: '0.03em',
-                      fontWeight: 600,
-                    }}>
-                      {award.badge}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: '13.5px', color: '#263238', lineHeight: 1.55, margin: 0 }}>
-                    {award.description}
-                  </p>
-                  <p style={{ fontSize: '12.5px', color: '#37474F', marginTop: '5px', margin: '6px 0 0 0', lineHeight: 1.5 }}>
-                    <span style={{ fontWeight: 600, color: '#263238' }}>Covers: </span>{award.examples}
-                  </p>
-                </button>
-
-                {isSelected && (
-                  <button
-                    onClick={handleStart}
-                    className="btn-primary w-full"
-                    style={{ padding: '13px 24px', fontSize: '15px', marginTop: '8px' }}
-                  >
-                    Continue — {award.shortName} →
-                  </button>
-                )}
+          {letters.map(letter => (
+            <div key={letter}>
+              {/* Letter anchor */}
+              <div
+                ref={el => { letterRefs.current[letter] = el; }}
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'var(--secondary-muted)',
+                  padding: '8px 0 4px',
+                  scrollMarginTop: '80px',
+                }}
+              >
+                {letter}
               </div>
-            );
-          })}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {grouped[letter].map(award => {
+                  const isSelected = selected === award.code;
+                  return (
+                    <div key={award.code}>
+                      <button
+                        onClick={() => setSelected(award.code)}
+                        onMouseEnter={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.borderColor = 'var(--primary-mid)';
+                            e.currentTarget.style.background = 'var(--primary-light)';
+                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,77,64,0.12)';
+                          }
+                        }}
+                        onMouseLeave={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.borderColor = 'rgba(38,50,56,0.28)';
+                            e.currentTarget.style.background = '#FFFFFF';
+                            e.currentTarget.style.boxShadow = '0 1px 3px rgba(38,50,56,0.08)';
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '16px 18px',
+                          background: isSelected ? 'var(--primary-light)' : '#FFFFFF',
+                          border: isSelected
+                            ? '1.5px solid var(--primary)'
+                            : '1.5px solid rgba(38,50,56,0.28)',
+                          borderLeft: isSelected ? '4px solid var(--primary)' : '4px solid rgba(38,50,56,0.12)',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                          display: 'block',
+                          boxShadow: isSelected
+                            ? '0 2px 8px rgba(0,77,64,0.15)'
+                            : '0 1px 3px rgba(38,50,56,0.08)',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                          {isSelected && (
+                            <svg width="14" height="11" viewBox="0 0 14 11" fill="none" style={{ flexShrink: 0 }}>
+                              <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                          <span style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--secondary)' }}>
+                            {award.shortName}
+                          </span>
+                          <span style={{
+                            fontSize: '10px',
+                            fontFamily: 'monospace',
+                            color: '#FFFFFF',
+                            background: 'var(--primary)',
+                            padding: '2px 7px',
+                            borderRadius: '3px',
+                            letterSpacing: '0.03em',
+                            fontWeight: 600,
+                          }}>
+                            {award.badge}
+                          </span>
+                        </div>
+                        <p style={{ fontSize: '13.5px', color: '#263238', lineHeight: 1.55, margin: 0 }}>
+                          {award.description}
+                        </p>
+                        <p style={{ fontSize: '12.5px', color: '#37474F', marginTop: '5px', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+                          <span style={{ fontWeight: 600, color: '#263238' }}>Covers: </span>{award.examples}
+                        </p>
+                      </button>
+
+                      {isSelected && (
+                        <button
+                          onClick={handleStart}
+                          className="btn-primary w-full"
+                          style={{ padding: '13px 24px', fontSize: '15px', marginTop: '8px' }}
+                        >
+                          Continue — {award.shortName} →
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

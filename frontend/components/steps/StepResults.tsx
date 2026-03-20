@@ -181,7 +181,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WageCheck Pay Entitlements Estimate</title>
+<title>Review My Pay — Pay Entitlements Estimate</title>
 <style>
   body { font-family: Arial, Helvetica, sans-serif; color: #111; margin: 40px; font-size: 13px; line-height: 1.5; }
   h1 { font-size: 22px; color: #1e40af; margin-bottom: 4px; }
@@ -201,8 +201,8 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
 </style>
 </head>
 <body>
-<h1>WageCheck — Pay Entitlements Estimate</h1>
-<p class="meta">Generated: ${dateGenerated} &nbsp;|&nbsp; wagecheck.vercel.app</p>
+<h1>Review My Pay — Pay Entitlements Estimate</h1>
+<p class="meta">Generated: ${dateGenerated} &nbsp;|&nbsp; reviewmypay.com</p>
 
 <div class="disclaimer">
   <strong>IMPORTANT — READ BEFORE USING THIS DOCUMENT</strong><br>
@@ -326,11 +326,11 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
 </ol>
 
 <div class="footer">
-  <strong>Disclaimer:</strong> This document is an automated estimate based solely on information entered by the user into WageCheck (wagecheck.vercel.app).
+  <strong>Disclaimer:</strong> This document is an automated estimate based solely on information entered by the user into Review My Pay (reviewmypay.com).
   It is not legal advice and is subject to the accuracy of the inputs provided. The ${awardLabel} rates shown are effective 1 July 2025.
   Enterprise agreements, IFAs, or annualised salary arrangements may override award rates.
   Always verify your entitlements at fairwork.gov.au or seek advice from a qualified employment lawyer or the Fair Work Ombudsman before taking action.
-  WageCheck accepts no liability for any decisions made based on this report.
+  Review My Pay accepts no liability for any decisions made based on this report.
 </div>
 
 <script>window.print();</script>

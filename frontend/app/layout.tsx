@@ -3,7 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'WageCheck — Know Your Workplace Rights',
+  title: 'Review My Pay — Know Your Workplace Rights',
   description:
     'Find out what you should be paid under your Fair Work modern award. Free, plain-English, and built for workers — not lawyers.',
   keywords: ['wage theft', 'hospitality award', 'retail award', 'fitness award', 'fair work', 'underpaid', 'Australia', 'award wages'],
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           color: 'var(--accent-dark)',
           letterSpacing: '0.01em',
         }}>
-          General information only — not legal advice. If you think you&apos;ve been underpaid,{' '}
+          General information only — not legal advice. First speak with your employer, then if unsuccessful{' '}
           <a
             href="https://www.fairwork.gov.au"
             target="_blank"
@@ -48,36 +48,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           or an employment lawyer.
         </div>
 
-        {/* Header — typographic wordmark */}
+        {/* Header */}
         <header style={{
           background: '#ffffff',
           borderBottom: '1.5px solid var(--border)',
           padding: '14px 16px',
         }}>
-          <div className="max-w-2xl mx-auto flex items-baseline justify-between">
-            <a href="/" style={{ textDecoration: 'none' }}>
-              <span style={{
-                fontFamily: 'Fraunces, Georgia, serif',
-                fontWeight: 500,
-                fontSize: '1.375rem',
-                color: 'var(--secondary)',
-                letterSpacing: '-0.03em',
-              }}>
-                WageCheck
-              </span>
+          <div className="max-w-2xl mx-auto flex items-center justify-between">
+            <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+              <svg width="160" height="52" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                <text x="100" y="30" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="20" fill="#263238">REVIEW MY</text>
+                <line x1="70" y1="42" x2="130" y2="42" stroke="#FFB74D" strokeWidth="3" strokeLinecap="round"/>
+                <text x="100" y="70" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="900" fontSize="32" fill="#FFB74D">PAY</text>
+              </svg>
             </a>
-            <div style={{
-              fontSize: '11px',
-              color: 'var(--secondary-muted)',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              fontWeight: 500,
-              textAlign: 'right',
-              lineHeight: 1.5,
-            }}>
-              <div>Fair Work Modern Awards</div>
-              <div style={{ opacity: 0.65 }}>Effective 1 July 2025</div>
-            </div>
+            <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <a href="/resources" style={{ fontSize: '13px', color: 'var(--secondary-muted)', textDecoration: 'none', fontWeight: 500 }}
+                onMouseOver={(e) => (e.currentTarget.style.color = 'var(--secondary)')}
+                onMouseOut={(e) => (e.currentTarget.style.color = 'var(--secondary-muted)')}>
+                Resources
+              </a>
+              <a href="/contact" style={{ fontSize: '13px', color: 'var(--secondary-muted)', textDecoration: 'none', fontWeight: 500 }}
+                onMouseOver={(e) => (e.currentTarget.style.color = 'var(--secondary)')}
+                onMouseOut={(e) => (e.currentTarget.style.color = 'var(--secondary-muted)')}>
+                Contact
+              </a>
+            </nav>
           </div>
         </header>
 
@@ -111,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               . Rates are updated each July.
             </p>
             <p style={{ opacity: 0.75 }}>
-              WageCheck does not store any personal information. Your shift details exist only in your browser session.
+              Review My Pay does not store any personal information. Your shift details exist only in your browser session.
               {' '}·{' '}
               Fair Work Ombudsman: 13 13 94
             </p>
