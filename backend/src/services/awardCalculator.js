@@ -22,6 +22,7 @@ const SGC_RATE = 0.12; // 12%
 // MA000084:            under 16=40%, 16=50%, 17=60%, 18=70%, 19+=100%
 // MA000022:            shopping trolley collection only: under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
 // MA000028:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
+// MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -67,6 +68,13 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 16) return 0.50;
     const MA000028_RATES = { 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
     return MA000028_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000033') {
+    // MA000033 junior rates: <16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
+    if (age >= 20) return 1.0;
+    if (age < 16) return 0.50;
+    const MA000033_RATES = { 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
+    return MA000033_RATES[age] || 1.0;
   }
   if (age >= 21) return 1.0;
   if (age < 16) return awardCode === 'MA000004' ? 0.45 : 0.40;

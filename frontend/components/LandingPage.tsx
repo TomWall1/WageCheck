@@ -84,6 +84,14 @@ const AWARDS = [
     examples: 'Fruit pickers, vegetable harvesters, nursery hands, tractor/machinery operators, spray operators, forepersons, orchard workers',
     badge: 'MA000028',
   },
+  {
+    code: 'MA000033' as AwardCode,
+    name: 'Nursery Industry Award 2020',
+    shortName: 'Nursery Industry Award',
+    description: 'Covers employees working in the nursery industry, including the growing, propagation, sale, and distribution of nursery stock, plants, seeds, and related products.',
+    examples: 'Nursery hands, propagators, retail nursery staff, plant growers, horticulture assistants, leading hands, forepersons',
+    badge: 'MA000033',
+  },
 ];
 
 interface Props {

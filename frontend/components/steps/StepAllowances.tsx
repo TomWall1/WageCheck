@@ -430,6 +430,21 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000028'],
   },
 
+  // ── MA000033 (Nursery Industry) ───────────────────────────────────────────
+  // All-purpose allowances: added to base rate BEFORE casual loading, penalties, and overtime.
+  {
+    type: 'nursery_first_aid',
+    primary: 'Has your employer appointed you as the person responsible for first aid?',
+    primaryHelp: 'A first aid allowance of $0.47/hr applies if your employer has designated you as the first aider AND you hold a current first aid certificate. This is an all-purpose allowance — it affects your base rate and is included in overtime and penalty calculations.',
+    onlyForAward: ['MA000033'],
+  },
+  {
+    type: 'nursery_meal',
+    primary: 'Were you required to work overtime and not provided with a meal break?',
+    primaryHelp: 'A meal allowance of $17.19 applies for each overtime meal break not provided by your employer.',
+    onlyForAward: ['MA000033'],
+  },
+
   // ── MA000084 (Storage Services and Wholesale) ─────────────────────────────
   {
     type: 'cold_work',
@@ -545,6 +560,18 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       // Horticulture first aid — all-purpose $0.33/hr
       if (q.type === 'hort_first_aid') {
         result.push({ type: 'first_aid', triggered: true });
+        continue;
+      }
+
+      // Nursery first aid — all-purpose $0.47/hr
+      if (q.type === 'nursery_first_aid') {
+        result.push({ type: 'first_aid', triggered: true });
+        continue;
+      }
+
+      // Nursery meal allowance
+      if (q.type === 'nursery_meal') {
+        result.push({ type: 'meal', triggered: true });
         continue;
       }
 
@@ -749,6 +776,8 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     }
     if (qType === 'hort_first_aid') return 'first_aid';
     if (qType === 'hort_wet_work') return 'wet_work';
+    if (qType === 'nursery_first_aid') return 'first_aid';
+    if (qType === 'nursery_meal') return 'meal';
     if (qType === 'meal_travelling') {
       return followUpAnswers['meal_travelling_five_or_more_days'] === 'yes' ? 'meal_travelling_weekly' : 'meal_travelling';
     }
@@ -805,6 +834,8 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       (a.type === 'leading_hand_21plus' && q.type === 'leading_hand_cleaning') ||
       (a.type === 'first_aid' && q.type === 'hort_first_aid') ||
       (a.type === 'wet_work' && q.type === 'hort_wet_work') ||
+      (a.type === 'first_aid' && q.type === 'nursery_first_aid') ||
+      (a.type === 'meal' && q.type === 'nursery_meal') ||
       (a.type === 'leading_hand_2to6' && q.type === 'hort_leading_hand') ||
       (a.type === 'leading_hand_7to10' && q.type === 'hort_leading_hand') ||
       (a.type === 'leading_hand_11to20' && q.type === 'hort_leading_hand') ||

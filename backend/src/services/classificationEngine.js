@@ -411,6 +411,22 @@ const CLASSIFICATION_RULES_MA000028 = [
 ];
 
 /**
+ * MA000033 — Nursery Industry Award 2020
+ * Classifications: Grade 1A (L1), Grade 1B (L2), Grade 2 (L3), Grade 3 (L4),
+ * Grade 4 (L5), Grade 5 (L6), Grade 6 (L7). All stream='nursery'.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000033 = [
+  { conditions: { nursery_experience: 'entry' }, level: 1, stream: 'nursery', rationale: 'Grade 1A — new to the nursery industry, performing basic tasks under supervision (Level 1)' },
+  { conditions: { nursery_experience: 'basic' }, level: 2, stream: 'nursery', rationale: 'Grade 1B — has basic skills, performs routine nursery tasks with some supervision (Level 2)' },
+  { conditions: { nursery_experience: 'experienced', nursery_grade: 'grade2' }, level: 3, stream: 'nursery', rationale: 'Grade 2 — proficient in range of nursery tasks, works independently (Level 3)' },
+  { conditions: { nursery_experience: 'experienced', nursery_grade: 'grade3' }, level: 4, stream: 'nursery', rationale: 'Grade 3 — advanced nursery skills, applies chemicals, operates equipment (Level 4)' },
+  { conditions: { nursery_experience: 'experienced', nursery_grade: 'grade4' }, level: 5, stream: 'nursery', rationale: 'Grade 4 — highly skilled, may supervise others or manage programs (Level 5)' },
+  { conditions: { nursery_experience: 'experienced', nursery_grade: 'grade5' }, level: 6, stream: 'nursery', rationale: 'Grade 5 — specialist or leading hand, Certificate III equivalent (Level 6)' },
+  { conditions: { nursery_experience: 'experienced', nursery_grade: 'grade6' }, level: 7, stream: 'nursery', rationale: 'Grade 6 — foreperson or technical specialist, Certificate IV equivalent (Level 7)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -514,6 +530,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'horticulture', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000033') {
+    for (const rule of CLASSIFICATION_RULES_MA000033) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'nursery', rationale: 'Unable to determine classification — defaulting to Grade 1A. Please review.', confidence: 'low' };
   }
 
   // MA000009 (and default)
