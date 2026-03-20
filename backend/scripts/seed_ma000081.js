@@ -429,6 +429,8 @@ async function seed() {
       'dancer:7': { ft: 37.85, casual: 47.31 },
     };
 
+    // Delete pay_rates before classifications to respect the FK constraint
+    await client.query('DELETE FROM pay_rates WHERE award_code = $1', [AWARD_CODE]);
     await client.query('DELETE FROM classifications WHERE award_code = $1', [AWARD_CODE]);
     for (const c of classifications) {
       await client.query(`
@@ -453,8 +455,6 @@ async function seed() {
       'SELECT id, level, stream FROM classifications WHERE award_code = $1',
       [AWARD_CODE]
     );
-
-    await client.query('DELETE FROM pay_rates WHERE award_code = $1', [AWARD_CODE]);
     for (const cls of classResult.rows) {
       const key = `${cls.stream}:${cls.level}`;
       const rates = BASE_RATES[key];
@@ -610,6 +610,14 @@ async function seed() {
       { employment_type: 'full_time',  threshold_hours: 41,   period: 'weekly', multiplier: 2.00, description: 'Weekly overtime — after 41 hours (×2.00)' },
       { employment_type: 'part_time',  threshold_hours: 38,   period: 'weekly', multiplier: 1.50, description: 'Part-time weekly overtime — first 3 hours over 38 (×1.50)' },
       { employment_type: 'part_time',  threshold_hours: 41,   period: 'weekly', multiplier: 2.00, description: 'Part-time weekly overtime — after 41 hours (×2.00)' },
+      // Casual — daily
+      // Verified: casual L1 OT = $30.35 × 1.40 = $42.49 = FT_base × 1.75 = FT OT rate × 1.25
+      // Casual loading (25%) applies to all OT hours. FT ×1.50 → casual ×1.40; FT ×2.00 → casual ×1.80.
+      { employment_type: 'casual', threshold_hours: 8.0,  period: 'daily', multiplier: 1.40, description: 'Casual daily overtime — after 8 hours (×1.40 of casual base = 175% of FT base)' },
+      { employment_type: 'casual', threshold_hours: 12.0, period: 'daily', multiplier: 1.80, description: 'Casual daily overtime — after 12 hours (×1.80 of casual base = 225% of FT base)' },
+      // Casual — weekly
+      { employment_type: 'casual', threshold_hours: 38,   period: 'weekly', multiplier: 1.40, description: 'Casual weekly overtime — first 3 hours over 38 (×1.40 of casual base)' },
+      { employment_type: 'casual', threshold_hours: 41,   period: 'weekly', multiplier: 1.80, description: 'Casual weekly overtime — after 41 hours (×1.80 of casual base)' },
     ];
 
     await client.query('DELETE FROM overtime_rates WHERE award_code = $1', [AWARD_CODE]);
@@ -845,6 +853,12 @@ async function seed() {
       },
     ];
 
+    // Delete answers before questions to respect the FK constraint
+    await client.query(`
+      DELETE FROM classification_answers WHERE question_id IN (
+        SELECT id FROM classification_questions WHERE award_code = $1
+      )
+    `, [AWARD_CODE]);
     await client.query('DELETE FROM classification_questions WHERE award_code = $1', [AWARD_CODE]);
     for (const q of questions) {
       const qResult = await client.query(`
@@ -878,7 +892,7 @@ async function seed() {
     await client.query('COMMIT');
     console.log('\n✅ MA000081 seed complete');
     console.log('   25 classifications (9 general + 9 touring_sl + 7 dancer)');
-    console.log('   12 penalty rules, 8 overtime rules');
+    console.log('   12 penalty rules, 12 overtime rules (FT/PT/casual daily + weekly)');
     console.log(`   ${allowances.length} allowances, 2 break rules, 4 classification questions`);
   } catch (err) {
     await client.query('ROLLBACK');
