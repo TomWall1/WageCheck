@@ -63,16 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </svg>
             </a>
             <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <a href="/resources" style={{ fontSize: '13px', color: 'var(--secondary-muted)', textDecoration: 'none', fontWeight: 500 }}
-                onMouseOver={(e) => (e.currentTarget.style.color = 'var(--secondary)')}
-                onMouseOut={(e) => (e.currentTarget.style.color = 'var(--secondary-muted)')}>
-                Resources
-              </a>
-              <a href="/contact" style={{ fontSize: '13px', color: 'var(--secondary-muted)', textDecoration: 'none', fontWeight: 500 }}
-                onMouseOver={(e) => (e.currentTarget.style.color = 'var(--secondary)')}
-                onMouseOut={(e) => (e.currentTarget.style.color = 'var(--secondary-muted)')}>
-                Contact
-              </a>
+              <a href="/resources" className="nav-link">Resources</a>
+              <a href="/contact" className="nav-link">Contact</a>
             </nav>
           </div>
         </header>

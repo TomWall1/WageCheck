@@ -222,4 +222,16 @@
     border-left: 4px solid #EF4444;
     border-radius: 8px;
   }
+
+  .nav-link {
+    font-size: 13px;
+    color: var(--secondary-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--secondary);
+  }
 }
