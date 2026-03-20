@@ -571,6 +571,22 @@ function classify(answers, awardCode = 'MA000009') {
     return { level: 1, stream: 'clerical', rationale: 'Unable to determine classification — defaulting to Level 1 Year 1. Please review.', confidence: 'low' };
   }
 
+  if (awardCode === 'MA000104') {
+    // MA000104 — Miscellaneous Award 2020
+    // Simple single-question dispatch: misc_level maps directly to level 1–4.
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4 }[answers.misc_level];
+    if (level) {
+      const rationales = {
+        l1: 'Employed less than 3 months, no trade qualifications required (Level 1)',
+        l2: 'Employed 3 months or more, no trade qualifications required (Level 2)',
+        l3: 'Trade qualified, carrying out duties requiring that qualification (Level 3)',
+        l4: 'Advanced trade qualifications or sub-professional role (Level 4)',
+      };
+      return { level, stream: 'general', rationale: rationales[answers.misc_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'general', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
   // MA000009 (and default)
   const stream = answers.stream;
   if (!stream) {

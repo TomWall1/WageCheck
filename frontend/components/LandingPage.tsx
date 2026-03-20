@@ -61,6 +61,14 @@ const AWARDS = [
     badge: 'MA000081',
   },
   {
+    code: 'MA000104' as AwardCode,
+    name: 'Miscellaneous Award 2020',
+    shortName: 'Miscellaneous Award',
+    description: 'The award of last resort — covers employees who are not covered by any other modern award. Does not cover managers or specialist professionals (accountants, lawyers, HR, IT specialists, marketing, finance, or PR).',
+    examples: 'Workers in any non-award-covered role who are not managers or specialist professionals',
+    badge: 'MA000104',
+  },
+  {
     code: 'MA000119' as AwardCode,
     name: 'Restaurant Industry Award 2020',
     shortName: 'Restaurant Award',

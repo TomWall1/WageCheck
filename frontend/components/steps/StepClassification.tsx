@@ -102,6 +102,7 @@ const STREAM_ORDER_MA000022 = ['cleaning'];
 const STREAM_ORDER_MA000028 = ['horticulture'];
 const STREAM_ORDER_MA000033 = ['nursery'];
 const STREAM_ORDER_MA000002 = ['clerical', 'call_centre'];
+const STREAM_ORDER_MA000104 = ['general'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -115,7 +116,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isHort = awardCode === 'MA000028';
   const isNursery = awardCode === 'MA000033';
   const isClerks = awardCode === 'MA000002';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks;
+  const isMisc = awardCode === 'MA000104';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -127,6 +129,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isHort ? STREAM_ORDER_MA000028
     : isNursery ? STREAM_ORDER_MA000033
     : isClerks ? STREAM_ORDER_MA000002
+    : isMisc ? STREAM_ORDER_MA000104
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -139,6 +142,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isHort ? 'Horticulture Award'
     : isNursery ? 'Nursery Industry Award'
     : isClerks ? 'Clerks Award'
+    : isMisc ? 'Miscellaneous Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -290,9 +294,10 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000094: Record<number, number> = { 17: 0.65, 18: 0.75, 19: 0.85 };
     const JUNIOR_MA000028: Record<number, number> = { 15: 0.50, 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
     const JUNIOR_MA000033: Record<number, number> = { 15: 0.50, 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : JUNIOR_DEFAULT;
-    const juniorCutoff = (isRest || isFitness) ? 20 : 21;
-    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : 0.40)) : 1.0;
+    const JUNIOR_MA000104: Record<number, number> = { 15: 0.368, 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : JUNIOR_DEFAULT;
+    const juniorCutoff = (isRest || isFitness) ? 20 : isMisc ? 21 : 21;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     const effectiveDate = result.classification.rate_effective_date
       ? new Date(result.classification.rate_effective_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -415,7 +420,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                 ? ' Levels run from Grade 1A (entry level) to Grade 6 (foreperson/specialist). Grades 1A and 1B cover entry-level workers; Grades 2–6 reflect increasing skill and responsibility.'
                                 : isClerks
                                   ? ' Levels run from Level 1 Year 1 (new starters) to Level 5 (office/section managers). Call centre specialists have separate Principal and Technical Specialist classifications.'
-                                  : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                  : isMisc
+                                    ? ' Levels run from Level 1 (new starters, under 3 months) to Level 4 (advanced trade or sub-professional). Levels 1–2 are based on tenure; Levels 3–4 require trade qualifications.'
+                                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -445,7 +452,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                 ? ' It might say something like "Nursery Industry Employee Grade 1B" or "Grade 3".'
                                 : isClerks
                                   ? ' It might say something like "Clerical Employee Level 2" or "Level 1 Year 3".'
-                                  : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                  : isMisc
+                                    ? ' It might say something like "Miscellaneous Award Level 2" or "Level 3 — trade qualified".'
+                                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

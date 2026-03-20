@@ -24,6 +24,7 @@ const SGC_RATE = 0.12; // 12%
 // MA000028:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000002:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100% (same as MA000004)
+// MA000104:            under 16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
 const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -76,6 +77,14 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 16) return 0.50;
     const MA000033_RATES = { 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
     return MA000033_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000104') {
+    // MA000104 junior rates (Miscellaneous Award Schedule A):
+    // <16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.368;
+    const MA000104_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    return MA000104_RATES[age] || 1.0;
   }
   if (age >= 21) return 1.0;
   if (age < 16) return (awardCode === 'MA000004' || awardCode === 'MA000002') ? 0.45 : 0.40;
@@ -378,7 +387,8 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
   if (multiplier === 1.12) return 'Outside span of hours — Sunday (×1.12 of casual base)';
   if (multiplier === 1.15) return dayType === 'weekday' ? 'Afternoon/night shift Mon–Fri (×1.15)' : 'Late night loading (midnight–6am, ×1.15)';
-  if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.20)' : 'Saturday penalty (×1.2)';
+  if (multiplier === 1.16) return dayType === 'weekday' ? 'Evening/night loading — casual (7pm–7am, ×1.16 of casual base)' : 'Saturday penalty — casual (×1.16 of casual base = ×1.45 of FT)';
+  if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening/night loading (7pm–7am, ×1.20)' : 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
   if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
   if (multiplier === 1.5) return dayType === 'saturday' ? 'Saturday afternoon — time and a half (×1.5)' : 'Sunday / time and a half (×1.5)';
@@ -629,7 +639,7 @@ async function calculateEntitlements(input, db) {
           mealAllowanceLabel = `Meal allowance — working past 8pm (${mealAllowancesOwed} × $${mealAllowanceRate.toFixed(2)}) — expense, not OTE`;
         }
       }
-    } else if ((awardCode === 'MA000004' || awardCode === 'MA000002') && overtimeCalc.mealAllowancesOwed > 0) {
+    } else if ((awardCode === 'MA000004' || awardCode === 'MA000002' || awardCode === 'MA000104') && overtimeCalc.mealAllowancesOwed > 0) {
       // MA000004 (Retail) / MA000002 (Clerks): two-tier meal pricing.
       // First meal at 'meal' rate ($23.59); subsequent meals at 'meal_second' rate ($21.39).
       mealAllowancesOwed = overtimeCalc.mealAllowancesOwed;

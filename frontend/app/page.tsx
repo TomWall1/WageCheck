@@ -97,6 +97,7 @@ export default function HomePage() {
     MA000028: 'Horticulture Award',
     MA000033: 'Nursery Industry Award',
     MA000002: 'Clerks Award',
+    MA000104: 'Miscellaneous Award',
   };
   const awardName = AWARD_NAMES[awardCode] ?? awardCode;
 

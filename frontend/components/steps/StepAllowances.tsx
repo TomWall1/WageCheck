@@ -66,7 +66,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'first_aid',
     primary: 'Do you hold a current first aid certificate?',
-    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080', 'MA000002'],
+    onlyForAward: ['MA000009', 'MA000004', 'MA000094', 'MA000080', 'MA000002', 'MA000104'],
     followUps: [
       {
         key: 'appointed',
@@ -181,7 +181,7 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   {
     type: 'vehicle_car',
     primary: 'Did you use your own car or motorcycle for work purposes during this period?',
-    onlyForAward: ['MA000094'],
+    onlyForAward: ['MA000094', 'MA000104'],
     followUps: [
       {
         key: 'km',
@@ -430,6 +430,14 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000002'],
   },
 
+  // ── MA000104 (Miscellaneous) ──────────────────────────────────────────────
+  {
+    type: 'leading_hand_misc',
+    primary: 'Were you required to supervise or be responsible for 3 or more other employees?',
+    primaryHelp: 'A leading hand allowance applies if management has directed you to be in charge of at least 3 employees. The rate depends on how many employees you are responsible for.',
+    onlyForAward: ['MA000104'],
+  },
+
   // ── MA000028 (Horticulture) ───────────────────────────────────────────────
   // All-purpose allowances: added to base rate BEFORE casual loading, penalties, and overtime.
   {
@@ -570,6 +578,17 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
         let lhType = 'leading_hand_1to5';
         if (count >= 11) lhType = 'leading_hand_11plus';
         else if (count >= 6) lhType = 'leading_hand_6to10';
+        result.push({ type: lhType, triggered: true, detail: leadingHandCount });
+        continue;
+      }
+
+      // Miscellaneous Award leading hand — 3 tiers (3-10, 11-20, 21+)
+      if (q.type === 'leading_hand_misc') {
+        const count = parseInt(leadingHandCount);
+        if (!leadingHandCount || isNaN(count) || count < 3) continue;
+        let lhType = 'leading_hand_3to10';
+        if (count > 20) lhType = 'leading_hand_over20';
+        else if (count > 10) lhType = 'leading_hand_11to20';
         result.push({ type: lhType, triggered: true, detail: leadingHandCount });
         continue;
       }
@@ -803,6 +822,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       if (count > 6) return 'leading_hand_7to10';
       return 'leading_hand_2to6';
     }
+    if (qType === 'leading_hand_misc') {
+      const count = parseInt(leadingHandCount);
+      if (count > 20) return 'leading_hand_over20';
+      if (count > 10) return 'leading_hand_11to20';
+      return 'leading_hand_3to10';
+    }
     if (qType === 'hort_first_aid') return 'first_aid';
     if (qType === 'hort_wet_work') return 'wet_work';
     if (qType === 'nursery_first_aid') return 'first_aid';
@@ -824,6 +849,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
     if (VEHICLE_TYPES.has(q.type)) return true;
     if (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning') return !!leadingHandCount && parseInt(leadingHandCount) > 0;
     if (q.type === 'hort_leading_hand') return !!leadingHandCount && parseInt(leadingHandCount) >= 2;
+    if (q.type === 'leading_hand_misc') return !!leadingHandCount && parseInt(leadingHandCount) >= 3;
     if (!q.followUps) return true;
     return q.followUps.every(fu => followUpAnswers[`${q.type}_${fu.key}`]);
   });
@@ -868,7 +894,10 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
       (a.type === 'leading_hand_2to6' && q.type === 'hort_leading_hand') ||
       (a.type === 'leading_hand_7to10' && q.type === 'hort_leading_hand') ||
       (a.type === 'leading_hand_11to20' && q.type === 'hort_leading_hand') ||
-      (a.type === 'leading_hand_21plus' && q.type === 'hort_leading_hand')
+      (a.type === 'leading_hand_21plus' && q.type === 'hort_leading_hand') ||
+      (a.type === 'leading_hand_3to10' && q.type === 'leading_hand_misc') ||
+      (a.type === 'leading_hand_11to20' && q.type === 'leading_hand_misc') ||
+      (a.type === 'leading_hand_over20' && q.type === 'leading_hand_misc')
     );
   }
 
@@ -944,16 +973,19 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
               </div>
 
               {/* Leading hand count input */}
-              {primary === true && (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning' || q.type === 'hort_leading_hand') && (
+              {primary === true && (q.type === 'leading_hand' || q.type === 'leading_hand_cleaning' || q.type === 'hort_leading_hand' || q.type === 'leading_hand_misc') && (
                 <div className="space-y-2 pl-4 border-l-2 border-brand-200">
                   <p className="text-sm font-medium text-gray-900">How many employees are you responsible for supervising?</p>
                   {q.type === 'hort_leading_hand' && (
                     <p className="text-xs text-gray-500">The leading hand allowance applies when you are in charge of 2 or more employees.</p>
                   )}
+                  {q.type === 'leading_hand_misc' && (
+                    <p className="text-xs text-gray-500">The allowance applies when you are directed to be in charge of 3 or more employees.</p>
+                  )}
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
-                      min={q.type === 'hort_leading_hand' ? 2 : 1}
+                      min={q.type === 'hort_leading_hand' ? 2 : q.type === 'leading_hand_misc' ? 3 : 1}
                       step={1}
                       placeholder="0"
                       value={leadingHandCount}
@@ -974,6 +1006,11 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                           : parseInt(leadingHandCount) > 6 ? 'All-purpose rate: $0.88/hr (7–10 employees)'
                           : parseInt(leadingHandCount) >= 2 ? 'All-purpose rate: $0.76/hr (2–6 employees)'
                           : 'Allowance applies from 2 employees')
+                        : q.type === 'leading_hand_misc'
+                        ? (parseInt(leadingHandCount) > 20 ? 'Rate: $88.68/week (more than 20 employees)'
+                          : parseInt(leadingHandCount) > 10 ? 'Rate: $69.45/week (11–20 employees)'
+                          : parseInt(leadingHandCount) >= 3 ? 'Rate: $47.01/week (3–10 employees)'
+                          : 'Allowance applies from 3 employees')
                         : (parseInt(leadingHandCount) >= 11 ? 'Rate: leading hand 11+ employees'
                           : parseInt(leadingHandCount) >= 6 ? 'Rate: leading hand 6–10 employees'
                           : 'Rate: leading hand 1–5 employees')}
