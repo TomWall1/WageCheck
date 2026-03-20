@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://wagecheck.com.au', 'https://www.wagecheck.com.au', /\.vercel\.app$/]
+    ? ['https://reviewmypay.com', 'https://www.reviewmypay.com', /\.vercel\.app$/]
     : 'http://localhost:3000',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'x-admin-secret'],
