@@ -99,6 +99,11 @@ export default function HomePage() {
     MA000002: 'Clerks Award',
     MA000104: 'Miscellaneous Award',
     MA000013: 'Racing Clubs Events Award',
+    MA000030: 'Market & Social Research Award',
+    MA000063: 'Passenger Vehicle Transportation Award',
+    MA000095: 'Car Parking Award',
+    MA000105: 'Funeral Industry Award',
+    MA000101: 'Gardening & Landscaping Award',
   };
   const awardName = AWARD_NAMES[awardCode] ?? awardCode;
 

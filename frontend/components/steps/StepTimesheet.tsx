@@ -556,7 +556,9 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {shift.segments.map((seg: any, j: number) => {
-                      const effectiveRate = seg.baseRate * seg.multiplier + (seg.addition_per_hour || 0);
+                      const effectiveRate = seg.effectiveRate !== null && seg.effectiveRate !== undefined
+                        ? seg.effectiveRate
+                        : seg.baseRate * seg.multiplier + (seg.addition_per_hour || 0);
                       return (
                         <tr key={j} className={clsx(seg.missedBreakPenalty && 'bg-warning-50')}>
                           <td className="py-1.5 text-gray-700">
@@ -569,7 +571,7 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
                             )}
                           </td>
                           <td className="py-1.5 text-right text-gray-600 text-sm">
-                            {formatHours(seg.hours)} × {formatCurrency(effectiveRate)}/hr
+                            {effectiveRate ? `${formatHours(seg.hours)} × ${formatCurrency(effectiveRate)}/hr` : formatHours(seg.hours)}
                           </td>
                           <td className="py-1.5 text-right font-medium">{formatCurrency(seg.pay)}</td>
                         </tr>

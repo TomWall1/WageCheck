@@ -54,7 +54,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
       .reduce((sum, a) => {
         const info = allowanceInfoByType[a.type];
         if (!info || !info.is_all_purpose || !info.amount || info.amount_type !== 'per_hour') return sum;
-        return sum + info.amount;
+        return sum + Number(info.amount);
       }, 0);
     setAllPurposePerHour(total);
     if (total <= 0) { setRefinedResult(null); return; }
@@ -96,8 +96,8 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const totalAllowancesOwed = triggeredAllowances.reduce((sum, a) => {
     const info = allowanceInfoByType[a.type];
     if (!info || !info.amount) return sum;
-    if (a.detail && info.amount_type === 'per_km') return sum + info.amount * parseFloat(a.detail || '0');
-    return sum + info.amount;
+    if (a.detail && info.amount_type === 'per_km') return sum + Number(info.amount) * parseFloat(a.detail || '0');
+    return sum + Number(info.amount);
   }, 0);
 
   // Grand total = wages + allowances
@@ -118,7 +118,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const oteAllowancesTotal = oteAllowances.reduce((sum, a) => {
     const info = allowanceInfoByType[a.type];
     if (!info || !info.amount) return sum;
-    return sum + info.amount;
+    return sum + Number(info.amount);
   }, 0);
   const oteAllowancesSuperAmount = Math.round(oteAllowancesTotal * summary.sgcRate * 100) / 100;
   const totalSuperAmount = Math.round((summary.superAmount + oteAllowancesSuperAmount) * 100) / 100;
@@ -139,7 +139,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
         `<tr>
           <td>${seg.rateLabel || seg.dayType}</td>
           <td style="text-align:right">${seg.hours.toFixed(2)}</td>
-          <td style="text-align:right">${formatCurrency(seg.effectiveRate)}/hr</td>
+          <td style="text-align:right">${seg.effectiveRate !== null ? formatCurrency(seg.effectiveRate) + '/hr' : '—'}</td>
           <td style="text-align:right">${formatCurrency(seg.pay)}</td>
         </tr>`
       ).join('');
@@ -175,7 +175,17 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
               ? 'Amusement, Events and Recreation Award 2020 [MA000080]'
               : state.awardCode === 'MA000081'
                 ? 'Live Performance Award 2020 [MA000081]'
-                : 'Hospitality Industry (General) Award 2020 [MA000009]';
+                : state.awardCode === 'MA000030'
+                  ? 'Market and Social Research Award 2020 [MA000030]'
+                  : state.awardCode === 'MA000063'
+                    ? 'Passenger Vehicle Transportation Award 2020 [MA000063]'
+                    : state.awardCode === 'MA000095'
+                      ? 'Car Parking Award 2020 [MA000095]'
+                      : state.awardCode === 'MA000105'
+                        ? 'Funeral Industry Award 2020 [MA000105]'
+                        : state.awardCode === 'MA000101'
+                          ? 'Gardening and Landscaping Services Award 2020 [MA000101]'
+                          : 'Hospitality Industry (General) Award 2020 [MA000009]';
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -238,9 +248,9 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
     const isOte = info.amount_type === 'per_hour' || info.amount_type === 'per_shift';
     let amtStr = '';
     if (a.detail && info.amount_type === 'per_km' && info.amount) {
-      amtStr = formatCurrency(info.amount * parseFloat(a.detail || '0'));
+      amtStr = formatCurrency(Number(info.amount) * parseFloat(a.detail || '0'));
     } else if (info.amount) {
-      amtStr = formatCurrency(info.amount);
+      amtStr = formatCurrency(Number(info.amount));
     }
     return `<tr><td>${info.name}</td><td style="text-align:right">${amtStr}</td><td>${isOte ? `Yes (${sgcPct})` : 'No (expense reimbursement)'}</td></tr>`;
   }).join('')}
@@ -422,9 +432,9 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
             if (!info) return null;
             let amt = 0;
             if (a.detail && info.amount_type === 'per_km' && info.amount) {
-              amt = info.amount * parseFloat(a.detail || '0');
+              amt = Number(info.amount) * parseFloat(a.detail || '0');
             } else if (info.amount) {
-              amt = info.amount;
+              amt = Number(info.amount);
             }
             if (!amt) return null;
             return (
@@ -483,7 +493,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
                       <tr key={gi}>
                         <td className="px-2 py-1.5 text-gray-700">{seg.rateLabel}</td>
                         <td className="px-2 py-1.5 text-right text-gray-600">{seg.hours.toFixed(2)}</td>
-                        <td className="px-2 py-1.5 text-right text-gray-600">{formatCurrency(seg.effectiveRate)}/hr</td>
+                        <td className="px-2 py-1.5 text-right text-gray-600">{seg.effectiveRate !== null ? `${formatCurrency(seg.effectiveRate)}/hr` : '—'}</td>
                         <td className="px-2 py-1.5 text-right font-medium text-gray-900">{formatCurrency(seg.pay)}</td>
                       </tr>
                     ))}
@@ -526,7 +536,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
                 if (a.detail && info.amount_type === 'per_km' && info.amount) {
                   amtDisplay = formatCurrency(info.amount * parseFloat(a.detail || '0'));
                 } else if (info.amount) {
-                  amtDisplay = `${formatCurrency(info.amount)} ${info.per_unit?.replace(/_/g, ' ') || ''}`;
+                  amtDisplay = `${formatCurrency(Number(info.amount))} ${info.per_unit?.replace(/_/g, ' ') || ''}`;
                 }
                 return (
                   <tr key={a.type}>
@@ -601,12 +611,12 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
                       <td className="px-2 py-2 text-gray-700">{info.name} (OTE allowance)</td>
                       <td className="px-2 py-2 text-right text-gray-400">—</td>
                       <td className="px-2 py-2 text-right text-gray-400">—</td>
-                      <td className="px-2 py-2 text-right text-gray-900 font-medium">{formatCurrency(info.amount)}</td>
+                      <td className="px-2 py-2 text-right text-gray-900 font-medium">{formatCurrency(Number(info.amount))}</td>
                       <td className="px-2 py-2 text-right">
                         <span className="text-success-700 font-semibold">{sgcPct}</span>
                       </td>
                       <td className="px-2 py-2 text-right font-medium">
-                        <span className="text-success-700">{formatCurrency(info.amount * summary.sgcRate)}</span>
+                        <span className="text-success-700">{formatCurrency(Number(info.amount) * summary.sgcRate)}</span>
                       </td>
                     </tr>
                   );

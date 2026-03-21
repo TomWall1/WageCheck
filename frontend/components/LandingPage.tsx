@@ -116,6 +116,46 @@ const AWARDS = [
     examples: 'Gate attendants, ushers, ticket sellers, barrier attendants, farriers, racecallers, judges, bar attendants, glass collectors',
     badge: 'MA000013',
   },
+  {
+    code: 'MA000030' as AwardCode,
+    name: 'Market and Social Research Award 2020',
+    shortName: 'Market & Social Research Award',
+    description: 'Covers employees in the market and social research industry, including telephone and face-to-face interviewers, data coders, field supervisors, research assistants, and research managers.',
+    examples: 'Telephone interviewers, face-to-face interviewers, survey coders, data editors, team leaders, field supervisors, research assistants, research officers, research managers',
+    badge: 'MA000030',
+  },
+  {
+    code: 'MA000063' as AwardCode,
+    name: 'Passenger Vehicle Transportation Award 2020',
+    shortName: 'Passenger Vehicle Transportation Award',
+    description: 'Covers drivers and operators in the passenger vehicle transport industry, including taxis, hire cars, rideshare, buses, coaches, limousines, and charter vehicles.',
+    examples: 'Taxi drivers, rideshare drivers, bus drivers, coach drivers, limousine drivers, hire car drivers, fleet coordinators, dispatch operators',
+    badge: 'MA000063',
+  },
+  {
+    code: 'MA000095' as AwardCode,
+    name: 'Car Parking Award 2020',
+    shortName: 'Car Parking Award',
+    description: 'Covers employees working in car parking facilities, including attendants, cashiers, and supervisors at commercial car parks, parking stations, and valet parking operations.',
+    examples: 'Car parking attendants, parking officers, cashiers, valet parking staff, car park supervisors',
+    badge: 'MA000095',
+  },
+  {
+    code: 'MA000105' as AwardCode,
+    name: 'Funeral Industry Award 2020',
+    shortName: 'Funeral Industry Award',
+    description: 'Covers employees in the funeral industry, including funeral homes, crematoria, and cemetery operations. Includes funeral directors, embalmers, drivers, and support staff.',
+    examples: 'Funeral directors, embalmers, hearse drivers, mortuary attendants, funeral arrangers, cemetery workers, crematorium operators',
+    badge: 'MA000105',
+  },
+  {
+    code: 'MA000101' as AwardCode,
+    name: 'Gardening and Landscaping Services Award 2020',
+    shortName: 'Gardening & Landscaping Award',
+    description: 'Covers employees in gardening, landscaping, and related services, including lawn mowing, garden maintenance, landscape construction, and arboriculture.',
+    examples: 'Gardeners, landscapers, lawn mowing operators, arborists, irrigation technicians, landscape labourers, garden maintenance workers',
+    badge: 'MA000101',
+  },
 ];
 
 interface Props {

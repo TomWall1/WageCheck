@@ -91,6 +91,11 @@ const STREAM_LABELS: Record<string, string> = {
   racecourse: 'Racecourse Attendant',
   official: 'Raceday Official',
   liquor: 'Liquor Employee',
+  research: 'Market & Social Research',
+  transport: 'Passenger Vehicle Transport',
+  car_parking: 'Car Parking',
+  funeral: 'Funeral Industry',
+  landscaping: 'Gardening & Landscaping',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
@@ -107,6 +112,11 @@ const STREAM_ORDER_MA000033 = ['nursery'];
 const STREAM_ORDER_MA000002 = ['clerical', 'call_centre'];
 const STREAM_ORDER_MA000104 = ['general'];
 const STREAM_ORDER_MA000013 = ['racecourse', 'official', 'liquor'];
+const STREAM_ORDER_MA000030 = ['research'];
+const STREAM_ORDER_MA000063 = ['transport'];
+const STREAM_ORDER_MA000095 = ['car_parking'];
+const STREAM_ORDER_MA000105 = ['funeral'];
+const STREAM_ORDER_MA000101 = ['landscaping'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -122,7 +132,12 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isClerks = awardCode === 'MA000002';
   const isMisc = awardCode === 'MA000104';
   const isRacing = awardCode === 'MA000013';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing;
+  const isResearch = awardCode === 'MA000030';
+  const isTransport = awardCode === 'MA000063';
+  const isCarParking = awardCode === 'MA000095';
+  const isFuneral = awardCode === 'MA000105';
+  const isLandscaping = awardCode === 'MA000101';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -136,6 +151,11 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isClerks ? STREAM_ORDER_MA000002
     : isMisc ? STREAM_ORDER_MA000104
     : isRacing ? STREAM_ORDER_MA000013
+    : isResearch ? STREAM_ORDER_MA000030
+    : isTransport ? STREAM_ORDER_MA000063
+    : isCarParking ? STREAM_ORDER_MA000095
+    : isFuneral ? STREAM_ORDER_MA000105
+    : isLandscaping ? STREAM_ORDER_MA000101
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -150,6 +170,11 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isClerks ? 'Clerks Award'
     : isMisc ? 'Miscellaneous Award'
     : isRacing ? 'Racing Clubs Events Award'
+    : isResearch ? 'Market & Social Research Award'
+    : isTransport ? 'Passenger Vehicle Transportation Award'
+    : isCarParking ? 'Car Parking Award'
+    : isFuneral ? 'Funeral Industry Award'
+    : isLandscaping ? 'Gardening & Landscaping Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);

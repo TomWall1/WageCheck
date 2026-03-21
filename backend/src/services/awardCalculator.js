@@ -142,6 +142,25 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     // Liquor employees use separate junior classification (level 2) with own base_hourly.
     return 1.0;
   }
+  if (awardCode === 'MA000030' || awardCode === 'MA000095' || awardCode === 'MA000105') {
+    return 1.0; // No junior rates specified in these awards' pay guides
+  }
+  if (awardCode === 'MA000063') {
+    // MA000063: Under 19=70%, 19=80%, 20+=adult
+    // Note: 18+ driving passenger vehicle in sole control must be paid adult rate (handled by employer)
+    if (age >= 20) return 1.0;
+    if (age < 19) return 0.70;
+    if (age === 19) return 0.80;
+    return 1.0;
+  }
+  if (awardCode === 'MA000101') {
+    // MA000101: Under 18=70%, 18=80%, 19=90%, 20+=adult
+    // Note: Trade qualified juniors must be paid adult rate (handled by employer)
+    if (age >= 20) return 1.0;
+    if (age < 18) return 0.70;
+    const MA000101_RATES = { 18: 0.80, 19: 0.90 };
+    return MA000101_RATES[age] || 1.0;
+  }
   // MA000058 (Registered and Licensed Clubs): under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult (same as MA000009)
   // MA000026 (Graphic Arts, Printing and Publishing): under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult (same as MA000009)
   if (awardCode === 'MA000058' || awardCode === 'MA000026') {
@@ -359,6 +378,11 @@ const MINIMUM_SHIFT_HOURS = {
   MA000005: { casual: 3, part_time: 3 },
   MA000058: { casual: 2, part_time: 2 },
   MA000026: { casual: 2, part_time: 2 },
+  MA000030: { casual: 3, part_time: 3 },
+  MA000063: { casual: 2, part_time: 2 },
+  MA000095: { casual: 3, part_time: 3 },
+  MA000105: { casual: 2, part_time: 2 },
+  MA000101: { casual: 2, part_time: 2 },
 };
 
 function getMinimumShiftMinutes(awardCode, employmentType) {
@@ -562,6 +586,8 @@ function getDayLabel(dayType) {
 
 function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType) {
   if (missedBreakPenalty) return `Double time (×2.0) — meal break not taken after 5 hours`;
+  if (addition_per_hour === 7.07) return dayType === 'weekday' ? 'Out-of-hours Mon–Fri (8pm–8am) +$7.07/hr' : 'Saturday loading +$7.07/hr';
+  if (addition_per_hour === 14.15) return dayType === 'sunday' ? 'Sunday loading +$14.15/hr' : 'Public holiday loading +$14.15/hr';
   if (addition_per_hour === 4.22) return `Night work loading (midnight–7am) +$4.22/hr`;
   if (addition_per_hour === 2.81) return `Evening loading (7pm–midnight) +$2.81/hr`;
   if (addition_per_hour === 12.3)  return 'Sunday — liquor bar (+$12.30/hr above Mon–Sat all-in rate)';

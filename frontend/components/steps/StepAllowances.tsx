@@ -1066,7 +1066,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                         <span className="text-gray-500 text-sm">km</span>
                         {vehicleMotorcycleKm && parseFloat(vehicleMotorcycleKm) > 0 && info?.amount && (
                           <span className="text-success-600 font-semibold text-sm">
-                            = {formatCurrency(parseFloat(vehicleMotorcycleKm) * info.amount)}
+                            = {formatCurrency(parseFloat(vehicleMotorcycleKm) * Number(info.amount))}
                           </span>
                         )}
                       </div>
@@ -1093,7 +1093,7 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                         <span className="text-gray-500 text-sm">km</span>
                         {vehicleKm && parseFloat(vehicleKm) > 0 && info?.amount && (
                           <span className="text-success-600 font-semibold text-sm">
-                            = {formatCurrency(parseFloat(vehicleKm) * info.amount)}
+                            = {formatCurrency(parseFloat(vehicleKm) * Number(info.amount))}
                           </span>
                         )}
                       </div>
@@ -1136,12 +1136,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                       <p className="text-gray-700">{info.description}</p>
                       {info.amount && !VEHICLE_TYPES.has(q.type) && (
                         <p className="font-semibold text-success-700">
-                          Rate: {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
+                          Rate: {formatCurrency(Number(info.amount))} {info.per_unit?.replace(/_/g, ' ')}
                         </p>
                       )}
                       {VEHICLE_TYPES.has(q.type) && info.amount && vehicleKm && (
                         <p className="font-semibold text-success-700">
-                          {parseFloat(vehicleKm).toFixed(1)} km × {formatCurrency(info.amount)}/km = {formatCurrency(parseFloat(vehicleKm) * info.amount)}
+                          {parseFloat(vehicleKm).toFixed(1)} km × {formatCurrency(Number(info.amount))}/km = {formatCurrency(parseFloat(vehicleKm) * Number(info.amount))}
                         </p>
                       )}
                     </div>
@@ -1174,12 +1174,12 @@ export default function StepAllowances({ awardCode, employmentType, stream, answ
                   <span className="text-gray-700">{info.name}</span>
                   {info.amount && !VEHICLE_TYPES.has(a.type) && (
                     <span className="font-semibold text-success-700 shrink-0">
-                      {formatCurrency(info.amount)} {info.per_unit?.replace(/_/g, ' ')}
+                      {formatCurrency(Number(info.amount))} {info.per_unit?.replace(/_/g, ' ')}
                     </span>
                   )}
                   {VEHICLE_TYPES.has(a.type) && info.amount && a.detail && (
                     <span className="font-semibold text-success-700 shrink-0">
-                      {formatCurrency(parseFloat(a.detail) * info.amount)}
+                      {formatCurrency(parseFloat(a.detail) * Number(info.amount))}
                     </span>
                   )}
                 </li>

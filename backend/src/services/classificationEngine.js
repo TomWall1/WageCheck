@@ -448,6 +448,75 @@ const CLASSIFICATION_RULES_MA000002 = [
 ];
 
 /**
+ * MA000063 — Passenger Vehicle Transportation Award 2020
+ * Single stream 'transport' with 6 grades.
+ */
+const CLASSIFICATION_RULES_MA000063 = [
+  { conditions: { transport_grade: 'grade1' }, level: 1, stream: 'transport', rationale: 'Grade 1 — entry-level driver or basic operations role' },
+  { conditions: { transport_grade: 'grade2' }, level: 2, stream: 'transport', rationale: 'Grade 2 — experienced driver or standard operations' },
+  { conditions: { transport_grade: 'grade3' }, level: 3, stream: 'transport', rationale: 'Grade 3 — experienced driver with additional qualifications' },
+  { conditions: { transport_grade: 'grade4' }, level: 4, stream: 'transport', rationale: 'Grade 4 — senior driver or supervisor' },
+  { conditions: { transport_grade: 'grade5' }, level: 5, stream: 'transport', rationale: 'Grade 5 — fleet coordinator, trainer, or specialist' },
+  { conditions: { transport_grade: 'grade6' }, level: 6, stream: 'transport', rationale: 'Grade 6 — manager or most senior classification' },
+];
+
+/**
+ * MA000095 — Car Parking Award 2020
+ * Single stream 'car_parking' with 3 levels.
+ */
+const CLASSIFICATION_RULES_MA000095 = [
+  { conditions: { parking_level: 'level1' }, level: 1, stream: 'car_parking', rationale: 'Car parking officer level 1 — entry-level, basic duties under supervision' },
+  { conditions: { parking_level: 'level2' }, level: 2, stream: 'car_parking', rationale: 'Car parking officer level 2 — experienced, cash handling, works independently' },
+  { conditions: { parking_level: 'level3' }, level: 3, stream: 'car_parking', rationale: 'Car parking officer level 3 — senior, supervises others, manages operations' },
+];
+
+/**
+ * MA000105 — Funeral Industry Award 2020
+ * Single stream 'funeral' with 6 grades.
+ */
+const CLASSIFICATION_RULES_MA000105 = [
+  { conditions: { funeral_experience: 'entry' }, level: 1, stream: 'funeral', rationale: 'Grade 1 — entry-level, general duties, cleaning, assisting with funerals' },
+  { conditions: { funeral_experience: 'experienced', funeral_grade: 'grade2' }, level: 2, stream: 'funeral', rationale: 'Grade 2 — assists with embalming, coffin handling, mortuary duties' },
+  { conditions: { funeral_experience: 'experienced', funeral_grade: 'grade3' }, level: 3, stream: 'funeral', rationale: 'Grade 3 — conducts viewings, drives hearse, arranges tributes' },
+  { conditions: { funeral_experience: 'experienced', funeral_grade: 'grade4' }, level: 4, stream: 'funeral', rationale: 'Grade 4 — conducts funerals, oversees arrangements' },
+  { conditions: { funeral_experience: 'experienced', funeral_grade: 'grade5' }, level: 5, stream: 'funeral', rationale: 'Grade 5 — funeral director, embalmer, senior arranger' },
+  { conditions: { funeral_experience: 'experienced', funeral_grade: 'grade6' }, level: 6, stream: 'funeral', rationale: 'Grade 6 — funeral home manager, senior funeral director' },
+];
+
+/**
+ * MA000101 — Gardening and Landscaping Services Award 2020
+ * Single stream 'landscaping' with Intro (0) + Levels 1-5.
+ */
+const CLASSIFICATION_RULES_MA000101 = [
+  { conditions: { land_experience: 'entry' }, level: 0, stream: 'landscaping', rationale: 'Introductory level — new to gardening/landscaping, first 3 months' },
+  { conditions: { land_experience: 'basic' }, level: 1, stream: 'landscaping', rationale: 'Level 1 — basic gardening tasks, general labouring under supervision' },
+  { conditions: { land_experience: 'skilled', land_role: 'level2' }, level: 2, stream: 'landscaping', rationale: 'Level 2 — experienced, operates equipment, Cert II or 12+ months' },
+  { conditions: { land_experience: 'skilled', land_role: 'level3' }, level: 3, stream: 'landscaping', rationale: 'Level 3 — skilled, independent work, landscape construction, Cert III' },
+  { conditions: { land_experience: 'skilled', land_role: 'level4' }, level: 4, stream: 'landscaping', rationale: 'Level 4 — tradesperson, manages projects, may supervise' },
+  { conditions: { land_experience: 'skilled', land_role: 'level5' }, level: 5, stream: 'landscaping', rationale: 'Level 5 — senior supervisor, specialist, Cert IV or equivalent' },
+];
+
+/**
+ * MA000030 — Market and Social Research Award 2020
+ * Single stream 'research' with 12 levels covering distinct roles.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000030 = [
+  { conditions: { research_role_type: 'trainee' }, level: 1, stream: 'research', rationale: 'Market research trainee — learning basic research tasks (Level 1)' },
+  { conditions: { research_role_type: 'support', research_support_year: 'first_year' }, level: 2, stream: 'research', rationale: 'Support employee — first year in this classification (Level 2)' },
+  { conditions: { research_role_type: 'support', research_support_year: 'thereafter' }, level: 3, stream: 'research', rationale: 'Support employee — one or more years in this classification (Level 3)' },
+  { conditions: { research_role_type: 'interviewer', research_interview_type: 'phone' }, level: 4, stream: 'research', rationale: 'Market research interviewer — telephone or online interviewing (Level 4)' },
+  { conditions: { research_role_type: 'interviewer', research_interview_type: 'face_to_face' }, level: 5, stream: 'research', rationale: 'Executive (face-to-face) interviewer / door-to-door interviewer (Level 5)' },
+  { conditions: { research_role_type: 'editor_coder' }, level: 6, stream: 'research', rationale: 'Editor / Coder / Keyboard operator — data editing and coding (Level 6)' },
+  { conditions: { research_role_type: 'leadership', research_leader_role: 'team_leader' }, level: 7, stream: 'research', rationale: 'Team leader — supervises interviewers or support staff (Level 7)' },
+  { conditions: { research_role_type: 'leadership', research_leader_role: 'field_supervisor' }, level: 8, stream: 'research', rationale: 'Field supervisor — manages field interviewing operations (Level 8)' },
+  { conditions: { research_role_type: 'leadership', research_leader_role: 'field_manager' }, level: 10, stream: 'research', rationale: 'Field manager — manages all field operations (Level 10)' },
+  { conditions: { research_role_type: 'research_pro', research_pro_role: 'assistant' }, level: 9, stream: 'research', rationale: 'Research assistant — assists with research design and analysis (Level 9)' },
+  { conditions: { research_role_type: 'research_pro', research_pro_role: 'officer' }, level: 11, stream: 'research', rationale: 'Research officer — independently manages research projects (Level 11)' },
+  { conditions: { research_role_type: 'research_pro', research_pro_role: 'manager' }, level: 12, stream: 'research', rationale: 'Research manager — manages a research team or department (Level 12)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -597,6 +666,51 @@ function classify(answers, awardCode = 'MA000009') {
       if (level !== undefined) return { level, stream: 'racecourse', rationale: labels[level], confidence: 'high' };
     }
     return { level: 0, stream: 'racecourse', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000030') {
+    for (const rule of CLASSIFICATION_RULES_MA000030) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'research', rationale: 'Unable to determine classification — defaulting to Market Research Trainee. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000063') {
+    for (const rule of CLASSIFICATION_RULES_MA000063) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'transport', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000095') {
+    for (const rule of CLASSIFICATION_RULES_MA000095) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'car_parking', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000105') {
+    for (const rule of CLASSIFICATION_RULES_MA000105) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'funeral', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000101') {
+    for (const rule of CLASSIFICATION_RULES_MA000101) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 0, stream: 'landscaping', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {
