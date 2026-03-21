@@ -25,6 +25,8 @@ const SGC_RATE = 0.12; // 12%
 // MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000002:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100% (same as MA000004)
 // MA000104:            under 16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
+// MA000058:            under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100% (same as MA000009)
+// MA000026:            under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100% (same as MA000009 default)
 // MA000102:            under 19=80%, 19=90%, 20+=100%
 // MA000120:            under 17=70%, 17=80%, 18=90%, 19+=100% (educator L1-L2 only; same flat $ for both levels)
 // MA000005:            under 17=50%, 17=75%, 18+=100% (adult)
@@ -70,6 +72,14 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 19) return 0.80;
     if (age === 19) return 0.90;
     return 1.0;
+  }
+  if (awardCode === 'MA000082') {
+    // MA000082 junior rates: under 18=70%, 18=80%, 19=90%, 20+=adult
+    // Note: 18yr+ who have been continuously employed 12 months must get adult rate.
+    if (age >= 20) return 1.0;
+    if (age < 18) return 0.70;
+    const MA000082_RATES = { 18: 0.80, 19: 0.90 };
+    return MA000082_RATES[age] || 1.0;
   }
   if (awardCode === 'MA000120') {
     // MA000120 junior rates (Children's Services Award — educator L1 and L2 only):
@@ -131,6 +141,13 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     // Non-liquor under-19 = 75% of introductory rate — handled in calculateEntitlements().
     // Liquor employees use separate junior classification (level 2) with own base_hourly.
     return 1.0;
+  }
+  // MA000058 (Registered and Licensed Clubs): under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult (same as MA000009)
+  // MA000026 (Graphic Arts, Printing and Publishing): under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult (same as MA000009)
+  if (awardCode === 'MA000058' || awardCode === 'MA000026') {
+    if (age >= 20) return 1.0;
+    if (age < 17) return 0.50;
+    return JUNIOR_RATES_DEFAULT[age] || 1.0;
   }
   // MA000009: under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult
   if (awardCode === 'MA000009') {
@@ -336,9 +353,12 @@ const MINIMUM_SHIFT_HOURS = {
   MA000104: { casual: 2, part_time: 2 },
   MA000013: { casual: 4, part_time: 4, full_time: 4 },
   MA000102: { casual: 2, part_time: 2 },
+  MA000082: { casual: 2, part_time: 2 },
   MA000120: { casual: 2, part_time: 2 },
   MA000023: { casual: 3, part_time: 3 },
   MA000005: { casual: 3, part_time: 3 },
+  MA000058: { casual: 2, part_time: 2 },
+  MA000026: { casual: 2, part_time: 2 },
 };
 
 function getMinimumShiftMinutes(awardCode, employmentType) {

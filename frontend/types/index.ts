@@ -124,7 +124,7 @@ export interface ClassificationOutcome {
   confidence: string;
 }
 
-export type AwardCode = 'MA000009' | 'MA000003' | 'MA000119' | 'MA000004' | 'MA000094' | 'MA000080' | 'MA000081' | 'MA000084' | 'MA000022' | 'MA000028' | 'MA000033' | 'MA000002' | 'MA000104' | 'MA000013' | 'MA000120' | 'MA000102' | 'MA000023' | 'MA000005';
+export type AwardCode = 'MA000009' | 'MA000003' | 'MA000119' | 'MA000004' | 'MA000094' | 'MA000080' | 'MA000081' | 'MA000084' | 'MA000022' | 'MA000028' | 'MA000033' | 'MA000002' | 'MA000104' | 'MA000013' | 'MA000120' | 'MA000102' | 'MA000023' | 'MA000005' | 'MA000026' | 'MA000058' | 'MA000082';
 
 export interface WageCheckState {
   step: number;
