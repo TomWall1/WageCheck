@@ -25,6 +25,10 @@ const SGC_RATE = 0.12; // 12%
 // MA000033:            under 16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=100%
 // MA000002:            under 16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100% (same as MA000004)
 // MA000104:            under 16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
+// MA000102:            under 19=80%, 19=90%, 20+=100%
+// MA000120:            under 17=70%, 17=80%, 18=90%, 19+=100% (educator L1-L2 only; same flat $ for both levels)
+// MA000005:            under 17=50%, 17=75%, 18+=100% (adult)
+// MA000023:            15=50%, 16=60%, 17=70%, 18+=100% (clerical stream only, applied to all streams in calculator)
 // MA000013:            no simple junior multiplier — non-liquor under-19 = 75% of introductory rate ($24.28);
 //                      handled as a special base-rate override in calculateEntitlements().
 // MA000009: under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100% (adult) — verified from pay guide
@@ -59,6 +63,38 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     if (age < 16) return 0.40;
     const MA000084_RATES = { 16: 0.50, 17: 0.60, 18: 0.70 };
     return MA000084_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000102') {
+    // MA000102 junior rates: under 19=80%, 19=90%, 20+=100% (adult Grade 1)
+    if (age >= 20) return 1.0;
+    if (age < 19) return 0.80;
+    if (age === 19) return 0.90;
+    return 1.0;
+  }
+  if (awardCode === 'MA000120') {
+    // MA000120 junior rates (Children's Services Award — educator L1 and L2 only):
+    // Under 17: 70%, 17yr: 80%, 18yr: 90%, 19+: adult.
+    // Both L1 and L2 juniors earn the same flat dollar amounts ($18.90, $21.60, $24.30).
+    // Percentages are exact for L2 ($27.00 base) but approximate for L1 ($26.19 base).
+    if (age >= 19) return 1.0;
+    if (age < 17) return 0.70;
+    const MA000120_RATES = { 17: 0.80, 18: 0.90 };
+    return MA000120_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000023') {
+    // MA000023 junior rates (clerical stream only per award, applied to all streams here):
+    // 15=50%, 16=60%, 17=70%, 18+=100% (adult)
+    if (age >= 18) return 1.0;
+    if (age <= 15) return 0.50;
+    const MA000023_RATES = { 16: 0.60, 17: 0.70 };
+    return MA000023_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000005') {
+    // MA000005 junior rates: under 17=50%, 17=75%, 18+=100% (adult)
+    if (age >= 18) return 1.0;
+    if (age < 17) return 0.50;
+    if (age === 17) return 0.75;
+    return 1.0;
   }
   if (awardCode === 'MA000022') {
     // Junior rates apply only to shopping trolley collection contractors.
@@ -299,6 +335,10 @@ const MINIMUM_SHIFT_HOURS = {
   MA000002: { casual: 3, part_time: 3 },
   MA000104: { casual: 2, part_time: 2 },
   MA000013: { casual: 4, part_time: 4, full_time: 4 },
+  MA000102: { casual: 2, part_time: 2 },
+  MA000120: { casual: 2, part_time: 2 },
+  MA000023: { casual: 3, part_time: 3 },
+  MA000005: { casual: 3, part_time: 3 },
 };
 
 function getMinimumShiftMinutes(awardCode, employmentType) {
