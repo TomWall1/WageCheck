@@ -632,6 +632,26 @@ async function calculateEntitlements(input, db) {
     }
   }
 
+  // MA000003 casual evening/night: the 10%/15% penalty is on the FT ORDINARY rate,
+  // not the casual base. The DB stores multipliers (1.10/1.15) which compound with casual
+  // loading (giving 137.5%/143.75% instead of correct 135%/140% of FT rate).
+  // Fix: convert to addition_per_hour = FT_base × (multiplier - 1.0), multiplier = 1.0.
+  if (awardCode === 'MA000003' && employmentType === 'casual') {
+    const ftRateForPenalty = await db.query(`
+      SELECT rate_amount FROM pay_rates
+      WHERE award_code = $1 AND classification_id = $2 AND employment_type = 'full_time' AND rate_type = 'base_hourly'
+      ORDER BY effective_date DESC LIMIT 1
+    `, [awardCode, classificationId]);
+    const ftBase = ftRateForPenalty.rows.length ? parseFloat(ftRateForPenalty.rows[0].rate_amount) : baseHourlyRate / 1.25;
+    penaltyRates = penaltyRates.map(r => {
+      if (r.day_type === 'weekday' && r.time_band_start && parseFloat(r.multiplier) > 1.0 && !parseFloat(r.addition_per_hour)) {
+        const penaltyPct = parseFloat(r.multiplier) - 1.0; // 0.10 or 0.15
+        return { ...r, multiplier: '1.0000', addition_per_hour: String(parseFloat((ftBase * penaltyPct).toFixed(4))) };
+      }
+      return r;
+    });
+  }
+
   // MA000119: casual Introductory/L1/L2 Sunday = ×1.20 (150% of FT = 150/125 of casual base).
   // DB stores ×1.40 (L3–L6 default); override here for ≤L2.
   if (awardCode === 'MA000119' && employmentType === 'casual') {

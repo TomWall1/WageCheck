@@ -188,7 +188,8 @@ async function runPenaltyRateTests() {
     // But pay guide says $35.84. Let me check: $35.84 / $33.19 = 1.0799 ≈ 1.08
     // This might be an incorrect multiplier in the seed data. Let's just test what the calc produces.
     const eveRate = r.shifts[0].segments[0]?.effectiveRate;
-    record('PC-04', 36.51, eveRate, 'Casual L1 evening (1.10× casual base). Pay guide says $35.84 — possible seed issue');
+    // Casual evening = casual_base + FT_base × 10% = $33.19 + $2.655 = $35.84
+    record('PC-04', 35.84, eveRate, 'Casual L1 evening (casual base + FT×10%)');
   } catch (e) { recordText('PC-04', 36.51, 'ERROR', 'FAIL', e.message); }
 }
 
