@@ -39,6 +39,20 @@ async function seed() {
     // Based on Schedule B of the Award
 
     const classifications = [
+      // INTRODUCTORY (Level 0)
+      {
+        level: 0, stream: 'general',
+        title: 'Introductory Level',
+        description: 'An introductory level employee is one who has not yet completed 3 months of employment in the hospitality industry.',
+        duties: [
+          'Basic tasks under close supervision during initial period of employment',
+          'Learning basic hospitality operations',
+          'Assisting other employees with their duties',
+        ],
+        indicative_tasks: ['New entrant to the hospitality industry (first 3 months)'],
+        sort_order: 1,
+      },
+
       // LEVEL 1
       {
         level: 1, stream: 'general',
@@ -333,6 +347,158 @@ async function seed() {
         indicative_tasks: ['Head chef', 'Executive chef', 'Executive pastry chef'],
         sort_order: 52,
       },
+
+      // LEVEL 6
+      {
+        level: 6, stream: 'kitchen',
+        title: 'Cook (tradesperson) Grade 5',
+        description: 'A cook who has completed an apprenticeship or has equivalent experience and is required to perform work above the level of Cook Grade 4.',
+        duties: [
+          'All duties of a Level 5 cook plus additional specialised responsibilities',
+          'Advanced culinary techniques and menu development',
+          'Training and mentoring junior cooking staff',
+          'Specialist pastry, larder, or sauce work at a high level',
+        ],
+        indicative_tasks: ['Senior tradesperson cook', 'Specialist chef (pastry, larder, sauce)'],
+        sort_order: 60,
+      },
+
+      // MANAGERIAL STAFF — HOTEL (Level 7 internally)
+      {
+        level: 7, stream: 'general',
+        title: 'Managerial Staff (Hotels)',
+        description: 'Managerial staff employed in a hotel who are not covered by another classification in this award.',
+        duties: [
+          'Managing hotel operations or a significant department within a hotel',
+          'Budget and financial management responsibilities',
+          'Staff supervision and HR management',
+          'Ensuring compliance with hotel standards and regulations',
+        ],
+        indicative_tasks: ['Hotel manager', 'Hotel duty manager', 'Hotel department manager'],
+        sort_order: 70,
+      },
+
+      // CASINO CLASSIFICATIONS
+      {
+        level: 1, stream: 'casino',
+        title: 'Introductory (Casino)',
+        description: 'Introductory-level casino employee within the first 3 months of employment.',
+        duties: ['Basic casino floor duties under close supervision', 'Learning casino operations'],
+        indicative_tasks: ['New casino entrant (first 3 months)'],
+        sort_order: 101,
+      },
+      {
+        level: 2, stream: 'casino',
+        title: 'Casino Electronic Gaming Employee Grade 1',
+        description: 'Employee operating or attending to electronic gaming machines at an entry level.',
+        duties: ['Attending to electronic gaming machines', 'Basic customer assistance on gaming floor', 'Monitoring machine operation'],
+        indicative_tasks: ['Gaming floor attendant', 'Slot attendant'],
+        sort_order: 102,
+      },
+      {
+        level: 3, stream: 'casino',
+        title: 'Casino Electronic Gaming Employee Grade 2',
+        description: 'Experienced electronic gaming employee with additional responsibilities.',
+        duties: ['Advanced gaming machine operation', 'Customer service and dispute resolution', 'Minor machine maintenance'],
+        indicative_tasks: ['Senior gaming attendant', 'Gaming technician assistant'],
+        sort_order: 103,
+      },
+      {
+        level: 3, stream: 'casino_equipment',
+        title: 'Casino Equipment Technician Grade 1',
+        description: 'Technician maintaining and repairing casino equipment.',
+        duties: ['Basic maintenance of gaming equipment', 'Equipment setup and configuration', 'Troubleshooting faults'],
+        indicative_tasks: ['Gaming machine technician (junior)', 'Equipment maintenance officer'],
+        sort_order: 104,
+      },
+      {
+        level: 3, stream: 'casino_table',
+        title: 'Casino Table Gaming Employee Grade 1',
+        description: 'Entry-level table gaming employee dealing at casino tables.',
+        duties: ['Dealing at table games under supervision', 'Handling chips and managing game pace', 'Customer interaction'],
+        indicative_tasks: ['Trainee dealer', 'Junior croupier'],
+        sort_order: 105,
+      },
+      {
+        level: 3, stream: 'casino_finance',
+        title: 'Customer Liaison Officer / Gaming Finance Employee Grade 1',
+        description: 'Customer liaison or entry-level gaming finance employee.',
+        duties: ['Customer liaison and support', 'Basic gaming finance transactions', 'Record keeping'],
+        indicative_tasks: ['Customer liaison officer', 'Gaming cashier'],
+        sort_order: 106,
+      },
+      {
+        level: 4, stream: 'casino_equipment',
+        title: 'Casino Equipment Technician Grade 2',
+        description: 'Experienced equipment technician with advanced skills.',
+        duties: ['Complex equipment repairs', 'Equipment installation and commissioning', 'Training junior technicians'],
+        indicative_tasks: ['Senior gaming technician'],
+        sort_order: 107,
+      },
+      {
+        level: 4, stream: 'casino_finance',
+        title: 'Gaming Finance Employee Grade 2 / Security Officer Grade 1',
+        description: 'Experienced gaming finance employee or security officer.',
+        duties: ['Advanced financial transactions', 'Security monitoring and patrol', 'Compliance reporting'],
+        indicative_tasks: ['Gaming finance officer', 'Casino security officer (grade 1)'],
+        sort_order: 108,
+      },
+      {
+        level: 5, stream: 'casino_table',
+        title: 'Casino Table Gaming Employee Grade 2 (Level 3A)',
+        description: 'Experienced table gaming employee with advanced dealing skills.',
+        duties: ['Dealing all table games independently', 'Supervising junior dealers', 'Game integrity monitoring'],
+        indicative_tasks: ['Experienced dealer', 'Senior croupier'],
+        sort_order: 109,
+      },
+      {
+        level: 5, stream: 'casino_equipment',
+        title: 'Casino Equipment Technician Grade 3',
+        description: 'Senior equipment technician with supervisory responsibilities.',
+        duties: ['Supervising equipment maintenance team', 'System-level troubleshooting', 'Project management'],
+        indicative_tasks: ['Lead gaming technician', 'Equipment supervisor'],
+        sort_order: 110,
+      },
+      {
+        level: 5, stream: 'casino_finance',
+        title: 'Gaming Finance Employee Grade 3 / Security Officer Grade 2',
+        description: 'Senior gaming finance employee or security officer.',
+        duties: ['Supervisory finance role', 'Senior security duties', 'Incident management'],
+        indicative_tasks: ['Senior gaming finance officer', 'Senior security officer'],
+        sort_order: 111,
+      },
+      {
+        level: 6, stream: 'casino_table',
+        title: 'Casino Table Gaming Employee Grade 3',
+        description: 'Senior table gaming employee with supervisory or inspector duties.',
+        duties: ['Table game inspection', 'Supervising dealing operations', 'High-value game management'],
+        indicative_tasks: ['Table inspector', 'Pit supervisor (junior)'],
+        sort_order: 112,
+      },
+      {
+        level: 6, stream: 'casino_finance',
+        title: 'Gaming Finance Employee Grade 4',
+        description: 'Senior gaming finance employee with management responsibilities.',
+        duties: ['Managing finance operations', 'Regulatory compliance', 'Staff supervision'],
+        indicative_tasks: ['Gaming finance manager', 'Cage supervisor'],
+        sort_order: 113,
+      },
+      {
+        level: 7, stream: 'casino_table',
+        title: 'Casino Table Gaming Employee Grade 4',
+        description: 'Most senior table gaming classification with full supervisory authority.',
+        duties: ['Full pit management', 'High-stakes game oversight', 'Compliance and integrity management'],
+        indicative_tasks: ['Pit boss', 'Senior table games supervisor'],
+        sort_order: 114,
+      },
+      {
+        level: 7, stream: 'casino_finance',
+        title: 'Gaming Finance Employee Grade 5 / Surveillance Operator',
+        description: 'Most senior gaming finance or surveillance classification.',
+        duties: ['Surveillance operations', 'Senior financial management', 'Regulatory liaison'],
+        indicative_tasks: ['Surveillance operator', 'Senior gaming finance manager'],
+        sort_order: 115,
+      },
     ];
 
     for (const c of classifications) {
@@ -363,22 +529,42 @@ async function seed() {
         effectiveDate: EFFECTIVE_DATE,
         label: '2024 (3.75% AWR increase — estimated from 2025 official rates)',
         rates: {
+          '0_general': 23.46,
           '1_general': 24.11, '1_food_beverage': 24.11, '1_kitchen': 24.11, '1_front_office': 24.11,
           '2_general': 24.98, '2_food_beverage': 24.98, '2_kitchen': 24.98, '2_front_office': 24.98,
           '3_general': 25.80, '3_food_beverage': 25.80, '3_kitchen': 25.80, '3_front_office': 25.80,
           '4_general': 27.17, '4_food_beverage': 27.17, '4_kitchen': 27.17, '4_front_office': 27.17,
           '5_general': 28.87, '5_kitchen': 28.87,
+          '6_kitchen': 29.64,
+          '7_general': 29.69,
+          // Casino (2024 estimated from 2025 ÷ 1.035)
+          '1_casino': 24.11, '2_casino': 25.49, '3_casino': 26.31,
+          '3_casino_equipment': 26.31, '3_casino_table': 26.31, '3_casino_finance': 26.31,
+          '4_casino_equipment': 27.17, '4_casino_finance': 27.17,
+          '5_casino_table': 28.44, '5_casino_equipment': 28.87, '5_casino_finance': 28.87,
+          '6_casino_table': 29.73, '6_casino_finance': 29.73,
+          '7_casino_table': 30.59, '7_casino_finance': 30.59,
         },
       },
       {
         effectiveDate: EFFECTIVE_DATE_2025,
         label: '2025 (3.5% AWR increase — verified at fairwork.gov.au, published 15 Jan 2026)',
         rates: {
+          '0_general': 24.28,
           '1_general': 24.95, '1_food_beverage': 24.95, '1_kitchen': 24.95, '1_front_office': 24.95,
           '2_general': 25.85, '2_food_beverage': 25.85, '2_kitchen': 25.85, '2_front_office': 25.85,
           '3_general': 26.70, '3_food_beverage': 26.70, '3_kitchen': 26.70, '3_front_office': 26.70,
           '4_general': 28.12, '4_food_beverage': 28.12, '4_kitchen': 28.12, '4_front_office': 28.12,
           '5_general': 29.88, '5_kitchen': 29.88,
+          '6_kitchen': 30.68,
+          '7_general': 30.73,
+          // Casino (2025 — from pay guide published 15 Jan 2026)
+          '1_casino': 24.95, '2_casino': 26.38, '3_casino': 27.23,
+          '3_casino_equipment': 27.23, '3_casino_table': 27.23, '3_casino_finance': 27.23,
+          '4_casino_equipment': 28.12, '4_casino_finance': 28.12,
+          '5_casino_table': 29.44, '5_casino_equipment': 29.88, '5_casino_finance': 29.88,
+          '6_casino_table': 30.77, '6_casino_finance': 30.77,
+          '7_casino_table': 31.66, '7_casino_finance': 31.66,
         },
       },
     ];
