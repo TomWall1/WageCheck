@@ -27,9 +27,9 @@ const SGC_RATE = 0.12; // 12%
 // MA000104:            under 16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=100%
 // MA000013:            no simple junior multiplier — non-liquor under-19 = 75% of introductory rate ($24.28);
 //                      handled as a special base-rate override in calculateEntitlements().
-// MA000009 / MA000003: under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100% (adult)
-// NOTE: "20: 0.90" was incorrect — the pay guide shows 20+ = adult rate for "other than office employee"
-const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.85 };
+// MA000009: under 17=50%, 17=60%, 18=70%, 19=85%, 20+=100% (adult) — verified from pay guide
+// MA000003 + others: under 16=40%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=100%
+const JUNIOR_RATES_DEFAULT = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.85 }; // MA000009 only
 const JUNIOR_RATES_MA000119 = { 17: 0.60, 18: 0.70, 19: 0.85 };
 const JUNIOR_RATES_MA000094 = { 17: 0.65, 18: 0.75, 19: 0.85 };
 const JUNIOR_RATES_MA000080 = { 17: 0.65, 18: 0.75, 19: 0.85 };
@@ -96,17 +96,24 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     // Liquor employees use separate junior classification (level 2) with own base_hourly.
     return 1.0;
   }
-  // MA000009/MA000003: 20+ = adult. MA000004/MA000002: 21+ = adult.
+  // MA000009: under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult
+  if (awardCode === 'MA000009') {
+    if (age >= 20) return 1.0;
+    if (age < 16) return 0.40;
+    return JUNIOR_RATES_DEFAULT[age] || 1.0;
+  }
+  // MA000003, MA000004, MA000002: under 16=40-45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult
   if (awardCode === 'MA000004' || awardCode === 'MA000002') {
     if (age >= 21) return 1.0;
     if (age < 16) return 0.45;
     const MA000004_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     return MA000004_RATES[age] || 1.0;
   }
-  // Default (MA000009, MA000003): under 17=50%, 17=60%, 18=70%, 19=85%, 20+=adult
-  if (age >= 20) return 1.0;
+  // MA000003 and remaining defaults: under 16=40%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult
+  if (age >= 21) return 1.0;
   if (age < 16) return 0.40;
-  return JUNIOR_RATES_DEFAULT[age] || 1.0;
+  const DEFAULT_FULL = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+  return DEFAULT_FULL[age] || 1.0;
 }
 
 // ── Day type ──────────────────────────────────────────────────────────────

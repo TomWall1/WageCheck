@@ -1,131 +1,15 @@
 /**
  * HIGA Testing Plan Runner — MA000009 (Hospitality Industry General Award)
- * Executes all tests from HIGA_Testing_Plan_July2025.xlsx against the calculator engine.
- * Writes results back to the Excel file.
- *
- * Usage: cd backend && node ../testing/run_higa_tests.js
+ * Uses shared test framework. Run: node testing/run_higa_tests.js
  */
 const path = require('path');
-// Resolve backend modules from the backend directory
-const backendDir = path.join(__dirname, '..', 'backend');
-process.chdir(backendDir);
-module.paths.unshift(path.join(backendDir, 'node_modules'));
-require('dotenv').config({ path: path.join(backendDir, '.env') });
-const pool = require(path.join(backendDir, 'src', 'db', 'pool'));
-const { calculateEntitlements } = require(path.join(backendDir, 'src', 'services', 'awardCalculator'));
-const XLSX = require('xlsx');
+const { createTestRunner } = require('./lib/testFramework');
+const t = createTestRunner('MA000009', path.join(__dirname, 'HIGA_Testing_Plan_July2025.xlsx'));
 
-const AWARD_CODE = 'MA000009';
-const XLSX_PATH = path.join(__dirname, 'HIGA_Testing_Plan_July2025.xlsx');
-
-// Use a Monday in 2025 as reference date for weekday shifts
-const REF_MONDAY    = '2025-07-07'; // Monday
-const REF_TUESDAY   = '2025-07-08';
-const REF_WEDNESDAY = '2025-07-09';
-const REF_THURSDAY  = '2025-07-10';
-const REF_FRIDAY    = '2025-07-11';
-const REF_SATURDAY  = '2025-07-12';
-const REF_SUNDAY    = '2025-07-13';
-const REF_PH        = '2025-12-25'; // Christmas Day (public holiday)
-
-// Tolerance for floating-point comparisons ($0.05 due to rounding in minute-by-minute calc)
-const TOLERANCE = 0.05;
-
-function round2(n) { return Math.round(n * 100) / 100; }
-
-function comparePay(actual, expected, tolerance = TOLERANCE) {
-  if (typeof actual !== 'number' || isNaN(actual)) return 'FAIL';
-  const diff = Math.abs(actual - expected);
-  if (diff <= 0.005) return 'PASS';
-  if (diff <= tolerance) return 'PARTIAL';
-  return 'FAIL';
-}
-
-// ── Classification ID lookup ──────────────────────────────────────────────
-let classMap = {}; // key: "level_stream" -> id
-
-async function loadClassifications() {
-  const res = await pool.query(
-    'SELECT id, level, stream FROM classifications WHERE award_code = $1',
-    [AWARD_CODE]
-  );
-  for (const r of res.rows) {
-    classMap[`${r.level}_${r.stream}`] = r.id;
-  }
-}
-
-function classId(level, stream = 'general') {
-  const id = classMap[`${level}_${stream}`];
-  if (!id) throw new Error(`No classification found for level=${level} stream=${stream}`);
-  return id;
-}
-
-// ── Test helpers ──────────────────────────────────────────────────────────
-async function calcShift(empType, clsId, date, start, end, opts = {}) {
-  const shift = {
-    date,
-    startTime: start,
-    endTime: end,
-    mealBreakTaken: opts.mealBreakTaken ?? true,
-    mealBreakDuration: opts.mealBreakDuration ?? (opts.mealBreakTaken === false ? 0 : 30),
-    restBreakTaken: opts.restBreakTaken ?? true,
-  };
-  return calculateEntitlements({
-    employmentType: empType,
-    classificationId: clsId,
-    shifts: [shift],
-    publicHolidays: opts.publicHolidays || [],
-    age: opts.age || null,
-    period: opts.period || 'weekly',
-    awardCode: AWARD_CODE,
-  }, pool);
-}
-
-async function calcMultiShift(empType, clsId, shifts, opts = {}) {
-  const formattedShifts = shifts.map(s => ({
-    date: s.date,
-    startTime: s.startTime,
-    endTime: s.endTime,
-    mealBreakTaken: s.mealBreakTaken ?? true,
-    mealBreakDuration: s.mealBreakDuration ?? (s.mealBreakTaken === false ? 0 : 30),
-    restBreakTaken: s.restBreakTaken ?? true,
-  }));
-  return calculateEntitlements({
-    employmentType: empType,
-    classificationId: clsId,
-    shifts: formattedShifts,
-    publicHolidays: opts.publicHolidays || [],
-    age: opts.age || null,
-    period: opts.period || 'weekly',
-    awardCode: AWARD_CODE,
-  }, pool);
-}
-
-// ══════════════════════════════════════════════════════════════════════════
-// TEST DEFINITIONS
-// ══════════════════════════════════════════════════════════════════════════
-const results = [];
-
-function record(testId, expected, actual, notes = '') {
-  const result = comparePay(actual, expected);
-  results.push({ testId, expected, actual: round2(actual), result, notes });
-  const icon = result === 'PASS' ? '✓' : result === 'PARTIAL' ? '~' : '✗';
-  console.log(`  ${icon} ${testId}: expected $${expected.toFixed(2)}, got $${round2(actual).toFixed(2)} [${result}]${notes ? ' — ' + notes : ''}`);
-}
-
-function recordText(testId, expected, actual, result, notes = '') {
-  results.push({ testId, expected: String(expected), actual: String(actual), result, notes });
-  const icon = result === 'PASS' ? '✓' : result === 'PARTIAL' ? '~' : '✗';
-  console.log(`  ${icon} ${testId}: ${result}${notes ? ' — ' + notes : ''}`);
-}
-
-function skip(testId, reason) {
-  results.push({ testId, expected: 'N/A', actual: 'SKIPPED', result: 'SKIP', notes: reason });
-  console.log(`  ⊘ ${testId}: SKIPPED — ${reason}`);
-}
-
-// Helper: get pay excluding meal allowance for pure rate tests
-function payOnly(r) { return round2(r.summary.totalPayOwed - r.summary.mealAllowancePay); }
+// Destructure for convenience (keeps all existing test code working without t. prefix)
+const { record, recordText, skip, classId, calcShift, calcMultiShift, round2, payOnly,
+        pool, awardCode: AWARD_CODE, REF_MONDAY, REF_TUESDAY, REF_WEDNESDAY, REF_THURSDAY, REF_FRIDAY,
+        REF_SATURDAY, REF_SUNDAY, REF_PH } = t;
 
 // ══════════════════════════════════════════════════════════════════════════
 async function runBaseRateTests() {
@@ -1251,7 +1135,7 @@ async function main() {
   console.log('WageCheck HIGA Test Runner — MA000009');
   console.log('═'.repeat(60));
 
-  await loadClassifications();
+  await t.init();
 
   await runBaseRateTests();
   await runPenaltyRateTests();
@@ -1270,126 +1154,13 @@ async function main() {
   await runDailyWeeklyOTInteractionTests();
   await runMealAllowanceTriggerTests();
 
-  // ── Summary ─────────────────────────────────────────────────────────────
-  console.log('\n' + '═'.repeat(60));
-  const pass = results.filter(r => r.result === 'PASS').length;
-  const partial = results.filter(r => r.result === 'PARTIAL').length;
-  const fail = results.filter(r => r.result === 'FAIL').length;
-  const skipped = results.filter(r => r.result === 'SKIP').length;
-  console.log(`\nRESULTS: ${pass} PASS, ${partial} PARTIAL, ${fail} FAIL, ${skipped} SKIPPED (${results.length} total)`);
-
-  if (fail > 0) {
-    console.log('\nFAILURES:');
-    for (const r of results.filter(r => r.result === 'FAIL')) {
-      console.log(`  ✗ ${r.testId}: expected ${r.expected}, got ${r.actual}${r.notes ? ' — ' + r.notes : ''}`);
-    }
-  }
-
-  // ── Write results to Excel ──────────────────────────────────────────────
-  try {
-    const wb = XLSX.readFile(XLSX_PATH);
-    writeResultsToExcel(wb);
-    XLSX.writeFile(wb, XLSX_PATH);
-    console.log(`\n✓ Results written to ${XLSX_PATH}`);
-  } catch (e) {
-    console.error('Failed to write Excel:', e.message);
-  }
-
-  await pool.end();
-}
-
-function writeResultsToExcel(wb) {
-  // Build a map of testId -> result
-  const resultMap = {};
-  for (const r of results) {
-    resultMap[r.testId] = r;
-  }
-
-  // For each sheet, find rows with a Test ID column and fill in Actual Output and Result
-  for (const sheetName of wb.SheetNames) {
-    const ws = wb.Sheets[sheetName];
-    const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-
-    for (let row = 0; row < data.length; row++) {
-      const testId = String(data[row][0] || '').trim();
-      if (!testId) continue;
-
-      // Check for exact match or sub-test match
-      const r = resultMap[testId];
-      if (r) {
-        // Find "Actual Output" and "Result" columns
-        // These vary by sheet, so find header row first
-        let headerRow = -1;
-        for (let h = Math.max(0, row - 10); h < row; h++) {
-          const cells = data[h] || [];
-          for (let c = 0; c < cells.length; c++) {
-            if (String(cells[c]).toLowerCase().includes('actual')) {
-              headerRow = h;
-              break;
-            }
-          }
-          if (headerRow >= 0) break;
-        }
-
-        if (headerRow >= 0) {
-          const headers = data[headerRow];
-          let actualCol = -1, resultCol = -1;
-          for (let c = 0; c < headers.length; c++) {
-            const h = String(headers[c]).toLowerCase();
-            if (h.includes('actual')) actualCol = c;
-            if (h === 'result' || h.includes('result')) resultCol = c;
-          }
-
-          if (actualCol >= 0) {
-            const cellRef = XLSX.utils.encode_cell({ r: row, c: actualCol });
-            ws[cellRef] = { t: 's', v: String(r.actual) + (r.notes ? ` (${r.notes})` : '') };
-          }
-          if (resultCol >= 0) {
-            const cellRef = XLSX.utils.encode_cell({ r: row, c: resultCol });
-            ws[cellRef] = { t: 's', v: r.result };
-          }
-        }
-      }
-    }
-
-    // Update the sheet range
-    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-    ws['!ref'] = XLSX.utils.encode_range(range);
-  }
-
-  // Also write a summary into the Complex Scenarios sheet for CS- tests
-  // and handle the EXPECTED TOTAL rows
-  for (const sheetName of ['Complex Scenarios', 'Regression']) {
-    const ws = wb.Sheets[sheetName];
-    if (!ws) continue;
-    const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-
-    for (let row = 0; row < data.length; row++) {
-      const cell0 = String(data[row][0] || '').trim();
-      if (cell0 === 'EXPECTED TOTAL') {
-        // Find the test ID from a few rows above (CS-XX header)
-        let csId = null;
-        for (let h = row - 1; h >= Math.max(0, row - 8); h--) {
-          const match = String(data[h][0] || '').match(/CS-(\d+)/);
-          if (match) {
-            csId = `CS-${match[1].padStart(2, '0')}`;
-            break;
-          }
-        }
-        if (csId && resultMap[csId]) {
-          // Write actual output in column 5 (F) and result in column 8 (I)
-          const actualRef = XLSX.utils.encode_cell({ r: row, c: 5 });
-          ws[actualRef] = { t: 's', v: `$${resultMap[csId].actual}` };
-          const resultRef = XLSX.utils.encode_cell({ r: row, c: 8 });
-          ws[resultRef] = { t: 's', v: resultMap[csId].result };
-        }
-      }
-    }
-  }
+  t.printSummary();
+  t.updateExistingExcel();
+  await t.cleanup();
 }
 
 main().catch(e => {
   console.error('Fatal error:', e);
-  pool.end();
+  t.cleanup();
   process.exit(1);
 });
