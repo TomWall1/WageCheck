@@ -21,10 +21,10 @@ export default function AdSidebar() {
 
   return (
     <ins className="adsbygoogle"
-      style={{ display: 'block', width: '300px', height: '250px' }}
+      style={{ display: 'block', width: '160px', height: '600px' }}
       data-ad-client="ca-pub-2221570965183279"
       data-ad-slot=""
-      data-ad-format="auto"
+      data-ad-format="vertical"
     />
   );
 }

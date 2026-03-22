@@ -63,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           borderBottom: '1.5px solid var(--border)',
           padding: '14px 16px',
         }}>
-          <div style={{ maxWidth: '1100px', margin: '0 auto' }} className="flex items-center justify-between">
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }} className="flex items-center justify-between">
             <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               <svg width="160" height="52" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
                 <text x="100" y="30" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="20" fill="#263238">REVIEW MY</text>
@@ -78,15 +78,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        {/* Main content — two-column layout on desktop */}
+        {/* Main content — centered with ad rails on desktop */}
         <main className="flex-1 px-4 py-10 pb-20 md:pb-10">
-          <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '2rem' }}>
-            {/* Main content column */}
-            <div style={{ flex: 1, maxWidth: '560px', minWidth: 0 }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
+            {/* Left ad rail — hidden on mobile */}
+            <aside className="hidden lg:block" style={{ width: '160px', flexShrink: 0 }}>
+              <div style={{ position: 'sticky', top: '1.5rem' }}>
+                <AdSidebar />
+              </div>
+            </aside>
+            {/* Main content column — always centered */}
+            <div style={{ width: '100%', maxWidth: '560px', minWidth: 0 }}>
               {children}
             </div>
-            {/* Desktop sidebar — hidden on mobile */}
-            <aside className="hidden md:block" style={{ width: '300px', flexShrink: 0 }}>
+            {/* Right ad rail — hidden on mobile */}
+            <aside className="hidden lg:block" style={{ width: '160px', flexShrink: 0 }}>
               <div style={{ position: 'sticky', top: '1.5rem' }}>
                 <AdSidebar />
               </div>
@@ -101,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           padding: '24px 16px',
           marginTop: '2rem',
         }}>
-          <div style={{ maxWidth: '1100px', margin: '0 auto', fontSize: '12px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', fontSize: '12px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
             <p style={{ marginBottom: '8px' }}>
               <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>This tool provides general information only — not legal advice.</span>{' '}
               Pay rates shown are minimum rates under the applicable Fair Work modern award, effective 1 July 2025.
