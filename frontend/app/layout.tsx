@@ -26,10 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gtag('js', new Date());
           gtag('config', 'G-G8305YSV8S');
         `}</Script>
-        {/* Google AdSense */}
-        <Script
+        {/* Google AdSense — must be in raw HTML for crawler verification */}
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2221570965183279"
-          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
       </head>
