@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import AdSidebar from '@/components/ads/AdSidebar';
+import AdMobileAnchor from '@/components/ads/AdMobileAnchor';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -13,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-AU">
       <head>
+        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-G8305YSV8S"
           strategy="afterInteractive"
@@ -23,6 +26,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           gtag('js', new Date());
           gtag('config', 'G-G8305YSV8S');
         `}</Script>
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2221570965183279"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="min-h-screen flex flex-col">
 
@@ -54,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           borderBottom: '1.5px solid var(--border)',
           padding: '14px 16px',
         }}>
-          <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div style={{ maxWidth: '1100px', margin: '0 auto' }} className="flex items-center justify-between">
             <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               <svg width="160" height="52" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
                 <text x="100" y="30" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="20" fill="#263238">REVIEW MY</text>
@@ -69,10 +78,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        {/* Main content */}
-        <main className="flex-1 px-4 py-10">
-          <div className="max-w-2xl mx-auto">
-            {children}
+        {/* Main content — two-column layout on desktop */}
+        <main className="flex-1 px-4 py-10 pb-20 md:pb-10">
+          <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '2rem' }}>
+            {/* Main content column */}
+            <div style={{ flex: 1, maxWidth: '560px', minWidth: 0 }}>
+              {children}
+            </div>
+            {/* Desktop sidebar — hidden on mobile */}
+            <aside className="hidden md:block" style={{ width: '300px', flexShrink: 0 }}>
+              <div style={{ position: 'sticky', top: '1.5rem' }}>
+                <AdSidebar />
+              </div>
+            </aside>
           </div>
         </main>
 
@@ -83,7 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           padding: '24px 16px',
           marginTop: '2rem',
         }}>
-          <div className="max-w-2xl mx-auto" style={{ fontSize: '12px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
+          <div style={{ maxWidth: '1100px', margin: '0 auto', fontSize: '12px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
             <p style={{ marginBottom: '8px' }}>
               <span style={{ color: 'var(--secondary)', fontWeight: 600 }}>This tool provides general information only — not legal advice.</span>{' '}
               Pay rates shown are minimum rates under the applicable Fair Work modern award, effective 1 July 2025.
@@ -105,6 +123,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </p>
           </div>
         </footer>
+
+        {/* Mobile anchor ad — fixed to bottom, hidden on desktop */}
+        <AdMobileAnchor />
 
       </body>
     </html>
