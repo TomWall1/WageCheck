@@ -80,22 +80,45 @@ async function runPenaltyRateTests() {
 
 async function runOvertimeTests() {
   console.log('\n═══ SECTION 3 — OVERTIME ═══');
-  // Daily OT 7.6hr/10.6hr, weekly 38hr/41hr (3hr first band). No casual OT.
+  console.log('\n3.1 FT daily OT (7.6hr/10.6hr thresholds)');
   try { const r = await calcShift('full_time', classId(3, 'general'), REF_MONDAY, '08:00', '16:06', { mealBreakTaken: true, mealBreakDuration: 30 }); record('DO-01', 202.92, payOnly(r), '7.6hr Mon, no OT'); } catch(e) { recordText('DO-01', 202.92, 'ERROR', 'FAIL', e.message); }
   try {
-    // 8.6hr shift: 7.6hr ordinary + 1hr OT @1.5×. 8:00 to 17:06 = 9hr6min - 30min = 8.6hr
     const r = await calcShift('full_time', classId(3, 'general'), REF_MONDAY, '08:00', '17:06', { mealBreakTaken: true, mealBreakDuration: 30 });
-    // 8.6hr × $26.70 = $229.62 base + 1hr × 26.70 × 0.5 = $13.35 OT = $242.97
-    // Wait: 8.6hr worked, 7.6hr threshold → 1hr OT. Base segments pay 8.6hr. OT premium on 1hr.
-    // Actually this shift ends at 5:06pm which is in daytime so no evening penalty.
     record('DO-02', 242.97, payOnly(r), '8.6hr Mon, 1hr daily OT @1.5× (excl meal)');
   } catch(e) { recordText('DO-02', 242.97, 'ERROR', 'FAIL', e.message); }
+
+  console.log('\n3.2 Casual daily OT (10hr threshold, per clause 11.3)');
+  // Casual G1 base=$31.19. 13.5hr shift = 10hr ordinary + 3hr OT @×1.20 + 0.5hr OT @×1.60
+  // Ordinary: 13.5hr × $31.19 = $421.07 (all hours paid at base)
+  // OT premium: 3hr × $31.19 × (1.20-1.0) = $18.71 + 0.5hr × $31.19 × (1.60-1.0) = $9.36 = $28.07
+  // Total ≈ $449.14
+  try {
+    const r = await calcShift('casual', classId(1, 'general'), REF_MONDAY, '06:00', '20:00', { mealBreakTaken: true, mealBreakDuration: 30 });
+    const otPay = r.summary.overtimePay;
+    recordText('CDO-01', 'yes', otPay > 0 ? 'yes' : 'no', otPay > 0 ? 'PASS' : 'FAIL', `Casual 13.5hr triggers daily OT (OT=$${round2(otPay)})`);
+  } catch(e) { recordText('CDO-01', 'yes', 'ERROR', 'FAIL', e.message); }
+  // Casual 9hr shift — under 10hr threshold, no daily OT
+  try {
+    const r = await calcShift('casual', classId(1, 'general'), REF_MONDAY, '08:00', '17:30', { mealBreakTaken: true, mealBreakDuration: 30 });
+    recordText('CDO-02', '0', String(r.summary.overtimeMinutes), r.summary.overtimeMinutes === 0 ? 'PASS' : 'FAIL', 'Casual 9hr = no daily OT (under 10hr threshold)');
+  } catch(e) { recordText('CDO-02', '0', 'ERROR', 'FAIL', e.message); }
+
+  console.log('\n3.3 FT weekly OT');
   try {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:00', endTime: '16:30', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', classId(3, 'general'), shifts);
     record('WO-01', 1094.70, payOnly(r), '40hr week, 2hr OT (excl meal)');
   } catch(e) { recordText('WO-01', 1094.70, 'ERROR', 'FAIL', e.message); }
+
+  console.log('\n3.4 Casual weekly OT (38hr threshold)');
+  try {
+    const shifts = [];
+    for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:00', endTime: '16:30', mealBreakTaken: true, mealBreakDuration: 30 });
+    const r = await calcMultiShift('casual', classId(1, 'general'), shifts);
+    const otPay = r.summary.overtimePay;
+    recordText('CWO-01', 'yes', otPay > 0 ? 'yes' : 'no', otPay > 0 ? 'PASS' : 'FAIL', `Casual 40hr week triggers weekly OT (OT=$${round2(otPay)})`);
+  } catch(e) { recordText('CWO-01', 'yes', 'ERROR', 'FAIL', e.message); }
 }
 
 async function runMinEngagementTests() {
