@@ -71,6 +71,14 @@ const CASUAL_OT_RATES = [
   // FT weekly: 38hr → ×1.50, 40hr → ×2.00.
   { award: 'MA000058', period: 'weekly', threshold: 38,  mult: 1.20, desc: 'Casual weekly OT — over 38hr/week (×1.20 of casual base)' },
   { award: 'MA000058', period: 'weekly', threshold: 40,  mult: 1.60, desc: 'Casual weekly OT — over 40hr/week (×1.60 of casual base)' },
+
+  // ── MA000095 (Car Parking) ─────────────────────────────────────────────
+  // Clause 11.3: casual OT for all hours in excess of ordinary hours on any day.
+  // Ordinary hours = 7.6hr/day (38hr/5). Also need FT/PT daily OT (was missing entirely).
+  // FT/PT daily: 7.6hr → ×1.50, 9.6hr → ×2.00.
+  // Casual daily: 7.6hr → ×1.20, 9.6hr → ×1.60.
+  { award: 'MA000095', period: 'daily',  threshold: 7.6, mult: 1.20, desc: 'Casual daily OT — first 2hr over 7.6hr (×1.20 of casual base)' },
+  { award: 'MA000095', period: 'daily',  threshold: 9.6, mult: 1.60, desc: 'Casual daily OT — after 9.6hr (×1.60 of casual base)' },
 ];
 
 async function migrate() {
