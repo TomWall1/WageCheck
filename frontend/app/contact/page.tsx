@@ -18,7 +18,7 @@ export default function ContactPage() {
     try {
       await emailjs.send('service_dazyrqm', 'template_uw29dno', {
         name,
-        from_email: email,
+        sender_email: email,
         message,
         time: new Date().toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' }),
       }, { publicKey: 'V5xR56gKnor6BPRVI' });
