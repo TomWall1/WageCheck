@@ -6,17 +6,33 @@ const router = express.Router();
 const RECIPIENT = 'reviewmypayapp@gmail.com';
 
 const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first');
+const { promisify } = require('util');
+const resolve4 = promisify(dns.resolve4);
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+let transporter;
+
+async function getTransporter() {
+  if (transporter) return transporter;
+
+  // Resolve Gmail SMTP to an IPv4 address directly
+  const addresses = await resolve4('smtp.gmail.com');
+  const ipv4Host = addresses[0];
+
+  transporter = nodemailer.createTransport({
+    host: ipv4Host,
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+    tls: {
+      servername: 'smtp.gmail.com', // needed for TLS cert validation
+    },
+  });
+
+  return transporter;
+}
 
 router.post('/', async (req, res) => {
   const { name, email, message } = req.body;
@@ -41,7 +57,8 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    await transporter.sendMail({
+    const mailer = await getTransporter();
+    await mailer.sendMail({
       from: `"Review My Pay Contact" <${process.env.SMTP_USER}>`,
       replyTo: `"${name.replace(/[<>"]/g, '')}" <${email}>`,
       to: RECIPIENT,
