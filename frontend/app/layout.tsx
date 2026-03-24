@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import AdSidebar from '@/components/ads/AdSidebar';
-import AdMobileAnchor from '@/components/ads/AdMobileAnchor';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -78,25 +76,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        {/* Main content — centered with ad rails on desktop */}
-        <main className="flex-1 px-4 py-10 pb-20 md:pb-10">
-          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-            {/* Left ad rail — hidden on mobile */}
-            <aside className="hidden lg:block" style={{ width: '160px', flexShrink: 0 }}>
-              <div style={{ position: 'sticky', top: '1.5rem' }}>
-                <AdSidebar />
-              </div>
-            </aside>
-            {/* Main content column — always centered */}
-            <div style={{ width: '100%', maxWidth: '560px', minWidth: 0 }}>
-              {children}
-            </div>
-            {/* Right ad rail — hidden on mobile */}
-            <aside className="hidden lg:block" style={{ width: '160px', flexShrink: 0 }}>
-              <div style={{ position: 'sticky', top: '1.5rem' }}>
-                <AdSidebar />
-              </div>
-            </aside>
+        {/* Main content */}
+        <main className="flex-1 px-4 py-10">
+          <div style={{ maxWidth: '560px', margin: '0 auto' }}>
+            {children}
           </div>
         </main>
 
@@ -130,8 +113,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </footer>
 
-        {/* Mobile anchor ad — fixed to bottom, hidden on desktop */}
-        <AdMobileAnchor />
 
       </body>
     </html>

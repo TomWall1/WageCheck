@@ -12,6 +12,9 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust the reverse proxy (Render, etc.) so rate limiting uses the real client IP
+app.set('trust proxy', 1);
+
 // Security
 app.use(helmet());
 app.use(cors({
