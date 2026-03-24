@@ -6,7 +6,6 @@ const rateLimit = require('express-rate-limit');
 
 const awardRoutes = require('./routes/award');
 const adminRoutes = require('./routes/admin');
-const contactRoutes = require('./routes/contact');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -47,17 +46,8 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-const contactLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many messages — please try again later.' },
-});
-
 app.use('/api/award', publicLimiter, awardRoutes);
 app.use('/api/admin', adminLimiter, adminRoutes);
-app.use('/api/contact', contactLimiter, contactRoutes);
 
 app.use(errorHandler);
 

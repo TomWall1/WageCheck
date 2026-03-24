@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import emailjs from '@emailjs/browser';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
@@ -17,16 +16,11 @@ export default function ContactPage() {
     setErrorMsg('');
 
     try {
-      const res = await fetch(`${API_URL}/api/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({ error: 'Something went wrong.' }));
-        throw new Error(data.error);
-      }
+      await emailjs.send('service_dazyrqm', 'template_uw29dno', {
+        name,
+        message,
+        time: new Date().toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' }),
+      }, { publicKey: 'V5xR56gKnor6BPRVI' });
 
       setStatus('sent');
       setName('');
