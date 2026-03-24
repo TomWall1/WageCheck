@@ -195,6 +195,62 @@ async function migrate() {
       )
     `);
 
+    // ── Anonymous calculation logs (analytics) ────────────────────────────────
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS calculation_logs (
+        id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        created_at            TIMESTAMPTZ DEFAULT NOW(),
+        award_code            VARCHAR(50) NOT NULL,
+        classification_level  INTEGER,
+        classification_stream VARCHAR(50),
+        employment_type       VARCHAR(20) NOT NULL,
+        age_bracket           VARCHAR(20),
+        total_shifts          INTEGER NOT NULL,
+        calculated_gross      NUMERIC(10,2) NOT NULL,
+        actual_pay_entered    NUMERIC(10,2),
+        gap_amount            NUMERIC(10,2),
+        gap_percent           NUMERIC(6,2),
+        appears_underpaid     BOOLEAN,
+        is_test               BOOLEAN NOT NULL DEFAULT FALSE
+      )
+    `);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS calculation_shift_logs (
+        id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        calculation_id       UUID NOT NULL REFERENCES calculation_logs(id) ON DELETE CASCADE,
+        day_type             VARCHAR(30) NOT NULL,
+        shift_duration_hours NUMERIC(5,2) NOT NULL,
+        break_minutes        INTEGER NOT NULL DEFAULT 0,
+        ordinary_hours       NUMERIC(5,2) NOT NULL,
+        ordinary_pay         NUMERIC(10,2) NOT NULL,
+        penalty_hours        NUMERIC(5,2) NOT NULL DEFAULT 0,
+        penalty_pay          NUMERIC(10,2) NOT NULL DEFAULT 0,
+        overtime_hours       NUMERIC(5,2) NOT NULL DEFAULT 0,
+        overtime_pay         NUMERIC(10,2) NOT NULL DEFAULT 0,
+        total_shift_pay      NUMERIC(10,2) NOT NULL,
+        missed_break_penalty BOOLEAN NOT NULL DEFAULT FALSE,
+        missed_break_amount  NUMERIC(10,2) NOT NULL DEFAULT 0
+      )
+    `);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS calculation_allowance_logs (
+        id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        calculation_id   UUID NOT NULL REFERENCES calculation_logs(id) ON DELETE CASCADE,
+        allowance_type   VARCHAR(50) NOT NULL,
+        allowance_amount NUMERIC(10,4) NOT NULL DEFAULT 0,
+        qualified        BOOLEAN NOT NULL DEFAULT FALSE
+      )
+    `);
+
+    // Analytics indexes
+    await client.query('CREATE INDEX IF NOT EXISTS idx_calc_logs_award ON calculation_logs(award_code)');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_calc_logs_created ON calculation_logs(created_at)');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_calc_logs_test ON calculation_logs(is_test)');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_calc_shift_logs_calc ON calculation_shift_logs(calculation_id)');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_calc_allowance_logs_calc ON calculation_allowance_logs(calculation_id)');
+
     // ── Scrape log ───────────────────────────────────────────────────────────────
     await client.query(`
       CREATE TABLE IF NOT EXISTS scrape_log (

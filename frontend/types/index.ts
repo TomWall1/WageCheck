@@ -70,6 +70,7 @@ export interface SuperBreakdownRow {
 }
 
 export interface CalculationResult {
+  calculationId?: string;
   baseHourlyRate: number;
   employmentType: EmploymentType;
   effectiveDate: string;

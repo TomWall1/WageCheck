@@ -1,9 +1,20 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...((options?.headers as Record<string, string>) || {}),
+  };
+
+  // Attach test-mode header if activated via localStorage
+  if (typeof window !== 'undefined') {
+    const testKey = localStorage.getItem('wagecheck_test_mode');
+    if (testKey) headers['x-test-mode'] = testKey;
+  }
+
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
     ...options,
+    headers,
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
@@ -52,6 +63,18 @@ export const api = {
     apiFetch('/api/award/classify', {
       method: 'POST',
       body: JSON.stringify({ answers, employmentType, award: awardCode }),
+    }),
+
+  logComparison: (calculationId: string, actualPay: number) =>
+    apiFetch('/api/award/log-comparison', {
+      method: 'POST',
+      body: JSON.stringify({ calculationId, actualPay }),
+    }),
+
+  logAllowances: (calculationId: string, allowances: Array<{ type: string; amount: number; qualified: boolean }>) =>
+    apiFetch('/api/award/log-allowances', {
+      method: 'POST',
+      body: JSON.stringify({ calculationId, allowances }),
     }),
 
   calculate: (payload: {

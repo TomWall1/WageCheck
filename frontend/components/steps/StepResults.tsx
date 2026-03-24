@@ -1,7 +1,7 @@
 'use client';
 
 import { WageCheckState, AllowanceInfo, CalculationResult } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api';
 import { formatCurrency, formatHours, employmentTypeLabel } from '@/lib/utils';
 import clsx from 'clsx';
@@ -91,6 +91,37 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   const underpayment = hasPaidAmount ? summary.totalPayOwed - paidAmount : null;
   const wasUnderpaid = underpayment !== null && underpayment > 0.50;
   const wasOverpaid = underpayment !== null && underpayment < -0.50;
+
+  // Log comparison to analytics (fire-and-forget, debounced)
+  const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const comparisonLoggedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (comparisonTimerRef.current) clearTimeout(comparisonTimerRef.current);
+    const calcId = activeResult?.calculationId;
+    if (!calcId || !hasPaidAmount) return;
+    const key = `${calcId}:${paidAmount}`;
+    if (comparisonLoggedRef.current === key) return;
+    comparisonTimerRef.current = setTimeout(() => {
+      comparisonLoggedRef.current = key;
+      api.logComparison(calcId, paidAmount).catch(() => {});
+    }, 1000);
+    return () => { if (comparisonTimerRef.current) clearTimeout(comparisonTimerRef.current); };
+  }, [activeResult?.calculationId, hasPaidAmount, paidAmount]);
+
+  // Log allowances to analytics (fire-and-forget, once per calculationId)
+  const allowanceLoggedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const calcId = activeResult?.calculationId;
+    if (!calcId || !allowanceInfo.length || allowanceLoggedRef.current === calcId) return;
+    allowanceLoggedRef.current = calcId;
+    const entries = allowanceAnswers.map(a => {
+      const info = allowanceInfoByType[a.type];
+      return { type: a.type, amount: info?.amount ? Number(info.amount) : 0, qualified: a.triggered };
+    });
+    if (entries.length > 0) {
+      api.logAllowances(calcId, entries).catch(() => {});
+    }
+  }, [activeResult?.calculationId, allowanceInfo, allowanceAnswers]);
 
   // Compute total allowances owed (additional, not included in wages)
   const totalAllowancesOwed = triggeredAllowances.reduce((sum, a) => {

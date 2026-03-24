@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db/pool');
-const { calculateEntitlements } = require('../services/awardCalculator');
+const { v4: uuidv4 } = require('uuid');
+const { calculateEntitlements, getDayType } = require('../services/awardCalculator');
 const { classifyAndFetch } = require('../services/classificationEngine');
+
+function bucketAge(age) {
+  if (!age) return null;
+  if (age < 18) return 'under_18';
+  if (age <= 20) return '18_20';
+  return '21_plus';
+}
 
 const VALID_AWARDS = ['MA000009', 'MA000003', 'MA000119', 'MA000004', 'MA000094', 'MA000080', 'MA000081', 'MA000084', 'MA000022', 'MA000028', 'MA000033', 'MA000002', 'MA000104', 'MA000013', 'MA000120', 'MA000102', 'MA000023', 'MA000005', 'MA000026', 'MA000058', 'MA000082', 'MA000030', 'MA000063', 'MA000095', 'MA000105', 'MA000101'];
 const DEFAULT_AWARD = 'MA000009';
@@ -203,10 +211,138 @@ router.post('/calculate', async (req, res) => {
       pool
     );
 
+    // ── Anonymous analytics logging (fire-and-forget) ──────────────────────
+    const calculationId = uuidv4();
+    result.calculationId = calculationId;
+    const isTest = req.headers['x-test-mode'] === process.env.ADMIN_SECRET;
+
+    (async () => {
+      try {
+        const classRow = await pool.query(
+          'SELECT level, stream FROM classifications WHERE id = $1 AND award_code = $2',
+          [classificationId, awardCode]
+        );
+        const cl = classRow.rows[0] || {};
+
+        await pool.query(`
+          INSERT INTO calculation_logs (id, award_code, classification_level, classification_stream, employment_type, age_bracket, total_shifts, calculated_gross, is_test)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+        `, [
+          calculationId, awardCode, cl.level || null, cl.stream || null,
+          employmentType, bucketAge(age), shifts.length,
+          result.summary.totalPayOwed, isTest
+        ]);
+
+        // Log each shift
+        for (const sh of result.shifts) {
+          const penaltyHours = sh.segments
+            .filter(s => s.multiplier > 1 && !s.missedBreakPenalty)
+            .reduce((sum, s) => sum + s.hours, 0);
+          const overtimeSegments = sh.segments.filter(s => s.rateLabel && s.rateLabel.toLowerCase().includes('overtime'));
+          const otHours = overtimeSegments.reduce((sum, s) => sum + s.hours, 0);
+          const otPay = overtimeSegments.reduce((sum, s) => sum + s.pay, 0);
+
+          await pool.query(`
+            INSERT INTO calculation_shift_logs (id, calculation_id, day_type, shift_duration_hours, break_minutes, ordinary_hours, ordinary_pay, penalty_hours, penalty_pay, overtime_hours, overtime_pay, total_shift_pay, missed_break_penalty, missed_break_amount)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+          `, [
+            uuidv4(), calculationId,
+            getDayType(sh.date, publicHolidays || []),
+            sh.workedHours, sh.mealBreakMinutes,
+            sh.workedHours, sh.ordinaryPay,
+            penaltyHours, sh.penaltyExtra,
+            otHours, otPay,
+            sh.totalPay, sh.missedBreakApplied || false, sh.missedBreakExtra
+          ]);
+        }
+
+        // Log allowances if provided in request body
+        const { allowances } = req.body;
+        if (Array.isArray(allowances)) {
+          for (const a of allowances) {
+            await pool.query(`
+              INSERT INTO calculation_allowance_logs (id, calculation_id, allowance_type, allowance_amount, qualified)
+              VALUES ($1,$2,$3,$4,$5)
+            `, [uuidv4(), calculationId, a.type, a.amount || 0, a.qualified || false]);
+          }
+        }
+      } catch (err) {
+        console.error('Analytics log error:', err.message);
+      }
+    })();
+
     res.json(result);
   } catch (err) {
     console.error('Calculation error:', err);
     res.status(500).json({ error: 'Calculation failed: ' + err.message });
+  }
+});
+
+// POST /api/award/log-comparison
+// Body: { calculationId, actualPay }
+router.post('/log-comparison', async (req, res) => {
+  try {
+    const { calculationId, actualPay } = req.body;
+    if (!calculationId || typeof actualPay !== 'number' || actualPay < 0) {
+      return res.status(400).json({ error: 'calculationId and actualPay (number >= 0) are required' });
+    }
+
+    const existing = await pool.query(
+      'SELECT calculated_gross FROM calculation_logs WHERE id = $1', [calculationId]
+    );
+    if (!existing.rows.length) {
+      return res.status(404).json({ error: 'Calculation not found' });
+    }
+
+    const calculatedGross = parseFloat(existing.rows[0].calculated_gross);
+    const gapAmount = Math.round((calculatedGross - actualPay) * 100) / 100;
+    const gapPercent = calculatedGross > 0
+      ? Math.round((gapAmount / calculatedGross) * 10000) / 100
+      : 0;
+    const appearsUnderpaid = gapAmount > 0.50;
+
+    await pool.query(`
+      UPDATE calculation_logs
+      SET actual_pay_entered = $2, gap_amount = $3, gap_percent = $4, appears_underpaid = $5
+      WHERE id = $1
+    `, [calculationId, actualPay, gapAmount, gapPercent, appearsUnderpaid]);
+
+    res.json({ ok: true, gapAmount, gapPercent, appearsUnderpaid });
+  } catch (err) {
+    console.error('Log comparison error:', err);
+    res.status(500).json({ error: 'Failed to log comparison' });
+  }
+});
+
+// POST /api/award/log-allowances
+// Body: { calculationId, allowances: [{ type, amount, qualified }] }
+router.post('/log-allowances', async (req, res) => {
+  try {
+    const { calculationId, allowances } = req.body;
+    if (!calculationId || !Array.isArray(allowances)) {
+      return res.status(400).json({ error: 'calculationId and allowances array are required' });
+    }
+
+    // Verify the calculation exists
+    const existing = await pool.query(
+      'SELECT id FROM calculation_logs WHERE id = $1', [calculationId]
+    );
+    if (!existing.rows.length) {
+      return res.status(404).json({ error: 'Calculation not found' });
+    }
+
+    for (const a of allowances) {
+      if (!a.type) continue;
+      await pool.query(`
+        INSERT INTO calculation_allowance_logs (id, calculation_id, allowance_type, allowance_amount, qualified)
+        VALUES ($1,$2,$3,$4,$5)
+      `, [uuidv4(), calculationId, a.type, a.amount || 0, a.qualified || false]);
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Log allowances error:', err);
+    res.status(500).json({ error: 'Failed to log allowances' });
   }
 });
 
