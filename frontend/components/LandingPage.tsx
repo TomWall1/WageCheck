@@ -85,6 +85,14 @@ const AWARDS = [
     badge: 'MA000119',
   },
   {
+    code: 'MA000016' as AwardCode,
+    name: 'Security Services Industry Award 2020',
+    shortName: 'Security Services Award',
+    description: 'Covers the security services industry including guarding, crowd control, patrol, and monitoring services.',
+    examples: 'Security guards, crowd controllers, patrol officers, alarm response officers, concierge security, CCTV operators',
+    badge: 'MA000016',
+  },
+  {
     code: 'MA000004' as AwardCode,
     name: 'General Retail Industry Award 2020',
     shortName: 'Retail Award',

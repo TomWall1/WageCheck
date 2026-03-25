@@ -600,6 +600,40 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000079'],
   },
 
+  // ── MA000016 (Security Services) ────────────────────────────────────────────
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    onlyForAward: ['MA000016'],
+  },
+  {
+    type: 'firearm',
+    primary: 'Do you carry a firearm on duty?',
+    onlyForAward: ['MA000016'],
+  },
+  {
+    type: 'aviation',
+    primary: 'Do you work in aviation security?',
+    onlyForAward: ['MA000016'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    onlyForAward: ['MA000016'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'meal',
+    primary: 'Do you work overtime and aren\'t provided a meal?',
+    onlyForAward: ['MA000016'],
+  },
+
   // ── MA000106 (Real Estate Industry) ─────────────────────────────────────────
   {
     type: 'vehicle',

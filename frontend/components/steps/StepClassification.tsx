@@ -102,6 +102,7 @@ const STREAM_LABELS: Record<string, string> = {
   motion_picture: 'Motion Picture Production',
   journalist: 'Journalism',
   real_estate: 'Real Estate',
+  security: 'Security Services',
   graduate: 'Graduates of Architecture',
   registered: 'Registered Architects',
   student: 'Students of Architecture',
@@ -130,6 +131,7 @@ const STREAM_ORDER_MA000101 = ['landscaping'];
 const STREAM_ORDER_MA000091 = ['cinema', 'tv_broadcasting', 'radio', 'motion_picture', 'journalist'];
 const STREAM_ORDER_MA000106 = ['real_estate'];
 const STREAM_ORDER_MA000079 = ['graduate', 'registered', 'student', 'bachelor_pathway'];
+const STREAM_ORDER_MA000016 = ['security'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -153,7 +155,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isBREC = awardCode === 'MA000091';
   const isRE = awardCode === 'MA000106';
   const isArch = awardCode === 'MA000079';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch;
+  const isSec = awardCode === 'MA000016';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -175,6 +178,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isBREC ? STREAM_ORDER_MA000091
     : isRE ? STREAM_ORDER_MA000106
     : isArch ? STREAM_ORDER_MA000079
+    : isSec ? STREAM_ORDER_MA000016
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -197,6 +201,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isBREC ? 'Broadcasting & Cinemas Award'
     : isRE ? 'Real Estate Award'
     : isArch ? 'Architects Award'
+    : isSec ? 'Security Services Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -393,7 +398,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000106: Record<number, number> = { 19: 0.70, 20: 0.80 };
     const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : isBREC ? JUNIOR_MA000091 : isRE ? JUNIOR_MA000106 : JUNIOR_DEFAULT;
     const juniorCutoff = (isRest || isFitness) ? 20 : (isMisc || isBREC || isRE) ? 21 : 21;
-    const juniorMult = isArch ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : 0.40)) : 1.0;
+    const juniorMult = isArch ? 1.0 : isSec ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     return (
       <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
@@ -523,7 +528,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                           ? ' Levels run from Level 1 (associate) to Level 5 (in-charge).'
                                           : isArch
                                             ? ' Classifications include graduates (Levels 1–4), registered architects (Levels 1–3), students (Levels 1–6), and bachelor pathway (Levels 1–3).'
-                                            : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                            : isSec
+                                              ? ' Levels run from Level 1 (entry-level officer) to Level 5 (supervisor/controller).'
+                                              : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -563,7 +570,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                           ? ' It might say something like "Real Estate Employee Level 2" or "Level 3".'
                                           : isArch
                                             ? ' It might say something like "Graduate Level 1" or "Registered Architect Level 2".'
-                                            : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                            : isSec
+                                              ? ' It might say something like "Security Officer Level 2" or "Level 3".'
+                                              : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

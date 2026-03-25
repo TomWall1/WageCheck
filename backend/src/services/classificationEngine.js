@@ -624,6 +624,18 @@ const CLASSIFICATION_RULES_MA000106 = [
 ];
 
 /**
+ * MA000016 — Security Services Industry Award 2020
+ * Single stream 'security' with 5 levels.
+ */
+const CLASSIFICATION_RULES_MA000016 = [
+  { conditions: { security_level: 'level_1' }, level: 1, stream: 'security', rationale: 'Security Officer Level 1 — entry-level security officer' },
+  { conditions: { security_level: 'level_2' }, level: 2, stream: 'security', rationale: 'Security Officer Level 2 — experienced officer (12+ months or additional certifications)' },
+  { conditions: { security_level: 'level_3' }, level: 3, stream: 'security', rationale: 'Security Officer Level 3 — senior officer (systems operation, post management)' },
+  { conditions: { security_level: 'level_4' }, level: 4, stream: 'security', rationale: 'Security Officer Level 4 — leading officer (team oversight, shift management)' },
+  { conditions: { security_level: 'level_5' }, level: 5, stream: 'security', rationale: 'Security Officer Level 5 — supervisor/controller (site or multi-site operations)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -845,6 +857,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'real_estate', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000016') {
+    for (const rule of CLASSIFICATION_RULES_MA000016) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'security', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {
