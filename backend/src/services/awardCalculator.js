@@ -145,6 +145,12 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
   if (awardCode === 'MA000030' || awardCode === 'MA000095' || awardCode === 'MA000105') {
     return 1.0; // No junior rates specified in these awards' pay guides
   }
+  if (awardCode === 'MA000091') {
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.507;
+    const RATES = { 16: 0.507, 17: 0.620, 18: 0.733, 19: 0.846, 20: 0.958 };
+    return RATES[age] || 1.0;
+  }
   if (awardCode === 'MA000063') {
     // MA000063: Under 19=70%, 19=80%, 20+=adult
     // Note: 18+ driving passenger vehicle in sole control must be paid adult rate (handled by employer)

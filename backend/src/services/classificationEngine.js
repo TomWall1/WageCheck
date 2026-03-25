@@ -517,6 +517,71 @@ const CLASSIFICATION_RULES_MA000030 = [
 ];
 
 /**
+ * MA000091 — Broadcasting, Recorded Entertainment and Cinemas Award 2020
+ * Five streams: cinema (L1–7), tv_broadcasting (L1–13), radio (L1–6),
+ * motion_picture (L1–10), journalist (L1–11).
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000091 = [
+  // ── Cinema stream ──────────────────────────────────────────────────────────
+  { conditions: { sector: 'cinema', cinema_role: 'entry' },       level: 1, stream: 'cinema', rationale: 'Cinema Worker Level 1 — entry-level cinema employee' },
+  { conditions: { sector: 'cinema', cinema_role: 'experienced' }, level: 2, stream: 'cinema', rationale: 'Cinema Worker Level 2 — experienced cinema employee' },
+  { conditions: { sector: 'cinema', cinema_role: 'specialist' },  level: 3, stream: 'cinema', rationale: 'Cinema Worker Level 3 — specialist cinema employee' },
+  { conditions: { sector: 'cinema', cinema_role: 'senior' },      level: 4, stream: 'cinema', rationale: 'Cinema Worker Level 4 — senior cinema employee' },
+  { conditions: { sector: 'cinema', cinema_role: 'supervisor' },  level: 5, stream: 'cinema', rationale: 'Cinema Worker Level 5 — cinema supervisor' },
+  { conditions: { sector: 'cinema', cinema_role: 'senior_supervisor' }, level: 6, stream: 'cinema', rationale: 'Cinema Worker Level 6 — senior cinema supervisor' },
+  { conditions: { sector: 'cinema', cinema_role: 'manager' },     level: 7, stream: 'cinema', rationale: 'Cinema Worker Level 7 — cinema manager' },
+
+  // ── TV Broadcasting stream ─────────────────────────────────────────────────
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'trainee' },          level: 1,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 1 — trainee' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'operator_b' },       level: 2,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 2 — Operator Grade B' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'operator_bplus' },   level: 3,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 3 — Operator Grade B+' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'operator_a' },       level: 4,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 4 — Operator Grade A' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'operator_aplus' },   level: 5,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 5 — Operator Grade A+' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'senior_b' },         level: 6,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 6 — Senior Operator Grade B' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'coordinator' },      level: 7,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 7 — Coordinator' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'senior_a' },         level: 8,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 8 — Senior Operator Grade A' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'senior_director' },  level: 9,  stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 9 — Senior Director' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'dept_supervisor' },  level: 10, stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 10 — Department Supervisor' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'senior_supervisor' },level: 11, stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 11 — Senior Supervisor' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'specialist' },       level: 12, stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 12 — Specialist' },
+  { conditions: { sector: 'tv_broadcasting', tv_role: 'chief' },            level: 13, stream: 'tv_broadcasting', rationale: 'TV Broadcasting Level 13 — Chief' },
+
+  // ── Radio stream ───────────────────────────────────────────────────────────
+  { conditions: { sector: 'radio', radio_role: 'broadcasting_operator' }, level: 1, stream: 'radio', rationale: 'Radio Level 1 — Broadcasting Operator' },
+  { conditions: { sector: 'radio', radio_role: 'technician' },           level: 2, stream: 'radio', rationale: 'Radio Level 2 — Technician' },
+  { conditions: { sector: 'radio', radio_role: 'announcer_2' },          level: 3, stream: 'radio', rationale: 'Radio Level 3 — Announcer Grade 2' },
+  { conditions: { sector: 'radio', radio_role: 'announcer_1' },          level: 4, stream: 'radio', rationale: 'Radio Level 4 — Announcer Grade 1' },
+  { conditions: { sector: 'radio', radio_role: 'engineer' },             level: 5, stream: 'radio', rationale: 'Radio Level 5 — Engineer' },
+  { conditions: { sector: 'radio', radio_role: 'chief_engineer' },       level: 6, stream: 'radio', rationale: 'Radio Level 6 — Chief Engineer' },
+
+  // ── Motion Picture stream ──────────────────────────────────────────────────
+  { conditions: { sector: 'motion_picture', mp_role: 'level_1' },  level: 1,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 1' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_2' },  level: 2,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 2' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_3' },  level: 3,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 3' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_4' },  level: 4,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 4' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_5' },  level: 5,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 5' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_6' },  level: 6,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 6' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_7' },  level: 7,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 7' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_8' },  level: 8,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 8' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_9' },  level: 9,  stream: 'motion_picture', rationale: 'Motion Picture Production Level 9' },
+  { conditions: { sector: 'motion_picture', mp_role: 'level_10' }, level: 10, stream: 'motion_picture', rationale: 'Motion Picture Production Level 10' },
+
+  // ── Journalist stream ──────────────────────────────────────────────────────
+  { conditions: { sector: 'journalist', journalist_role: 'cadet_1' }, level: 1,  stream: 'journalist', rationale: 'Journalist Cadet Year 1' },
+  { conditions: { sector: 'journalist', journalist_role: 'cadet_2' }, level: 2,  stream: 'journalist', rationale: 'Journalist Cadet Year 2' },
+  { conditions: { sector: 'journalist', journalist_role: 'cadet_3' }, level: 3,  stream: 'journalist', rationale: 'Journalist Cadet Year 3' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_1' }, level: 4,  stream: 'journalist', rationale: 'Journalist Grade 1' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_2' }, level: 5,  stream: 'journalist', rationale: 'Journalist Grade 2' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_3' }, level: 6,  stream: 'journalist', rationale: 'Journalist Grade 3' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_4' }, level: 7,  stream: 'journalist', rationale: 'Journalist Grade 4' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_5' }, level: 8,  stream: 'journalist', rationale: 'Journalist Grade 5' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_6' }, level: 9,  stream: 'journalist', rationale: 'Journalist Grade 6' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_7' }, level: 10, stream: 'journalist', rationale: 'Journalist Grade 7' },
+  { conditions: { sector: 'journalist', journalist_role: 'grade_8' }, level: 11, stream: 'journalist', rationale: 'Journalist Grade 8' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -711,6 +776,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 0, stream: 'landscaping', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000091') {
+    for (const rule of CLASSIFICATION_RULES_MA000091) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'cinema', rationale: 'Default — Cinema Worker Level 1', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {

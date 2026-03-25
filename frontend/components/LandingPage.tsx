@@ -156,6 +156,14 @@ const AWARDS = [
     examples: 'Gardeners, landscapers, lawn mowing operators, arborists, irrigation technicians, landscape labourers, garden maintenance workers',
     badge: 'MA000101',
   },
+  {
+    code: 'MA000091' as AwardCode,
+    name: 'Broadcasting, Recorded Entertainment and Cinemas Award 2020',
+    shortName: 'Broadcasting & Cinemas Award',
+    description: 'Covers broadcasting, recorded entertainment, and cinema industries including TV, radio, film production, and cinema operations.',
+    examples: 'Cinema workers, camera operators, audio technicians, lighting operators, film crew, journalists, radio broadcasters',
+    badge: 'MA000091',
+  },
 ];
 
 interface Props {

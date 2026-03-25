@@ -96,6 +96,11 @@ const STREAM_LABELS: Record<string, string> = {
   car_parking: 'Car Parking',
   funeral: 'Funeral Industry',
   landscaping: 'Gardening & Landscaping',
+  cinema: 'Cinema',
+  tv_broadcasting: 'TV Broadcasting',
+  radio: 'Radio Broadcasting',
+  motion_picture: 'Motion Picture Production',
+  journalist: 'Journalism',
 };
 
 const STREAM_ORDER_MA000009 = ['kitchen', 'food_beverage', 'front_office', 'general'];
@@ -117,6 +122,7 @@ const STREAM_ORDER_MA000063 = ['transport'];
 const STREAM_ORDER_MA000095 = ['car_parking'];
 const STREAM_ORDER_MA000105 = ['funeral'];
 const STREAM_ORDER_MA000101 = ['landscaping'];
+const STREAM_ORDER_MA000091 = ['cinema', 'tv_broadcasting', 'radio', 'motion_picture', 'journalist'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -137,7 +143,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isCarParking = awardCode === 'MA000095';
   const isFuneral = awardCode === 'MA000105';
   const isLandscaping = awardCode === 'MA000101';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping;
+  const isBREC = awardCode === 'MA000091';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -156,6 +163,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isCarParking ? STREAM_ORDER_MA000095
     : isFuneral ? STREAM_ORDER_MA000105
     : isLandscaping ? STREAM_ORDER_MA000101
+    : isBREC ? STREAM_ORDER_MA000091
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -175,6 +183,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isCarParking ? 'Car Parking Award'
     : isFuneral ? 'Funeral Industry Award'
     : isLandscaping ? 'Gardening & Landscaping Award'
+    : isBREC ? 'Broadcasting & Cinemas Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -367,9 +376,10 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000028: Record<number, number> = { 15: 0.50, 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
     const JUNIOR_MA000033: Record<number, number> = { 15: 0.50, 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
     const JUNIOR_MA000104: Record<number, number> = { 15: 0.368, 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : JUNIOR_DEFAULT;
-    const juniorCutoff = (isRest || isFitness) ? 20 : isMisc ? 21 : 21;
-    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : 0.40)) : 1.0;
+    const JUNIOR_MA000091: Record<number, number> = { 16: 0.507, 17: 0.620, 18: 0.733, 19: 0.846, 20: 0.958 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : isBREC ? JUNIOR_MA000091 : JUNIOR_DEFAULT;
+    const juniorCutoff = (isRest || isFitness) ? 20 : (isMisc || isBREC) ? 21 : 21;
+    const juniorMult = (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     return (
       <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
@@ -493,7 +503,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                     ? ' Levels run from Level 1 (new starters, under 3 months) to Level 4 (advanced trade or sub-professional). Levels 1–2 are based on tenure; Levels 3–4 require trade qualifications.'
                                     : isRacing
                                       ? ' Racecourse Attendants: Introductory + Grades 1–4. Raceday Officials: Grades 1–4. Liquor employees (bar, cashier, glass collectors) always work as casuals on all-inclusive rates.'
-                                      : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                      : isBREC
+                                        ? ' Five streams: Cinema (Levels 1–7), TV Broadcasting (Levels 1–13), Radio (Levels 1–6), Motion Picture Production (Levels 1–10), and Journalism (Levels 1–11).'
+                                        : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -527,7 +539,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                     ? ' It might say something like "Miscellaneous Award Level 2" or "Level 3 — trade qualified".'
                                     : isRacing
                                       ? ' It might say something like "Grade 2 Racecourse Attendant" or "Grade 3 Raceday Official".'
-                                      : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                      : isBREC
+                                        ? ' It might say something like "Cinema Worker Level 3" or "TV Broadcasting Operator Grade A".'
+                                        : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

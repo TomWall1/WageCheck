@@ -538,6 +538,48 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primaryHelp: 'If you are directed to work at a different location, you are entitled to reimbursement for additional fares and travel time (Mon–Sat at your ordinary rate; Sun/PH at ordinary rate + 50%).',
     onlyForAward: ['MA000084'],
   },
+
+  // ── MA000091 (Broadcasting, Recorded Entertainment and Cinemas) ─────────
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    onlyForAward: ['MA000091'],
+  },
+  {
+    type: 'meal',
+    primary: 'Do you work overtime and aren\'t provided a meal?',
+    onlyForAward: ['MA000091'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    onlyForAward: ['MA000091'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'director',
+    primary: 'Do you work as a director?',
+    primaryHelp: 'A director allowance is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
+    onlyForAward: ['MA000091'],
+  },
+  {
+    type: 'bocp',
+    primary: 'Do you hold a Broadcast Operator\'s Certificate of Proficiency (BOCP)?',
+    primaryHelp: 'A BOCP allowance is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
+    onlyForAward: ['MA000091'],
+  },
+  {
+    type: 'tvocp',
+    primary: 'Do you hold a Television Operator\'s Certificate of Proficiency (TVOCP)?',
+    primaryHelp: 'A TVOCP allowance is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
+    onlyForAward: ['MA000091'],
+  },
 ];
 
 type FollowUpAnswers = Record<string, string>;
