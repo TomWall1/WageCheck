@@ -209,24 +209,6 @@ export default function ContactPage() {
         </form>
       )}
 
-      <div style={{
-        padding: '16px 20px',
-        background: 'var(--primary-light)',
-        border: '1.5px solid var(--primary)',
-        borderRadius: '10px',
-        fontSize: '14.5px',
-      }}>
-        <p style={{ fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          Or email us directly
-        </p>
-        <a
-          href="mailto:reviewmypayapp@gmail.com"
-          style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '15px', textDecoration: 'none' }}
-        >
-          reviewmypayapp@gmail.com
-        </a>
-      </div>
-
       <p style={{ fontSize: '13px', color: 'var(--secondary-muted)' }}>
         This tool provides general information only — not legal advice. For urgent workplace issues,
         contact the Fair Work Ombudsman on <strong style={{ color: 'var(--secondary)' }}>13 13 94</strong> or visit{' '}

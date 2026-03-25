@@ -139,8 +139,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Get help
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--secondary-muted)' }}>
-                  <a href="mailto:reviewmypayapp@gmail.com" style={{ color: 'var(--secondary-muted)', textDecoration: 'none' }}>
-                    reviewmypayapp@gmail.com
+                  <a href="/contact" style={{ color: 'var(--secondary-muted)', textDecoration: 'none' }}>
+                    Contact us
                   </a>
                   <div>
                     Fair Work Ombudsman:{' '}

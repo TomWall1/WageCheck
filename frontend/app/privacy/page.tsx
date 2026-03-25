@@ -148,12 +148,7 @@ export default function PrivacyPage() {
           If you have any questions about this privacy policy, please{' '}
           <a href="/contact" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 500 }}>
             get in touch
-          </a>{' '}
-          or email{' '}
-          <a href="mailto:reviewmypayapp@gmail.com"
-            style={{ color: 'var(--primary)', fontWeight: 500, textDecoration: 'none' }}>
-            reviewmypayapp@gmail.com
-          </a>.
+          </a> via our contact page.
         </p>
       </div>
     </div>
