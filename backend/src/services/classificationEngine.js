@@ -635,6 +635,13 @@ const CLASSIFICATION_RULES_MA000016 = [
   { conditions: { security_level: 'level_5' }, level: 5, stream: 'security', rationale: 'Security Officer Level 5 — supervisor/controller (site or multi-site operations)' },
 ];
 
+const CLASSIFICATION_RULES_MA000042 = [
+  { conditions: { cit_role: 'escort' }, level: 1, stream: 'cash_in_transit', rationale: 'Level 1 — Escort: entry-level security escort for cash-in-transit operations' },
+  { conditions: { cit_role: 'soft_skin' }, level: 2, stream: 'cash_in_transit', rationale: 'Level 2 — Non-armoured (soft skin) vehicle operator' },
+  { conditions: { cit_role: 'armoured' }, level: 3, stream: 'cash_in_transit', rationale: 'Level 3 — Armoured vehicle operator' },
+  { conditions: { cit_role: 'crew_leader' }, level: 4, stream: 'cash_in_transit', rationale: 'Level 4 — Crew leader: leads cash-in-transit crew and coordinates operations' },
+];
+
 /**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
@@ -866,6 +873,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'security', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000042') {
+    for (const rule of CLASSIFICATION_RULES_MA000042) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'cash_in_transit', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {

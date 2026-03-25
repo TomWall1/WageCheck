@@ -145,6 +145,9 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
   if (awardCode === 'MA000016') {
     return 1.0; // No junior rates — security licence requires 18+
   }
+  if (awardCode === 'MA000042') {
+    return 1.0; // No junior rates — security licence required
+  }
   if (awardCode === 'MA000030' || awardCode === 'MA000095' || awardCode === 'MA000105') {
     return 1.0; // No junior rates specified in these awards' pay guides
   }

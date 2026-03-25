@@ -149,6 +149,14 @@ const AWARDS = [
     badge: 'MA000063',
   },
   {
+    code: 'MA000042' as AwardCode,
+    name: 'Transport (Cash in Transit) Award 2020',
+    shortName: 'Cash in Transit Award',
+    description: 'Covers employees in the cash-in-transit industry including armoured vehicle operations, cash escort, and ATM servicing.',
+    examples: 'Armoured vehicle operators, cash escorts, crew leaders, non-armoured vehicle operators, ATM technicians',
+    badge: 'MA000042',
+  },
+  {
     code: 'MA000095' as AwardCode,
     name: 'Car Parking Award 2020',
     shortName: 'Car Parking Award',

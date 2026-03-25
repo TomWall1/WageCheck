@@ -634,6 +634,23 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000016'],
   },
 
+  // ── MA000042 (Cash in Transit) ──────────────────────────────────────────────
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    onlyForAward: ['MA000042'],
+  },
+  {
+    type: 'atm_work',
+    primary: 'Do you perform ATM work?',
+    onlyForAward: ['MA000042'],
+  },
+  {
+    type: 'meal',
+    primary: 'Do you work overtime and aren\'t provided a meal?',
+    onlyForAward: ['MA000042'],
+  },
+
   // ── MA000106 (Real Estate Industry) ─────────────────────────────────────────
   {
     type: 'vehicle',
