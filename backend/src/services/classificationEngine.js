@@ -642,6 +642,28 @@ const CLASSIFICATION_RULES_MA000042 = [
   { conditions: { cit_role: 'crew_leader' }, level: 4, stream: 'cash_in_transit', rationale: 'Level 4 — Crew leader: leads cash-in-transit crew and coordinates operations' },
 ];
 
+const CLASSIFICATION_RULES_MA000032 = [
+  { conditions: { crane_level: 'mce1' }, level: 1, stream: 'mobile_crane', rationale: 'MCE1 — Mobile crane employee level 1' },
+  { conditions: { crane_level: 'mce2' }, level: 2, stream: 'mobile_crane', rationale: 'MCE2 — Mobile crane employee level 2' },
+  { conditions: { crane_level: 'mce3' }, level: 3, stream: 'mobile_crane', rationale: 'MCE3 — Mobile crane employee level 3' },
+  { conditions: { crane_level: 'mce4' }, level: 4, stream: 'mobile_crane', rationale: 'MCE4 — Mobile crane employee level 4' },
+  { conditions: { crane_level: 'mce5' }, level: 5, stream: 'mobile_crane', rationale: 'MCE5 — Mobile crane employee level 5' },
+  { conditions: { crane_level: 'mce6' }, level: 6, stream: 'mobile_crane', rationale: 'MCE6 — Mobile crane employee level 6' },
+  { conditions: { crane_level: 'mce7' }, level: 7, stream: 'mobile_crane', rationale: 'MCE7 — Mobile crane employee level 7' },
+];
+
+const CLASSIFICATION_RULES_MA000103 = [
+  { conditions: { ses_grade: 'grade_1' }, level: 1, stream: 'supported_employment', rationale: 'Grade 1 — Entry-level supported employment services' },
+  { conditions: { ses_grade: 'grade_2' }, level: 2, stream: 'supported_employment', rationale: 'Grade 2 — Supported employment with developing skills' },
+  { conditions: { ses_grade: 'grade_3' }, level: 3, stream: 'supported_employment', rationale: 'Grade 3 — Competent supported employment services' },
+  { conditions: { ses_grade: 'grade_4' }, level: 4, stream: 'supported_employment', rationale: 'Grade 4 — Experienced supported employment services' },
+  { conditions: { ses_grade: 'grade_5' }, level: 5, stream: 'supported_employment', rationale: 'Grade 5 — Senior supported employment services' },
+  { conditions: { ses_grade: 'grade_6' }, level: 6, stream: 'supported_employment', rationale: 'Grade 6 — Advanced supported employment services' },
+  { conditions: { ses_grade: 'grade_7' }, level: 7, stream: 'supported_employment', rationale: 'Grade 7 — Highest-level supported employment services' },
+  { conditions: { ses_grade: 'grade_a' }, level: 8, stream: 'supported_employment', rationale: 'Grade A — Transitional supported wage classification' },
+  { conditions: { ses_grade: 'grade_b' }, level: 9, stream: 'supported_employment', rationale: 'Grade B — Transitional supported wage classification' },
+];
+
 /**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
@@ -882,6 +904,24 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'cash_in_transit', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000032') {
+    for (const rule of CLASSIFICATION_RULES_MA000032) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'mobile_crane', rationale: 'Unable to determine classification — defaulting to MCE1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000103') {
+    for (const rule of CLASSIFICATION_RULES_MA000103) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'supported_employment', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {

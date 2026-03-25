@@ -104,6 +104,8 @@ const STREAM_LABELS: Record<string, string> = {
   real_estate: 'Real Estate',
   security: 'Security Services',
   cash_in_transit: 'Cash in Transit',
+  mobile_crane: 'Mobile Crane',
+  supported_employment: 'Supported Employment',
   graduate: 'Graduates of Architecture',
   registered: 'Registered Architects',
   student: 'Students of Architecture',
@@ -134,6 +136,8 @@ const STREAM_ORDER_MA000106 = ['real_estate'];
 const STREAM_ORDER_MA000079 = ['graduate', 'registered', 'student', 'bachelor_pathway'];
 const STREAM_ORDER_MA000016 = ['security'];
 const STREAM_ORDER_MA000042 = ['cash_in_transit'];
+const STREAM_ORDER_MA000032 = ['mobile_crane'];
+const STREAM_ORDER_MA000103 = ['supported_employment'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -159,7 +163,9 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isArch = awardCode === 'MA000079';
   const isSec = awardCode === 'MA000016';
   const isCIT = awardCode === 'MA000042';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT;
+  const isMCH = awardCode === 'MA000032';
+  const isSES = awardCode === 'MA000103';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -183,6 +189,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isArch ? STREAM_ORDER_MA000079
     : isSec ? STREAM_ORDER_MA000016
     : isCIT ? STREAM_ORDER_MA000042
+    : isMCH ? STREAM_ORDER_MA000032
+    : isSES ? STREAM_ORDER_MA000103
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -207,6 +215,8 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isArch ? 'Architects Award'
     : isSec ? 'Security Services Award'
     : isCIT ? 'Cash in Transit Award'
+    : isMCH ? 'Mobile Crane Hiring Award'
+    : isSES ? 'Supported Employment Services Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -403,7 +413,7 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000106: Record<number, number> = { 19: 0.70, 20: 0.80 };
     const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : isBREC ? JUNIOR_MA000091 : isRE ? JUNIOR_MA000106 : JUNIOR_DEFAULT;
     const juniorCutoff = (isRest || isFitness) ? 20 : (isMisc || isBREC || isRE) ? 21 : 21;
-    const juniorMult = isArch ? 1.0 : isSec ? 1.0 : isCIT ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : 0.40)) : 1.0;
+    const juniorMult = isArch ? 1.0 : isSec ? 1.0 : isCIT ? 1.0 : isMCH ? 1.0 : isSES ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     return (
       <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
@@ -537,7 +547,11 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                               ? ' Levels run from Level 1 (entry-level officer) to Level 5 (supervisor/controller).'
                                               : isCIT
                                                 ? ' Classifications include escort, vehicle operators, and crew leader.'
-                                                : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                                : isMCH
+                                                  ? ' Levels run from MCE1 (entry level) to MCE7 (specialist heavy crane operator).'
+                                                  : isSES
+                                                    ? ' Grades run from Grade 1 to Grade 7, plus transitional Grades A and B.'
+                                                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -581,7 +595,11 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                               ? ' It might say something like "Security Officer Level 2" or "Level 3".'
                                               : isCIT
                                                 ? ' It might say something like "Armoured Vehicle Operator" or "Crew Leader".'
-                                                : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                                : isMCH
+                                                  ? ' It might say something like "MCE3" or "Mobile Crane Employee Level 5".'
+                                                  : isSES
+                                                    ? ' It might say something like "Grade 3" or "Grade A".'
+                                                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

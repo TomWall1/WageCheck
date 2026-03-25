@@ -157,6 +157,22 @@ const AWARDS = [
     badge: 'MA000042',
   },
   {
+    code: 'MA000032' as AwardCode,
+    name: 'Mobile Crane Hiring Award 2010',
+    shortName: 'Mobile Crane Hiring Award',
+    description: 'Covers employees in the mobile crane hiring industry, including crane operators of all levels from entry-level to specialist heavy crane operators.',
+    examples: 'Mobile crane operators, riggers, dogmen, crane crew members, heavy crane specialists, multi-crane lift coordinators',
+    badge: 'MA000032',
+  },
+  {
+    code: 'MA000103' as AwardCode,
+    name: 'Supported Employment Services Award 2020',
+    shortName: 'Supported Employment Services Award',
+    description: 'Covers employees with disability working in supported employment services, including Australian Disability Enterprises (ADEs) and similar organisations.',
+    examples: 'Supported employees in packaging, assembly, recycling, grounds maintenance, laundry, catering, cleaning, and other supported employment activities',
+    badge: 'MA000103',
+  },
+  {
     code: 'MA000095' as AwardCode,
     name: 'Car Parking Award 2020',
     shortName: 'Car Parking Award',

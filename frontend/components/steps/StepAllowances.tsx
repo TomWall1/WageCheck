@@ -651,6 +651,65 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000042'],
   },
 
+  // ── MA000103 (Supported Employment Services) ────────────────────────────────
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    onlyForAward: ['MA000103'],
+  },
+  {
+    type: 'laundry',
+    primary: 'Do you launder your own uniform or special clothing?',
+    onlyForAward: ['MA000103'],
+  },
+  {
+    type: 'toilet_cleaning',
+    primary: 'Do you clean toilets as part of your duties?',
+    onlyForAward: ['MA000103'],
+  },
+  {
+    type: 'meal',
+    primary: 'Do you work overtime and aren\'t provided a meal?',
+    onlyForAward: ['MA000103'],
+  },
+
+  // ── MA000032 (Mobile Crane Hiring) ──────────────────────────────────────────
+  {
+    type: 'multi_crane_2',
+    primary: 'Are you involved in a multi-crane lift with 2 cranes?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'multi_crane_3',
+    primary: 'Are you involved in a multi-crane lift with 3 cranes?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'multi_crane_4',
+    primary: 'Are you involved in a multi-crane lift with 4 cranes?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'multi_crane_5plus',
+    primary: 'Are you involved in a multi-crane lift with more than 4 cranes?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'pile_driving',
+    primary: 'Do you perform pile driving work?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'meal',
+    primary: 'Do you work overtime and aren\'t provided a meal?',
+    onlyForAward: ['MA000032'],
+  },
+  {
+    type: 'travel_fares',
+    primary: 'Do you travel to work sites?',
+    onlyForAward: ['MA000032'],
+  },
+
   // ── MA000106 (Real Estate Industry) ─────────────────────────────────────────
   {
     type: 'vehicle',
