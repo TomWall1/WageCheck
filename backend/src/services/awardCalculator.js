@@ -145,6 +145,12 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
   if (awardCode === 'MA000030' || awardCode === 'MA000095' || awardCode === 'MA000105') {
     return 1.0; // No junior rates specified in these awards' pay guides
   }
+  if (awardCode === 'MA000106') {
+    if (age >= 21) return 1.0;
+    if (age < 19) return 0.60;
+    const RATES = { 19: 0.70, 20: 0.80 };
+    return RATES[age] || 1.0;
+  }
   if (awardCode === 'MA000091') {
     if (age >= 21) return 1.0;
     if (age < 16) return 0.507;

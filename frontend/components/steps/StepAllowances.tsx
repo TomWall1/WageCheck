@@ -580,6 +580,25 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primaryHelp: 'A TVOCP allowance is an all-purpose allowance — it is added to your base rate before casual loading, penalties, and overtime are calculated.',
     onlyForAward: ['MA000091'],
   },
+
+  // ── MA000106 (Real Estate Industry) ─────────────────────────────────────────
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    onlyForAward: ['MA000106'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'mobile_phone',
+    primary: 'Do you use your own mobile phone for work?',
+    onlyForAward: ['MA000106'],
+  },
 ];
 
 type FollowUpAnswers = Record<string, string>;

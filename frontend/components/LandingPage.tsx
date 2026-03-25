@@ -164,6 +164,14 @@ const AWARDS = [
     examples: 'Cinema workers, camera operators, audio technicians, lighting operators, film crew, journalists, radio broadcasters',
     badge: 'MA000091',
   },
+  {
+    code: 'MA000106' as AwardCode,
+    name: 'Real Estate Industry Award 2020',
+    shortName: 'Real Estate Award',
+    description: 'Covers the real estate industry including sales, property management, and strata management.',
+    examples: 'Real estate agents, property managers, sales representatives, strata managers, office administrators',
+    badge: 'MA000106',
+  },
 ];
 
 interface Props {

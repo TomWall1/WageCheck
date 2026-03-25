@@ -582,6 +582,19 @@ const CLASSIFICATION_RULES_MA000091 = [
 ];
 
 /**
+ * MA000106 — Real Estate Industry Award 2020
+ * Single stream 'real_estate' with 5 levels.
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000106 = [
+  { conditions: { re_level: 'associate_first12' }, level: 1, stream: 'real_estate', rationale: 'Associate level — first 12 months at this level (Level 1)' },
+  { conditions: { re_level: 'associate_after12' }, level: 2, stream: 'real_estate', rationale: 'Associate level — after first 12 months (Level 2)' },
+  { conditions: { re_level: 'representative' }, level: 3, stream: 'real_estate', rationale: 'Representative level — sales agent, property manager, or similar (Level 3)' },
+  { conditions: { re_level: 'supervisory' }, level: 4, stream: 'real_estate', rationale: 'Supervisory level — senior agent, team leader (Level 4)' },
+  { conditions: { re_level: 'in_charge' }, level: 5, stream: 'real_estate', rationale: 'In-charge level — office manager, principal (Level 5)' },
+];
+
+/**
  * Check if a set of answers matches a rule's conditions.
  * Conditions values can be a single string or array (matches any of those values).
  */
@@ -785,6 +798,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'cinema', rationale: 'Default — Cinema Worker Level 1', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000106') {
+    for (const rule of CLASSIFICATION_RULES_MA000106) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'real_estate', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {
