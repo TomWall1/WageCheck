@@ -202,7 +202,7 @@ async function runSuperTests() {
     const r = await calcShift('full_time', cinId(1), REF_MONDAY, '09:00', '17:00', { mealBreakTaken: true, mealBreakDuration: 30 });
     const ote = round2(7.5 * 26.94);
     const expectedSuper = round2(ote * 0.12);
-    const actualSuper = r.summary.superContribution || r.summary.superPayable || 0;
+    const actualSuper = r.summary.superAmount || 0;
     record('SU-02', expectedSuper, round2(actualSuper), 'Super on 7.5hr ordinary Cinema L1');
   } catch(e) { recordText('SU-02', 0, 'ERROR', 'FAIL', e.message); }
 }
