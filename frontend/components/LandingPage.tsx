@@ -13,6 +13,14 @@ const AWARDS = [
     badge: 'MA000080',
   },
   {
+    code: 'MA000079' as AwardCode,
+    name: 'Architects Award 2020',
+    shortName: 'Architects Award',
+    description: 'Covers graduate architects, registered architects, students of architecture, and related roles in architectural practices.',
+    examples: 'Graduate architects, registered architects, architecture students, architectural drafters',
+    badge: 'MA000079',
+  },
+  {
     code: 'MA000022' as AwardCode,
     name: 'Cleaning Services Award 2020',
     shortName: 'Cleaning Award',

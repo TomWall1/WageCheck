@@ -586,6 +586,35 @@ const CLASSIFICATION_RULES_MA000091 = [
  * Single stream 'real_estate' with 5 levels.
  * Evaluated in order; first match wins.
  */
+/**
+ * MA000079 — Architects Award 2020
+ * Four streams: student (6 levels), graduate (4 levels), registered (3 levels), bachelor_pathway (3 levels).
+ * Evaluated in order; first match wins.
+ */
+const CLASSIFICATION_RULES_MA000079 = [
+  // ── Student stream ──────────────────────────────────────────────────────────
+  { conditions: { arch_stream: 'student', student_age: 'yes' }, level: 6, stream: 'student', rationale: 'Student of architecture — 21 years and over (Level 6)' },
+  { conditions: { arch_stream: 'student', student_age: 'no', student_experience: 'first_13weeks' }, level: 1, stream: 'student', rationale: 'Student of architecture — under 21, first 13 weeks (Level 1)' },
+  { conditions: { arch_stream: 'student', student_age: 'no', student_experience: 'weeks_14_26' }, level: 2, stream: 'student', rationale: 'Student of architecture — under 21, 14–26 weeks (Level 2)' },
+  { conditions: { arch_stream: 'student', student_age: 'no', student_experience: 'weeks_27_52' }, level: 3, stream: 'student', rationale: 'Student of architecture — under 21, 27–52 weeks (Level 3)' },
+  { conditions: { arch_stream: 'student', student_age: 'no', student_experience: 'year_2' }, level: 4, stream: 'student', rationale: 'Student of architecture — under 21, 2nd year (Level 4)' },
+  { conditions: { arch_stream: 'student', student_age: 'no', student_experience: 'year_3' }, level: 5, stream: 'student', rationale: 'Student of architecture — under 21, 3rd year (Level 5)' },
+  { conditions: { arch_stream: 'student' }, level: 1, stream: 'student', rationale: 'Student of architecture — default entry level (Level 1)' },
+  // ── Graduate stream ─────────────────────────────────────────────────────────
+  { conditions: { arch_stream: 'graduate', graduate_level: 'entry' }, level: 1, stream: 'graduate', rationale: 'Graduate of architecture — entry level (Level 1)' },
+  { conditions: { arch_stream: 'graduate', graduate_level: 'pay_point_1' }, level: 2, stream: 'graduate', rationale: 'Graduate of architecture — 1st pay point (Level 2)' },
+  { conditions: { arch_stream: 'graduate', graduate_level: 'pay_point_2' }, level: 3, stream: 'graduate', rationale: 'Graduate of architecture — 2nd pay point (Level 3)' },
+  { conditions: { arch_stream: 'graduate', graduate_level: 'experienced' }, level: 4, stream: 'graduate', rationale: 'Experienced graduate of architecture — Level 2a (Level 4)' },
+  // ── Registered stream ───────────────────────────────────────────────────────
+  { conditions: { arch_stream: 'registered', registered_level: 'entry' }, level: 1, stream: 'registered', rationale: 'Registered architect — entry level (Level 1)' },
+  { conditions: { arch_stream: 'registered', registered_level: 'pay_point_1' }, level: 2, stream: 'registered', rationale: 'Registered architect — 1st pay point (Level 2)' },
+  { conditions: { arch_stream: 'registered', registered_level: 'pay_point_2' }, level: 3, stream: 'registered', rationale: 'Registered architect — 2nd pay point (Level 3)' },
+  // ── Bachelor pathway stream ─────────────────────────────────────────────────
+  { conditions: { arch_stream: 'bachelor_pathway', bachelor_year: 'year_1' }, level: 1, stream: 'bachelor_pathway', rationale: 'Bachelor pathway — 1st year (Level 1)' },
+  { conditions: { arch_stream: 'bachelor_pathway', bachelor_year: 'year_2' }, level: 2, stream: 'bachelor_pathway', rationale: 'Bachelor pathway — 2nd year (Level 2)' },
+  { conditions: { arch_stream: 'bachelor_pathway', bachelor_year: 'year_3' }, level: 3, stream: 'bachelor_pathway', rationale: 'Bachelor pathway — 3rd year (Level 3)' },
+];
+
 const CLASSIFICATION_RULES_MA000106 = [
   { conditions: { re_level: 'associate_first12' }, level: 1, stream: 'real_estate', rationale: 'Associate level — first 12 months at this level (Level 1)' },
   { conditions: { re_level: 'associate_after12' }, level: 2, stream: 'real_estate', rationale: 'Associate level — after first 12 months (Level 2)' },
@@ -798,6 +827,15 @@ function classify(answers, awardCode = 'MA000009') {
       }
     }
     return { level: 1, stream: 'cinema', rationale: 'Default — Cinema Worker Level 1', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000079') {
+    for (const rule of CLASSIFICATION_RULES_MA000079) {
+      if (matchesRule(answers, rule.conditions)) {
+        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+      }
+    }
+    return { level: 1, stream: 'graduate', rationale: 'Unable to determine classification — defaulting to Graduate Level 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000106') {

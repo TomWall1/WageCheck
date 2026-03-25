@@ -581,6 +581,25 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     onlyForAward: ['MA000091'],
   },
 
+  // ── MA000079 (Architects Award) ──────────────────────────────────────────────
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    onlyForAward: ['MA000079'],
+    followUps: [
+      {
+        key: 'km',
+        question: 'Approximately how many kilometres did you travel for work?',
+        triggeredWhen: 'yes',
+      },
+    ],
+  },
+  {
+    type: 'meal_travel',
+    primary: 'Do you receive meal allowances when travelling by air for work?',
+    onlyForAward: ['MA000079'],
+  },
+
   // ── MA000106 (Real Estate Industry) ─────────────────────────────────────────
   {
     type: 'vehicle',

@@ -145,6 +145,9 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
   if (awardCode === 'MA000030' || awardCode === 'MA000095' || awardCode === 'MA000105') {
     return 1.0; // No junior rates specified in these awards' pay guides
   }
+  if (awardCode === 'MA000079') {
+    return 1.0; // No junior multiplier — student rates are separate classifications
+  }
   if (awardCode === 'MA000106') {
     if (age >= 21) return 1.0;
     if (age < 19) return 0.60;
