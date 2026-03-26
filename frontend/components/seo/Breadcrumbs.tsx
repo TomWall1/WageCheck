@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function Breadcrumbs({ items }: Props) {
-  const baseUrl = 'https://reviewmypay.com.au';
+  const baseUrl = 'https://reviewmypay.com';
 
   const jsonLd = {
     '@context': 'https://schema.org',

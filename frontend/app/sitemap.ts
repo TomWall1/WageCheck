@@ -3,7 +3,7 @@ import { AWARDS } from '@/lib/awards';
 import { GUIDES } from '@/lib/guides';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://reviewmypay.com.au';
+  const baseUrl = 'https://reviewmypay.com';
   const subPages = ['pay-rates', 'penalty-rates', 'casual-employees', 'overtime', 'allowances', 'classifications'];
 
   const staticPages: MetadataRoute.Sitemap = [
