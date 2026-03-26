@@ -70,8 +70,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </svg>
             </a>
             <nav style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <a href="/awards" className="nav-link">Awards</a>
+              <a href="/guides" className="nav-link">Guides</a>
               <a href="/about" className="nav-link">About</a>
-              <a href="/resources" className="nav-link">Resources</a>
               <a href="/contact" className="nav-link">Contact</a>
             </nav>
           </div>
@@ -79,9 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main content */}
         <main className="flex-1 px-4 py-10">
-          <div style={{ maxWidth: '560px', margin: '0 auto' }}>
-            {children}
-          </div>
+          {children}
         </main>
 
         {/* Footer */}
@@ -109,8 +108,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[
                     { href: '/', label: 'Home' },
+                    { href: '/awards', label: 'Awards' },
+                    { href: '/guides', label: 'Guides' },
+                    { href: '/check-my-pay', label: 'Check My Pay' },
                     { href: '/about', label: 'About' },
-                    { href: '/resources', label: 'Resources' },
                     { href: '/contact', label: 'Contact' },
                   ].map((link) => (
                     <a key={link.href} href={link.href} style={{ fontSize: '13px', color: 'var(--secondary-muted)', textDecoration: 'none', transition: 'color 0.15s' }}>

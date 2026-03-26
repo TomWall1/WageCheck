@@ -256,7 +256,7 @@ export default function LandingPage({ onSelect }: Props) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '560px', margin: '0 auto' }}>
       {/* Hero */}
       <div style={{ paddingBottom: '1.5rem', borderBottom: '1.5px solid var(--border)' }}>
         <h1 style={{

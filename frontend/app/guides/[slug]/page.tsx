@@ -1,0 +1,67 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getGuideBySlug, getAllGuideSlugs } from '@/lib/guides';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
+import CheckPayCTA from '@/components/seo/CheckPayCTA';
+
+interface Props { params: Promise<{ slug: string }>; }
+
+export function generateStaticParams() {
+  return getAllGuideSlugs().map(slug => ({ slug }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const guide = getGuideBySlug(slug);
+  if (!guide) return {};
+  return {
+    title: `${guide.title} | Review My Pay`,
+    description: guide.description,
+    keywords: guide.keywords,
+  };
+}
+
+export default async function GuidePage({ params }: Props) {
+  const { slug } = await params;
+  const guide = getGuideBySlug(slug);
+  if (!guide) notFound();
+
+  return (
+    <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Guides', href: '/guides' },
+        { label: guide.title, href: `/guides/${slug}` },
+      ]} />
+
+      <div style={{ paddingBottom: '1.5rem', borderBottom: '1.5px solid var(--border)', marginBottom: '2rem' }}>
+        <h1 style={{
+          fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600,
+          letterSpacing: '-0.03em', color: 'var(--secondary)', lineHeight: 1.2,
+        }}>
+          {guide.title}
+        </h1>
+        <p style={{ fontSize: '15px', color: 'var(--secondary-muted)', marginTop: '8px', lineHeight: 1.6 }}>
+          {guide.description}
+        </p>
+      </div>
+
+      <div style={{ fontSize: '14.5px', color: 'var(--secondary-muted)', lineHeight: 1.75 }}>
+        <p>{guide.brief}</p>
+        <p style={{ marginTop: '1.5rem', fontStyle: 'italic', fontSize: '13px' }}>
+          This guide is being expanded with detailed content. Check back soon for the full article, or use our pay calculator to check your pay now.
+        </p>
+      </div>
+
+      <div style={{ marginTop: '2rem', fontSize: '13px', color: 'var(--secondary-muted)' }}>
+        <p>
+          <a href="/guides" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>&larr; All guides</a>
+          {' | '}
+          <a href="/awards" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Browse awards</a>
+        </p>
+      </div>
+
+      <CheckPayCTA />
+    </div>
+  );
+}

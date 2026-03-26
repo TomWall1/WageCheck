@@ -68,10 +68,12 @@ function CheckLayoutInner({ children }: { children: React.ReactNode }) {
 
 export default function CheckLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense>
-      <WageCheckProvider>
-        <CheckLayoutInner>{children}</CheckLayoutInner>
-      </WageCheckProvider>
-    </Suspense>
+    <div style={{ maxWidth: '560px', margin: '0 auto' }}>
+      <Suspense>
+        <WageCheckProvider>
+          <CheckLayoutInner>{children}</CheckLayoutInner>
+        </WageCheckProvider>
+      </Suspense>
+    </div>
   );
 }
