@@ -728,6 +728,208 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primary: 'Do you use your own mobile phone for work?',
     onlyForAward: ['MA000106'],
   },
+
+  // ── MA000092 (Alpine Resorts) ──────────────────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work overtime for more than 2 hours without being given notice the day before?',
+    primaryHelp: 'You are entitled to a meal allowance of $16.73 if you work more than 2 hours of overtime and your employer did not give you notice the day before.',
+    onlyForAward: ['MA000092'],
+  },
+  {
+    type: 'boot',
+    primary: 'Does your employer require specific footwear that they do not supply?',
+    primaryHelp: 'You are entitled to $0.16 per hour worked if your employer requires specific footwear and does not provide it.',
+    onlyForAward: ['MA000092'],
+  },
+  {
+    type: 'equipment',
+    primary: 'Do you supply your own equipment (other than footwear) as required by your employer?',
+    primaryHelp: 'You are entitled to $0.33 per hour worked if your employer requires you to supply your own equipment.',
+    onlyForAward: ['MA000092'],
+  },
+  {
+    type: 'sewerage',
+    primary: 'Are you required to work at a sewerage treatment plant?',
+    primaryHelp: 'You are entitled to $11.63 per shift if you work at a sewerage treatment plant.',
+    onlyForAward: ['MA000092'],
+  },
+
+  // ── MA000019 (Banking, Finance and Insurance) ─────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work overtime extending past 6pm for more than 1.5 hours?',
+    primaryHelp: 'You are entitled to $21.27 for the first meal. If overtime exceeds 5.5 hours, a further $17.48 applies.',
+    onlyForAward: ['MA000019'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $19.66 per week.',
+    onlyForAward: ['MA000019'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work purposes?',
+    primaryHelp: 'You are entitled to $0.99 per km for casual or incidental use.',
+    onlyForAward: ['MA000019'],
+  },
+
+  // ── MA000021 (Business Equipment) ─────────────────────────────────────────
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $25.11 per week.',
+    onlyForAward: ['MA000021'],
+  },
+
+  // ── MA000083 (Commercial Sales) ───────────────────────────────────────────
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    primaryHelp: 'Car: $0.98/km. Motorcycle: $0.33/km.',
+    onlyForAward: ['MA000083'],
+  },
+
+  // ── MA000027 (Health Professionals and Support Services) ──────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work more than 1 hour of overtime without being given notice?',
+    primaryHelp: 'You are entitled to a meal allowance of $16.62. A further $14.98 applies if overtime exceeds 4 hours.',
+    onlyForAward: ['MA000027'],
+  },
+  {
+    type: 'uniform',
+    primary: 'Do you wear a uniform that your employer requires you to launder?',
+    primaryHelp: 'Uniform: up to $6.24/week or $1.23/shift. Laundering: up to $1.49/week or $0.32/shift.',
+    onlyForAward: ['MA000027'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own motor vehicle for work?',
+    primaryHelp: 'You are entitled to $0.99 per km.',
+    onlyForAward: ['MA000027'],
+  },
+
+  // ── MA000099 (Labour Market Assistance) ───────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work overtime of more than 2 hours, or 5+ hours on a non-ordinary day?',
+    primaryHelp: 'You are entitled to a meal allowance of $19.64.',
+    onlyForAward: ['MA000099'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $17.65 per week.',
+    onlyForAward: ['MA000099'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    primaryHelp: 'You are entitled to $0.98 per km.',
+    onlyForAward: ['MA000099'],
+  },
+
+  // ── MA000112 (Local Government) ───────────────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work more than 2 hours of overtime (minimum 10 hours on duty)?',
+    primaryHelp: 'You are entitled to $19.93 for the first meal. A further $19.93 applies after 4 more hours of overtime.',
+    onlyForAward: ['MA000112'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $19.68 per week.',
+    onlyForAward: ['MA000112'],
+  },
+  {
+    type: 'tool',
+    primary: 'Are you a tradesperson or apprentice required to supply your own tools?',
+    primaryHelp: 'You are entitled to $22.25 per week.',
+    onlyForAward: ['MA000112'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    primaryHelp: 'Car: $0.98/km. Motorcycle: $0.33/km.',
+    onlyForAward: ['MA000112'],
+  },
+
+  // ── MA000074 (Poultry Processing) ─────────────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work overtime and need to buy your own meal?',
+    primaryHelp: 'You are entitled to $18.38 per meal.',
+    onlyForAward: ['MA000074'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $21.41 per week.',
+    onlyForAward: ['MA000074'],
+  },
+  {
+    type: 'cold_work',
+    primary: 'Do you work in cold storage or freezer areas?',
+    primaryHelp: '-15.6°C to -18°C: $0.95/hr. -18°C to -23.3°C: $1.67/hr. Below -23.3°C: $2.62/hr.',
+    onlyForAward: ['MA000074'],
+  },
+
+  // ── MA000065 (Professional Employees) ─────────────────────────────────────
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    primaryHelp: 'You are entitled to $0.98 per km.',
+    onlyForAward: ['MA000065'],
+  },
+
+  // ── MA000121 (State Government Agencies) ──────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work overtime and need a meal?',
+    primaryHelp: 'You are entitled to $22.67 per meal.',
+    onlyForAward: ['MA000121'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: 'You are entitled to $786.05 per year ($15.12 per week).',
+    onlyForAward: ['MA000121'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own private motor vehicle for work?',
+    primaryHelp: 'You are entitled to $0.99 per km.',
+    onlyForAward: ['MA000121'],
+  },
+
+  // ── MA000090 (Wine Industry) ──────────────────────────────────────────────
+  {
+    type: 'meal',
+    primary: 'Did you work more than 2 hours of overtime?',
+    primaryHelp: 'You are entitled to a meal allowance of $18.38.',
+    onlyForAward: ['MA000090'],
+  },
+  {
+    type: 'first_aid',
+    primary: 'Are you a designated first aid officer?',
+    primaryHelp: '$21.26/week or $4.25/day.',
+    onlyForAward: ['MA000090'],
+  },
+  {
+    type: 'wet_work',
+    primary: 'Do you perform wet work or work in wine vats?',
+    primaryHelp: 'Wet work: $6.36/day. Wine vats: $1.18/hr.',
+    onlyForAward: ['MA000090'],
+  },
+  {
+    type: 'vehicle',
+    primary: 'Do you use your own vehicle for work?',
+    primaryHelp: 'You are entitled to $0.98 per km.',
+    onlyForAward: ['MA000090'],
+  },
 ];
 
 type FollowUpAnswers = Record<string, string>;

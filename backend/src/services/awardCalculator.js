@@ -81,6 +81,79 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     const MA000082_RATES = { 18: 0.80, 19: 0.90 };
     return MA000082_RATES[age] || 1.0;
   }
+  if (awardCode === 'MA000092') {
+    // MA000092 junior rates (Alpine Resorts Award):
+    // ≤17: 70%, 18: 80%, ≥19: adult (100%).
+    if (age >= 19) return 1.0;
+    if (age <= 17) return 0.70;
+    const MA000092_RATES = { 18: 0.80 };
+    return MA000092_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000074') {
+    // MA000074 junior rates (Poultry Processing Award):
+    // <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000074_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000074_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000090') {
+    // MA000090 junior rates (Wine Industry Award):
+    // <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000090_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000090_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000112') {
+    // MA000112 junior rates (Local Government Industry Award):
+    // <16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.368;
+    const MA000112_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    return MA000112_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000021') {
+    // MA000021 junior rates (Business Equipment Award):
+    // <16=42%, 16=42%, 17=55%, 18=75%, 19=95%, 20+=adult.
+    if (age >= 20) return 1.0;
+    if (age < 17) return 0.42;
+    const MA000021_RATES = { 17: 0.55, 18: 0.75, 19: 0.95 };
+    return MA000021_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000027') {
+    // MA000027 junior rates (Health Professionals — Support Services stream only):
+    // <16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.368;
+    const MA000027_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    return MA000027_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000099') {
+    // MA000099 junior rates (Labour Market Assistance Industry Award):
+    // <18=70%, 18=80%, 19=90%, 20+=adult.
+    if (age >= 20) return 1.0;
+    if (age < 18) return 0.70;
+    const MA000099_RATES = { 18: 0.80, 19: 0.90 };
+    return MA000099_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000019') {
+    // MA000019 junior rates (Banking, Finance and Insurance Award):
+    // <17=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 17) return 0.50;
+    const MA000019_RATES = { 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000019_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000083') {
+    // MA000083 junior rates (Commercial Sales Award):
+    // ≤18=75%, 19=89%, 20+=adult.
+    if (age >= 20) return 1.0;
+    if (age <= 18) return 0.75;
+    const MA000083_RATES = { 19: 0.89 };
+    return MA000083_RATES[age] || 1.0;
+  }
+  // MA000065 (Professional), MA000121 (State Govt) — no junior rates
   if (awardCode === 'MA000120') {
     // MA000120 junior rates (Children's Services Award — educator L1 and L2 only):
     // Under 17: 70%, 17yr: 80%, 18yr: 90%, 19+: adult.

@@ -106,6 +106,22 @@ const STREAM_LABELS: Record<string, string> = {
   cash_in_transit: 'Cash in Transit',
   mobile_crane: 'Mobile Crane',
   supported_employment: 'Supported Employment',
+  resort_worker: 'Resort Worker',
+  snowsports: 'Snowsports Instructor',
+  banking: 'Banking & Finance',
+  technical: 'Technical',
+  commercial_traveller: 'Commercial Traveller',
+  commercial_sales: 'Commercial Sales',
+  health_professional: 'Health Professional',
+  support_services: 'Support Services',
+  professional: 'Professional',
+  poultry: 'Poultry Processing',
+  wine: 'Wine Industry',
+  labour_market: 'Labour Market Assistance',
+  local_govt: 'Local Government',
+  admin: 'Administrative',
+  it: 'IT Officer',
+  legal: 'Legal Officer',
   graduate: 'Graduates of Architecture',
   registered: 'Registered Architects',
   student: 'Students of Architecture',
@@ -138,6 +154,17 @@ const STREAM_ORDER_MA000016 = ['security'];
 const STREAM_ORDER_MA000042 = ['cash_in_transit'];
 const STREAM_ORDER_MA000032 = ['mobile_crane'];
 const STREAM_ORDER_MA000103 = ['supported_employment'];
+const STREAM_ORDER_MA000092 = ['resort_worker', 'snowsports'];
+const STREAM_ORDER_MA000019 = ['banking'];
+const STREAM_ORDER_MA000021 = ['technical', 'commercial_traveller'];
+const STREAM_ORDER_MA000027 = ['health_professional', 'support_services'];
+const STREAM_ORDER_MA000065 = ['professional'];
+const STREAM_ORDER_MA000074 = ['poultry'];
+const STREAM_ORDER_MA000083 = ['commercial_sales'];
+const STREAM_ORDER_MA000090 = ['wine'];
+const STREAM_ORDER_MA000099 = ['labour_market'];
+const STREAM_ORDER_MA000112 = ['local_govt'];
+const STREAM_ORDER_MA000121 = ['admin', 'technical', 'professional', 'it', 'legal'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -165,7 +192,18 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isCIT = awardCode === 'MA000042';
   const isMCH = awardCode === 'MA000032';
   const isSES = awardCode === 'MA000103';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES;
+  const isAlpine = awardCode === 'MA000092';
+  const isBanking = awardCode === 'MA000019';
+  const isBusEquip = awardCode === 'MA000021';
+  const isHealth = awardCode === 'MA000027';
+  const isProfEmp = awardCode === 'MA000065';
+  const isPoultry = awardCode === 'MA000074';
+  const isCommSales = awardCode === 'MA000083';
+  const isWine = awardCode === 'MA000090';
+  const isLMA = awardCode === 'MA000099';
+  const isLocalGovt = awardCode === 'MA000112';
+  const isStateGovt = awardCode === 'MA000121';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES || isAlpine || isBanking || isBusEquip || isHealth || isProfEmp || isPoultry || isCommSales || isWine || isLMA || isLocalGovt || isStateGovt;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -191,6 +229,17 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isCIT ? STREAM_ORDER_MA000042
     : isMCH ? STREAM_ORDER_MA000032
     : isSES ? STREAM_ORDER_MA000103
+    : isAlpine ? STREAM_ORDER_MA000092
+    : isBanking ? STREAM_ORDER_MA000019
+    : isBusEquip ? STREAM_ORDER_MA000021
+    : isHealth ? STREAM_ORDER_MA000027
+    : isProfEmp ? STREAM_ORDER_MA000065
+    : isPoultry ? STREAM_ORDER_MA000074
+    : isCommSales ? STREAM_ORDER_MA000083
+    : isWine ? STREAM_ORDER_MA000090
+    : isLMA ? STREAM_ORDER_MA000099
+    : isLocalGovt ? STREAM_ORDER_MA000112
+    : isStateGovt ? STREAM_ORDER_MA000121
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -217,6 +266,17 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isCIT ? 'Cash in Transit Award'
     : isMCH ? 'Mobile Crane Hiring Award'
     : isSES ? 'Supported Employment Services Award'
+    : isAlpine ? 'Alpine Resorts Award'
+    : isBanking ? 'Banking & Finance Award'
+    : isBusEquip ? 'Business Equipment Award'
+    : isHealth ? 'Health Professionals Award'
+    : isProfEmp ? 'Professional Employees Award'
+    : isPoultry ? 'Poultry Processing Award'
+    : isCommSales ? 'Commercial Sales Award'
+    : isWine ? 'Wine Industry Award'
+    : isLMA ? 'Labour Market Assistance Award'
+    : isLocalGovt ? 'Local Government Award'
+    : isStateGovt ? 'State Government Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);
@@ -411,9 +471,16 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     const JUNIOR_MA000104: Record<number, number> = { 15: 0.368, 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
     const JUNIOR_MA000091: Record<number, number> = { 16: 0.507, 17: 0.620, 18: 0.733, 19: 0.846, 20: 0.958 };
     const JUNIOR_MA000106: Record<number, number> = { 19: 0.70, 20: 0.80 };
-    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : isBREC ? JUNIOR_MA000091 : isRE ? JUNIOR_MA000106 : JUNIOR_DEFAULT;
-    const juniorCutoff = (isRest || isFitness) ? 20 : (isMisc || isBREC || isRE) ? 21 : 21;
-    const juniorMult = isArch ? 1.0 : isSec ? 1.0 : isCIT ? 1.0 : isMCH ? 1.0 : isSES ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : 0.40)) : 1.0;
+    const JUNIOR_MA000092: Record<number, number> = { 17: 0.70, 18: 0.80 };
+    const JUNIOR_MA000074: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    const JUNIOR_MA000090: Record<number, number> = { 15: 0.45, 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    const JUNIOR_MA000112: Record<number, number> = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    const JUNIOR_MA000021: Record<number, number> = { 17: 0.55, 18: 0.75, 19: 0.95 };
+    const JUNIOR_MA000027: Record<number, number> = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    const JUNIOR_MA000099: Record<number, number> = { 18: 0.80, 19: 0.90 };
+    const juniorTable = isRest ? JUNIOR_MA000119 : isRetail ? JUNIOR_MA000004 : isClerks ? JUNIOR_MA000002 : isFitness ? JUNIOR_MA000094 : isHort ? JUNIOR_MA000028 : isNursery ? JUNIOR_MA000033 : isMisc ? JUNIOR_MA000104 : isBREC ? JUNIOR_MA000091 : isRE ? JUNIOR_MA000106 : isAlpine ? JUNIOR_MA000092 : isPoultry ? JUNIOR_MA000074 : isWine ? JUNIOR_MA000090 : isLocalGovt ? JUNIOR_MA000112 : isBusEquip ? JUNIOR_MA000021 : isHealth ? JUNIOR_MA000027 : isLMA ? JUNIOR_MA000099 : JUNIOR_DEFAULT;
+    const juniorCutoff = (isRest || isFitness) ? 20 : (isMisc || isBREC || isRE || isPoultry || isWine || isLocalGovt || isHealth) ? 21 : isAlpine ? 19 : (isBusEquip || isLMA) ? 20 : 21;
+    const juniorMult = isArch ? 1.0 : isSec ? 1.0 : isCIT ? 1.0 : isMCH ? 1.0 : isSES ? 1.0 : isBanking ? 1.0 : isCommSales ? 1.0 : isProfEmp ? 1.0 : isStateGovt ? 1.0 : (age && age < juniorCutoff) ? (juniorTable[age] ?? (isRest ? 0.50 : isFitness ? 0.55 : (isRetail || isClerks) ? 0.45 : (isHort || isNursery) ? 0.50 : isMisc ? 0.368 : isBREC ? 0.507 : isRE ? 0.70 : isAlpine ? 0.70 : (isPoultry || isWine) ? 0.45 : (isLocalGovt || isHealth) ? 0.368 : isBusEquip ? 0.42 : isLMA ? 0.70 : 0.40)) : 1.0;
     const displayRate = Number(result.classification.base_rate) * juniorMult;
     return (
       <div className="bg-white rounded-lg p-4 border border-brand-200 space-y-1">
@@ -551,7 +618,29 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                                   ? ' Levels run from MCE1 (entry level) to MCE7 (specialist heavy crane operator).'
                                                   : isSES
                                                     ? ' Grades run from Grade 1 to Grade 7, plus transitional Grades A and B.'
-                                                    : ' Levels run from 1 (entry level) to 5 (senior/management).'}
+                                                    : isAlpine
+                                                      ? ' Resort workers run from Training Level to Level 7. Snowsports instructors run from Category E (trainee) to Category A (10+ seasons, APSI Level 4).'
+                                                      : isBanking
+                                                        ? ' Levels run from Level 1 (entry level) to Level 6 (senior management).'
+                                                        : isBusEquip
+                                                          ? ' Technical stream runs Level 1–6. Commercial Travellers have Salesperson Levels 1–3.'
+                                                          : isHealth
+                                                            ? ' Health Professionals run Level 1–4. Support Services run Level 1–9.'
+                                                            : isProfEmp
+                                                              ? ' Levels run from Level 1 (graduate, various pay points by degree) to Level 5 (senior medical research).'
+                                                              : isPoultry
+                                                                ? ' Levels run from Level 1 (entry level) to Level 6 (senior supervisor).'
+                                                                : isCommSales
+                                                                  ? ' Three classifications: Probationary Traveller, Merchandiser, and Commercial Traveller.'
+                                                                  : isWine
+                                                                    ? ' Grades run from Grade 1 (entry, with 6-month split) to Grade 5 (supervisor/principal tradesperson).'
+                                                                    : isLMA
+                                                                      ? ' Roles range from Administrative Assistant to Manager Grade 2.'
+                                                                      : isLocalGovt
+                                                                        ? ' Levels run from Level 1 (entry level) to Level 11 (senior management).'
+                                                                        : isStateGovt
+                                                                          ? ' Multiple streams: Administrative (APS 1 to EL 2), Technical, Professional, IT, and Legal.'
+                                                                          : ' Levels run from 1 (entry level) to 5 (senior/management).'}
           </p>
         </div>
 
@@ -599,7 +688,29 @@ export default function StepClassification({ awardCode, employmentType, age, ans
                                                   ? ' It might say something like "MCE3" or "Mobile Crane Employee Level 5".'
                                                   : isSES
                                                     ? ' It might say something like "Grade 3" or "Grade A".'
-                                                    : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
+                                                    : isAlpine
+                                                      ? ' It might say something like "Resort Worker Level 3" or "Snowsports Instructor Category B".'
+                                                      : isBanking
+                                                        ? ' It might say something like "Level 3" or "Banking Employee Level 4".'
+                                                        : isBusEquip
+                                                          ? ' It might say something like "Technical Level 3" or "Salesperson Level 2".'
+                                                          : isHealth
+                                                            ? ' It might say something like "Health Professional Level 2" or "Support Services Level 4".'
+                                                            : isProfEmp
+                                                              ? ' It might say something like "Level 2" or "Graduate Professional Pay Point 1.2".'
+                                                              : isPoultry
+                                                                ? ' It might say something like "Level 3" or "Poultry Employee Level 4".'
+                                                                : isCommSales
+                                                                  ? ' It might say something like "Commercial Traveller" or "Merchandiser".'
+                                                                  : isWine
+                                                                    ? ' It might say something like "Grade 3" or "Wine Industry Employee Grade 2".'
+                                                                    : isLMA
+                                                                      ? ' It might say something like "Employment Services Officer Grade 1" or "Administrative Officer".'
+                                                                      : isLocalGovt
+                                                                        ? ' It might say something like "Level 4" or "Local Government Employee Level 7".'
+                                                                        : isStateGovt
+                                                                          ? ' It might say something like "APS 4" or "ITO 2" or "EL 1".'
+                                                                          : ' It might say something like "Level 2" or "Food and Beverage Attendant Grade 2".'}
           </p>
           <div className="space-y-2">
             <button

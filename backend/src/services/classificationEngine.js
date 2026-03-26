@@ -924,6 +924,266 @@ function classify(answers, awardCode = 'MA000009') {
     return { level: 1, stream: 'supported_employment', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
   }
 
+  if (awardCode === 'MA000092') {
+    // MA000092 — Alpine Resorts Award 2020
+    // Two-branch dispatch: resort_worker or snowsports instructor.
+    if (answers.alpine_role === 'resort_worker') {
+      const level = { training: 1, l1: 2, l2: 3, l3: 4, l4: 5, l5: 6, l6: 7, l7: 8 }[answers.alpine_worker_level];
+      if (level) {
+        const rationales = {
+          training: 'Training level — undergoing induction or training (max 7 weeks)',
+          l1: 'Resort Worker Level 1 — entry-level, no experience required',
+          l2: 'Resort Worker Level 2 — some experience or qualifications',
+          l3: 'Resort Worker Level 3 — significant experience or specialist training',
+          l4: 'Resort Worker Level 4 — specialist skills and qualifications',
+          l5: 'Resort Worker Level 5 — supervisor/trainer of lower-level staff',
+          l6: 'Resort Worker Level 6 — qualified trade or specialist role',
+          l7: 'Resort Worker Level 7 — senior supervisor of specialist teams',
+        };
+        return { level, stream: 'resort_worker', rationale: rationales[answers.alpine_worker_level], confidence: 'high' };
+      }
+      return { level: 2, stream: 'resort_worker', rationale: 'Unable to determine level — defaulting to Resort Worker Level 1. Please review.', confidence: 'low' };
+    }
+    if (answers.alpine_role === 'snowsports') {
+      const level = { cat_a: 1, cat_b: 2, cat_c: 3, cat_d: 4, cat_e: 5 }[answers.alpine_instructor_cat];
+      if (level) {
+        const rationales = {
+          cat_a: 'Snowsports Instructor Category A — APSI Level 4, 10+ seasons',
+          cat_b: 'Snowsports Instructor Category B — APSI Level 3',
+          cat_c: 'Snowsports Instructor Category C — APSI Level 2',
+          cat_d: 'Snowsports Instructor Category D — APSI Level 1',
+          cat_e: 'Snowsports Instructor Category E — trainee or recruitment clinic only',
+        };
+        return { level, stream: 'snowsports', rationale: rationales[answers.alpine_instructor_cat], confidence: 'high' };
+      }
+      return { level: 5, stream: 'snowsports', rationale: 'Unable to determine category — defaulting to Category E. Please review.', confidence: 'low' };
+    }
+    return { level: 2, stream: 'resort_worker', rationale: 'Unable to determine role type — defaulting to Resort Worker Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000019') {
+    // MA000019 — Banking, Finance and Insurance Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.banking_level];
+    if (level) {
+      const rationales = {
+        l1: 'Level 1 — entry-level banking/finance employee',
+        l2: 'Level 2 — experienced clerical, uses financial product knowledge',
+        l3: 'Level 3 — specialised/technical role, exercises judgment',
+        l4: 'Level 4 — senior specialist, may supervise others',
+        l5: 'Level 5 — management or supervisory role',
+        l6: 'Level 6 — senior management',
+      };
+      return { level, stream: 'banking', rationale: rationales[answers.banking_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'banking', rationale: 'Unable to determine level — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000021') {
+    // MA000021 — Business Equipment Award 2020
+    if (answers.business_equip_stream === 'technical') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.be_tech_level];
+      if (level) {
+        const rationales = {
+          l1: 'Technical Level 1 — entry-level technical employee',
+          l2: 'Technical Level 2 — experienced technical employee',
+          l3: 'Technical Level 3 — skilled technical employee',
+          l4: 'Technical Level 4 — advanced technical employee',
+          l5: 'Technical Level 5 — senior technical employee',
+          l6: 'Technical Level 6 — principal technical employee',
+        };
+        return { level, stream: 'technical', rationale: rationales[answers.be_tech_level], confidence: 'high' };
+      }
+      return { level: 1, stream: 'technical', rationale: 'Unable to determine level — defaulting to Technical Level 1. Please review.', confidence: 'low' };
+    }
+    if (answers.business_equip_stream === 'commercial_traveller') {
+      const level = { sales1: 1, sales2: 2, sales3: 3 }[answers.be_sales_level];
+      if (level) {
+        const rationales = {
+          sales1: 'Salesperson Level 1 — entry-level sales representative',
+          sales2: 'Salesperson Level 2 — experienced sales representative',
+          sales3: 'Salesperson Level 3 — senior sales representative',
+        };
+        return { level, stream: 'commercial_traveller', rationale: rationales[answers.be_sales_level], confidence: 'high' };
+      }
+      return { level: 1, stream: 'commercial_traveller', rationale: 'Unable to determine level — defaulting to Salesperson Level 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'technical', rationale: 'Unable to determine stream — defaulting to Technical Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000083') {
+    // MA000083 — Commercial Sales Award 2020
+    const level = { probationary: 1, merchandiser: 2, commercial_traveller: 3 }[answers.sales_role];
+    if (level) {
+      const rationales = {
+        probationary: 'Probationary Traveller — new commercial traveller in probation (max 3 months)',
+        merchandiser: 'Merchandiser — employee who merchandises products at retail outlets',
+        commercial_traveller: 'Commercial Traveller/Advertising Sales Representative — travels to sell products or advertising',
+      };
+      return { level, stream: 'commercial_sales', rationale: rationales[answers.sales_role], confidence: 'high' };
+    }
+    return { level: 1, stream: 'commercial_sales', rationale: 'Unable to determine role — defaulting to Probationary Traveller. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000027') {
+    // MA000027 — Health Professionals and Support Services Award 2020
+    if (answers.health_stream === 'health_professional') {
+      const level = { hp1: 1, hp2: 2, hp3: 3, hp4: 4 }[answers.health_pro_level];
+      if (level) {
+        const rationales = {
+          hp1: 'Health Professional Level 1 — graduate entry (degree-qualified)',
+          hp2: 'Health Professional Level 2 — experienced professional (4+ years)',
+          hp3: 'Health Professional Level 3 — senior professional, may supervise',
+          hp4: 'Health Professional Level 4 — principal professional, manages a service',
+        };
+        return { level, stream: 'health_professional', rationale: rationales[answers.health_pro_level], confidence: 'high' };
+      }
+      return { level: 1, stream: 'health_professional', rationale: 'Unable to determine level — defaulting to HP Level 1. Please review.', confidence: 'low' };
+    }
+    if (answers.health_stream === 'support_services') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9 }[answers.support_level];
+      if (level) {
+        const rationales = {
+          l1: 'Support Services Level 1 — entry-level (cleaning, food services, laundry)',
+          l2: 'Support Services Level 2 — some experience, basic equipment',
+          l3: 'Support Services Level 3 — experienced, may guide others',
+          l4: 'Support Services Level 4 — trade qualified or advanced',
+          l5: 'Support Services Level 5 — experienced tradesperson',
+          l6: 'Support Services Level 6 — supervisor or advanced specialist',
+          l7: 'Support Services Level 7 — senior supervisor',
+          l8: 'Support Services Level 8 — technical specialist',
+          l9: 'Support Services Level 9 — senior management',
+        };
+        return { level, stream: 'support_services', rationale: rationales[answers.support_level], confidence: 'high' };
+      }
+      return { level: 1, stream: 'support_services', rationale: 'Unable to determine level — defaulting to Support Services Level 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'support_services', rationale: 'Unable to determine stream — defaulting to Support Services Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000099') {
+    // MA000099 — Labour Market Assistance Industry Award 2020
+    const level = { admin_assistant: 1, admin_officer: 2, eso_grade1: 3, eso_grade2: 4, coordinator: 5, manager1: 6, manager2: 7 }[answers.lma_role];
+    if (level) {
+      const rationales = {
+        admin_assistant: 'Administrative Assistant — entry-level administration',
+        admin_officer: 'Administrative Officer — experienced administration',
+        eso_grade1: 'Employment Services Officer Grade 1 — frontline case worker',
+        eso_grade2: 'Employment Services Officer Grade 2 — experienced case worker',
+        coordinator: 'Employment Services Coordinator — coordinates employment services',
+        manager1: 'Manager Grade 1 — manages a team or office',
+        manager2: 'Manager Grade 2 — senior management',
+      };
+      return { level, stream: 'labour_market', rationale: rationales[answers.lma_role], confidence: 'high' };
+    }
+    return { level: 1, stream: 'labour_market', rationale: 'Unable to determine role — defaulting to Administrative Assistant. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000112') {
+    // MA000112 — Local Government Industry Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9, l10: 10, l11: 11 }[answers.local_govt_level];
+    if (level) {
+      const rationales = {
+        l1: 'Level 1 — entry-level, routine tasks under supervision',
+        l2: 'Level 2 — some experience, limited supervision',
+        l3: 'Level 3 — trades assistant or experienced worker',
+        l4: 'Level 4 — trade qualified',
+        l5: 'Level 5 — experienced tradesperson or technical employee',
+        l6: 'Level 6 — advanced tradesperson or specialist',
+        l7: 'Level 7 — senior tradesperson or supervisor',
+        l8: 'Level 8 — professional or technical specialist',
+        l9: 'Level 9 — senior professional',
+        l10: 'Level 10 — management',
+        l11: 'Level 11 — senior management',
+      };
+      return { level, stream: 'local_govt', rationale: rationales[answers.local_govt_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'local_govt', rationale: 'Unable to determine level — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000074') {
+    // MA000074 — Poultry Processing Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.poultry_level];
+    if (level) {
+      const rationales = {
+        l1: 'Level 1 — new employee, basic tasks',
+        l2: 'Level 2 — some experience, operates basic equipment',
+        l3: 'Level 3 — trades assistant, operates specialised equipment',
+        l4: 'Level 4 — trade qualified or advanced operator',
+        l5: 'Level 5 — supervisor or advanced tradesperson',
+        l6: 'Level 6 — senior supervisor or plant manager',
+      };
+      return { level, stream: 'poultry', rationale: rationales[answers.poultry_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'poultry', rationale: 'Unable to determine level — defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000065') {
+    // MA000065 — Professional Employees Award 2020
+    const level = { pp1_3yr: 1, pp1_4yr: 2, pp1_2: 3, pp1_3: 4, pp1_4: 5, level2: 6, level3: 7, level4: 8, level5: 9 }[answers.professional_level];
+    if (level) {
+      const rationales = {
+        pp1_3yr: 'Level 1 Pay Point 1.1 — graduate with 3-year degree',
+        pp1_4yr: 'Level 1 Pay Point 1.1 — graduate with 4 or 5-year degree',
+        pp1_2: 'Level 1 Pay Point 1.2 — graduate professional, 1+ year experience',
+        pp1_3: 'Level 1 Pay Point 1.3 — graduate professional, 2+ years experience',
+        pp1_4: 'Level 1 Pay Point 1.4 — graduate professional, 3+ years experience',
+        level2: 'Level 2 — experienced professional or quality auditor',
+        level3: 'Level 3 — senior professional or lead quality auditor',
+        level4: 'Level 4 — principal professional',
+        level5: 'Level 5 — experienced medical research employee (highest level)',
+      };
+      return { level, stream: 'professional', rationale: rationales[answers.professional_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'professional', rationale: 'Unable to determine level — defaulting to Pay Point 1.1 (3yr degree). Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000121') {
+    // MA000121 — State Government Agencies Award 2020
+    if (answers.state_govt_stream === 'admin') {
+      const level = { aps1: 1, aps2: 2, aps3: 3, aps4: 4, aps5: 5, aps6: 6, el1: 7, el2: 8 }[answers.sga_admin_level];
+      if (level) return { level, stream: 'admin', rationale: 'Administrative Stream — ' + answers.sga_admin_level.toUpperCase(), confidence: 'high' };
+      return { level: 1, stream: 'admin', rationale: 'Unable to determine level — defaulting to APS 1. Please review.', confidence: 'low' };
+    }
+    if (answers.state_govt_stream === 'technical') {
+      const level = { to1: 1, to2: 2, to3: 3, to4: 4 }[answers.sga_tech_level];
+      if (level) return { level, stream: 'technical', rationale: 'Technical Stream — TO ' + level, confidence: 'high' };
+      return { level: 1, stream: 'technical', rationale: 'Unable to determine level — defaulting to TO 1. Please review.', confidence: 'low' };
+    }
+    if (answers.state_govt_stream === 'professional') {
+      const level = { es1: 1, es2: 2 }[answers.sga_es_level];
+      if (level) return { level, stream: 'professional', rationale: 'Engineer/Scientist Stream — ES ' + level, confidence: 'high' };
+      return { level: 1, stream: 'professional', rationale: 'Unable to determine level — defaulting to ES 1. Please review.', confidence: 'low' };
+    }
+    if (answers.state_govt_stream === 'it') {
+      const level = { ito1: 1, ito2: 2 }[answers.sga_ito_level];
+      if (level) return { level, stream: 'it', rationale: 'IT Officer Stream — ITO ' + level, confidence: 'high' };
+      return { level: 1, stream: 'it', rationale: 'Unable to determine level — defaulting to ITO 1. Please review.', confidence: 'low' };
+    }
+    if (answers.state_govt_stream === 'legal') {
+      const level = { lo1: 1, lo2: 2 }[answers.sga_lo_level];
+      if (level) return { level, stream: 'legal', rationale: 'Legal Officer Stream — LO ' + level, confidence: 'high' };
+      return { level: 1, stream: 'legal', rationale: 'Unable to determine level — defaulting to LO 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'admin', rationale: 'Unable to determine stream — defaulting to APS 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000090') {
+    // MA000090 — Wine Industry Award 2020
+    const level = { g1_new: 1, g1_exp: 2, g2: 3, g3: 4, g4: 5, g5: 6 }[answers.wine_grade];
+    if (level) {
+      const rationales = {
+        g1_new: 'Grade 1 — first 6 months of employment',
+        g1_exp: 'Grade 1 — after 6 months of employment',
+        g2: 'Grade 2 — experienced worker',
+        g3: 'Grade 3 — tradesperson or equivalent',
+        g4: 'Grade 4 — advanced tradesperson',
+        g5: 'Grade 5 — supervisor or principal tradesperson',
+      };
+      return { level, stream: 'wine', rationale: rationales[answers.wine_grade], confidence: 'high' };
+    }
+    return { level: 1, stream: 'wine', rationale: 'Unable to determine grade — defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
   if (awardCode === 'MA000104') {
     // MA000104 — Miscellaneous Award 2020
     // Simple single-question dispatch: misc_level maps directly to level 1–4.
