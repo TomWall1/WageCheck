@@ -3,6 +3,26 @@ import { notFound } from 'next/navigation';
 import { getGuideBySlug, getAllGuideSlugs } from '@/lib/guides';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import dynamic from 'next/dynamic';
+
+// Guide content components — lazy loaded by slug
+const guideComponents: Record<string, React.ComponentType> = {
+  'what-is-a-modern-award': dynamic(() => import('@/components/seo/guides/GuideWhatIsModernAward')),
+  'penalty-rates-australia': dynamic(() => import('@/components/seo/guides/GuidePenaltyRates')),
+  'casual-loading-explained': dynamic(() => import('@/components/seo/guides/GuideCasualLoading')),
+  'overtime-pay-australia': dynamic(() => import('@/components/seo/guides/GuideOvertimePay')),
+  'am-i-being-underpaid': dynamic(() => import('@/components/seo/guides/GuideAmIUnderpaid')),
+  'how-to-report-underpayment': dynamic(() => import('@/components/seo/guides/GuideReportUnderpayment')),
+  'minimum-wage-australia-2025': dynamic(() => import('@/components/seo/guides/GuideMinimumWage')),
+  'public-holiday-pay-australia': dynamic(() => import('@/components/seo/guides/GuidePublicHolidayPay')),
+  'casual-vs-part-time': dynamic(() => import('@/components/seo/guides/GuideCasualVsPartTime')),
+  'wage-theft-australia': dynamic(() => import('@/components/seo/guides/GuideWageTheft')),
+  'flat-rate-vs-award': dynamic(() => import('@/components/seo/guides/GuideFlatRateVsAward')),
+  'how-to-read-your-payslip': dynamic(() => import('@/components/seo/guides/GuideReadPayslip')),
+  'allowances-and-loadings': dynamic(() => import('@/components/seo/guides/GuideAllowancesLoadings')),
+  'superannuation-casual-workers': dynamic(() => import('@/components/seo/guides/GuideSuperCasual')),
+  'hospitality-vs-restaurant-award': dynamic(() => import('@/components/seo/guides/GuideHospitalityVsRestaurant')),
+};
 
 interface Props { params: Promise<{ slug: string }>; }
 
@@ -25,6 +45,8 @@ export default async function GuidePage({ params }: Props) {
   const { slug } = await params;
   const guide = getGuideBySlug(slug);
   if (!guide) notFound();
+
+  const GuideContent = guideComponents[slug];
 
   return (
     <div style={{ maxWidth: '640px', margin: '0 auto' }}>
@@ -67,12 +89,16 @@ export default async function GuidePage({ params }: Props) {
         )}
       </div>
 
-      <div style={{ fontSize: '14.5px', color: 'var(--secondary-muted)', lineHeight: 1.75 }}>
-        <p>{guide.brief}</p>
-        <p style={{ marginTop: '1.5rem', fontStyle: 'italic', fontSize: '13px' }}>
-          This guide is being expanded with detailed content. Check back soon for the full article, or use our pay calculator to check your pay now.
-        </p>
-      </div>
+      {GuideContent ? (
+        <GuideContent />
+      ) : (
+        <div style={{ fontSize: '14.5px', color: 'var(--secondary-muted)', lineHeight: 1.75 }}>
+          <p>{guide.brief}</p>
+          <p style={{ marginTop: '1.5rem', fontStyle: 'italic', fontSize: '13px' }}>
+            This guide is being expanded with detailed content. Check back soon for the full article, or use our pay calculator to check your pay now.
+          </p>
+        </div>
+      )}
 
       <div style={{ marginTop: '2rem', fontSize: '13px', color: 'var(--secondary-muted)' }}>
         <p>

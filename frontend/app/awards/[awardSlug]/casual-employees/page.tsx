@@ -4,6 +4,7 @@ import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import HospitalityCasualContent from '@/components/seo/awards/HospitalityCasualContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -15,6 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'hospitality-award') {
+    return {
+      title: 'Hospitality Award Casual Pay Rates 2025\u201326 | Review My Pay',
+      description: 'Casual loading, penalty rate stacking, and conversion rights under the Hospitality Award. What the 25% means \u2014 and what it doesn\u2019t.',
+    };
+  }
   return {
     title: `${award.shortName} Casual Pay Rates 2025 — Loading, Penalties & Rights | Review My Pay`,
     description: `Casual pay rates under the ${award.shortName}: 25% casual loading, penalty rates, minimum engagement, and casual conversion rights.`,
@@ -38,8 +45,13 @@ export default async function CasualEmployeesPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="casual-employees" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {award.shortName} — Casual Employees
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Casual Pay Rates 2025\u201326' : `${award.shortName} — Casual Employees`}
       </h1>
+
+      {awardSlug === 'hospitality-award' ? (
+        <HospitalityCasualContent />
+      ) : (
+      <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Casual employees receive a 25% loading on top of the base hourly rate. This loading compensates for not receiving paid leave, notice of termination, and redundancy pay.
       </p>
@@ -49,7 +61,7 @@ export default async function CasualEmployeesPage({ params }: Props) {
           What is casual loading?
         </h2>
         <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
-          The 25% casual loading is paid instead of entitlements that permanent employees receive, including annual leave, personal/carer's leave, notice of termination, and redundancy pay. The casual loading is applied to the ordinary hourly rate before any penalty rate multipliers.
+          The 25% casual loading is paid instead of entitlements that permanent employees receive, including annual leave, personal/carer&apos;s leave, notice of termination, and redundancy pay. The casual loading is applied to the ordinary hourly rate before any penalty rate multipliers.
         </p>
       </section>
 
@@ -76,6 +88,8 @@ export default async function CasualEmployeesPage({ params }: Props) {
       </p>
 
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
+      </>
+      )}
     </div>
   );
 }

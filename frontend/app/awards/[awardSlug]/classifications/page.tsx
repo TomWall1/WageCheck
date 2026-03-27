@@ -5,6 +5,7 @@ import { serverFetch } from '@/lib/api-server';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import HospitalityClassificationsContent from '@/components/seo/awards/HospitalityClassificationsContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -16,6 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'hospitality-award') {
+    return {
+      title: 'Hospitality Award Classifications 2025\u201326 | Review My Pay',
+      description: 'Hospitality Award classification levels explained: Level 1 through Level 5, with duties, indicative job titles, and base rates for each. MA000009.',
+    };
+  }
   return {
     title: `${award.shortName} Classification Levels 2025 — Which Level Are You? | Review My Pay`,
     description: `${award.shortName} classification levels explained: duties, indicative tasks, and base rates for each level. Find out if you're correctly classified.`,
@@ -51,8 +58,13 @@ export default async function ClassificationsPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="classifications" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {award.shortName} — Classification Levels
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Classifications 2025\u201326' : `${award.shortName} — Classification Levels`}
       </h1>
+
+      {awardSlug === 'hospitality-award' ? (
+        <HospitalityClassificationsContent />
+      ) : (
+      <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Your classification level determines your minimum pay rate. Being classified one level too low can cost you $2–4 per hour — more than $3,000 per year for a full-time worker.
       </p>
@@ -92,6 +104,8 @@ export default async function ClassificationsPage({ params }: Props) {
       </p>
 
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
+      </>
+      )}
     </div>
   );
 }

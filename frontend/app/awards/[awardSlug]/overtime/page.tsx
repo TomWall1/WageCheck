@@ -4,6 +4,7 @@ import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import HospitalityOvertimeContent from '@/components/seo/awards/HospitalityOvertimeContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -15,6 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'hospitality-award') {
+    return {
+      title: 'Hospitality Award Overtime Rates 2025\u201326 | Review My Pay',
+      description: 'Overtime rules under the Hospitality Award: daily triggers, time-and-a-half, double-time, and how overtime interacts with penalty rates. MA000009.',
+    };
+  }
   return {
     title: `${award.shortName} Overtime Rates 2025 — Daily & Weekly Thresholds | Review My Pay`,
     description: `Overtime rules under the ${award.shortName}: daily and weekly thresholds, time-and-a-half, double-time, and TOIL provisions.`,
@@ -38,8 +45,13 @@ export default async function OvertimePage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="overtime" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {award.shortName} — Overtime Rates
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Overtime Rates 2025\u201326' : `${award.shortName} — Overtime Rates`}
       </h1>
+
+      {awardSlug === 'hospitality-award' ? (
+        <HospitalityOvertimeContent />
+      ) : (
+      <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Overtime is paid when you work beyond your ordinary hours. Most awards use a two-tier system: time-and-a-half for the first 2 hours, then double-time after that.
       </p>
@@ -87,6 +99,8 @@ export default async function OvertimePage({ params }: Props) {
       </p>
 
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
+      </>
+      )}
     </div>
   );
 }

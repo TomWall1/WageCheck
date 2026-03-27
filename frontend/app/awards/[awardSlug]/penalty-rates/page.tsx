@@ -5,6 +5,7 @@ import { serverFetch } from '@/lib/api-server';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import HospitalityPenaltyContent from '@/components/seo/awards/HospitalityPenaltyContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -16,6 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'hospitality-award') {
+    return {
+      title: 'Hospitality Award Penalty Rates 2025\u201326 | Review My Pay',
+      description: 'Full Hospitality Award penalty rates for weekends, public holidays, and late nights. See every multiplier and dollar amount under MA000009.',
+    };
+  }
   return {
     title: `${award.shortName} Penalty Rates 2025 — Weekend, Evening & Public Holiday | Review My Pay`,
     description: `${award.shortName} penalty rate multipliers for Saturday, Sunday, public holidays, evenings, and late nights. Full-time, part-time, and casual rates.`,
@@ -61,8 +68,13 @@ export default async function PenaltyRatesPage({ params }: Props) {
         fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600,
         letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px',
       }}>
-        {award.shortName} Penalty Rates 2025
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Penalty Rates 2025\u201326' : `${award.shortName} Penalty Rates 2025`}
       </h1>
+
+      {awardSlug === 'hospitality-award' ? (
+        <HospitalityPenaltyContent />
+      ) : (
+      <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Penalty rates are higher pay rates for working at particular times — weekends, public holidays, evenings, and late nights. These multipliers are applied to your base hourly rate.
       </p>
@@ -139,6 +151,8 @@ export default async function PenaltyRatesPage({ params }: Props) {
       </div>
 
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
+      </>
+      )}
     </div>
   );
 }
