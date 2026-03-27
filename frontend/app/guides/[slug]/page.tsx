@@ -44,6 +44,27 @@ export default async function GuidePage({ params }: Props) {
         <p style={{ fontSize: '15px', color: 'var(--secondary-muted)', marginTop: '8px', lineHeight: 1.6 }}>
           {guide.description}
         </p>
+        {guide.tags && guide.tags.length > 0 && (
+          <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '10px' }}>
+            {guide.tags.map(tag => (
+              <a
+                key={tag}
+                href={`/guides?tag=${encodeURIComponent(tag)}`}
+                style={{
+                  fontSize: '10.5px',
+                  fontWeight: 500,
+                  color: 'var(--primary)',
+                  background: 'var(--primary-light)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                }}
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       <div style={{ fontSize: '14.5px', color: 'var(--secondary-muted)', lineHeight: 1.75 }}>
