@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getAllowance } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,14 @@ const faqData = [
   { question: 'How far back can I claim unpaid allowances?', answer: '6 years under the Fair Work Act. Given that allowances recur on every qualifying shift, the total can be significant.' },
 ];
 
-export default function GuideAllowancesLoadings() {
+export default function GuideAllowancesLoadings({ rates }: { rates?: HospitalityRateData }) {
+  const splitShort = rates ? formatCurrency(getAllowance(rates, 'split_shift_short')) : '$3.53';
+  const splitLong = rates ? formatCurrency(getAllowance(rates, 'split_shift_long')) : '$5.34';
+  const mealAllowance = rates ? formatCurrency(getAllowance(rates, 'meal')) : '$16.73';
+  const firstAidFt = rates ? formatCurrency(getAllowance(rates, 'first_aid_ft')) : '$12.82';
+  const firstAidDaily = rates ? formatCurrency(getAllowance(rates, 'first_aid_ptcasual')) : '$2.56';
+  const toolDaily = rates ? formatCurrency(getAllowance(rates, 'tool')) : '$2.03';
+  const laundryFt = rates ? formatCurrency(getAllowance(rates, 'laundry_ft')) : '$6.00';
   return (
     <>
       {/* Last updated */}
@@ -48,9 +57,9 @@ export default function GuideAllowancesLoadings() {
             <strong>Scenario:</strong> Cook, full-time, 5 years at the same venue. Brings their own knife roll to every shift.
           </p>
           <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> Hourly rate only</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Tool allowance of $2.03/day under the Hospitality Award</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Tool allowance of {toolDaily}/day under the Hospitality Award</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
-            Underpayment (allowances alone): $2.03 &times; 5 days &times; 50 weeks &times; 5 years = ~$2,537
+            Underpayment (allowances alone): {toolDaily} &times; 5 days &times; 50 weeks &times; 5 years = ~$2,537
           </p>
           <p style={smallStyle}>
             <strong>Why it happens:</strong> Neither party knew the allowance existed. It was never mentioned, never paid.
@@ -83,13 +92,13 @@ export default function GuideAllowancesLoadings() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Split shift (2&ndash;3hr break)</td><td style={tdStyle}>$3.53/day</td><td style={tdStyle}>Shift broken into 2 periods, 2&ndash;3hr gap (perm/PT only)</td></tr>
-              <tr><td style={tdStyle}>Split shift (3hr+ break)</td><td style={tdStyle}>$5.34/day</td><td style={tdStyle}>Same, gap over 3 hours</td></tr>
-              <tr><td style={tdStyle}>Meal allowance (overtime)</td><td style={tdStyle}>$16.73/meal</td><td style={tdStyle}>Unplanned overtime spanning a meal time (FT/PT only)</td></tr>
-              <tr><td style={tdStyle}>First aid (FT)</td><td style={tdStyle}>$12.82/week</td><td style={tdStyle}>Holds certificate, appointed responsible first aider</td></tr>
-              <tr><td style={tdStyle}>First aid (PT/casual)</td><td style={tdStyle}>$2.56/day</td><td style={tdStyle}>Same condition, per shift</td></tr>
-              <tr><td style={tdStyle}>Laundry (FT catering)</td><td style={tdStyle}>$6.00/week</td><td style={tdStyle}>Required to launder own uniform</td></tr>
-              <tr><td style={tdStyle}>Tool/equipment</td><td style={tdStyle}>$2.03/day</td><td style={tdStyle}>Cook required to provide own knives/tools</td></tr>
+              <tr><td style={tdStyle}>Split shift (2&ndash;3hr break)</td><td style={tdStyle}>{splitShort}/day</td><td style={tdStyle}>Shift broken into 2 periods, 2&ndash;3hr gap (perm/PT only)</td></tr>
+              <tr><td style={tdStyle}>Split shift (3hr+ break)</td><td style={tdStyle}>{splitLong}/day</td><td style={tdStyle}>Same, gap over 3 hours</td></tr>
+              <tr><td style={tdStyle}>Meal allowance (overtime)</td><td style={tdStyle}>{mealAllowance}/meal</td><td style={tdStyle}>Unplanned overtime spanning a meal time (FT/PT only)</td></tr>
+              <tr><td style={tdStyle}>First aid (FT)</td><td style={tdStyle}>{firstAidFt}/week</td><td style={tdStyle}>Holds certificate, appointed responsible first aider</td></tr>
+              <tr><td style={tdStyle}>First aid (PT/casual)</td><td style={tdStyle}>{firstAidDaily}/day</td><td style={tdStyle}>Same condition, per shift</td></tr>
+              <tr><td style={tdStyle}>Laundry (FT catering)</td><td style={tdStyle}>{laundryFt}/week</td><td style={tdStyle}>Required to launder own uniform</td></tr>
+              <tr><td style={tdStyle}>Tool/equipment</td><td style={tdStyle}>{toolDaily}/day</td><td style={tdStyle}>Cook required to provide own knives/tools</td></tr>
             </tbody>
           </table>
         </div>
@@ -133,7 +142,7 @@ export default function GuideAllowancesLoadings() {
 
           <h3 style={h3Style}>Tool allowance never applied to tradesperson cooks</h3>
           <p style={pStyle}>
-            $2.03/day &times; 5 days &times; 50 weeks = $507.50/year that most cooks never see.
+            {toolDaily}/day &times; 5 days &times; 50 weeks = $507.50/year that most cooks never see.
           </p>
 
           <h3 style={h3Style}>Laundry allowance not paid to catering staff</h3>

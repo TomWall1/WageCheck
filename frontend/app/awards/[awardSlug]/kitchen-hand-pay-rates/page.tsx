@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
+import { getHospitalityRates, getLevel, getEveningLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
@@ -63,6 +65,10 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
 
+  const rates = await getHospitalityRates();
+  const l1 = getLevel(rates, 1);
+  const eveningLoading = getEveningLoading(rates);
+
   return (
     <div>
       <Breadcrumbs items={[
@@ -98,8 +104,8 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual kitchen hand, Level 1. 4-hour public holiday shift.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $30.13/hr (ordinary casual rate)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Public holiday casual rate at Level 1 &mdash; $54.23/hr</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l1?.casualRate ?? 0)}/hr (ordinary casual rate)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Public holiday casual rate at Level 1 &mdash; {formatCurrency(l1?.publicHolidayCasual ?? 0)}/hr</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$96 for one 4-hour shift
           </p>
@@ -122,11 +128,11 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>$24.10/hr</td><td style={tdStyle}>$30.13/hr</td></tr>
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>$37.66/hr</td></tr>
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$36.15/hr</td><td style={tdStyle}>$42.18/hr</td></tr>
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$54.23/hr</td><td style={tdStyle}>$54.23/hr</td></tr>
-              <tr><td style={tdStyle}>Evening (after 7pm)</td><td style={tdStyle}>$26.57/hr</td><td style={tdStyle}>$32.60/hr</td></tr>
+              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>{formatCurrency(l1?.ftRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.casualRate ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{formatCurrency(l1?.saturdayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.saturdayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{formatCurrency(l1?.sundayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Evening (after 7pm)</td><td style={tdStyle}>{formatCurrency((l1?.ftRate ?? 0) + eveningLoading)}/hr</td><td style={tdStyle}>{formatCurrency((l1?.casualRate ?? 0) + eveningLoading)}/hr</td></tr>
               <tr><td style={tdStyle}>Minimum per shift</td><td style={tdStyle}>3 hours</td><td style={tdStyle}>3 hours</td></tr>
             </tbody>
           </table>
@@ -147,7 +153,7 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
 
           <h3 style={h3Style}>Same rate every day regardless of day</h3>
           <p style={pStyle}>
-            A kitchen hand paid $25/hr on a Sunday is being significantly underpaid. The casual Sunday rate is $42.18/hr &mdash; over 40% more than the ordinary weekday rate. This is the most frequent issue in this role.
+            A kitchen hand paid $25/hr on a Sunday is being significantly underpaid. The casual Sunday rate is {formatCurrency(l1?.sundayCasual ?? 0)}/hr &mdash; over 40% more than the ordinary weekday rate. This is the most frequent issue in this role.
           </p>
 
           <h3 style={h3Style}>Minimum engagement not honoured</h3>

@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,9 @@ const faqData = [
   { question: 'What if I\'ve been on a flat rate for years — can I still claim?', answer: 'Yes. Under the Fair Work Act you can recover underpayments going back 6 years.' },
 ];
 
-export default function GuideFlatRateVsAward() {
+export default function GuideFlatRateVsAward({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2PhCas = rates ? formatCurrency(l2?.publicHolidayCasual ?? 0) : '$56.88';
   return (
     <>
       {/* Last updated */}
@@ -47,7 +51,7 @@ export default function GuideFlatRateVsAward() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Hospitality worker told their $34/hr flat rate &quot;covers everything including weekends.&quot;
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>The problem:</strong> Level 2 casual public holiday rate is $56.88/hr. A $34/hr flat rate doesn&apos;t come close.</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>The problem:</strong> Level 2 casual public holiday rate is {l2PhCas}/hr. A $34/hr flat rate doesn&apos;t come close.</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment on one 8-hour public holiday shift: ~$183
           </p>

@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityOvertimeContent from '@/components/seo/awards/HospitalityOvertimeContent';
+import { getHospitalityRates } from '@/lib/hospitality-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -49,7 +50,7 @@ export default async function OvertimePage({ params }: Props) {
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
-        <HospitalityOvertimeContent />
+        <HospitalityOvertimeContent rates={await getHospitalityRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

@@ -3,6 +3,7 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData } from '@/lib/hospitality-rates';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -23,7 +24,7 @@ const faqData = [
   { question: 'How far back can I claim unpaid super?', answer: 'The ATO can pursue unpaid super going back 5 years in most cases. Act sooner rather than later.' },
 ];
 
-export default function GuideSuperCasual() {
+export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateData }) {
   return (
     <>
       {/* Last updated */}

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
+import { getHospitalityRates, getLevel, getEveningLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
@@ -63,6 +65,11 @@ export default async function WaitstaffPayRatesPage({ params }: Props) {
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
 
+  const rates = await getHospitalityRates();
+  const l2 = getLevel(rates, 2);
+  const l3 = getLevel(rates, 3);
+  const eveningLoading = getEveningLoading(rates);
+
   return (
     <div>
       <Breadcrumbs items={[
@@ -98,8 +105,8 @@ export default async function WaitstaffPayRatesPage({ params }: Props) {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual waitstaff, Level 2. 6-hour Saturday evening shift &mdash; 5pm to 11pm.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $31.60/hr flat</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Saturday casual rate ($37.92/hr) + evening loading after 7pm (+$2.47/hr)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l2?.casualRate ?? 0)}/hr flat</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Saturday casual rate ({formatCurrency(l2?.saturdayCasual ?? 0)}/hr) + evening loading after 7pm (+{formatCurrency(eveningLoading)}/hr)</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$40&ndash;60 for that single shift
           </p>
@@ -127,8 +134,8 @@ export default async function WaitstaffPayRatesPage({ params }: Props) {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$37.92/hr</td><td style={tdStyle}>$44.24/hr</td><td style={tdStyle}>$56.88/hr</td></tr>
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>$39.15/hr</td><td style={tdStyle}>$45.68/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
+              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>{formatCurrency(l2?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.saturdayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.sundayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>{formatCurrency(l3?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.saturdayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.sundayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.publicHolidayCasual ?? 0)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -148,7 +155,7 @@ export default async function WaitstaffPayRatesPage({ params }: Props) {
 
           <h3 style={h3Style}>Same rate every day of the week</h3>
           <p style={pStyle}>
-            Sunday casual should be $44.24/hr at Level 2. A flat $31/hr or $32/hr on a Sunday is significantly underpaid.
+            Sunday casual should be {formatCurrency(l2?.sundayCasual ?? 0)}/hr at Level 2. A flat $31/hr or $32/hr on a Sunday is significantly underpaid.
           </p>
 
           <h3 style={h3Style}>Split shift allowance never paid</h3>

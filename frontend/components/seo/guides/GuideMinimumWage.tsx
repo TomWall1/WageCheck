@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,8 @@ const faqData = [
   { question: 'What if my employer says they can\'t afford the minimum wage?', answer: 'That is not a legal exemption. The minimum wage applies regardless of employer circumstances.' },
 ];
 
-export default function GuideMinimumWage() {
+export default function GuideMinimumWage({ rates }: { rates?: HospitalityRateData }) {
+  const l1Ft = rates ? formatCurrency(getLevel(rates, 1)?.ftRate ?? 0) : '$24.10';
   return (
     <>
       {/* Last updated */}
@@ -100,7 +103,7 @@ export default function GuideMinimumWage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Hospitality Award (MA000009)</td><td style={tdStyle}>$24.10/hr (Level 1)</td><td style={tdStyle}>Below NMW &mdash; NMW applies instead</td></tr>
+              <tr><td style={tdStyle}>Hospitality Award (MA000009)</td><td style={tdStyle}>{l1Ft}/hr (Level 1)</td><td style={tdStyle}>Below NMW &mdash; NMW applies instead</td></tr>
               <tr><td style={tdStyle}>Retail Award (MA000004)</td><td style={tdStyle}>$24.10/hr (Level 1)</td><td style={tdStyle}>Below NMW &mdash; NMW applies instead</td></tr>
               <tr><td style={tdStyle}>Fast Food Award (MA000003)</td><td style={tdStyle}>$24.10/hr (Level 1)</td><td style={tdStyle}>Below NMW &mdash; NMW applies instead</td></tr>
               <tr><td style={tdStyle}>Clerks Award (MA000002)</td><td style={tdStyle}>$24.10/hr (Level 1)</td><td style={tdStyle}>Below NMW &mdash; NMW applies instead</td></tr>

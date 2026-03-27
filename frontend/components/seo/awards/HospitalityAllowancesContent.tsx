@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getAllowance } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
@@ -39,7 +41,17 @@ const faqData = [
   { question: 'Should allowances appear separately on my payslip?', answer: 'Yes. Employers must itemise allowances on payslips. If your allowances are bundled into a single hourly rate with no breakdown, you have no way of verifying they\'re actually being paid.' },
 ];
 
-export default function HospitalityAllowancesContent() {
+export default function HospitalityAllowancesContent({ rates }: { rates: HospitalityRateData }) {
+  const splitShort = getAllowance(rates, 'split_shift_short');
+  const splitLong = getAllowance(rates, 'split_shift_long');
+  const firstAidFt = getAllowance(rates, 'first_aid_ft');
+  const firstAidDaily = getAllowance(rates, 'first_aid_ptcasual');
+  const toolDaily = getAllowance(rates, 'tool');
+  const airportTravel = getAllowance(rates, 'airport_travel');
+  const laundryFt = getAllowance(rates, 'laundry_ft');
+  const laundryPtCasual = getAllowance(rates, 'laundry_ptcasual');
+  const mealAllowance = getAllowance(rates, 'meal');
+  const vehicleAllowance = getAllowance(rates, 'vehicle');
   return (
     <>
       {/* Last updated */}
@@ -65,7 +77,7 @@ export default function HospitalityAllowancesContent() {
             <strong>Scenario:</strong> Full-time cook, Level 3. Brings own knives to work every day. Works 5 days per week.
           </p>
           <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> Base rate only &mdash; no tool allowance</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Tool allowance of $2.03/day (capped at $9.94/week)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Tool allowance of {formatCurrency(toolDaily)}/day (capped at $9.94/week)</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$9.94/week. ~$517/year &mdash; just from one missing allowance.
           </p>
@@ -108,14 +120,14 @@ export default function HospitalityAllowancesContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Split/broken shift (2&ndash;3hr gap)</td><td style={tdStyle}>$3.53/day</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Split/broken shift (&gt;3hr gap)</td><td style={tdStyle}>$5.34/day</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>First aid</td><td style={tdStyle}>$12.82/week (FT) · $2.56/day (PT/casual)</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Tool allowance (cooks)</td><td style={tdStyle}>$2.03/day (max $9.94/week)</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Airport travel</td><td style={tdStyle}>$8.45/day</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Laundry (catering)</td><td style={tdStyle}>$6.00/week (FT) · $2.05/uniform (PT/casual)</td><td style={tdStyle}>Catering employees</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Meal allowance (overtime)</td><td style={tdStyle}>$16.73</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
-              <tr><td style={tdStyle}>Vehicle (managerial hotel)</td><td style={tdStyle}>$0.99/km</td><td style={tdStyle}>Managerial hotel employees</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Split/broken shift (2&ndash;3hr gap)</td><td style={tdStyle}>{formatCurrency(splitShort)}/day</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Split/broken shift (&gt;3hr gap)</td><td style={tdStyle}>{formatCurrency(splitLong)}/day</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>First aid</td><td style={tdStyle}>{formatCurrency(firstAidFt)}/week (FT) · {formatCurrency(firstAidDaily)}/day (PT/casual)</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Tool allowance (cooks)</td><td style={tdStyle}>{formatCurrency(toolDaily)}/day (max $9.94/week)</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Airport travel</td><td style={tdStyle}>{formatCurrency(airportTravel)}/day</td><td style={tdStyle}>All types</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Laundry (catering)</td><td style={tdStyle}>{formatCurrency(laundryFt)}/week (FT) · {formatCurrency(laundryPtCasual)}/uniform (PT/casual)</td><td style={tdStyle}>Catering employees</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Meal allowance (overtime)</td><td style={tdStyle}>{formatCurrency(mealAllowance)}</td><td style={tdStyle}>FT/PT only</td><td style={tdStyle}>Non-all-purpose</td></tr>
+              <tr><td style={tdStyle}>Vehicle (managerial hotel)</td><td style={tdStyle}>{formatCurrency(vehicleAllowance)}/km</td><td style={tdStyle}>Managerial hotel employees</td><td style={tdStyle}>Non-all-purpose</td></tr>
             </tbody>
           </table>
         </div>
@@ -140,17 +152,17 @@ export default function HospitalityAllowancesContent() {
 
           <h3 style={h3Style}>Tool allowance missing for cooks</h3>
           <p style={pStyle}>
-            Cooks who supply and maintain their own knives and tools are entitled to $2.03 per day (up to $9.94/week). This is rarely paid unless the employee specifically asks.
+            Cooks who supply and maintain their own knives and tools are entitled to {formatCurrency(toolDaily)} per day (up to $9.94/week). This is rarely paid unless the employee specifically asks.
           </p>
 
           <h3 style={h3Style}>First aid allowance not applied</h3>
           <p style={pStyle}>
-            If you hold a current first aid certificate and your employer requires you to be the designated first aider, you&apos;re owed $12.82/week (full-time) or $2.56/day (part-time/casual). Many employers pocket the benefit of having a qualified first aider without paying the allowance.
+            If you hold a current first aid certificate and your employer requires you to be the designated first aider, you&apos;re owed {formatCurrency(firstAidFt)}/week (full-time) or {formatCurrency(firstAidDaily)}/day (part-time/casual). Many employers pocket the benefit of having a qualified first aider without paying the allowance.
           </p>
 
           <h3 style={h3Style}>Meal allowance skipped on overtime</h3>
           <p style={pStyle}>
-            If you&apos;re a permanent employee required to work overtime and a meal break falls during that overtime, you&apos;re entitled to $16.73. This is frequently missed on busy nights.
+            If you&apos;re a permanent employee required to work overtime and a meal break falls during that overtime, you&apos;re entitled to {formatCurrency(mealAllowance)}. This is frequently missed on busy nights.
           </p>
 
           <p style={pStyle}>

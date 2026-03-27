@@ -3,6 +3,7 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData } from '@/lib/hospitality-rates';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +23,7 @@ const faqData = [
   { question: 'My payslip shows super but I can\'t see it in my fund', answer: 'Log into your super fund and check incoming contributions. If they\'re on the payslip but not appearing in the fund, contact the ATO\'s unpaid super line on 13 10 20.' },
 ];
 
-export default function GuideReadPayslip() {
+export default function GuideReadPayslip({ rates }: { rates?: HospitalityRateData }) {
   return (
     <>
       {/* Last updated */}

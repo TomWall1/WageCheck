@@ -6,6 +6,7 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityAllowancesContent from '@/components/seo/awards/HospitalityAllowancesContent';
+import { getHospitalityRates } from '@/lib/hospitality-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -60,7 +61,7 @@ export default async function AllowancesPage({ params }: Props) {
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
-        <HospitalityAllowancesContent />
+        <HospitalityAllowancesContent rates={await getHospitalityRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

@@ -5,6 +5,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif',
@@ -48,7 +50,15 @@ const sectionStyle: React.CSSProperties = {
   marginBottom: '2.5rem',
 };
 
-export default function HospitalityHubContent() {
+export default function HospitalityHubContent({ rates }: { rates: HospitalityRateData }) {
+  const levelRoles: Record<number, string> = {
+    1: 'Kitchen hand, food & beverage attendant',
+    2: 'Bar attendant, waitstaff, guest service',
+    3: 'Experienced F&B, Cook Grade 2, front desk',
+    4: 'Cook Grade 3, front office supervisor',
+    5: 'Senior supervisor, Cook Grade 4–5',
+  };
+  const l2 = getLevel(rates, 2);
   return (
     <>
       {/* Intro */}
@@ -76,8 +86,8 @@ export default function HospitalityHubContent() {
           <p style={{ ...pStyle, fontWeight: 500, marginBottom: '4px' }}>What should have happened:</p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '12px' }}>
             <li>Weekday shifts: $25/hr &#10003; (within range for Level 2)</li>
-            <li>Sunday shift: ~$44/hr (casual Sunday rate at Level 2)</li>
-            <li>Public holiday shift: ~$57/hr (casual public holiday rate at Level 2)</li>
+            <li>Sunday shift: ~{formatCurrency(l2?.sundayCasual ?? 0)}/hr (casual Sunday rate at Level 2)</li>
+            <li>Public holiday shift: ~{formatCurrency(l2?.publicHolidayCasual ?? 0)}/hr (casual public holiday rate at Level 2)</li>
           </ul>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
             Estimated underpayment: $75–$185 in that week alone.
@@ -167,20 +177,14 @@ export default function HospitalityHubContent() {
               </tr>
             </thead>
             <tbody>
-              {[
-                { level: 1, roles: 'Kitchen hand, food & beverage attendant', ord: '$30.13', sat: '$36.15', sun: '$42.18', ph: '$54.23' },
-                { level: 2, roles: 'Bar attendant, waitstaff, guest service', ord: '$31.60', sat: '$37.92', sun: '$44.24', ph: '$56.88' },
-                { level: 3, roles: 'Experienced F&B, Cook Grade 2, front desk', ord: '$32.63', sat: '$39.15', sun: '$45.68', ph: '$58.73' },
-                { level: 4, roles: 'Cook Grade 3, front office supervisor', ord: '$34.15', sat: '$40.98', sun: '$47.81', ph: '$61.47' },
-                { level: 5, roles: 'Senior supervisor, Cook Grade 4–5', ord: '$35.75', sat: '$42.90', sun: '$50.05', ph: '$64.35' },
-              ].map(r => (
-                <tr key={r.level} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Level {r.level}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary-muted)', fontSize: '12.5px' }}>{r.roles}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{r.ord}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{r.sat}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{r.sun}</td>
-                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{r.ph}</td>
+              {rates.levels.filter(l => l.level >= 1 && l.level <= 5).map(l => (
+                <tr key={l.level} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Level {l.level}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary-muted)', fontSize: '12.5px' }}>{levelRoles[l.level] ?? ''}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.casualRate)}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.saturdayCasual)}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.sundayCasual)}</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.publicHolidayCasual)}</td>
                 </tr>
               ))}
             </tbody>

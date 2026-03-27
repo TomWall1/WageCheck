@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityHubContent from '@/components/seo/awards/HospitalityHubContent';
+import { getHospitalityRates } from '@/lib/hospitality-rates';
 
 interface Props {
   params: Promise<{ awardSlug: string }>;
@@ -83,7 +84,7 @@ export default async function AwardHubPage({ params }: Props) {
               Hospitality Award Pay Rates 2025&ndash;26
             </h1>
           </div>
-          <HospitalityHubContent />
+          <HospitalityHubContent rates={await getHospitalityRates()} />
         </>
       ) : (
         <>

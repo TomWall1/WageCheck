@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
+import { getHospitalityRates, getLevel, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
@@ -63,6 +65,12 @@ export default async function BartenderPayRatesPage({ params }: Props) {
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
 
+  const rates = await getHospitalityRates();
+  const l2 = getLevel(rates, 2);
+  const l3 = getLevel(rates, 3);
+  const eveningLoading = getEveningLoading(rates);
+  const nightLoading = getNightLoading(rates);
+
   return (
     <div>
       <Breadcrumbs items={[
@@ -98,7 +106,7 @@ export default async function BartenderPayRatesPage({ params }: Props) {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual bartender, Level 2. 5-hour Friday night shift &mdash; 9pm to 2am.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $31.60/hr flat for all 5 hours</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l2?.casualRate ?? 0)}/hr flat for all 5 hours</p>
           <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Evening loading (9pm&ndash;midnight) + late-night loading (midnight&ndash;2am) + Saturday rates from midnight</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$35&ndash;50 for that single shift
@@ -125,17 +133,17 @@ export default async function BartenderPayRatesPage({ params }: Props) {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Ordinary hours</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$32.63/hr</td></tr>
-              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>~$34.07/hr</td><td style={tdStyle}>~$35.10/hr</td></tr>
-              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>~$36.42/hr</td><td style={tdStyle}>~$37.45/hr</td></tr>
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$37.92/hr</td><td style={tdStyle}>$39.15/hr</td></tr>
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$44.24/hr</td><td style={tdStyle}>$45.68/hr</td></tr>
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$56.88/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
+              <tr><td style={tdStyle}>Ordinary hours</td><td style={tdStyle}>{formatCurrency(l2?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.casualRate ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>~{formatCurrency((l2?.casualRate ?? 0) + eveningLoading)}/hr</td><td style={tdStyle}>~{formatCurrency((l3?.casualRate ?? 0) + eveningLoading)}/hr</td></tr>
+              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>~{formatCurrency((l2?.casualRate ?? 0) + nightLoading)}/hr</td><td style={tdStyle}>~{formatCurrency((l3?.casualRate ?? 0) + nightLoading)}/hr</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{formatCurrency(l2?.saturdayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.saturdayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{formatCurrency(l2?.sundayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{formatCurrency(l2?.publicHolidayCasual ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.publicHolidayCasual ?? 0)}/hr</td></tr>
             </tbody>
           </table>
         </div>
         <p style={smallStyle}>
-          Evening and late-night rates are approximate &mdash; a flat loading ($2.47/hr evening, $4.82/hr late night) is added to the applicable casual rate. Rates based on MA000009 pay guide, effective 1 July 2025.
+          Evening and late-night rates are approximate &mdash; a flat loading ({formatCurrency(eveningLoading)}/hr evening, {formatCurrency(nightLoading)}/hr late night) is added to the applicable casual rate. Rates based on MA000009 pay guide, effective 1 July 2025.
         </p>
         <p style={{ ...pStyle, marginTop: '1rem' }}>
           If your late-night rate looks identical to your afternoon rate, check your pay now.

@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,10 @@ const faqData = [
   { question: 'What if the public holiday falls on my day off?', answer: 'For permanent employees, if a public holiday falls on a day you\'d ordinarily work, you\'re entitled to a paid day off or a substitute day. For casuals, entitlement depends on whether the day would have been a scheduled working day.' },
 ];
 
-export default function GuidePublicHolidayPay() {
+export default function GuidePublicHolidayPay({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2Cas = rates ? formatCurrency(l2?.casualRate ?? 0) : '$31.60';
+  const l2PhCas = rates ? formatCurrency(l2?.publicHolidayCasual ?? 0) : '$56.88';
   return (
     <>
       {/* Last updated */}
@@ -47,8 +52,8 @@ export default function GuidePublicHolidayPay() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual hospitality worker, Level 2. 6-hour Christmas Day shift.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $31.60/hr (ordinary casual rate)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Public holiday casual rate at Level 2 &mdash; $56.88/hr</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {l2Cas}/hr (ordinary casual rate)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Public holiday casual rate at Level 2 &mdash; {l2PhCas}/hr</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$152 for that single shift
           </p>

@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
@@ -39,7 +41,16 @@ const faqData = [
   { question: 'Can I recover penalty rates I wasn\'t paid?', answer: 'Yes — up to 6 years back under the Fair Work Act. The Fair Work Ombudsman can recover these on your behalf.' },
 ];
 
-export default function HospitalityPenaltyContent() {
+export default function HospitalityPenaltyContent({ rates }: { rates: HospitalityRateData }) {
+  const l1 = getLevel(rates, 1);
+  const eveningLoading = getEveningLoading(rates);
+  const nightLoading = getNightLoading(rates);
+  const l1Ft = l1?.ftRate ?? 0;
+  const l1Cas = l1?.casualRate ?? 0;
+  const l1FtEvening = l1Ft + eveningLoading;
+  const l1CasEvening = l1Cas + eveningLoading;
+  const l1FtNight = l1Ft + nightLoading;
+  const l1CasNight = l1Cas + nightLoading;
   return (
     <>
       {/* Last updated */}
@@ -64,10 +75,10 @@ export default function HospitalityPenaltyContent() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual kitchen hand, Level 1. 6-hour Sunday shift.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $30.13/hr (standard casual rate)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday casual rate at Level 1 — $42.18/hr</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l1Cas)}/hr (standard casual rate)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday casual rate at Level 1 — {formatCurrency(l1?.sundayCasual ?? 0)}/hr</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
-            Underpayment: ~$73 for one shift. ~$3,800/year working one Sunday per week.
+            Underpayment: ~{formatCurrency(((l1?.sundayCasual ?? 0) - l1Cas) * 6)} for one shift. ~{formatCurrency(((l1?.sundayCasual ?? 0) - l1Cas) * 6 * 52)}/year working one Sunday per week.
           </p>
           <p style={smallStyle}>
             <strong>Why it happens:</strong> Employer pays the same casual rate every day. The Sunday multiplier is never applied.
@@ -82,8 +93,8 @@ export default function HospitalityPenaltyContent() {
           <li><strong>Saturday</strong> → 1.25× ordinary rate</li>
           <li><strong>Sunday</strong> → 1.5× ordinary rate</li>
           <li><strong>Public holiday</strong> → 2.25× ordinary rate</li>
-          <li><strong>Evening (7pm–midnight)</strong> → +$2.47/hr on top of base</li>
-          <li><strong>Late night (midnight–7am)</strong> → +$4.82/hr on top of base</li>
+          <li><strong>Evening (7pm–midnight)</strong> → +{formatCurrency(eveningLoading)}/hr on top of base</li>
+          <li><strong>Late night (midnight–7am)</strong> → +{formatCurrency(nightLoading)}/hr on top of base</li>
         </ul>
       </section>
 
@@ -112,12 +123,12 @@ export default function HospitalityPenaltyContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Weekday ordinary</td><td style={tdStyle}>$24.10/hr</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>Permanent: $144.60</td></tr>
-              <tr><td style={tdStyle}>Weekday evening (7pm–midnight)</td><td style={tdStyle}>$26.57/hr</td><td style={tdStyle}>$32.60/hr</td><td style={tdStyle}>Permanent: $159.42</td></tr>
-              <tr><td style={tdStyle}>Late night (midnight–7am)</td><td style={tdStyle}>$28.92/hr</td><td style={tdStyle}>$35.07/hr</td><td style={tdStyle}>Permanent: $173.52</td></tr>
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>$36.15/hr</td><td style={tdStyle}>Casual: $216.90</td></tr>
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$36.15/hr</td><td style={tdStyle}>$42.18/hr</td><td style={tdStyle}>Casual: $253.05</td></tr>
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$54.23/hr</td><td style={tdStyle}>$54.23/hr</td><td style={tdStyle}>Either: $325.35</td></tr>
+              <tr><td style={tdStyle}>Weekday ordinary</td><td style={tdStyle}>{formatCurrency(l1Ft)}/hr</td><td style={tdStyle}>{formatCurrency(l1Cas)}/hr</td><td style={tdStyle}>Permanent: {formatCurrency(l1Ft * 6)}</td></tr>
+              <tr><td style={tdStyle}>Weekday evening (7pm–midnight)</td><td style={tdStyle}>{formatCurrency(l1FtEvening)}/hr</td><td style={tdStyle}>{formatCurrency(l1CasEvening)}/hr</td><td style={tdStyle}>Permanent: {formatCurrency(l1FtEvening * 6)}</td></tr>
+              <tr><td style={tdStyle}>Late night (midnight–7am)</td><td style={tdStyle}>{formatCurrency(l1FtNight)}/hr</td><td style={tdStyle}>{formatCurrency(l1CasNight)}/hr</td><td style={tdStyle}>Permanent: {formatCurrency(l1FtNight * 6)}</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{formatCurrency(l1?.saturdayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.saturdayCasual ?? 0)}/hr</td><td style={tdStyle}>Casual: {formatCurrency((l1?.saturdayCasual ?? 0) * 6)}</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{formatCurrency(l1?.sundayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.sundayCasual ?? 0)}/hr</td><td style={tdStyle}>Casual: {formatCurrency((l1?.sundayCasual ?? 0) * 6)}</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayCasual ?? 0)}/hr</td><td style={tdStyle}>Either: {formatCurrency((l1?.publicHolidayFt ?? 0) * 6)}</td></tr>
             </tbody>
           </table>
         </div>
@@ -209,11 +220,9 @@ export default function HospitalityPenaltyContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$36.15/hr</td><td style={tdStyle}>$42.18/hr</td><td style={tdStyle}>$54.23/hr</td></tr>
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$37.92/hr</td><td style={tdStyle}>$44.24/hr</td><td style={tdStyle}>$56.88/hr</td></tr>
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$39.15/hr</td><td style={tdStyle}>$45.68/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
-              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>$40.98/hr</td><td style={tdStyle}>$47.81/hr</td><td style={tdStyle}>$61.47/hr</td></tr>
-              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>$42.90/hr</td><td style={tdStyle}>$50.05/hr</td><td style={tdStyle}>$64.35/hr</td></tr>
+              {rates.levels.filter(l => l.level >= 1 && l.level <= 5).map(l => (
+                <tr key={l.level}><td style={tdStyle}>Level {l.level}</td><td style={tdStyle}>{formatCurrency(l.sundayFt)}/hr</td><td style={tdStyle}>{formatCurrency(l.sundayCasual)}/hr</td><td style={tdStyle}>{formatCurrency(l.publicHolidayCasual)}/hr</td></tr>
+              ))}
             </tbody>
           </table>
         </div>

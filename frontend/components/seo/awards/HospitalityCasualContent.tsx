@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
@@ -38,7 +40,9 @@ const faqData = [
   { question: 'My roster is the same every week \u2014 am I still casual?', answer: 'Possibly not after 12 months. Regular and systematic work \u2014 even with varying hours \u2014 can trigger conversion rights. If your employer has never raised this after 12 months, they may be in breach.' },
 ];
 
-export default function HospitalityCasualContent() {
+export default function HospitalityCasualContent({ rates }: { rates: HospitalityRateData }) {
+  const l1 = getLevel(rates, 1);
+  const l2 = getLevel(rates, 2);
   return (
     <>
       {/* Last updated */}
@@ -63,10 +67,10 @@ export default function HospitalityCasualContent() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual food and beverage attendant, Level 2. 6-hour Sunday shift.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $31.60/hr (casual base &mdash; loading included)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Casual Sunday rate at Level 2 &mdash; $44.24/hr</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l2?.casualRate ?? 0)}/hr (casual base &mdash; loading included)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Casual Sunday rate at Level 2 &mdash; {formatCurrency(l2?.sundayCasual ?? 0)}/hr</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
-            Underpayment: ~$76 for one shift. ~$3,900/year on one Sunday per week.
+            Underpayment: ~{formatCurrency(((l2?.sundayCasual ?? 0) - (l2?.casualRate ?? 0)) * 6)} for one shift. ~{formatCurrency(((l2?.sundayCasual ?? 0) - (l2?.casualRate ?? 0)) * 6 * 52)}/year on one Sunday per week.
           </p>
           <p style={smallStyle}>
             <strong>Why it happens:</strong> Employer pays the casual rate every day assuming the loading covers the penalty. It doesn&apos;t.
@@ -113,11 +117,9 @@ export default function HospitalityCasualContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>$36.15/hr</td><td style={tdStyle}>$42.18/hr</td><td style={tdStyle}>$54.23/hr</td></tr>
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$37.92/hr</td><td style={tdStyle}>$44.24/hr</td><td style={tdStyle}>$56.88/hr</td></tr>
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>$39.15/hr</td><td style={tdStyle}>$45.68/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
-              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>$34.15/hr</td><td style={tdStyle}>$40.98/hr</td><td style={tdStyle}>$47.81/hr</td><td style={tdStyle}>$61.47/hr</td></tr>
-              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>$35.75/hr</td><td style={tdStyle}>$42.90/hr</td><td style={tdStyle}>$50.05/hr</td><td style={tdStyle}>$64.35/hr</td></tr>
+              {rates.levels.filter(l => l.level >= 1 && l.level <= 5).map(l => (
+                <tr key={l.level}><td style={tdStyle}>Level {l.level}</td><td style={tdStyle}>{formatCurrency(l.casualRate)}/hr</td><td style={tdStyle}>{formatCurrency(l.saturdayCasual)}/hr</td><td style={tdStyle}>{formatCurrency(l.sundayCasual)}/hr</td><td style={tdStyle}>{formatCurrency(l.publicHolidayCasual)}/hr</td></tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -144,7 +146,7 @@ export default function HospitalityCasualContent() {
 
           <h3 style={h3Style}>Penalty rates not applied on top of loading</h3>
           <p style={pStyle}>
-            The penalty applies to the casual base rate. A casual Sunday is not $30.13/hr &mdash; it&apos;s $42.18/hr at Level 1. Many employers pay the same rate daily.
+            The penalty applies to the casual base rate. A casual Sunday is not {formatCurrency(l1?.casualRate ?? 0)}/hr &mdash; it&apos;s {formatCurrency(l1?.sundayCasual ?? 0)}/hr at Level 1. Many employers pay the same rate daily.
           </p>
           <CheckPayCTA awardCode="MA000009" awardName="Hospitality Award" />
 

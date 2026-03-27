@@ -4,9 +4,10 @@ import { getGuideBySlug, getAllGuideSlugs } from '@/lib/guides';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import dynamic from 'next/dynamic';
+import { getHospitalityRates, HospitalityRateData } from '@/lib/hospitality-rates';
 
-// Guide content components — lazy loaded by slug
-const guideComponents: Record<string, React.ComponentType> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const guideComponents: Record<string, React.ComponentType<any>> = {
   'what-is-a-modern-award': dynamic(() => import('@/components/seo/guides/GuideWhatIsModernAward')),
   'penalty-rates-australia': dynamic(() => import('@/components/seo/guides/GuidePenaltyRates')),
   'casual-loading-explained': dynamic(() => import('@/components/seo/guides/GuideCasualLoading')),
@@ -47,6 +48,17 @@ export default async function GuidePage({ params }: Props) {
   if (!guide) notFound();
 
   const GuideContent = guideComponents[slug];
+
+  // Guides that reference hospitality rates need live data
+  const guidesNeedingRates = [
+    'casual-loading-explained', 'allowances-and-loadings', 'flat-rate-vs-award',
+    'minimum-wage-australia-2025', 'public-holiday-pay-australia',
+    'how-to-read-your-payslip', 'superannuation-casual-workers',
+  ];
+  let rates: HospitalityRateData | undefined;
+  if (guidesNeedingRates.includes(slug)) {
+    try { rates = await getHospitalityRates(); } catch { /* rates stay undefined */ }
+  }
 
   return (
     <div style={{ maxWidth: '640px', margin: '0 auto' }}>
@@ -90,7 +102,7 @@ export default async function GuidePage({ params }: Props) {
       </div>
 
       {GuideContent ? (
-        <GuideContent />
+        <GuideContent rates={rates} />
       ) : (
         <div style={{ fontSize: '14.5px', color: 'var(--secondary-muted)', lineHeight: 1.75 }}>
           <p>{guide.brief}</p>

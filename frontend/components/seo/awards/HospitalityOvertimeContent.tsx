@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
@@ -38,7 +40,15 @@ const faqData = [
   { question: 'Do supervisors and managers get overtime?', answer: 'Most do. The exemption only applies where a salary genuinely covers all overtime obligations. Most hospitality managers on fixed salaries are underpaid on this basis.' },
 ];
 
-export default function HospitalityOvertimeContent() {
+export default function HospitalityOvertimeContent({ rates }: { rates: HospitalityRateData }) {
+  const level2 = getLevel(rates, 2);
+  const level3 = getLevel(rates, 3);
+  const l2Base = level2?.ftRate ?? 0;
+  const l3Base = level3?.ftRate ?? 0;
+  const l2Ot15 = Math.round(l2Base * 1.5 * 100) / 100;
+  const l2Ot20 = Math.round(l2Base * 2.0 * 100) / 100;
+  const l3Ot15 = Math.round(l3Base * 1.5 * 100) / 100;
+  const l3Ot20 = Math.round(l3Base * 2.0 * 100) / 100;
   return (
     <>
       {/* Last updated */}
@@ -63,8 +73,8 @@ export default function HospitalityOvertimeContent() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Full-time cook, Level 3. Works 45 hours across one week &mdash; five 9-hour days.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $26.10/hr flat for all 45 hours</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> 38 hours at $26.10/hr; 7 hours at overtime rates ($39.15/hr then $52.20/hr)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l3Base)}/hr flat for all 45 hours</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> 38 hours at {formatCurrency(l3Base)}/hr; 7 hours at overtime rates ({formatCurrency(l3Ot15)}/hr then {formatCurrency(l3Ot20)}/hr)</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$130 that week. ~$6,700/year if this happens weekly.
           </p>
@@ -107,9 +117,9 @@ export default function HospitalityOvertimeContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Ordinary (up to threshold)</td><td style={tdStyle}>1&times;</td><td style={tdStyle}>$25.28/hr</td><td style={tdStyle}>$26.10/hr</td></tr>
-              <tr><td style={tdStyle}>Overtime &mdash; first 2 hours</td><td style={tdStyle}>1.5&times;</td><td style={tdStyle}>$37.92/hr</td><td style={tdStyle}>$39.15/hr</td></tr>
-              <tr><td style={tdStyle}>Overtime &mdash; after 2 hours</td><td style={tdStyle}>2&times;</td><td style={tdStyle}>$50.56/hr</td><td style={tdStyle}>$52.20/hr</td></tr>
+              <tr><td style={tdStyle}>Ordinary (up to threshold)</td><td style={tdStyle}>1&times;</td><td style={tdStyle}>{formatCurrency(l2Base)}/hr</td><td style={tdStyle}>{formatCurrency(l3Base)}/hr</td></tr>
+              <tr><td style={tdStyle}>Overtime &mdash; first 2 hours</td><td style={tdStyle}>1.5&times;</td><td style={tdStyle}>{formatCurrency(l2Ot15)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot15)}/hr</td></tr>
+              <tr><td style={tdStyle}>Overtime &mdash; after 2 hours</td><td style={tdStyle}>2&times;</td><td style={tdStyle}>{formatCurrency(l2Ot20)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot20)}/hr</td></tr>
             </tbody>
           </table>
         </div>

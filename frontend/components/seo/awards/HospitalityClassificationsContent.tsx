@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = {
   fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
@@ -39,7 +41,21 @@ const faqData = [
   { question: 'How do I find out what level I should be?', answer: 'Look at the duties you actually perform day to day \u2014 not your job title. Compare them against the classification descriptions in the award. If your duties match a higher level than you\'re being paid, raise it with your employer or contact the Fair Work Ombudsman.' },
 ];
 
-export default function HospitalityClassificationsContent() {
+const levelRoles: Record<number, string> = {
+  1: 'Kitchen hand, glassy, general hand, introductory bar/food attendant',
+  2: 'Cook grade 1, bar attendant, food & beverage attendant, front office',
+  3: 'Cook grade 2, senior food & beverage attendant, guest services supervisor',
+  4: 'Cook grade 3 (tradesperson), senior front office, senior housekeeper',
+  5: 'Cook grade 4 (chef), senior supervisor, advanced tradesperson',
+};
+
+export default function HospitalityClassificationsContent({ rates }: { rates: HospitalityRateData }) {
+  const level1 = getLevel(rates, 1);
+  const level3 = getLevel(rates, 3);
+  const l1Base = level1?.ftRate ?? 0;
+  const l3Base = level3?.ftRate ?? 0;
+  const diffPerHour = Math.round((l3Base - l1Base) * 100) / 100;
+  const diffPerWeek = Math.round(diffPerHour * 38 * 100) / 100;
   return (
     <>
       {/* Last updated */}
@@ -64,10 +80,10 @@ export default function HospitalityClassificationsContent() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Full-time bar attendant who also trains new staff and manages stock ordering. Classified and paid as Level 1.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $24.10/hr (Level 1 base rate)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Level 3 base rate &mdash; $26.10/hr (duties include supervision and training)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l1Base)}/hr (Level 1 base rate)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Level 3 base rate &mdash; {formatCurrency(l3Base)}/hr (duties include supervision and training)</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
-            Underpayment: $2.00/hr &times; 38hrs = ~$76/week. ~$3,950/year &mdash; before penalties.
+            Underpayment: {formatCurrency(diffPerHour)}/hr &times; 38hrs = ~{formatCurrency(diffPerWeek)}/week. ~{formatCurrency(Math.round(diffPerWeek * 52))}/year &mdash; before penalties.
           </p>
           <p style={smallStyle}>
             <strong>Why it happens:</strong> Employer never updates the classification when duties change. The worker assumes their pay is correct because they got a &quot;raise&quot; at some point.
@@ -89,11 +105,9 @@ export default function HospitalityClassificationsContent() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$24.10/hr</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>Kitchen hand, glassy, general hand, introductory bar/food attendant</td></tr>
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$25.28/hr</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>Cook grade 1, bar attendant, food &amp; beverage attendant, front office</td></tr>
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$26.10/hr</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>Cook grade 2, senior food &amp; beverage attendant, guest services supervisor</td></tr>
-              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>$27.32/hr</td><td style={tdStyle}>$34.15/hr</td><td style={tdStyle}>Cook grade 3 (tradesperson), senior front office, senior housekeeper</td></tr>
-              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>$28.60/hr</td><td style={tdStyle}>$35.75/hr</td><td style={tdStyle}>Cook grade 4 (chef), senior supervisor, advanced tradesperson</td></tr>
+              {rates.levels.filter(l => l.level >= 1 && l.level <= 5).map(l => (
+                <tr key={l.level}><td style={tdStyle}>Level {l.level}</td><td style={tdStyle}>{formatCurrency(l.ftRate)}/hr</td><td style={tdStyle}>{formatCurrency(l.casualRate)}/hr</td><td style={tdStyle}>{levelRoles[l.level] ?? l.title}</td></tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -101,7 +115,7 @@ export default function HospitalityClassificationsContent() {
           Rates based on the Fair Work Commission pay guide for MA000009, effective 1 July 2025. Higher levels (6 and above) exist for managerial roles.
         </p>
         <p style={{ ...pStyle, marginTop: '1rem' }}>
-          The difference between Level 1 and Level 3 is $2.00/hr. On a full-time week that&apos;s $76 &mdash; and that gap compounds on every penalty rate and overtime hour.
+          The difference between Level 1 and Level 3 is {formatCurrency(diffPerHour)}/hr. On a full-time week that&apos;s {formatCurrency(diffPerWeek)} &mdash; and that gap compounds on every penalty rate and overtime hour.
         </p>
         <CheckPayCTA awardCode="MA000009" awardName="Hospitality Award" />
       </section>

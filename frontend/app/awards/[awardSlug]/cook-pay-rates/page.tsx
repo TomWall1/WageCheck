@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
+import { getHospitalityRates, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
@@ -62,6 +64,12 @@ export default async function CookPayRatesPage({ params }: Props) {
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
 
+  const rates = await getHospitalityRates();
+  const l2 = getLevel(rates, 2);
+  const l3 = getLevel(rates, 3);
+  const l4 = getLevel(rates, 4);
+  const l5 = getLevel(rates, 5);
+
   return (
     <div>
       <Breadcrumbs items={[
@@ -97,8 +105,8 @@ export default async function CookPayRatesPage({ params }: Props) {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Full-time Cook Grade 3, Level 4. Works a 10-hour Sunday shift.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $27.32/hr for all 10 hours</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday permanent rate at Level 4 &mdash; $40.98/hr for ordinary Sunday hours; overtime rate for hours beyond 10</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {formatCurrency(l4?.ftRate ?? 0)}/hr for all 10 hours</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday permanent rate at Level 4 &mdash; {formatCurrency(l4?.sundayFt ?? 0)}/hr for ordinary Sunday hours; overtime rate for hours beyond 10</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$136 for that single shift
           </p>
@@ -123,10 +131,10 @@ export default async function CookPayRatesPage({ params }: Props) {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Cook Grade 1 / Kitchen Attendant</td><td style={tdStyle}>Level 2</td><td style={tdStyle}>$25.28/hr</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$44.24/hr</td></tr>
-              <tr><td style={tdStyle}>Cook Grade 2 / Senior Cook</td><td style={tdStyle}>Level 3</td><td style={tdStyle}>$26.10/hr</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>$45.68/hr</td></tr>
-              <tr><td style={tdStyle}>Cook Grade 3 / Sous Chef</td><td style={tdStyle}>Level 4</td><td style={tdStyle}>$27.32/hr</td><td style={tdStyle}>$34.15/hr</td><td style={tdStyle}>$47.81/hr</td></tr>
-              <tr><td style={tdStyle}>Cook Grade 4&ndash;5 / Head Chef</td><td style={tdStyle}>Level 5</td><td style={tdStyle}>$28.60/hr</td><td style={tdStyle}>$35.75/hr</td><td style={tdStyle}>$50.05/hr</td></tr>
+              <tr><td style={tdStyle}>Cook Grade 1 / Kitchen Attendant</td><td style={tdStyle}>Level 2</td><td style={tdStyle}>{formatCurrency(l2?.ftRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Cook Grade 2 / Senior Cook</td><td style={tdStyle}>Level 3</td><td style={tdStyle}>{formatCurrency(l3?.ftRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Cook Grade 3 / Sous Chef</td><td style={tdStyle}>Level 4</td><td style={tdStyle}>{formatCurrency(l4?.ftRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l4?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l4?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Cook Grade 4&ndash;5 / Head Chef</td><td style={tdStyle}>Level 5</td><td style={tdStyle}>{formatCurrency(l5?.ftRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l5?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l5?.sundayCasual ?? 0)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -169,7 +177,7 @@ export default async function CookPayRatesPage({ params }: Props) {
 
           <h3 style={h3Style}>Sunday rates applied at permanent rate for casuals</h3>
           <p style={pStyle}>
-            Casual Cook Grade 2 Sunday rate is $45.68/hr &mdash; not the permanent rate of $39.15/hr. Receiving permanent Sunday rates as a casual is underpayment.
+            Casual Cook Grade 2 Sunday rate is {formatCurrency(l3?.sundayCasual ?? 0)}/hr &mdash; not the permanent rate of {formatCurrency(l3?.sundayFt ?? 0)}/hr. Receiving permanent Sunday rates as a casual is underpayment.
           </p>
 
           <p style={pStyle}>

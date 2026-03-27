@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,13 @@ const faqData = [
   { question: 'Can my employer remove the loading if I get other benefits?', answer: 'Not without a formal, legally compliant arrangement. The loading is an award entitlement.' },
 ];
 
-export default function GuideCasualLoading() {
+export default function GuideCasualLoading({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l1Ft = rates ? formatCurrency(l1?.ftRate ?? 0) : '$24.10';
+  const l1Cas = rates ? formatCurrency(l1?.casualRate ?? 0) : '$30.13';
+  const l1SatCas = rates ? formatCurrency(l1?.saturdayCasual ?? 0) : '$36.15';
+  const l1SunCas = rates ? formatCurrency(l1?.sundayCasual ?? 0) : '$42.18';
+  const l1PhCas = rates ? formatCurrency(l1?.publicHolidayCasual ?? 0) : '$54.23';
   return (
     <>
       {/* Last updated */}
@@ -47,8 +55,8 @@ export default function GuideCasualLoading() {
           <p style={{ ...pStyle, marginBottom: '8px' }}>
             <strong>Scenario:</strong> Casual hospitality worker told the 25% loading covers Sunday rates.
           </p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> $30.13/hr every day (casual base rate)</p>
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday casual rate under the Hospitality Award &mdash; $42.18/hr at Level 1</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What they were paid:</strong> {l1Cas}/hr every day (casual base rate)</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What should have happened:</strong> Sunday casual rate under the Hospitality Award &mdash; {l1SunCas}/hr at Level 1</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
             Underpayment: ~$72 per 6-hour Sunday shift. ~$3,744/year on one Sunday per week.
           </p>
@@ -75,10 +83,10 @@ export default function GuideCasualLoading() {
           It&apos;s applied to the base rate to produce the casual ordinary hourly rate.
         </p>
         <p style={pStyle}>
-          Example: Hospitality Award Level 1 base rate = $24.10/hr. Casual rate = $24.10 &times; 1.25 = $30.13/hr.
+          Example: Hospitality Award Level 1 base rate = {l1Ft}/hr. Casual rate = {l1Ft} &times; 1.25 = {l1Cas}/hr.
         </p>
         <p style={pStyle}>
-          That $30.13/hr is your starting point on an ordinary weekday. It is not your rate on Sundays.
+          That {l1Cas}/hr is your starting point on an ordinary weekday. It is not your rate on Sundays.
         </p>
         <p style={pStyle}>
           If your Sunday rate looks the same as your Tuesday rate, check your pay now.
@@ -106,10 +114,10 @@ export default function GuideCasualLoading() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={tdStyle}>Weekday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>None</td><td style={tdStyle}>$30.13/hr</td></tr>
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>Saturday loading</td><td style={tdStyle}>$36.15/hr</td></tr>
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>Sunday loading</td><td style={tdStyle}>$42.18/hr</td></tr>
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>PH rate</td><td style={tdStyle}>$54.23/hr</td></tr>
+              <tr><td style={tdStyle}>Weekday</td><td style={tdStyle}>{l1Cas}/hr</td><td style={tdStyle}>None</td><td style={tdStyle}>{l1Cas}/hr</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{l1Cas}/hr</td><td style={tdStyle}>Saturday loading</td><td style={tdStyle}>{l1SatCas}/hr</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{l1Cas}/hr</td><td style={tdStyle}>Sunday loading</td><td style={tdStyle}>{l1SunCas}/hr</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{l1Cas}/hr</td><td style={tdStyle}>PH rate</td><td style={tdStyle}>{l1PhCas}/hr</td></tr>
             </tbody>
           </table>
         </div>
