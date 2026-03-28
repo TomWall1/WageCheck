@@ -60,7 +60,14 @@ export default function ScenarioLateNightTransport() {
           </p>
         </div>
         <p style={pStyle}>
-          If you regularly finish after midnight and your rate doesn&apos;t reflect the late-night loading, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you regularly finish after midnight and your rate doesn&apos;t reflect the late-night loading, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your late-night loadings &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The late-night loading of {/* TODO: dynamic rate */}$4.22/hr applies to every hour after midnight. Working 3 nights per week finishing at 2am (2 hours of late-night time each): $4.22 &times; 2hrs &times; 3 nights = approximately $25/week in missed loading. Over a year: ~$1,300.
         </p>
       </section>
 

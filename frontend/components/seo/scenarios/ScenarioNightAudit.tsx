@@ -62,7 +62,14 @@ export default function ScenarioNightAudit() {
           </p>
         </div>
         <p style={pStyle}>
-          If your night audit rate looks like an ordinary front office rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your night audit rate looks like an ordinary front office rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your night audit pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A night audit worker classified at Level 2 instead of Level 3 is underpaid on base rate, on the Saturday rate, on the Sunday rate, and on the late-night loading &mdash; simultaneously. The combined gap across a 38-hour week of night audit shifts (all after midnight, spanning weekends) is often $100&ndash;$200/week. Over a year: $5,000&ndash;$10,000 &mdash; one of the highest single-role underpayments in the award.
         </p>
       </section>
 

@@ -159,6 +159,21 @@ export default function GuideHospitalityVsRestaurant() {
         ))}
       </section>
 
+      {/* Check your pay under the correct award */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Check your pay under the correct award</h2>
+        <p style={pStyle}>
+          Now that you&apos;ve identified which award applies, check what you&apos;re actually owed:
+        </p>
+        <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
+          <li><strong>Hospitality Award</strong> &rarr; <a href="/awards/hospitality-award" style={linkStyle}>Hospitality Award pay rates</a></li>
+          <li><strong>Restaurant Award</strong> &rarr; <a href="/awards/restaurant-award" style={linkStyle}>Restaurant Award pay rates</a></li>
+        </ul>
+        <p style={pStyle}>
+          The rates differ — particularly on Sundays. Use the correct award hub for your workplace.
+        </p>
+      </section>
+
       {/* Closing CTA */}
       <section style={sectionStyle}>
         <p style={pStyle}>

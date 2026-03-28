@@ -163,6 +163,25 @@ export default function GuideReportUnderpayment() {
         ))}
       </section>
 
+      {/* Find your award */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Find your award</h2>
+        <p style={pStyle}>
+          These rules apply across all modern awards — but the specific rates, penalty multipliers, and allowances vary by industry. If you&apos;re ready to check your actual pay:
+        </p>
+        <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
+          <li><strong>Hospitality</strong> (hotels, bars, caf&eacute;s, clubs) &rarr; <a href="/awards/hospitality-award" style={linkStyle}>Hospitality Award pay rates</a></li>
+          <li><strong>Fast food and takeaway</strong> &rarr; <a href="/awards/fast-food-award" style={linkStyle}>Fast Food Award pay rates</a></li>
+          <li><strong>Restaurants and caf&eacute;s</strong> &rarr; <a href="/awards/restaurant-award" style={linkStyle}>Restaurant Award pay rates</a></li>
+          <li><strong>Retail</strong> (shops, supermarkets) &rarr; <a href="/awards/retail-award" style={linkStyle}>Retail Award pay rates</a></li>
+          <li><strong>Admin and clerical</strong> &rarr; <a href="/awards/clerks-award" style={linkStyle}>Clerks Award pay rates</a></li>
+          <li><strong>Cleaning</strong> &rarr; <a href="/awards/cleaning-award" style={linkStyle}>Cleaning Award pay rates</a></li>
+        </ul>
+        <p style={pStyle}>
+          Not sure which applies to you? <a href="/awards" style={linkStyle}>Browse all awards</a>
+        </p>
+      </section>
+
       {/* Closing CTA */}
       <section style={sectionStyle}>
         <p style={pStyle}>

@@ -62,7 +62,14 @@ export default function ScenarioSplitShifts() {
           </ul>
         </div>
         <p style={pStyle}>
-          If no split shift allowance appears on your payslip and you regularly work this pattern, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If no split shift allowance appears on your payslip and you regularly work this pattern, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check if your split shift allowance is missing &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The split shift allowance is {/* TODO: dynamic rate */}$5.34/day when the break exceeds 3 hours. Working 5 split shifts per week: ~$26.70/week. Over 50 working weeks: ~$1,335/year &mdash; money that should appear on every payslip and almost never does.
         </p>
       </section>
 

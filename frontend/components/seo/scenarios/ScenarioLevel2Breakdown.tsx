@@ -96,7 +96,7 @@ export default function ScenarioLevel2Breakdown() {
           Rates based on the Fair Work Commission pay guide for MA000009, effective 1 July 2025. Evening/late-night rates are the applicable day rate plus the flat hourly loading.
         </p>
         <p style={pStyle}>
-          If any of these rates are higher than what you&apos;re currently paid on those days, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If any of these rates are higher than what you&apos;re currently paid on those days, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Level 2 shifts &rarr;</a>
         </p>
       </section>
 
@@ -109,7 +109,14 @@ export default function ScenarioLevel2Breakdown() {
           </p>
         </div>
         <p style={pStyle}>
-          If your Sunday rate looks similar to your Tuesday rate, you&apos;re almost certainly underpaid on Sundays. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Sunday shifts &rarr;</a>
+          If your Sunday rate looks similar to your Tuesday rate, you&apos;re almost certainly underpaid on Sundays. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Level 2 shifts &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A Level 2 casual worker paid the ordinary weekday rate for every shift misses: approximately {/* TODO: dynamic rate */}$6.32/hr on Saturdays, {/* TODO: dynamic rate */}$12.64/hr on Sundays, and {/* TODO: dynamic rate */}$25.28/hr on public holidays. Working one Sunday and one Saturday per week: ~$113.76/week. Over a year: ~$5,688 &mdash; from two shifts per week being underpaid.
         </p>
       </section>
 

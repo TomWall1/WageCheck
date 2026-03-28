@@ -74,7 +74,7 @@ export default function IntentNoPenaltyRates({ rates }: { rates?: HospitalityRat
           These are the legal minimums. Your employer must apply them &mdash; regardless of what your contract says, regardless of whether it&apos;s stated on your roster, and regardless of any verbal agreement to the contrary.
         </p>
         <p style={pStyle}>
-          If your payslip doesn&apos;t show separate lines for each day type, that&apos;s a red flag. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+          If your payslip doesn&apos;t show separate lines for each day type, that&apos;s a red flag. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your penalty rates &rarr;</a>
         </p>
       </section>
 
@@ -94,7 +94,7 @@ export default function IntentNoPenaltyRates({ rates }: { rates?: HospitalityRat
           If your employer claims a flat rate covers everything but hasn&apos;t shown you the numbers, that claim is very likely incorrect.
         </p>
         <p style={pStyle}>
-          If you&apos;re on a flat rate and want to check, <a href="/check-my-pay?award=MA000009" style={linkStyle}>enter your actual shifts now</a>.
+          If you&apos;re on a flat rate and want to check, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your penalty rates &rarr;</a>
         </p>
       </section>
 

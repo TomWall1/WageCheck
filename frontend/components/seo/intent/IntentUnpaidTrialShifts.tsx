@@ -74,7 +74,7 @@ export default function IntentUnpaidTrialShifts({ rates }: { rates?: Hospitality
           If you worked more than about an hour on a trial shift and weren&apos;t paid, you&apos;re almost certainly owed money for that time.
         </p>
         <p style={pStyle}>
-          If this has happened to you, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check what you&apos;re owed now</a>.
+          If this has happened to you, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate what your trial shift should have paid &rarr;</a>
         </p>
       </section>
 

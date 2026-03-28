@@ -66,7 +66,14 @@ export default function ScenarioAustraliaDay() {
           If Australia Day fell on a weekend and you were paid the Saturday or Sunday rate rather than the public holiday rate, you were underpaid.
         </p>
         <p style={pStyle}>
-          If your Australia Day pay was at 2&times; or less, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your Australia Day pay was at 2&times; or less, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your public holiday pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The difference between double time (2&times;) and the correct rate (2.25&times;) is 0.25&times; your ordinary rate per hour. At Level 2 permanent, that&apos;s approximately $6/hr on every public holiday hour worked. An 8-hour Australia Day shift: ~$50 underpaid in a single day &mdash; every year, on every public holiday where the wrong multiplier is applied.
         </p>
       </section>
 

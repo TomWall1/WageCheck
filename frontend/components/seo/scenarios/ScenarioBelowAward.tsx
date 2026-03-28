@@ -45,7 +45,7 @@ export default function ScenarioBelowAward() {
         <p style={pStyle}><strong>Step 3:</strong> Compare your actual rate against the table. If your rate is lower, you&apos;re being underpaid.</p>
         <p style={pStyle}><strong>Step 4:</strong> Check that the correct rate is being applied for the day you&apos;re working &mdash; a rate that&apos;s legal on a Tuesday may be below the minimum on a Sunday.</p>
         <p style={pStyle}>
-          If your rate falls below the minimum, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your full pay picture now &rarr;</a>
+          If your rate falls below the minimum, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate the exact shortfall &rarr;</a>
         </p>
       </section>
 
@@ -72,6 +72,13 @@ export default function ScenarioBelowAward() {
           </table>
         </div>
         <p style={smallStyle}>Effective 1 July 2025.</p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Being paid $2/hr below the award minimum for your level and employment type: $2 &times; 25hrs/week &times; 52 weeks = $2,600/year from base rate alone &mdash; before factoring in that every penalty rate multiplied from the wrong base is also underpaid. The compounding effect across weekend shifts typically doubles or triples the total. Over 3 years: potentially $8,000&ndash;$15,000+.
+        </p>
       </section>
 
       <section style={sectionStyle}>

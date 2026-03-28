@@ -66,7 +66,7 @@ export default function IntentAmIUnderpaid({ rates }: { rates?: HospitalityRateD
           If your Sunday rate, Saturday rate, and Tuesday rate are identical on your payslip, penalty rates almost certainly haven&apos;t been applied. Under the Hospitality Award, Sunday casual rate at Level 2 is {rates ? formatCurrency(getLevel(rates, 2)?.sundayCasual ?? 0) : '$44.24'}/hr &mdash; significantly higher than the ordinary weekday rate of {rates ? formatCurrency(getLevel(rates, 2)?.casualRate ?? 0) : '$31.60'}/hr.
         </p>
         <p style={pStyle}>
-          If your payslip shows one rate every day, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+          If your payslip shows one rate every day, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check what you&apos;re owed &rarr;</a>
         </p>
 
         <h3 style={h3Style}>2. You regularly work more than 38 hours but never see overtime</h3>
@@ -90,7 +90,7 @@ export default function IntentAmIUnderpaid({ rates }: { rates?: HospitalityRateD
             One rate for every shift &mdash; weekday, Saturday, Sunday, Christmas Day. Unless the flat rate has been formally assessed against every penalty scenario and demonstrably covers all of them, this is almost always underpayment.
           </p>
           <p style={pStyle}>
-            If this sounds like your situation, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+            If this sounds like your situation, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check what you&apos;re owed &rarr;</a>
           </p>
 
           <h3 style={h3Style}>Classified at Level 2 when Level 3 duties are being performed</h3>

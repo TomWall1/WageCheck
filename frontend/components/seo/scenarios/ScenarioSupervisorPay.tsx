@@ -72,7 +72,14 @@ export default function ScenarioSupervisorPay() {
           Ask yourself: are you trusted to run shifts, train others, and solve problems independently? If yes, you may already be working above your current classification.
         </p>
         <p style={pStyle}>
-          If so, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If so, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check if your level is correct &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The difference between Level 2 and Level 3 casual rates is approximately {/* TODO: dynamic rate */}$1.03/hr on ordinary hours &mdash; and larger on penalty days. Working 25 hours/week at the wrong level: approximately $25/week. Over a year: ~$1,300 &mdash; not counting the compounding effect on every weekend penalty rate.
         </p>
       </section>
 

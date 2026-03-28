@@ -89,7 +89,7 @@ export default function IntentPayTooLow({ rates }: { rates?: HospitalityRateData
         </p>
 
         <p style={pStyle}>
-          If any of these sound familiar, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+          If any of these sound familiar, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Find out exactly what&apos;s wrong &rarr;</a>
         </p>
       </section>
 
@@ -108,7 +108,7 @@ export default function IntentPayTooLow({ rates }: { rates?: HospitalityRateData
             <li>Superannuation contributions</li>
           </ul>
           <p style={pStyle}>
-            A payslip that shows only &quot;X hours &times; $Y rate&quot; with nothing else is hiding information. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+            A payslip that shows only &quot;X hours &times; $Y rate&quot; with nothing else is hiding information. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Find out exactly what&apos;s wrong &rarr;</a>
           </p>
         </div>
         <CheckPayCTA awardCode="MA000009" awardName="Hospitality Award" />

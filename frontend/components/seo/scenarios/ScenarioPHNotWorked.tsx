@@ -77,13 +77,20 @@ export default function ScenarioPHNotWorked() {
       </section>
 
       <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A permanent employee who should receive a paid day off on each public holiday but doesn&apos;t &mdash; and works 5 days/week &mdash; misses approximately 8&ndash;10 paid days per year (depending on state). At Level 2 permanent rates, that&apos;s 8 &times; 7.6hrs &times; {/* TODO: dynamic rate */}$25.85/hr = approximately $1,572/year in paid leave not received.
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
         <h2 style={h2Style}>What to check on your payslip</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
           <li>For permanent employees: do public holidays that fall on your ordinary working days appear as paid leave days?</li>
           <li>Is your pay in the period containing a public holiday identical to a period without one? If so, you may be missing the holiday pay.</li>
         </ul>
         <p style={pStyle}>
-          If public holidays are disappearing from your pay as a permanent employee, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If public holidays are disappearing from your pay as a permanent employee, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your public holiday entitlements &rarr;</a>
         </p>
       </section>
 

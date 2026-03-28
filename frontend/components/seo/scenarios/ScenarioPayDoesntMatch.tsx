@@ -66,7 +66,14 @@ export default function ScenarioPayDoesntMatch() {
         </div>
 
         <p style={pStyle}>
-          If your pay and roster don&apos;t match, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your pay and roster don&apos;t match, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check what your roster hours should pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Even a small recurring discrepancy adds up fast. A 30-minute per shift undercount across 5 shifts per week at Level 2 casual rates: approximately $20&ndash;$25/week. Over a year: $1,000&ndash;$1,300 &mdash; from what looks like a minor rounding issue on each individual payslip.
         </p>
       </section>
 

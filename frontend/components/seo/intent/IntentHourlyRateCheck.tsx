@@ -138,7 +138,7 @@ export default function IntentHourlyRateCheck({ rates }: { rates?: HospitalityRa
           Rates based on the Fair Work Commission pay guide for MA000009, effective 1 July 2025.
         </p>
         <p style={{ ...pStyle, marginTop: '1rem' }}>
-          Compare your rate against the table. If what you&apos;re paid falls below the relevant cell, you&apos;re being underpaid. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+          Compare your rate against the table. If what you&apos;re paid falls below the relevant cell, you&apos;re being underpaid. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check if your rate is correct &rarr;</a>
         </p>
       </section>
 
@@ -149,7 +149,7 @@ export default function IntentHourlyRateCheck({ rates }: { rates?: HospitalityRa
           This is the most common situation. A rate that looks fine on a weekday is often insufficient when you factor in weekend and public holiday rates. If you&apos;re paid $34/hr flat but work Sundays, compare $34 against the Sunday rate for your level &mdash; not just the weekday rate.
         </p>
         <p style={pStyle}>
-          If your flat rate doesn&apos;t clear the Sunday or public holiday rate for your classification, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+          If your flat rate doesn&apos;t clear the Sunday or public holiday rate for your classification, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check if your rate is correct &rarr;</a>
         </p>
       </section>
 

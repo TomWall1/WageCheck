@@ -50,7 +50,7 @@ export default function ScenarioRegularCasual() {
           Your employer must either offer conversion or provide written reasons for not doing so within 21 days of a request.
         </p>
         <p style={pStyle}>
-          Ask yourself: are you trusted to work a recognisable schedule, are you expected to be available on certain days, and has this been the case for more than 12 months? If yes, you likely qualify. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay &rarr;</a>
+          Ask yourself: are you trusted to work a recognisable schedule, are you expected to be available on certain days, and has this been the case for more than 12 months? If yes, you likely qualify. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your casual pay and conversion rights &rarr;</a>
         </p>
       </section>
 
@@ -70,12 +70,19 @@ export default function ScenarioRegularCasual() {
       </section>
 
       <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Annual leave as a permanent part-time employee working 24hrs/week = 4 weeks &times; 24hrs &times; {/* TODO: dynamic rate */}$25.85/hr = approximately $2,480/year in leave entitlements not accruing. That&apos;s on top of any pay rate shortfalls. Workers kept casual indefinitely on regular schedules often miss $2,000&ndash;$4,000/year in leave value alone.
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
         <h2 style={h2Style}>Whether or not you convert &mdash; check your current pay</h2>
         <p style={pStyle}>
           Even as a casual, you&apos;re entitled to correct <a href="/awards/hospitality-award/classifications" style={linkStyle}>classification</a>, full penalty rates on weekends and public holidays, minimum 3-hour engagement, and superannuation. These obligations apply regardless of how long the casual arrangement has been in place.
         </p>
         <p style={pStyle}>
-          If you&apos;ve been on a regular casual schedule and haven&apos;t checked your pay properly, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check now &rarr;</a>
+          If you&apos;ve been on a regular casual schedule and haven&apos;t checked your pay properly, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your casual pay and conversion rights &rarr;</a>
         </p>
       </section>
 

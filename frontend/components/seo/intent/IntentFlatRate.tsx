@@ -72,7 +72,7 @@ export default function IntentFlatRate({ rates }: { rates?: HospitalityRateData 
           The public holiday rate at 2.25&times; is almost always the critical test. If your flat rate falls below the public holiday rate for your classification &mdash; at any point &mdash; the flat rate fails.
         </p>
         <p style={pStyle}>
-          If your flat rate is lower than the Sunday or public holiday rate for your level, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+          If your flat rate is lower than the Sunday or public holiday rate for your level, <a href="/check-my-pay?award=MA000009" style={linkStyle}>See if your flat rate is compliant &rarr;</a>
         </p>
       </section>
 
@@ -119,7 +119,7 @@ export default function IntentFlatRate({ rates }: { rates?: HospitalityRateData 
           <li>Confirm how overtime is handled when hours exceed 38 per week</li>
         </ul>
         <p style={pStyle}>
-          If they can&apos;t or won&apos;t provide this, that&apos;s a strong signal the arrangement isn&apos;t compliant. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+          If they can&apos;t or won&apos;t provide this, that&apos;s a strong signal the arrangement isn&apos;t compliant. <a href="/check-my-pay?award=MA000009" style={linkStyle}>See if your flat rate is compliant &rarr;</a>
         </p>
         <CheckPayCTA awardCode="MA000009" awardName="Hospitality Award" />
       </section>

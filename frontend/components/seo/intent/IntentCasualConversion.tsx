@@ -72,7 +72,7 @@ export default function IntentCasualConversion({ rates }: { rates?: HospitalityR
           &quot;Regular and systematic&quot; doesn&apos;t mean identical hours every week. A consistent pattern of engagement &mdash; even with some variation &mdash; can qualify.
         </p>
         <p style={pStyle}>
-          If you&apos;ve been working a recognisable schedule for over a year without any conversation about conversion, your employer may be in breach. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+          If you&apos;ve been working a recognisable schedule for over a year without any conversation about conversion, your employer may be in breach. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your casual pay now &rarr;</a>
         </p>
       </section>
 

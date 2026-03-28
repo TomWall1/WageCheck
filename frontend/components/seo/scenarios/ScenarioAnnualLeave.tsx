@@ -59,7 +59,14 @@ export default function ScenarioAnnualLeave() {
           </p>
         </div>
         <p style={pStyle}>
-          If your pay during annual leave doesn&apos;t include the loading, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your pay during annual leave doesn&apos;t include the loading, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your leave loading &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Annual leave loading is 17.5% on top of ordinary pay during leave. For a permanent Level 3 employee taking 4 weeks&apos; leave (38hrs/week): 17.5% &times; {/* TODO: dynamic rate */}$26.70/hr &times; 152hrs = approximately $710 in leave loading owed per year. If your employer pays ordinary rates during leave without the loading, this amount is missed every single year.
         </p>
       </section>
 

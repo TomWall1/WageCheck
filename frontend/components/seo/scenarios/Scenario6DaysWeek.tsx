@@ -66,7 +66,14 @@ export default function Scenario6DaysWeek() {
           </p>
         </div>
         <p style={pStyle}>
-          If your 6th day pay looks the same as your other days, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your 6th day pay looks the same as your other days, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your overtime entitlement &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A 6-day week typically means 8&ndash;10 hours of overtime. At Level 3 permanent, those hours attract time-and-a-half then double time. Working this pattern every week: the missed overtime typically adds up to $150&ndash;$250/week. Over a year: $7,500&ndash;$13,000.
         </p>
       </section>
 

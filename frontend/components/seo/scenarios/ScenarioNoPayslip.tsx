@@ -69,7 +69,7 @@ export default function ScenarioNoPayslip() {
           The absence of a payslip often coincides with underpayment &mdash; not always deliberately, but because the lack of transparency removes the most accessible check workers have.
         </p>
         <p style={pStyle}>
-          If you&apos;ve been working without payslips, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you&apos;ve been working without payslips, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate what you should have received &rarr;</a>
         </p>
       </section>
 
@@ -86,6 +86,13 @@ export default function ScenarioNoPayslip() {
             <strong>Step 3:</strong> Use bank statements to reconstruct payment history &mdash; these show dates and amounts even without itemised payslips.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Without a payslip, you can&apos;t verify any of the following: whether your base rate is correct, whether penalty rates were applied, whether allowances were paid, or whether super was contributed. Workers without payslips are statistically more likely to be underpaid across multiple entitlements simultaneously. The total gap is often $3,000&ndash;$8,000/year when all missed entitlements are calculated together.
+        </p>
       </section>
 
       <section style={sectionStyle}>

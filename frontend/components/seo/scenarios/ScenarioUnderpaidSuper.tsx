@@ -51,7 +51,7 @@ export default function ScenarioUnderpaidSuper() {
         <p style={pStyle}><strong>Step 3:</strong> Check the amount &mdash; it should be approximately 11.5% of your gross ordinary time earnings for the relevant period.</p>
         <p style={pStyle}><strong>Step 4:</strong> Compare your payslip super figure with what actually appeared in your fund. They don&apos;t always match.</p>
         <p style={pStyle}>
-          If contributions are missing, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If contributions are missing, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay and super &rarr;</a>
         </p>
       </section>
 
@@ -78,6 +78,13 @@ export default function ScenarioUnderpaidSuper() {
             Super rates increased from 10% to 10.5% (July 2022), to 11% (July 2023), to 11.5% (July 2025). Employers still applying earlier rates are underpaying.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Super at 11.5% on $500/week in earnings = $57.50/week owed. If super hasn&apos;t been paid at all: $57.50 &times; 52 = ~$3,000/year in retirement savings not accumulating. Over 3 years: ~$9,000 &mdash; plus lost investment returns on that balance. The compounding effect over a working lifetime is substantial.
+        </p>
       </section>
 
       <section style={sectionStyle}>

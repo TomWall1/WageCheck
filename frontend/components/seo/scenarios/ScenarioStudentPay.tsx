@@ -84,7 +84,14 @@ export default function ScenarioStudentPay() {
           </p>
         </div>
         <p style={pStyle}>
-          If your weekend rates look the same as weekday rates, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your weekend rates look the same as weekday rates, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your age-based rate &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A worker who turned 21 six months ago and hasn&apos;t had their rate updated is being paid at 90% of the adult rate instead of 100%. At Level 2 base, that gap is approximately {/* TODO: dynamic rate */}$2.59/hr. Working 20hrs/week for 6 months: approximately $1,347 in underpayment since the 21st birthday.
         </p>
       </section>
 

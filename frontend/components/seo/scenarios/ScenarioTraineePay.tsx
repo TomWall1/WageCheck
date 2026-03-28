@@ -65,7 +65,14 @@ export default function ScenarioTraineePay() {
           </p>
         </div>
         <p style={pStyle}>
-          If you&apos;ve been on the introductory rate for longer than 3 months, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you&apos;ve been on the introductory rate for longer than 3 months, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your trainee rate &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Being held on an introductory rate beyond the 3-month threshold means being paid below Level 1 for every hour worked. The gap between the introductory rate and Level 1 is {/* TODO: dynamic rate */}$0.67/hr. Working 20 hours/week past that 3-month mark: approximately $13/week. Over 6 months of incorrect rate: ~$340.
         </p>
       </section>
 

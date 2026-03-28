@@ -67,7 +67,14 @@ export default function ScenarioSentHomeEarly() {
           </p>
         </div>
         <p style={pStyle}>
-          If you were paid for less than 3 hours on any shift, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you were paid for less than 3 hours on any shift, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your minimum engagement &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          Sent home after 2 hours on a Sunday? You&apos;re owed 3 hours at the Sunday casual rate &mdash; not 2 hours at the weekday rate. The difference between what you were paid and what you&apos;re owed is often $40&ndash;$80 per instance. Workers sent home early regularly can be owed $1,000+/year in minimum engagement shortfalls alone.
         </p>
       </section>
 

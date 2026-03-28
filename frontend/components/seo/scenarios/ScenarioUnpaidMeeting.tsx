@@ -52,7 +52,7 @@ export default function ScenarioUnpaidMeeting() {
           A Sunday morning staff meeting before your shift starts must be paid at the Sunday rate, not a special &quot;meeting rate.&quot;
         </p>
         <p style={pStyle}>
-          If you&apos;ve attended meetings without pay, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you&apos;ve attended meetings without pay, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate what those meetings should have paid &rarr;</a>
         </p>
       </section>
 
@@ -79,6 +79,13 @@ export default function ScenarioUnpaidMeeting() {
             If the meeting takes your total weekly hours past 38, those meeting hours attract <a href="/awards/hospitality-award/overtime" style={linkStyle}>overtime rates</a>.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A 45-minute pre-shift briefing 5 days per week, unpaid, at Level 2 casual: approximately 3.75 hours/week &times; {/* TODO: dynamic rate */}$31.60/hr = ~$118/week in uncompensated working time. Over a year: ~$6,150. For a Sunday meeting, the Sunday casual rate applies &mdash; making the hourly gap larger.
+        </p>
       </section>
 
       <section style={sectionStyle}>

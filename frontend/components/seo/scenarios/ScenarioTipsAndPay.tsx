@@ -59,7 +59,14 @@ export default function ScenarioTipsAndPay() {
           </p>
         </div>
         <p style={pStyle}>
-          If you suspect your base pay is below award minimums regardless of tips, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you suspect your base pay is below award minimums regardless of tips, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check if your base rate is correct &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          If your base pay is below the award minimum &mdash; for example, $28/hr when the Sunday casual rate at your level is {/* TODO: dynamic rate */}$44.24/hr &mdash; tips don&apos;t fill that gap legally. The shortfall is owed regardless of how much you earned in tips. On a Sunday shift where the pay gap is $15+/hr, a 6-hour shift means $90+ owed per shift on top of any tipping income.
         </p>
       </section>
 

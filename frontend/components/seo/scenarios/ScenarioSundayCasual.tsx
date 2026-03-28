@@ -75,7 +75,7 @@ export default function ScenarioSundayCasual() {
         </div>
         <p style={smallStyle}>Rates effective 1 July 2025.</p>
         <p style={pStyle}>
-          If your Sunday pay matches your ordinary casual rate rather than the Sunday casual rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your Sunday pay matches your ordinary casual rate rather than the Sunday casual rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Sunday shifts &rarr;</a>
         </p>
       </section>
 
@@ -93,6 +93,13 @@ export default function ScenarioSundayCasual() {
             Getting $31.60 on a Sunday means the Sunday penalty hasn&apos;t been applied. That&apos;s ~$12.64/hr missing on every Sunday shift.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The gap between the ordinary casual rate and the Sunday casual rate at Level 2 is approximately {/* TODO: dynamic rate */}$12.64/hr. Working one 6-hour Sunday shift per week at the wrong rate: ~$75.84/week. Over 50 working weeks: ~$3,792/year &mdash; from a single shift type being underpaid.
+        </p>
       </section>
 
       <section style={sectionStyle}>

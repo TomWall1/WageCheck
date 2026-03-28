@@ -66,7 +66,14 @@ export default function ScenarioDoubleShift() {
           </p>
         </div>
         <p style={pStyle}>
-          If your double shift pay looks like a flat hourly rate &times; hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your double shift pay looks like a flat hourly rate &times; hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your double shift pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A 14-hour shift contains 4 hours of daily overtime. At Level 3 permanent, those 4 hours should be paid at time-and-a-half then double time &mdash; significantly above the ordinary rate. If you&apos;re paid a flat rate for the whole shift, the overtime shortfall alone is often $80&ndash;$140 per double shift. Working two double shifts per month: ~$1,600&ndash;$3,300/year in missed overtime.
         </p>
       </section>
 

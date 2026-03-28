@@ -48,7 +48,7 @@ export default function ScenarioAllInRate() {
           The public holiday rate is the critical test. At Level 2 casual, that&apos;s $56.88/hr. Any all-in rate that falls below this fails to cover public holiday shifts.
         </p>
         <p style={pStyle}>
-          If your all-in rate doesn&apos;t clearly exceed the public holiday rate for your level, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your all-in rate doesn&apos;t clearly exceed the public holiday rate for your level, <a href="/check-my-pay?award=MA000009" style={linkStyle}>See if your all-in rate is compliant &rarr;</a>
         </p>
       </section>
 
@@ -84,6 +84,13 @@ export default function ScenarioAllInRate() {
             Even if penalty rates are covered, a split shift or meal allowance that applies in some shifts can make the arrangement non-compliant on those days.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          An all-in rate of $38/hr that doesn&apos;t cover the public holiday rate at Level 2 ({/* TODO: dynamic rate */}$56.88/hr) leaves a gap of {/* TODO: dynamic rate */}$18.88/hr on every public holiday hour worked. Over 6 public holiday shifts per year at 8 hours each: approximately $906 in underpayment &mdash; from public holidays alone, before accounting for any Sunday shortfalls.
+        </p>
       </section>
 
       <section style={sectionStyle}>

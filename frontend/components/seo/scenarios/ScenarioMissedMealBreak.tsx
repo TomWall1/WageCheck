@@ -61,7 +61,14 @@ export default function ScenarioMissedMealBreak() {
           </p>
         </div>
         <p style={pStyle}>
-          If you&apos;ve been working extended shifts without the meal allowance, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you&apos;ve been working extended shifts without the meal allowance, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your extended shift entitlements &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The meal allowance for unplanned overtime is {/* TODO: dynamic rate */}$16.73 per meal. If this applies twice per week &mdash; common in busy kitchens and high-volume service &mdash; that&apos;s $16.73 &times; 2 = approximately $33.46/week. Over 50 weeks: ~$1,673/year in allowances owed but never paid.
         </p>
       </section>
 

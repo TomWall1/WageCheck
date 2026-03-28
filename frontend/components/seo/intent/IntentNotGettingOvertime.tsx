@@ -74,7 +74,7 @@ export default function IntentNotGettingOvertime({ rates }: { rates?: Hospitalit
           <li><strong>After 2 hours</strong> &rarr; 2&times; your ordinary rate (double time)</li>
         </ul>
         <p style={pStyle}>
-          If your payslip never shows overtime despite consistently working past these thresholds, that&apos;s a red flag. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay now</a>.
+          If your payslip never shows overtime despite consistently working past these thresholds, that&apos;s a red flag. <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your overtime shortfall &rarr;</a>
         </p>
       </section>
 
@@ -88,7 +88,7 @@ export default function IntentNotGettingOvertime({ rates }: { rates?: Hospitalit
             Being asked to cover someone&apos;s shift or come in on a rostered day off. These hours count toward the weekly total and trigger overtime when 38 is exceeded.
           </p>
           <p style={pStyle}>
-            If you regularly cover extra shifts, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now</a>.
+            If you regularly cover extra shifts, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your overtime shortfall &rarr;</a>
           </p>
 
           <h3 style={h3Style}>Long single shifts with no daily overtime applied</h3>

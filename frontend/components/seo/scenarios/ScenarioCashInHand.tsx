@@ -58,7 +58,7 @@ export default function ScenarioCashInHand() {
           <li>Is superannuation being paid to your fund?</li>
         </ul>
         <p style={pStyle}>
-          If any of these are missing, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If any of these are missing, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check what you should have been paid &rarr;</a>
         </p>
       </section>
 
@@ -82,6 +82,13 @@ export default function ScenarioCashInHand() {
             While this is the employee&apos;s problem at tax time (you still have a tax obligation), no tax withheld can also be a sign that the employment relationship is being deliberately kept off the books.
           </p>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A cash rate of $25/hr on a Sunday &mdash; when the Sunday casual rate at Level 2 is {/* TODO: dynamic rate */}$44.24/hr &mdash; is a shortfall of over $19/hr. On a 6-hour Sunday shift, that&apos;s over $115 in one shift. If you&apos;ve been paid a flat cash rate across weekends for a year: potentially $5,000+ in underpayment.
+        </p>
       </section>
 
       <section style={sectionStyle}>

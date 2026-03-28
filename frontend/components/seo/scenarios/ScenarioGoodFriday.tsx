@@ -87,7 +87,14 @@ export default function ScenarioGoodFriday() {
           </p>
         </div>
         <p style={pStyle}>
-          If you received significantly less than this for a Good Friday shift, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you received significantly less than this for a Good Friday shift, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Good Friday pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The difference between double time (2&times;) and the correct rate (2.25&times;) is 0.25&times; your ordinary rate per hour. At Level 2 permanent over an 8-hour Good Friday shift: approximately $50 underpaid. Multiply across Easter Friday, Easter Monday, Christmas Day, Boxing Day, and Australia Day &mdash; the annual total from this single multiplier error is often $200&ndash;$300.
         </p>
       </section>
 

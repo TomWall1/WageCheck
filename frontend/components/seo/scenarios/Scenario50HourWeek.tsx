@@ -66,7 +66,14 @@ export default function Scenario50HourWeek() {
           </p>
         </div>
         <p style={pStyle}>
-          If your payslip shows no overtime on weeks over 38 hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your payslip shows no overtime on weeks over 38 hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your overtime shortfall &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A 50-hour week contains 12 hours of overtime &mdash; 2 at time-and-a-half, 10 at double time. At Level 3 permanent, that&apos;s approximately $350&ndash;$450 in overtime pay that should appear on your payslip. If this is a consistent pattern: ~$18,000&ndash;$23,000/year in missed overtime pay.
         </p>
       </section>
 

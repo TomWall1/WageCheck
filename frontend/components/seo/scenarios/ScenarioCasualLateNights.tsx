@@ -64,7 +64,14 @@ export default function ScenarioCasualLateNights() {
           </p>
         </div>
         <p style={pStyle}>
-          If your late night rate looks the same as your afternoon rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If your late night rate looks the same as your afternoon rate, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your late-night shifts &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A shift from 9pm to 2am has two rate periods &mdash; evening loading (9pm&ndash;midnight) and late-night loading (midnight&ndash;2am) &mdash; on top of the applicable day rate. If you&apos;re being paid a flat casual rate for the whole shift, the missed loading across 3 late nights per week adds up to approximately $60&ndash;$100/week. Over a year: ~$3,000&ndash;$5,000 in missed loadings.
         </p>
       </section>
 

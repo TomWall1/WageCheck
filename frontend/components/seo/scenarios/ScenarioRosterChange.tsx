@@ -56,7 +56,14 @@ export default function ScenarioRosterChange() {
           </p>
         </div>
         <p style={pStyle}>
-          If you were sent home and paid for less than 3 hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you were sent home and paid for less than 3 hours, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check what your shifted roster should pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          If you arrived for a rostered Saturday shift and were sent home after 1 hour, you&apos;re owed 3 hours at the Saturday casual rate &mdash; not 1 hour at the weekday rate. The difference on a single instance is often $60&ndash;$90. If this happens regularly, the cumulative shortfall is significant.
         </p>
       </section>
 

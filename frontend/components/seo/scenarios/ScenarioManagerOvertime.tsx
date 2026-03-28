@@ -74,7 +74,14 @@ export default function ScenarioManagerOvertime() {
           </p>
         </div>
         <p style={pStyle}>
-          <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay &rarr;</a>
+          <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your overtime shortfall &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          A Level 4 permanent manager regularly working 50-hour weeks on a salary that covers only 38 hours is owed approximately {/* TODO: dynamic rate */}$350&ndash;$450/week in overtime. Over 52 weeks: ~$18,000&ndash;$23,000/year. For many hospitality managers, this is the single largest source of underpayment &mdash; and the one least likely to be raised because &quot;managers don&apos;t get overtime&quot; is accepted as fact.
         </p>
       </section>
 
@@ -86,7 +93,7 @@ export default function ScenarioManagerOvertime() {
           <li>Do you regularly work 50+ hours without any additional payment?</li>
         </ul>
         <p style={pStyle}>
-          If the answer to the first two is no and the third is yes, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If the answer to the first two is no and the third is yes, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Calculate your overtime shortfall &rarr;</a>
         </p>
       </section>
 

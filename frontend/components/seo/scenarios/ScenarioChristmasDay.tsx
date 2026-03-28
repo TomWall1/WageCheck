@@ -69,7 +69,14 @@ export default function ScenarioChristmasDay() {
           </p>
         </div>
         <p style={pStyle}>
-          If you received significantly less than this, <a href="/check-my-pay?award=MA000009" style={linkStyle}>check your pay now &rarr;</a>
+          If you received significantly less than this, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your Christmas Day pay &rarr;</a>
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>What this costs you</h2>
+        <p style={pStyle}>
+          The difference between an ordinary casual rate and the public holiday rate at Level 2 is over $25/hr. On an 8-hour Christmas Day shift, that gap is over $200 in a single day. If you&apos;ve worked multiple public holidays on the wrong rate, the total is often in the hundreds to thousands of dollars.
         </p>
       </section>
 
