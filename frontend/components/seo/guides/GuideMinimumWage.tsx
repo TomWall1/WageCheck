@@ -20,7 +20,7 @@ const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px 
 
 const faqData = [
   { question: 'Is the minimum wage the same in every state?', answer: 'Yes — the National Minimum Wage applies across all states and territories for private sector employees.' },
-  { question: 'Is super included in the minimum wage?', answer: 'No. Superannuation is paid in addition to wages. From July 2025, the rate is 11.5% on top of ordinary time earnings.' },
+  { question: 'Is super included in the minimum wage?', answer: 'No. Superannuation is paid in addition to wages. From July 2025, the rate is 12% on top of ordinary time earnings.' },
   { question: 'What if my employer says they can\'t afford the minimum wage?', answer: 'That is not a legal exemption. The minimum wage applies regardless of employer circumstances.' },
 ];
 

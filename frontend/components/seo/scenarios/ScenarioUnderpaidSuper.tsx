@@ -37,7 +37,7 @@ export default function ScenarioUnderpaidSuper() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>
-          From 1 November 2022, all employees &mdash; including casual workers &mdash; are entitled to superannuation regardless of their earnings. The current rate (from 1 July 2025) is 11.5% of ordinary time earnings, paid quarterly at minimum.
+          From 1 November 2022, all employees &mdash; including casual workers &mdash; are entitled to superannuation regardless of their earnings. The current rate (from 1 July 2025) is 12% of ordinary time earnings, paid quarterly at minimum.
         </p>
         <p style={pStyle}>
           Super must be paid on top of wages &mdash; it cannot be included in your hourly rate as a substitute for the actual super contribution.
@@ -48,7 +48,7 @@ export default function ScenarioUnderpaidSuper() {
         <h2 style={h2Style}>How to check your super</h2>
         <p style={pStyle}><strong>Step 1:</strong> Log in to your super fund &mdash; most have apps or online portals showing incoming contributions.</p>
         <p style={pStyle}><strong>Step 2:</strong> Check that contributions appear at least quarterly (28 October, 28 January, 28 April, 28 July).</p>
-        <p style={pStyle}><strong>Step 3:</strong> Check the amount &mdash; it should be approximately 11.5% of your gross ordinary time earnings for the relevant period.</p>
+        <p style={pStyle}><strong>Step 3:</strong> Check the amount &mdash; it should be approximately 12% of your gross ordinary time earnings for the relevant period.</p>
         <p style={pStyle}><strong>Step 4:</strong> Compare your payslip super figure with what actually appeared in your fund. They don&apos;t always match.</p>
         <p style={pStyle}>
           If contributions are missing, <a href="/check-my-pay?award=MA000009" style={linkStyle}>Check your pay and super &rarr;</a>
@@ -75,7 +75,7 @@ export default function ScenarioUnderpaidSuper() {
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Wrong rate applied</h3>
           <p style={{ ...pStyle, marginBottom: '4px' }}>
-            Super rates increased from 10% to 10.5% (July 2022), to 11% (July 2023), to 11.5% (July 2025). Employers still applying earlier rates are underpaying.
+            Super rates increased from 10% to 10.5% (July 2022), to 11% (July 2023), to 11.5% (July 2024), to 12% (July 2025). Employers still applying earlier rates are underpaying.
           </p>
         </div>
       </section>
@@ -83,7 +83,7 @@ export default function ScenarioUnderpaidSuper() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Super at 11.5% on $500/week in earnings = $57.50/week owed. If super hasn&apos;t been paid at all: $57.50 &times; 52 = ~$3,000/year in retirement savings not accumulating. Over 3 years: ~$9,000 &mdash; plus lost investment returns on that balance. The compounding effect over a working lifetime is substantial.
+          Super at 12% on $500/week in earnings = $60/week owed. If super hasn&apos;t been paid at all: $60 &times; 52 = ~$3,120/year in retirement savings not accumulating. Over 3 years: ~$9,360 &mdash; plus lost investment returns on that balance. The compounding effect over a working lifetime is substantial.
         </p>
       </section>
 

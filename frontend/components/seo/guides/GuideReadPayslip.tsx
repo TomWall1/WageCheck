@@ -112,7 +112,7 @@ export default function GuideReadPayslip({ rates }: { rates?: HospitalityRateDat
 
         <h3 style={h3Style}>Superannuation</h3>
         <p style={pStyle}>
-          Should show the fund name and the contribution amount. The rate is 11.5% of ordinary time earnings from July 2025. If it&apos;s absent or looks low, check your super fund directly. &rarr; See <a href="/guides/superannuation-casual-workers" style={linkStyle}>superannuation for casual workers guide</a>
+          Should show the fund name and the contribution amount. The rate is 12% of ordinary time earnings from July 2025. If it&apos;s absent or looks low, check your super fund directly. &rarr; See <a href="/guides/superannuation-casual-workers" style={linkStyle}>superannuation for casual workers guide</a>
         </p>
       </section>
 

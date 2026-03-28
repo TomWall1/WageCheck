@@ -20,7 +20,7 @@ const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px 
 const faqData = [
   { question: 'My employer says I\'m not entitled to super because I\'m casual — is that right?', answer: 'No — and that claim is wrong. Since November 2022, all employees including casuals are entitled to super. If you\'ve been told this, there\'s a strong chance your super hasn\'t been paid.' },
   { question: 'I have multiple casual jobs — do I get super from each employer?', answer: 'Yes. Each employer calculates and pays super independently on your earnings with them.' },
-  { question: 'My employer is paying at 10% — is that still correct?', answer: 'No. From 1 July 2024 the rate was 11%. From 1 July 2025 it is 11.5%. If your employer is still at 10%, they\'re underpaying your super.' },
+  { question: 'My employer is paying at 10% — is that still correct?', answer: 'No. From 1 July 2024 the rate was 11.5%. From 1 July 2025 it is 12%. If your employer is still at 10%, they\'re underpaying your super.' },
   { question: 'How far back can I claim unpaid super?', answer: 'The ATO can pursue unpaid super going back 5 years in most cases. Act sooner rather than later.' },
 ];
 
@@ -29,7 +29,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
     <>
       {/* Last updated */}
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
-        Last updated: March 2026 &middot; Rate: 11.5% from 1 July 2025
+        Last updated: March 2026 &middot; Rate: 12% from 1 July 2025
       </p>
 
       {/* Intro */}
@@ -52,7 +52,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
           <p style={{ ...pStyle, marginBottom: '4px' }}><strong>Post-2022 reality:</strong> Threshold abolished. Super must be paid on all earnings regardless of amount.</p>
           <p style={{ ...pStyle, marginBottom: '4px' }}><strong>What many employers are still doing:</strong> Not updating payroll systems. Continuing not to pay super for low-earning casuals.</p>
           <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '4px' }}>
-            Missed super per year: $400 &times; 52 &times; 11.5% = ~$2,392
+            Missed super per year: $400 &times; 52 &times; 12% = ~$2,496
           </p>
           <p style={smallStyle}>
             <strong>Why it happens:</strong> System wasn&apos;t updated. Worker doesn&apos;t check the fund. Years pass.
@@ -73,7 +73,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
           <li>Their age (with limited exceptions)</li>
         </ul>
         <p style={pStyle}>
-          The rate from 1 July 2025 is 11.5% of ordinary time earnings.
+          The rate from 1 July 2025 is 12% of ordinary time earnings.
         </p>
         <p style={pStyle}>
           If you&apos;re a casual worker who hasn&apos;t verified your super recently, check now.
@@ -126,7 +126,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
 
           <h3 style={h3Style}>Wrong rate applied</h3>
           <p style={pStyle}>
-            From July 2024, the rate was 11%. From July 2025, it is 11.5%. Employers still using 10% or 10.5% are underpaying super.
+            From July 2024, the rate was 11.5%. From July 2025, it is 12%. Employers still using 10% or 10.5% are underpaying super.
           </p>
 
           <h3 style={h3Style}>No super fund set up for new casual workers</h3>
@@ -150,7 +150,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
           <li>Log in to your super fund &mdash; most have apps showing incoming contributions</li>
           <li>Check the frequency &mdash; contributions should appear at least quarterly</li>
-          <li>Check the amount &mdash; compare against 11.5% of your gross ordinary time earnings</li>
+          <li>Check the amount &mdash; compare against 12% of your gross ordinary time earnings</li>
           <li>If contributions are missing &mdash; contact the ATO on 13 10 20 or report via ato.gov.au</li>
         </ul>
       </section>

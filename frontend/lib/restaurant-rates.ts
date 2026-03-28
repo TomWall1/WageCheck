@@ -1,11 +1,4 @@
-/**
- * Hospitality Award rate data provider — fetches live rates from the API
- * for use in SEO content components. All dollar amounts in content pages
- * should come from this provider, not be hardcoded.
- */
 import { serverFetch } from './api-server';
-
-// ── Types ──────────────────────────────────────────────────────────────────
 
 interface ApiClassification {
   id: number; level: number; stream: string; title: string;
@@ -30,14 +23,12 @@ interface ApiAllowance {
   is_all_purpose: boolean;
 }
 
-/** A single classification level with computed rates */
 export interface LevelRate {
   level: number;
   stream: string;
   title: string;
   ftRate: number;
   casualRate: number;
-  /** Penalty dollar amounts: base × multiplier */
   saturdayFt: number;
   saturdayCasual: number;
   sundayFt: number;
@@ -62,46 +53,30 @@ export interface AllowanceInfo {
   isAllPurpose: boolean;
 }
 
-export interface HospitalityRateData {
-  /** General stream levels 0–5 + level 7 (Managerial) */
+export interface RestaurantRateData {
   levels: LevelRate[];
-  /** Penalty rate multipliers */
   penalties: PenaltyInfo[];
-  /** Allowance amounts */
   allowances: AllowanceInfo[];
-  /** e.g. "1 July 2025" */
   effectiveDate: string;
 }
-
-// ── Helpers ────────────────────────────────────────────────────────────────
 
 function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-// ── Main fetch function ────────────────────────────────────────────────────
+const AWARD_CODE = 'MA000119';
 
-const AWARD_CODE = 'MA000009';
-
-/**
- * Fetch all rate data needed for hospitality content components.
- * Returns structured data with computed penalty dollar amounts.
- * Called from server components — uses ISR caching.
- */
-export async function getHospitalityRates(): Promise<HospitalityRateData> {
-  // Fetch in parallel
+export async function getRestaurantRates(): Promise<RestaurantRateData> {
   const [classifications, penalties, allowances] = await Promise.all([
     serverFetch<ApiClassification[]>(`/api/award/classifications?award=${AWARD_CODE}`).catch(() => [] as ApiClassification[]),
     serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${AWARD_CODE}`).catch(() => [] as ApiPenaltyRate[]),
     serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${AWARD_CODE}`).catch(() => [] as ApiAllowance[]),
   ]);
 
-  // Get the "general" stream classifications (main levels 0–5 + 7 for Managerial)
   const generalCls = classifications
     .filter(c => c.stream === 'general')
     .sort((a, b) => a.level - b.level);
 
-  // Fetch FT rates for each general classification
   const levelRates: LevelRate[] = [];
   for (const cls of generalCls) {
     try {
@@ -114,7 +89,6 @@ export async function getHospitalityRates(): Promise<HospitalityRateData> {
       const ft = parseFloat(ftRate.rate_amount);
       const casual = round2(ft * 1.25);
 
-      // Get penalty multipliers for FT and casual
       const ftPenalties = penalties.filter(p => p.employment_type === 'full_time' && !p.time_band_label);
       const casualPenalties = penalties.filter(p => p.employment_type === 'casual' && !p.time_band_label);
 
@@ -139,7 +113,6 @@ export async function getHospitalityRates(): Promise<HospitalityRateData> {
     }
   }
 
-  // Transform penalties
   const penaltyInfo: PenaltyInfo[] = penalties
     .filter(p => p.employment_type === 'full_time')
     .map(p => {
@@ -155,7 +128,6 @@ export async function getHospitalityRates(): Promise<HospitalityRateData> {
       };
     });
 
-  // Transform allowances
   const allowanceInfo: AllowanceInfo[] = allowances
     .filter(a => a.amount !== null)
     .map(a => ({
@@ -166,10 +138,8 @@ export async function getHospitalityRates(): Promise<HospitalityRateData> {
       isAllPurpose: a.is_all_purpose,
     }));
 
-  // Determine effective date from first rate
   let effectiveDate = '1 July 2025';
   if (levelRates.length > 0) {
-    // Get from DB
     try {
       const rates = await serverFetch<ApiPayRate[]>(
         `/api/award/rates?award=${AWARD_CODE}&classification_id=${generalCls[0]?.id}&employment_type=full_time`
@@ -186,24 +156,18 @@ export async function getHospitalityRates(): Promise<HospitalityRateData> {
   return { levels: levelRates, penalties: penaltyInfo, allowances: allowanceInfo, effectiveDate };
 }
 
-// ── Convenience getters ────────────────────────────────────────────────────
-
-/** Get a specific level's data (levels 0–5 in the general stream) */
-export function getLevel(rates: HospitalityRateData, level: number): LevelRate | undefined {
+export function getLevel(rates: RestaurantRateData, level: number): LevelRate | undefined {
   return rates.levels.find(l => l.level === level);
 }
 
-/** Get a specific allowance amount */
-export function getAllowance(rates: HospitalityRateData, type: string): number {
+export function getAllowance(rates: RestaurantRateData, type: string): number {
   return rates.allowances.find(a => a.type === type)?.amount ?? 0;
 }
 
-/** Get evening loading (addition_per_hour for evening band) */
-export function getEveningLoading(rates: HospitalityRateData): number {
-  return rates.penalties.find(p => p.timeBandLabel === 'evening_7pm_to_midnight')?.additionPerHour ?? 0;
+export function getLateNightLoading(rates: RestaurantRateData): number {
+  return rates.penalties.find(p => p.timeBandLabel === 'latenight_10pm_to_midnight')?.additionPerHour ?? 0;
 }
 
-/** Get night loading (addition_per_hour for night band) */
-export function getNightLoading(rates: HospitalityRateData): number {
-  return rates.penalties.find(p => p.timeBandLabel === 'night_midnight_to_7am')?.additionPerHour ?? 0;
+export function getEarlyMorningLoading(rates: RestaurantRateData): number {
+  return rates.penalties.find(p => p.timeBandLabel === 'earlymorning_midnight_to_6am')?.additionPerHour ?? 0;
 }
