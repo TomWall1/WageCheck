@@ -1329,6 +1329,82 @@ function classify(answers, awardCode = 'MA000009') {
     return { level: 1, stream: 'vet_support', rationale: 'Defaulting to Vet Support Introductory. Please review.', confidence: 'low' };
   }
 
+  if (awardCode === 'MA000025') {
+    const level = { g1: 1, g2: 2, g3: 3, g4: 4, g5: 5, g6: 6, g7: 7, g8: 8, g9: 9, g10: 10 }[answers.electrical_grade];
+    if (level) return { level, stream: 'electrical', rationale: 'Electrical Worker Grade ' + level, confidence: 'high' };
+    return { level: 1, stream: 'electrical', rationale: 'Defaulting to Grade 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000036') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8 }[answers.plumbing_level];
+    if (level) return { level, stream: 'plumbing', rationale: 'Plumbing Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'plumbing', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000029') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.joinery_level];
+    if (level) return { level, stream: 'joinery', rationale: 'Joinery Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'joinery', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000073') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.food_mfg_level];
+    if (level) return { level, stream: 'food_manufacturing', rationale: 'Food Manufacturing Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'food_manufacturing', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000059') {
+    const level = { mi1: 1, mi2: 2, mi3: 3, mi4: 4, mi5: 5, mi6: 6, mi7: 7, mi8: 8 }[answers.meat_level];
+    if (level) return { level, stream: 'meat', rationale: 'Meat Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'meat', rationale: 'Defaulting to MI 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000041') {
+    if (answers.telecom_stream === 'telecom_clerical') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.telecom_clerical_level];
+      if (level) return { level, stream: 'telecom_clerical', rationale: 'Telecom Clerical Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'telecom_clerical', rationale: 'Defaulting to C&A Level 1.', confidence: 'low' };
+    }
+    if (answers.telecom_stream === 'telecom_technical') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.telecom_tech_level];
+      if (level) return { level, stream: 'telecom_technical', rationale: 'Telecom Technical Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'telecom_technical', rationale: 'Defaulting to Trainee.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'telecom_clerical', rationale: 'Defaulting to C&A Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000043') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9 }[answers.waste_level];
+    if (level) return { level, stream: 'waste', rationale: 'Waste Management Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'waste', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000096') {
+    if (answers.dc_laundry_stream === 'dry_cleaning') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.dc_level];
+      if (level) return { level, stream: 'dry_cleaning', rationale: 'Dry Cleaning Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'dry_cleaning', rationale: 'Defaulting to DC Level 1.', confidence: 'low' };
+    }
+    if (answers.dc_laundry_stream === 'laundry') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4 }[answers.laundry_level];
+      if (level) return { level, stream: 'laundry', rationale: 'Laundry Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'laundry', rationale: 'Defaulting to Laundry Level 1.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'dry_cleaning', rationale: 'Defaulting to DC Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000098') {
+    const level = { patient_transport: 1, call_taker: 2, clinical_transport: 3, attendant: 4, officer: 5, asst_station: 6, station: 7, mechanic: 8 }[answers.ambulance_role];
+    if (level) return { level, stream: 'ambulance', rationale: 'Ambulance ' + answers.ambulance_role.replace(/_/g, ' '), confidence: 'high' };
+    return { level: 1, stream: 'ambulance', rationale: 'Defaulting to Patient Transport Officer.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000113') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9, l10: 10 }[answers.water_level];
+    if (level) return { level, stream: 'water', rationale: 'Water Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'water', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
   if (awardCode === 'MA000104') {
     // MA000104 — Miscellaneous Award 2020
     // Simple single-question dispatch: misc_level maps directly to level 1–4.

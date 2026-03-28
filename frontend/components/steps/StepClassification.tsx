@@ -137,6 +137,18 @@ const STREAM_LABELS: Record<string, string> = {
   vet_support: 'Vet Support Staff',
   vet_surgeon: 'Veterinary Surgeon',
   inspector: 'Animal Care Inspector',
+  electrical: 'Electrical Contracting',
+  plumbing: 'Plumbing',
+  joinery: 'Joinery & Building Trades',
+  food_manufacturing: 'Food Manufacturing',
+  meat: 'Meat Industry',
+  telecom_clerical: 'Telecom Clerical',
+  telecom_technical: 'Telecom Technical',
+  waste: 'Waste Management',
+  dry_cleaning: 'Dry Cleaning',
+  laundry: 'Laundry',
+  ambulance: 'Ambulance & Patient Transport',
+  water: 'Water Industry',
   graduate: 'Graduates of Architecture',
   registered: 'Registered Architects',
   student: 'Students of Architecture',
@@ -192,6 +204,16 @@ const STREAM_ORDER_MA000077 = ['teacher'];
 const STREAM_ORDER_MA000038 = ['road_transport'];
 const STREAM_ORDER_MA000116 = ['legal'];
 const STREAM_ORDER_MA000118 = ['vet_support', 'vet_surgeon', 'inspector'];
+const STREAM_ORDER_MA000025 = ['electrical'];
+const STREAM_ORDER_MA000036 = ['plumbing'];
+const STREAM_ORDER_MA000029 = ['joinery'];
+const STREAM_ORDER_MA000073 = ['food_manufacturing'];
+const STREAM_ORDER_MA000059 = ['meat'];
+const STREAM_ORDER_MA000041 = ['telecom_clerical', 'telecom_technical'];
+const STREAM_ORDER_MA000043 = ['waste'];
+const STREAM_ORDER_MA000096 = ['dry_cleaning', 'laundry'];
+const STREAM_ORDER_MA000098 = ['ambulance'];
+const STREAM_ORDER_MA000113 = ['water'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -242,7 +264,17 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isRoadTrans = awardCode === 'MA000038';
   const isLegalServ = awardCode === 'MA000116';
   const isVetServ = awardCode === 'MA000118';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES || isAlpine || isBanking || isBusEquip || isHealth || isProfEmp || isPoultry || isCommSales || isWine || isLMA || isLocalGovt || isStateGovt || isAgedCare || isNurses || isSCHADS || isPharmacy || isManuf || isBuildConst || isVehicleRep || isSchoolSupp || isTeachers || isRoadTrans || isLegalServ || isVetServ;
+  const isElectrical = awardCode === 'MA000025';
+  const isPlumbing = awardCode === 'MA000036';
+  const isJoinery = awardCode === 'MA000029';
+  const isFoodMfg = awardCode === 'MA000073';
+  const isMeatInd = awardCode === 'MA000059';
+  const isTelecom = awardCode === 'MA000041';
+  const isWaste = awardCode === 'MA000043';
+  const isDryCleaning = awardCode === 'MA000096';
+  const isAmbulance = awardCode === 'MA000098';
+  const isWater = awardCode === 'MA000113';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES || isAlpine || isBanking || isBusEquip || isHealth || isProfEmp || isPoultry || isCommSales || isWine || isLMA || isLocalGovt || isStateGovt || isAgedCare || isNurses || isSCHADS || isPharmacy || isManuf || isBuildConst || isVehicleRep || isSchoolSupp || isTeachers || isRoadTrans || isLegalServ || isVetServ || isElectrical || isPlumbing || isJoinery || isFoodMfg || isMeatInd || isTelecom || isWaste || isDryCleaning || isAmbulance || isWater;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -291,6 +323,16 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isRoadTrans ? STREAM_ORDER_MA000038
     : isLegalServ ? STREAM_ORDER_MA000116
     : isVetServ ? STREAM_ORDER_MA000118
+    : isElectrical ? STREAM_ORDER_MA000025
+    : isPlumbing ? STREAM_ORDER_MA000036
+    : isJoinery ? STREAM_ORDER_MA000029
+    : isFoodMfg ? STREAM_ORDER_MA000073
+    : isMeatInd ? STREAM_ORDER_MA000059
+    : isTelecom ? STREAM_ORDER_MA000041
+    : isWaste ? STREAM_ORDER_MA000043
+    : isDryCleaning ? STREAM_ORDER_MA000096
+    : isAmbulance ? STREAM_ORDER_MA000098
+    : isWater ? STREAM_ORDER_MA000113
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -340,6 +382,16 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isRoadTrans ? 'Road Transport Award'
     : isLegalServ ? 'Legal Services Award'
     : isVetServ ? 'Vet Services Award'
+    : isElectrical ? 'Electrical Contracting Award'
+    : isPlumbing ? 'Plumbing Award'
+    : isJoinery ? 'Joinery Award'
+    : isFoodMfg ? 'Food Manufacturing Award'
+    : isMeatInd ? 'Meat Industry Award'
+    : isTelecom ? 'Telecommunications Award'
+    : isWaste ? 'Waste Management Award'
+    : isDryCleaning ? 'Dry Cleaning Award'
+    : isAmbulance ? 'Ambulance Award'
+    : isWater ? 'Water Industry Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);

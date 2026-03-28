@@ -220,9 +220,54 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     return MA000089_RATES[age] || 1.0;
   }
   if (awardCode === 'MA000020') {
-    // MA000020 (Building & Construction) — no standard junior rates (industry-specific)
+    // MA000020 (Building & Construction) — no standard junior rates
     return 1.0;
   }
+  if (awardCode === 'MA000025' || awardCode === 'MA000029') {
+    // MA000025 (Electrical), MA000029 (Joinery) — trades junior rates:
+    // <16=42%, 16=42%, 17=55%, 18=75%, 19=95%, 20+=adult.
+    if (age >= 20) return 1.0;
+    if (age < 17) return 0.42;
+    const TRADES_RATES = { 17: 0.55, 18: 0.75, 19: 0.95 };
+    return TRADES_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000073') {
+    // MA000073 (Food, Beverage & Tobacco Manufacturing):
+    // <16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.368;
+    const MA000073_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    return MA000073_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000059') {
+    // MA000059 (Meat Industry): <16=70%, 16=70%, 17=80%, 18+=adult.
+    if (age >= 18) return 1.0;
+    if (age < 17) return 0.70;
+    const MA000059_RATES = { 17: 0.80 };
+    return MA000059_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000041') {
+    // MA000041 (Telecommunications): <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000041_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000041_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000096') {
+    // MA000096 (Dry Cleaning & Laundry): <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000096_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000096_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000113') {
+    // MA000113 (Water Industry): <16=36.8%, 16=47.3%, 17=57.8%, 18=68.3%, 19=82.5%, 20=97.7%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.368;
+    const MA000113_RATES = { 16: 0.473, 17: 0.578, 18: 0.683, 19: 0.825, 20: 0.977 };
+    return MA000113_RATES[age] || 1.0;
+  }
+  // MA000036 (Plumbing), MA000043 (Waste), MA000098 (Ambulance) — no junior rates
   if (awardCode === 'MA000120') {
     // MA000120 junior rates (Children's Services Award — educator L1 and L2 only):
     // Under 17: 70%, 17yr: 80%, 18yr: 90%, 19+: adult.
