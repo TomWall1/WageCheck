@@ -122,6 +122,21 @@ const STREAM_LABELS: Record<string, string> = {
   admin: 'Administrative',
   it: 'IT Officer',
   legal: 'Legal Officer',
+  aged_care_general: 'Aged Care General',
+  aged_care_direct: 'Aged Care Direct Care',
+  nursing: 'Nursing',
+  home_care: 'Home Care',
+  social_community: 'Social & Community Services',
+  pharmacy: 'Pharmacy',
+  manufacturing: 'Manufacturing',
+  construction: 'Building & Construction',
+  vehicle_repair: 'Vehicle Repair & Services',
+  school_support: 'School Support Staff',
+  teacher: 'Teaching',
+  road_transport: 'Road Transport',
+  vet_support: 'Vet Support Staff',
+  vet_surgeon: 'Veterinary Surgeon',
+  inspector: 'Animal Care Inspector',
   graduate: 'Graduates of Architecture',
   registered: 'Registered Architects',
   student: 'Students of Architecture',
@@ -165,6 +180,18 @@ const STREAM_ORDER_MA000090 = ['wine'];
 const STREAM_ORDER_MA000099 = ['labour_market'];
 const STREAM_ORDER_MA000112 = ['local_govt'];
 const STREAM_ORDER_MA000121 = ['admin', 'technical', 'professional', 'it', 'legal'];
+const STREAM_ORDER_MA000018 = ['aged_care_general', 'aged_care_direct'];
+const STREAM_ORDER_MA000034 = ['nursing'];
+const STREAM_ORDER_MA000100 = ['home_care', 'social_community'];
+const STREAM_ORDER_MA000012 = ['pharmacy'];
+const STREAM_ORDER_MA000010 = ['manufacturing'];
+const STREAM_ORDER_MA000020 = ['construction'];
+const STREAM_ORDER_MA000089 = ['vehicle_repair'];
+const STREAM_ORDER_MA000076 = ['school_support'];
+const STREAM_ORDER_MA000077 = ['teacher'];
+const STREAM_ORDER_MA000038 = ['road_transport'];
+const STREAM_ORDER_MA000116 = ['legal'];
+const STREAM_ORDER_MA000118 = ['vet_support', 'vet_surgeon', 'inspector'];
 
 export default function StepClassification({ awardCode, employmentType, age, answers, prefetchedQuestions, onAnswersChange, onResult, onNext, onBack }: Props) {
   const isFF = awardCode === 'MA000003';
@@ -203,7 +230,19 @@ export default function StepClassification({ awardCode, employmentType, age, ans
   const isLMA = awardCode === 'MA000099';
   const isLocalGovt = awardCode === 'MA000112';
   const isStateGovt = awardCode === 'MA000121';
-  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES || isAlpine || isBanking || isBusEquip || isHealth || isProfEmp || isPoultry || isCommSales || isWine || isLMA || isLocalGovt || isStateGovt;
+  const isAgedCare = awardCode === 'MA000018';
+  const isNurses = awardCode === 'MA000034';
+  const isSCHADS = awardCode === 'MA000100';
+  const isPharmacy = awardCode === 'MA000012';
+  const isManuf = awardCode === 'MA000010';
+  const isBuildConst = awardCode === 'MA000020';
+  const isVehicleRep = awardCode === 'MA000089';
+  const isSchoolSupp = awardCode === 'MA000076';
+  const isTeachers = awardCode === 'MA000077';
+  const isRoadTrans = awardCode === 'MA000038';
+  const isLegalServ = awardCode === 'MA000116';
+  const isVetServ = awardCode === 'MA000118';
+  const isParentGated = isFF || isRest || isRetail || isFitness || isAmusement || isLivePerf || isStorage || isCleaning || isHort || isNursery || isClerks || isMisc || isRacing || isResearch || isTransport || isCarParking || isFuneral || isLandscaping || isBREC || isRE || isArch || isSec || isCIT || isMCH || isSES || isAlpine || isBanking || isBusEquip || isHealth || isProfEmp || isPoultry || isCommSales || isWine || isLMA || isLocalGovt || isStateGovt || isAgedCare || isNurses || isSCHADS || isPharmacy || isManuf || isBuildConst || isVehicleRep || isSchoolSupp || isTeachers || isRoadTrans || isLegalServ || isVetServ;
   const STREAM_ORDER = isFF ? STREAM_ORDER_MA000003
     : isRest ? STREAM_ORDER_MA000119
     : isRetail ? STREAM_ORDER_MA000004
@@ -240,6 +279,18 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isLMA ? STREAM_ORDER_MA000099
     : isLocalGovt ? STREAM_ORDER_MA000112
     : isStateGovt ? STREAM_ORDER_MA000121
+    : isAgedCare ? STREAM_ORDER_MA000018
+    : isNurses ? STREAM_ORDER_MA000034
+    : isSCHADS ? STREAM_ORDER_MA000100
+    : isPharmacy ? STREAM_ORDER_MA000012
+    : isManuf ? STREAM_ORDER_MA000010
+    : isBuildConst ? STREAM_ORDER_MA000020
+    : isVehicleRep ? STREAM_ORDER_MA000089
+    : isSchoolSupp ? STREAM_ORDER_MA000076
+    : isTeachers ? STREAM_ORDER_MA000077
+    : isRoadTrans ? STREAM_ORDER_MA000038
+    : isLegalServ ? STREAM_ORDER_MA000116
+    : isVetServ ? STREAM_ORDER_MA000118
     : STREAM_ORDER_MA000009;
   const awardShortName = isFF ? 'Fast Food Award'
     : isRest ? 'Restaurant Industry Award'
@@ -277,6 +328,18 @@ export default function StepClassification({ awardCode, employmentType, age, ans
     : isLMA ? 'Labour Market Assistance Award'
     : isLocalGovt ? 'Local Government Award'
     : isStateGovt ? 'State Government Award'
+    : isAgedCare ? 'Aged Care Award'
+    : isNurses ? 'Nurses Award'
+    : isSCHADS ? 'SCHADS Award'
+    : isPharmacy ? 'Pharmacy Award'
+    : isManuf ? 'Manufacturing Award'
+    : isBuildConst ? 'Building & Construction Award'
+    : isVehicleRep ? 'Vehicle Industry Award'
+    : isSchoolSupp ? 'School Support Staff Award'
+    : isTeachers ? 'Teachers Award'
+    : isRoadTrans ? 'Road Transport Award'
+    : isLegalServ ? 'Legal Services Award'
+    : isVetServ ? 'Vet Services Award'
     : 'Hospitality Award';
   // Which path the user chose
   const [knowsClassification, setKnowsClassification] = useState<boolean | null>(null);

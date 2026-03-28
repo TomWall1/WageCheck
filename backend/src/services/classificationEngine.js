@@ -1184,6 +1184,151 @@ function classify(answers, awardCode = 'MA000009') {
     return { level: 1, stream: 'wine', rationale: 'Unable to determine grade — defaulting to Grade 1. Please review.', confidence: 'low' };
   }
 
+  if (awardCode === 'MA000018') {
+    // MA000018 — Aged Care Award 2010
+    if (answers.aged_care_stream === 'aged_care_general') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.aged_care_general_level];
+      if (level) return { level, stream: 'aged_care_general', rationale: 'Aged Care General Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'aged_care_general', rationale: 'Defaulting to General Level 1. Please review.', confidence: 'low' };
+    }
+    if (answers.aged_care_stream === 'aged_care_direct') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.aged_care_direct_level];
+      if (level) return { level, stream: 'aged_care_direct', rationale: 'Aged Care Direct Care Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'aged_care_direct', rationale: 'Defaulting to Direct Care Level 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'aged_care_general', rationale: 'Defaulting to General Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000034') {
+    // MA000034 — Nurses Award 2020
+    const level = { nursing_assistant: 1, enrolled_nurse: 2, rn_l1: 3, rn_l2: 4, rn_l3: 5, rn_l4: 6, rn_l5: 7, nurse_practitioner: 8 }[answers.nursing_level];
+    if (level) {
+      const rationales = {
+        nursing_assistant: 'Nursing Assistant', enrolled_nurse: 'Enrolled Nurse',
+        rn_l1: 'Registered Nurse Level 1', rn_l2: 'Registered Nurse Level 2',
+        rn_l3: 'Registered Nurse Level 3', rn_l4: 'Registered Nurse Level 4',
+        rn_l5: 'Registered Nurse Level 5', nurse_practitioner: 'Nurse Practitioner',
+      };
+      return { level, stream: 'nursing', rationale: rationales[answers.nursing_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'nursing', rationale: 'Defaulting to Nursing Assistant. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000100') {
+    // MA000100 — SCHADS Award 2010
+    if (answers.schads_stream === 'home_care') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.home_care_level];
+      if (level) return { level, stream: 'home_care', rationale: 'Home Care Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'home_care', rationale: 'Defaulting to Home Care Level 1. Please review.', confidence: 'low' };
+    }
+    if (answers.schads_stream === 'social_community') {
+      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8 }[answers.sacs_level];
+      if (level) return { level, stream: 'social_community', rationale: 'SACS Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'social_community', rationale: 'Defaulting to SACS Level 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'home_care', rationale: 'Defaulting to Home Care Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000012') {
+    // MA000012 — Pharmacy Industry Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9, l10: 10 }[answers.pharmacy_level];
+    if (level) {
+      const rationales = {
+        l1: 'Pharmacy Assistant Level 1', l2: 'Pharmacy Assistant Level 2',
+        l3: 'Pharmacy Assistant Level 3', l4: 'Pharmacy Assistant Level 4',
+        l5: 'Pharmacy Intern (1st half)', l6: 'Pharmacy Intern (2nd half)',
+        l7: 'Pharmacist', l8: 'Experienced Pharmacist',
+        l9: 'Pharmacist in Charge', l10: 'Pharmacist Manager',
+      };
+      return { level, stream: 'pharmacy', rationale: rationales[answers.pharmacy_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'pharmacy', rationale: 'Defaulting to Pharmacy Assistant Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000010') {
+    // MA000010 — Manufacturing and Associated Industries Award 2020
+    const level = { c13: 1, c12: 2, c11: 3, c10: 4, c9: 5, c8: 6, c7: 7, c6: 8, c5: 9, c4: 10, c3: 11, c2a: 12 }[answers.manufacturing_level];
+    if (level) return { level, stream: 'manufacturing', rationale: 'Manufacturing ' + answers.manufacturing_level.toUpperCase(), confidence: 'high' };
+    return { level: 1, stream: 'manufacturing', rationale: 'Defaulting to C13. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000020') {
+    // MA000020 — Building and Construction General On-site Award 2020
+    const level = { cw1a: 1, cw1b: 2, cw1c: 3, cw1d: 4, cw2: 5, cw3: 6, cw4: 7, cw5: 8, cw6: 9 }[answers.construction_level];
+    if (level) return { level, stream: 'construction', rationale: 'CW/ECW ' + answers.construction_level.replace('cw', '').toUpperCase(), confidence: 'high' };
+    return { level: 1, stream: 'construction', rationale: 'Defaulting to CW1(a). Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000089') {
+    // MA000089 — Vehicle Repair, Services and Retail Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.vehicle_repair_level];
+    if (level) return { level, stream: 'vehicle_repair', rationale: 'Vehicle RSR Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'vehicle_repair', rationale: 'Defaulting to RSR Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000076') {
+    // MA000076 — Educational Services (Schools) General Staff Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8 }[answers.school_support_level];
+    if (level) return { level, stream: 'school_support', rationale: 'School Support Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'school_support', rationale: 'Defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000077') {
+    // MA000077 — Educational Services (Teachers) Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.teacher_level];
+    if (level) {
+      const rationales = {
+        l1: 'Graduate Teacher (Level 1)', l2: 'Teacher Level 2 (Proficient)',
+        l3: 'Teacher Level 3 (3yr at L2)', l4: 'Teacher Level 4 (3yr at L3)',
+        l5: 'Teacher Level 5 (Highly Accomplished/Lead)',
+      };
+      return { level, stream: 'teacher', rationale: rationales[answers.teacher_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'teacher', rationale: 'Defaulting to Graduate Teacher. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000038') {
+    // MA000038 — Road Transport and Distribution Award 2020
+    const level = { g1: 1, g2: 2, g3: 3, g4: 4, g5: 5, g6: 6, g7: 7, g8: 8, g9: 9, g10: 10 }[answers.transport_grade];
+    if (level) return { level, stream: 'road_transport', rationale: 'Transport Worker Grade ' + level, confidence: 'high' };
+    return { level: 1, stream: 'road_transport', rationale: 'Defaulting to Grade 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000116') {
+    // MA000116 — Legal Services Award 2020
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.legal_level];
+    if (level) {
+      const rationales = {
+        l1: 'Legal Clerical & Admin Level 1', l2: 'Legal Clerical & Admin Level 2',
+        l3: 'Legal Clerical & Admin Level 3', l4: 'Legal Clerical & Admin Level 4',
+        l5: 'Legal Clerical & Admin Level 5', l6: 'Law Graduate (Level 5)',
+        l7: 'Law Clerk (Level 6)',
+      };
+      return { level, stream: 'legal', rationale: rationales[answers.legal_level], confidence: 'high' };
+    }
+    return { level: 1, stream: 'legal', rationale: 'Defaulting to Level 1. Please review.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000118') {
+    // MA000118 — Animal Care and Veterinary Services Award 2020
+    if (answers.vet_stream === 'vet_support') {
+      const level = { intro: 1, l1: 2, l2: 3, l3: 4, l4: 5, l5: 6 }[answers.vet_support_level];
+      if (level) return { level, stream: 'vet_support', rationale: 'Vet Support ' + (level === 1 ? 'Introductory' : 'Level ' + (level - 1)), confidence: 'high' };
+      return { level: 1, stream: 'vet_support', rationale: 'Defaulting to Introductory. Please review.', confidence: 'low' };
+    }
+    if (answers.vet_stream === 'vet_surgeon') {
+      const level = { l1a: 1, l1b: 2, l2: 3, l3: 4, l4: 5 }[answers.vet_surgeon_level];
+      if (level) return { level, stream: 'vet_surgeon', rationale: 'Veterinary Surgeon Level ' + answers.vet_surgeon_level.toUpperCase(), confidence: 'high' };
+      return { level: 1, stream: 'vet_surgeon', rationale: 'Defaulting to Level 1A. Please review.', confidence: 'low' };
+    }
+    if (answers.vet_stream === 'inspector') {
+      const level = { l1: 1, l2: 2, l3: 3 }[answers.inspector_level];
+      if (level) return { level, stream: 'inspector', rationale: 'Inspector Level ' + level, confidence: 'high' };
+      return { level: 1, stream: 'inspector', rationale: 'Defaulting to Inspector Level 1. Please review.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'vet_support', rationale: 'Defaulting to Vet Support Introductory. Please review.', confidence: 'low' };
+  }
+
   if (awardCode === 'MA000104') {
     // MA000104 — Miscellaneous Award 2020
     // Simple single-question dispatch: misc_level maps directly to level 1–4.

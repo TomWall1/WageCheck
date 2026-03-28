@@ -930,6 +930,54 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
     primaryHelp: 'You are entitled to $0.98 per km.',
     onlyForAward: ['MA000090'],
   },
+
+  // ── MA000018 (Aged Care) ──────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work more than 1 hour of overtime?', primaryHelp: 'You are entitled to $16.62. A further $14.98 after 4 hours.', onlyForAward: ['MA000018'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.99 per km.', onlyForAward: ['MA000018'] },
+  { type: 'tool', primary: 'Are you a chef/cook required to supply your own tools?', primaryHelp: '$13.41 per week.', onlyForAward: ['MA000018'] },
+
+  // ── MA000034 (Nurses) ─────────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work overtime without notice?', primaryHelp: '$16.62 for the first meal, $14.98 after 4 hours.', onlyForAward: ['MA000034'] },
+  { type: 'uniform', primary: 'Do you wear a uniform you launder yourself?', primaryHelp: 'Uniform: up to $6.24/week. Laundering: up to $1.49/week.', onlyForAward: ['MA000034'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.99 per km.', onlyForAward: ['MA000034'] },
+
+  // ── MA000100 (SCHADS) ─────────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work overtime?', primaryHelp: 'You are entitled to $16.62 per meal.', onlyForAward: ['MA000100'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.99 per km.', onlyForAward: ['MA000100'] },
+
+  // ── MA000012 (Pharmacy) ───────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work more than 1.5 hours of overtime?', primaryHelp: '$23.74 for the first meal. $21.28 after 4 hours.', onlyForAward: ['MA000012'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.99 per km.', onlyForAward: ['MA000012'] },
+
+  // ── MA000010 (Manufacturing) ──────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work overtime and need a meal?', primaryHelp: 'You are entitled to $18.38 per meal.', onlyForAward: ['MA000010'] },
+  { type: 'tool', primary: 'Are you required to supply your own tools?', primaryHelp: 'Varies by trade — e.g. carpenter/joiner: $33.88/week.', onlyForAward: ['MA000010'] },
+
+  // ── MA000020 (Building & Construction) ────────────────────────────────────
+  { type: 'meal', primary: 'Did you work more than 1.5 hours of overtime?', primaryHelp: '$19.00 per meal.', onlyForAward: ['MA000020'] },
+  { type: 'tool', primary: 'Are you required to supply your own tools?', primaryHelp: 'Carpenter/joiner: $39.60/week. Plasterer/fixer: $32.76/week.', onlyForAward: ['MA000020'] },
+
+  // ── MA000089 (Vehicle Repair) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work more than 1.5 hours of overtime?', primaryHelp: '$17.93 per meal.', onlyForAward: ['MA000089'] },
+  { type: 'tool', primary: 'Are you a tradesperson or apprentice with your own tools?', primaryHelp: 'Varies by apprentice level — $5.88 to $12.14/week.', onlyForAward: ['MA000089'] },
+
+  // ── MA000076 (School Support Staff) ───────────────────────────────────────
+  { type: 'meal', primary: 'Did you work overtime?', primaryHelp: '$19.93 per meal.', onlyForAward: ['MA000076'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: 'Car: $0.99/km. Motorcycle: $0.33/km.', onlyForAward: ['MA000076'] },
+
+  // ── MA000077 (Teachers) ───────────────────────────────────────────────────
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: 'Car: $0.99/km. Motorcycle: $0.33/km.', onlyForAward: ['MA000077'] },
+
+  // ── MA000038 (Road Transport) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you need a meal while working?', primaryHelp: '$20.32 per meal.', onlyForAward: ['MA000038'] },
+
+  // ── MA000116 (Legal Services) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work overtime?', primaryHelp: '$19.93 per meal (Mon-Fri). Further: $15.89.', onlyForAward: ['MA000116'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: 'Car: $0.98/km. Motorcycle: $0.33/km.', onlyForAward: ['MA000116'] },
+
+  // ── MA000118 (Animal Care & Vet) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work more than 1.5 hours of overtime without notice?', primaryHelp: '$14.99 first meal. $12.88 subsequent.', onlyForAward: ['MA000118'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: 'Car: $0.98/km. Motorcycle: $0.33/km.', onlyForAward: ['MA000118'] },
 ];
 
 type FollowUpAnswers = Record<string, string>;
