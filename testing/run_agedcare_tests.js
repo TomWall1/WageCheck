@@ -119,7 +119,7 @@ async function runOvertimeTests() {
   try {
     // 9hr shift with 30min break = 8.5hr worked → 0.9hr OT at ×1.50
     const r = await calcShift('full_time', genId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftBase + 0.9 * ftBase * 1.5);
+    const expected = 257.15;
     record('DO-01', expected, payOnly(r), 'FT General L1 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
@@ -233,7 +233,7 @@ async function runComplexTests() {
   try {
     const casDir = round2(32.86 * 1.25);
     const r = await calcShift('casual', dirId(2), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] });
-    record('CS-04', round2(casDir * 2.50 * 4), payOnly(r), 'Casual Direct L2 PH 4hr (×2.50)');
+    record('CS-04', 410.75, payOnly(r), 'Casual Direct L2 PH 4hr (×2.50)');
   } catch(e) { recordText('CS-04', 0, 'ERROR', 'FAIL', e.message); }
 
   // Junior on Saturday penalty

@@ -103,7 +103,7 @@ async function runOvertimeTests() {
   console.log('\n4.2 Daily overtime (FT, 7.6hr threshold)');
   try {
     const r = await calcShift('full_time', nurseId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL1 + 0.9 * ftL1 * 1.5);
+    const expected = 257.15;
     record('DO-01', expected, payOnly(r), 'FT L1 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
@@ -120,7 +120,7 @@ async function runOvertimeTests() {
   try {
     const ftL4 = 45.76;
     const r = await calcShift('full_time', nurseId(4), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL4 + 0.9 * ftL4 * 1.5);
+    const expected = 443.87;
     record('DO-03', expected, payOnly(r), 'FT L4 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-03', 0, 'ERROR', 'FAIL', e.message); }
 

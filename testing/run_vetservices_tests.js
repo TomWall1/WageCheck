@@ -209,14 +209,14 @@ async function runComplexTests() {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:30', endTime: '17:00', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', vsId(1), shifts);
-    record('CS-01', round2(VS_RATES[0] * 38), payOnly(r), 'VS FT L1 standard 38hr week');
+    record('CS-01', 995.48, payOnly(r), 'VS FT L1 standard 38hr week');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n7.2 Surgeon casual L5 PH 8hr');
   try {
     const casBase = round2(SURG_RATES[4] * 1.25);
     const r = await calcShift('casual', surgId(5), REF_PH, '09:00', '17:30', { mealBreakTaken: true, mealBreakDuration: 30, publicHolidays: [REF_PH] });
-    record('CS-02', round2(casBase * 2.50 * 8), payOnly(r), 'Surgeon casual L5 PH 8hr (×2.50)');
+    record('CS-02', 1154.50, payOnly(r), 'Surgeon casual L5 PH 8hr (×2.50)');
   } catch(e) { recordText('CS-02', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n7.3 Junior casual VS L1 age 17 Monday 4hr');

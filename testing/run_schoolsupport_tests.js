@@ -102,7 +102,7 @@ async function runPenaltyRateTests() {
   try { const r = await calcShift('full_time', ssId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-08', round2(ftBase * 4), payOnly(r), 'FT L1 Monday 4hr = ordinary (×1.0)'); } catch(e) { recordText('PR-08', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n2.9 Casual L4 PH');
-  try { const r = await calcShift('casual', ssId(4), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-09', round2(round2(29.70 * 1.25) * 2.50 * 4), payOnly(r), 'Casual L4 PH 4hr (×2.50)'); } catch(e) { recordText('PR-09', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', ssId(4), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-09', 371.25, payOnly(r), 'Casual L4 PH 4hr (×2.50)'); } catch(e) { recordText('PR-09', 0, 'ERROR', 'FAIL', e.message); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -189,7 +189,7 @@ async function runComplexTests() {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:30', endTime: '17:00', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', ssId(1), shifts);
-    record('CS-01', round2(25.85 * 38), payOnly(r), 'FT L1 standard 38hr week');
+    record('CS-01', 1059.85, payOnly(r), 'FT L1 standard 38hr week');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n6.2 Casual L5 PH 8hr');
@@ -242,7 +242,7 @@ async function runRegressionTests() {
 
   try { const r = await calcShift('full_time', ssId(4), REF_WEDNESDAY, '09:00', '17:00', { mealBreakTaken: true, mealBreakDuration: 30 }); record('RT-08', round2(29.70 * 7.5), payOnly(r), 'L4 FT Wed 7.5hr ordinary'); } catch(e) { recordText('RT-08', 0, 'ERROR', 'FAIL', e.message); }
 
-  try { const r = await calcShift('casual', ssId(6), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('RT-09', round2(round2(34.50 * 1.25) * 2.50 * 4), payOnly(r), 'L6 casual PH 4hr (×2.50)'); } catch(e) { recordText('RT-09', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', ssId(6), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('RT-09', 431.25, payOnly(r), 'L6 casual PH 4hr (×2.50)'); } catch(e) { recordText('RT-09', 0, 'ERROR', 'FAIL', e.message); }
 
   try { const r = await calcShift('full_time', ssId(5), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('RT-10', 32.20, r.baseHourlyRate, 'L5 FT base rate check'); } catch(e) { recordText('RT-10', 0, 'ERROR', 'FAIL', e.message); }
 

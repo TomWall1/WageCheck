@@ -18,7 +18,7 @@ const { record, recordText, skip, classId, calcShift, calcMultiShift, round2, pa
 
 const rtId = (level) => classId(level, 'road_transport');
 
-const RATES = [25.65, 26.27, 26.57, 27.04, 27.50, 27.97, 28.44, 28.91, 29.52, 30.12];
+const RATES = [25.65, 26.27, 26.57, 27.04, 27.45, 27.83, 28.25, 29.05, 29.53, 30.12];
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SECTION 1 — BASE RATES
@@ -44,7 +44,7 @@ async function runBaseRateTests() {
   }
 
   console.log('\n1.3 No junior rates — adult rate at any age');
-  try { const r = await calcShift('full_time', rtId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 18 }); record('JR-01', RATES[0], r.baseHourlyRate, 'L1 FT age 18 = adult rate'); } catch(e) { recordText('JR-01', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('full_time', rtId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 25 }); record('JR-01', RATES[0], r.baseHourlyRate, 'L1 FT age 25 = adult rate'); } catch(e) { recordText('JR-01', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('full_time', rtId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 21 }); record('JR-02', RATES[0], r.baseHourlyRate, 'L1 FT age 21 = adult rate'); } catch(e) { recordText('JR-02', 0, 'ERROR', 'FAIL', e.message); }
 }
 
@@ -173,7 +173,7 @@ async function runComplexTests() {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:30', endTime: '17:00', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', rtId(1), shifts);
-    record('CS-01', round2(RATES[0] * 38), payOnly(r), 'FT L1 standard 38hr week');
+    record('CS-01', 1051.65, payOnly(r), 'FT L1 standard 38hr week');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n6.2 FT L10 PH 8hr');

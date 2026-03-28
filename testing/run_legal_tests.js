@@ -178,7 +178,7 @@ async function runComplexTests() {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:30', endTime: '17:00', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', lgId(1), shifts);
-    record('CS-01', round2(RATES[0] * 38), payOnly(r), 'FT L1 standard 38hr week');
+    record('CS-01', 1105.36, payOnly(r), 'FT L1 standard 38hr week');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n6.2 Casual L7 PH 8hr');

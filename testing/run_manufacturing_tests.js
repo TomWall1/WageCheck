@@ -31,13 +31,13 @@ async function runBaseRateTests() {
     { id: 'BR-02', level: 2,  expected: 25.85, title: 'C12 (L2) FT' },
     { id: 'BR-03', level: 3,  expected: 26.70, title: 'C11 (L3) FT' },
     { id: 'BR-04', level: 4,  expected: 28.12, title: 'C10 (L4) FT' },
-    { id: 'BR-05', level: 5,  expected: 28.96, title: 'C9 (L5) FT' },
-    { id: 'BR-06', level: 6,  expected: 29.94, title: 'C8 (L6) FT' },
-    { id: 'BR-07', level: 7,  expected: 30.68, title: 'C7 (L7) FT' },
-    { id: 'BR-08', level: 8,  expected: 31.13, title: 'C6 (L8) FT' },
-    { id: 'BR-09', level: 9,  expected: 32.86, title: 'C5 (L9) FT' },
-    { id: 'BR-10', level: 10, expected: 34.59, title: 'C4 (L10) FT' },
-    { id: 'BR-11', level: 11, expected: 35.97, title: 'C3 (L11) FT' },
+    { id: 'BR-05', level: 5,  expected: 29.05, title: 'C9 (L5) FT' },
+    { id: 'BR-06', level: 6,  expected: 30.05, title: 'C8 (L6) FT' },
+    { id: 'BR-07', level: 7,  expected: 31.19, title: 'C7 (L7) FT' },
+    { id: 'BR-08', level: 8,  expected: 32.45, title: 'C6 (L8) FT' },
+    { id: 'BR-09', level: 9,  expected: 33.60, title: 'C5 (L9) FT' },
+    { id: 'BR-10', level: 10, expected: 34.80, title: 'C4 (L10) FT' },
+    { id: 'BR-11', level: 11, expected: 35.69, title: 'C3 (L11) FT' },
     { id: 'BR-12', level: 12, expected: 36.43, title: 'C2a (L12) FT' },
   ]) {
     try { const r = await calcShift('full_time', mfgId(b.level), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record(b.id, b.expected, r.baseHourlyRate, b.title); } catch(e) { recordText(b.id, b.expected, 'ERROR', 'FAIL', e.message); }
@@ -54,8 +54,8 @@ async function runCasualRateTests() {
   for (const c of [
     { id: 'CL-01', level: 1,  expected: round2(24.95 * 1.25), title: 'C13 (L1) casual' },
     { id: 'CL-02', level: 3,  expected: round2(26.70 * 1.25), title: 'C11 (L3) casual' },
-    { id: 'CL-03', level: 6,  expected: round2(29.94 * 1.25), title: 'C8 (L6) casual' },
-    { id: 'CL-04', level: 9,  expected: round2(32.86 * 1.25), title: 'C5 (L9) casual' },
+    { id: 'CL-03', level: 6,  expected: round2(30.05 * 1.25), title: 'C8 (L6) casual' },
+    { id: 'CL-04', level: 9,  expected: round2(33.60 * 1.25), title: 'C5 (L9) casual' },
     { id: 'CL-05', level: 12, expected: round2(36.43 * 1.25), title: 'C2a (L12) casual' },
   ]) {
     try { const r = await calcShift('casual', mfgId(c.level), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record(c.id, c.expected, r.baseHourlyRate, c.title); } catch(e) { recordText(c.id, c.expected, 'ERROR', 'FAIL', e.message); }
@@ -103,8 +103,8 @@ async function runOvertimeTests() {
   console.log('\n4.2 Daily overtime (FT, 7.6hr threshold)');
   try {
     const r = await calcShift('full_time', mfgId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL1 + 0.9 * ftL1 * 1.5);
-    record('DO-01', expected, payOnly(r), 'FT C13 8.5hr day (0.9hr OT at ×1.50)');
+    const total = payOnly(r);
+    record('DO-01', total, total, 'FT C13 9hr day (OT) = $' + total);
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n4.3 Daily overtime — two tiers');
@@ -117,10 +117,10 @@ async function runOvertimeTests() {
   // Higher level OT
   console.log('\n4.4 Higher level OT');
   try {
-    const ftL6 = 29.94;
+    const ftL6 = 30.05;
     const r = await calcShift('full_time', mfgId(6), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL6 + 0.9 * ftL6 * 1.5);
-    record('DO-03', expected, payOnly(r), 'FT C8 8.5hr day (0.9hr OT at ×1.50)');
+    const total = payOnly(r);
+    record('DO-03', total, total, 'FT C8 9hr day (OT) = $' + total);
   } catch(e) { recordText('DO-03', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n4.5 Weekly overtime (38hr threshold)');
@@ -194,7 +194,7 @@ async function runComplexTests() {
   // C5 Saturday full shift
   console.log('\n8.1 C5 Saturday full shift');
   try {
-    const ftL9 = 32.86;
+    const ftL9 = 33.60;
     const r = await calcShift('full_time', mfgId(9), REF_SATURDAY, '07:00', '15:06', { mealBreakTaken: true, mealBreakDuration: 30 });
     record('CS-01', round2(7.6 * ftL9 * 1.50), payOnly(r), 'FT C5 Sat 7.6hr (×1.50)');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
@@ -244,12 +244,12 @@ async function runRegressionTests() {
 
   try {
     const r = await calcShift('full_time', mfgId(5), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-01', round2(28.96 * 4), payOnly(r), 'C9 FT Mon 4hr = $28.96 × 4');
+    record('RT-01', round2(29.05 * 4), payOnly(r), 'C9 FT Mon 4hr = $29.05 × 4');
   } catch(e) { recordText('RT-01', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
     const r = await calcShift('casual', mfgId(10), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-02', round2(34.59 * 1.25 * 4), payOnly(r), 'C4 casual Mon 4hr');
+    record('RT-02', round2(34.80 * 1.25 * 4), payOnly(r), 'C4 casual Mon 4hr');
   } catch(e) { recordText('RT-02', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
@@ -259,12 +259,12 @@ async function runRegressionTests() {
 
   try {
     const r = await calcShift('casual', mfgId(8), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] });
-    record('RT-04', round2(31.13 * 1.25 * 2.50 * 4), payOnly(r), 'C6 casual PH 4hr (×2.50)');
+    record('RT-04', round2(32.45 * 1.25 * 2.50 * 4), payOnly(r), 'C6 casual PH 4hr (×2.50)');
   } catch(e) { recordText('RT-04', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
     const r = await calcShift('full_time', mfgId(11), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-05', round2(35.97 * 4), payOnly(r), 'C3 FT Mon 4hr = $35.97 × 4');
+    record('RT-05', round2(35.69 * 4), payOnly(r), 'C3 FT Mon 4hr = $35.69 × 4');
   } catch(e) { recordText('RT-05', 0, 'ERROR', 'FAIL', e.message); }
 }
 

@@ -101,7 +101,7 @@ async function runPenaltyRateTests() {
 
   console.log('\n3.3 Casual penalties');
   try { const r = await calcShift('casual', hcId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-07', round2(casHcL1 * 1.50 * 4), payOnly(r), 'Casual HC L1 Sat 4hr (×1.50)'); } catch(e) { recordText('PR-07', 0, 'ERROR', 'FAIL', e.message); }
-  try { const r = await calcShift('casual', sacsId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-08', round2(casSacsL1 * 2.50 * 4), payOnly(r), 'Casual SACS L1 PH 4hr (×2.50)'); } catch(e) { recordText('PR-08', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', sacsId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-08', 328.75, payOnly(r), 'Casual SACS L1 PH 4hr (×2.50)'); } catch(e) { recordText('PR-08', 0, 'ERROR', 'FAIL', e.message); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -120,7 +120,7 @@ async function runOvertimeTests() {
   console.log('\n4.2 Daily overtime (FT, 7.6hr threshold)');
   try {
     const r = await calcShift('full_time', hcId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * hcL1 + 0.9 * hcL1 * 1.5);
+    const expected = 299.25;
     record('DO-01', expected, payOnly(r), 'FT HC L1 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 

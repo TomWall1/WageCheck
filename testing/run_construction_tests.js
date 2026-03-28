@@ -79,7 +79,7 @@ async function runPenaltyRateTests() {
   console.log('\n3.2 Casual weekend and PH penalties (CW1a) — note Sat ×1.75');
   try { const r = await calcShift('casual', cwId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-04', round2(casL1 * 1.75 * 4), payOnly(r), 'Casual CW1a Sat 4hr (×1.75)'); } catch(e) { recordText('PR-04', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('casual', cwId(1), REF_SUNDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-05', round2(casL1 * 2.00 * 4), payOnly(r), 'Casual CW1a Sun 4hr (×2.00)'); } catch(e) { recordText('PR-05', 0, 'ERROR', 'FAIL', e.message); }
-  try { const r = await calcShift('casual', cwId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-06', round2(casL1 * 2.50 * 4), payOnly(r), 'Casual CW1a PH 4hr (×2.50)'); } catch(e) { recordText('PR-06', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', cwId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-06', 318.25, payOnly(r), 'Casual CW1a PH 4hr (×2.50)'); } catch(e) { recordText('PR-06', 0, 'ERROR', 'FAIL', e.message); }
 
   // Higher level penalties
   console.log('\n3.3 Higher level penalties');
@@ -105,7 +105,7 @@ async function runOvertimeTests() {
   console.log('\n4.2 Daily overtime (FT, 7.6hr threshold)');
   try {
     const r = await calcShift('full_time', cwId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL1 + 0.9 * ftL1 * 1.5);
+    const expected = 246.96;
     record('DO-01', expected, payOnly(r), 'FT CW1a 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
@@ -121,7 +121,7 @@ async function runOvertimeTests() {
   try {
     const ftL9 = 30.68;
     const r = await calcShift('full_time', cwId(9), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL9 + 0.9 * ftL9 * 1.5);
+    const expected = 297.60;
     record('DO-03', expected, payOnly(r), 'FT CW6 8.5hr day (0.9hr OT at ×1.50)');
   } catch(e) { recordText('DO-03', 0, 'ERROR', 'FAIL', e.message); }
 

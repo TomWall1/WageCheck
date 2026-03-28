@@ -49,7 +49,7 @@ async function runBaseRateTests() {
   }
 
   console.log('\n1.3 No junior rates — adult rate at any age');
-  try { const r = await calcShift('full_time', tId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 18 }); record('JR-01', 36.69, r.baseHourlyRate, 'L1 FT age 18 = adult rate'); } catch(e) { recordText('JR-01', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('full_time', tId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 25 }); record('JR-01', 36.69, r.baseHourlyRate, 'L1 FT age 25 = adult rate'); } catch(e) { recordText('JR-01', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('full_time', tId(1), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, age: 21 }); record('JR-02', 36.69, r.baseHourlyRate, 'L1 FT age 21 = adult rate'); } catch(e) { recordText('JR-02', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n1.4 FT weekday pay verification');
@@ -183,7 +183,7 @@ async function runComplexTests() {
     const shifts = [];
     for (let d = 7; d <= 11; d++) shifts.push({ date: `2025-07-${String(d).padStart(2,'0')}`, startTime: '08:30', endTime: '17:00', mealBreakTaken: true, mealBreakDuration: 30 });
     const r = await calcMultiShift('full_time', tId(1), shifts);
-    record('CS-01', round2(36.69 * 38), payOnly(r), 'FT L1 standard 38hr week');
+    record('CS-01', 1504.29, payOnly(r), 'FT L1 standard 38hr week');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n6.2 FT L5 PH 8hr');

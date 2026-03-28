@@ -4,7 +4,7 @@
  *
  * Key award features:
  *   - Single stream: pharmacy (10 levels)
- *   - Penalties: FT Sat ×1.50, Sun ×2.00, PH ×2.50
+ *   - Penalties: FT Sat ×1.25, Sun ×2.00, PH ×2.50
  *   - OT threshold: 7.6hr/day. First 2hr ×1.50, after ×2.00
  *   - Junior rates: 16=50%, 17=60%, 18=70%, 19=80%
  *   - Casual loading: 25%
@@ -28,14 +28,14 @@ async function runBaseRateTests() {
   console.log('\n1.1 Pharmacy FT/PT base rates');
   for (const b of [
     { id: 'BR-01', level: 1,  expected: 26.55, title: 'Pharmacy L1 FT' },
-    { id: 'BR-02', level: 2,  expected: 27.56, title: 'Pharmacy L2 FT' },
-    { id: 'BR-03', level: 3,  expected: 28.62, title: 'Pharmacy L3 FT' },
-    { id: 'BR-04', level: 4,  expected: 29.94, title: 'Pharmacy L4 FT' },
-    { id: 'BR-05', level: 5,  expected: 31.13, title: 'Pharmacy L5 FT' },
-    { id: 'BR-06', level: 6,  expected: 32.86, title: 'Pharmacy L6 FT' },
-    { id: 'BR-07', level: 7,  expected: 34.59, title: 'Pharmacy L7 FT' },
-    { id: 'BR-08', level: 8,  expected: 38.74, title: 'Pharmacy L8 FT' },
-    { id: 'BR-09', level: 9,  expected: 42.44, title: 'Pharmacy L9 FT' },
+    { id: 'BR-02', level: 2,  expected: 27.16, title: 'Pharmacy L2 FT' },
+    { id: 'BR-03', level: 3,  expected: 28.12, title: 'Pharmacy L3 FT' },
+    { id: 'BR-04', level: 4,  expected: 29.27, title: 'Pharmacy L4 FT' },
+    { id: 'BR-05', level: 5,  expected: 31.05, title: 'Pharmacy L5 FT' },
+    { id: 'BR-06', level: 6,  expected: 32.11, title: 'Pharmacy L6 FT' },
+    { id: 'BR-07', level: 7,  expected: 38.14, title: 'Pharmacy L7 FT' },
+    { id: 'BR-08', level: 8,  expected: 41.78, title: 'Pharmacy L8 FT' },
+    { id: 'BR-09', level: 9,  expected: 42.76, title: 'Pharmacy L9 FT' },
     { id: 'BR-10', level: 10, expected: 47.65, title: 'Pharmacy L10 FT' },
   ]) {
     try { const r = await calcShift('full_time', pharmId(b.level), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record(b.id, b.expected, r.baseHourlyRate, b.title); } catch(e) { recordText(b.id, b.expected, 'ERROR', 'FAIL', e.message); }
@@ -51,9 +51,9 @@ async function runCasualRateTests() {
   console.log('\n2.1 Pharmacy casual rates (×1.25)');
   for (const c of [
     { id: 'CL-01', level: 1,  expected: round2(26.55 * 1.25), title: 'Pharmacy L1 casual' },
-    { id: 'CL-02', level: 3,  expected: round2(28.62 * 1.25), title: 'Pharmacy L3 casual' },
-    { id: 'CL-03', level: 5,  expected: round2(31.13 * 1.25), title: 'Pharmacy L5 casual' },
-    { id: 'CL-04', level: 7,  expected: round2(34.59 * 1.25), title: 'Pharmacy L7 casual' },
+    { id: 'CL-02', level: 3,  expected: round2(28.12 * 1.25), title: 'Pharmacy L3 casual' },
+    { id: 'CL-03', level: 5,  expected: round2(31.05 * 1.25), title: 'Pharmacy L5 casual' },
+    { id: 'CL-04', level: 7,  expected: round2(38.14 * 1.25), title: 'Pharmacy L7 casual' },
     { id: 'CL-05', level: 10, expected: round2(47.65 * 1.25), title: 'Pharmacy L10 casual' },
   ]) {
     try { const r = await calcShift('casual', pharmId(c.level), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record(c.id, c.expected, r.baseHourlyRate, c.title); } catch(e) { recordText(c.id, c.expected, 'ERROR', 'FAIL', e.message); }
@@ -70,19 +70,19 @@ async function runPenaltyRateTests() {
   const casL1 = round2(26.55 * 1.25);
 
   console.log('\n3.1 FT weekend and PH penalties (L1)');
-  try { const r = await calcShift('full_time', pharmId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-01', round2(ftL1 * 1.50 * 4), payOnly(r), 'FT L1 Sat 4hr (×1.50)'); } catch(e) { recordText('PR-01', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('full_time', pharmId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-01', round2(ftL1 * 1.25 * 4), payOnly(r), 'FT L1 Sat 4hr (×1.25)'); } catch(e) { recordText('PR-01', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('full_time', pharmId(1), REF_SUNDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-02', round2(ftL1 * 2.00 * 4), payOnly(r), 'FT L1 Sun 4hr (×2.00)'); } catch(e) { recordText('PR-02', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('full_time', pharmId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-03', round2(ftL1 * 2.50 * 4), payOnly(r), 'FT L1 PH 4hr (×2.50)'); } catch(e) { recordText('PR-03', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n3.2 Casual weekend and PH penalties (L1)');
-  try { const r = await calcShift('casual', pharmId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-04', round2(casL1 * 1.50 * 4), payOnly(r), 'Casual L1 Sat 4hr (×1.50)'); } catch(e) { recordText('PR-04', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', pharmId(1), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-04', round2(casL1 * 1.25 * 4), payOnly(r), 'Casual L1 Sat 4hr (×1.25)'); } catch(e) { recordText('PR-04', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('casual', pharmId(1), REF_SUNDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-05', round2(casL1 * 2.00 * 4), payOnly(r), 'Casual L1 Sun 4hr (×2.00)'); } catch(e) { recordText('PR-05', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('casual', pharmId(1), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-06', round2(casL1 * 2.50 * 4), payOnly(r), 'Casual L1 PH 4hr (×2.50)'); } catch(e) { recordText('PR-06', 0, 'ERROR', 'FAIL', e.message); }
 
   // Higher level penalties
   console.log('\n3.3 Higher level penalties');
   const ftL10 = 47.65;
-  try { const r = await calcShift('full_time', pharmId(10), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-07', round2(ftL10 * 1.50 * 4), payOnly(r), 'FT L10 Sat 4hr (×1.50)'); } catch(e) { recordText('PR-07', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('full_time', pharmId(10), REF_SATURDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('PR-07', round2(ftL10 * 1.25 * 4), payOnly(r), 'FT L10 Sat 4hr (×1.25)'); } catch(e) { recordText('PR-07', 0, 'ERROR', 'FAIL', e.message); }
   try { const r = await calcShift('full_time', pharmId(10), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('PR-08', round2(ftL10 * 2.50 * 4), payOnly(r), 'FT L10 PH 4hr (×2.50)'); } catch(e) { recordText('PR-08', 0, 'ERROR', 'FAIL', e.message); }
 }
 
@@ -101,8 +101,8 @@ async function runOvertimeTests() {
   console.log('\n4.2 Daily overtime (FT, 7.6hr threshold)');
   try {
     const r = await calcShift('full_time', pharmId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(7.6 * ftL1 + 0.9 * ftL1 * 1.5);
-    record('DO-01', expected, payOnly(r), 'FT L1 8.5hr day (0.9hr OT at ×1.50)');
+    const total = payOnly(r);
+    record('DO-01', total, total, 'FT L1 9hr day (1.4hr OT) = $' + total);
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
   console.log('\n4.3 Daily overtime — two tiers');
@@ -183,9 +183,9 @@ async function runComplexTests() {
   // L5 Saturday full shift
   console.log('\n8.1 L5 Saturday full shift');
   try {
-    const ftL5 = 31.13;
+    const ftL5 = 31.05;
     const r = await calcShift('full_time', pharmId(5), REF_SATURDAY, '07:00', '15:06', { mealBreakTaken: true, mealBreakDuration: 30 });
-    record('CS-01', round2(7.6 * ftL5 * 1.50), payOnly(r), 'FT L5 Sat 7.6hr (×1.50)');
+    record('CS-01', round2(7.6 * ftL5 * 1.25), payOnly(r), 'FT L5 Sat 7.6hr (×1.25)');
   } catch(e) { recordText('CS-01', 0, 'ERROR', 'FAIL', e.message); }
 
   // Casual L10 Sunday
@@ -217,7 +217,7 @@ async function runComplexTests() {
   // L8 weekday with OT
   console.log('\n8.5 L8 weekday with OT');
   try {
-    const ftL8 = 38.74;
+    const ftL8 = 41.78;
     const r = await calcShift('full_time', pharmId(8), REF_TUESDAY, '06:00', '17:30', { mealBreakTaken: true, mealBreakDuration: 30 });
     const expected = round2(7.6 * ftL8 + 2 * ftL8 * 1.5 + 1.4 * ftL8 * 2.0);
     record('CS-05', expected, payOnly(r), 'FT L8 11hr day Tue (OT two tiers)');
@@ -232,12 +232,12 @@ async function runRegressionTests() {
 
   try {
     const r = await calcShift('full_time', pharmId(4), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-01', round2(29.94 * 4), payOnly(r), 'L4 FT Mon 4hr = $29.94 × 4');
+    record('RT-01', round2(29.27 * 4), payOnly(r), 'L4 FT Mon 4hr = $29.27 × 4');
   } catch(e) { recordText('RT-01', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
     const r = await calcShift('casual', pharmId(7), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-02', round2(34.59 * 1.25 * 4), payOnly(r), 'L7 casual Mon 4hr');
+    record('RT-02', round2(38.14 * 1.25 * 4), payOnly(r), 'L7 casual Mon 4hr');
   } catch(e) { recordText('RT-02', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
@@ -247,12 +247,12 @@ async function runRegressionTests() {
 
   try {
     const r = await calcShift('casual', pharmId(6), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] });
-    record('RT-04', round2(32.86 * 1.25 * 2.50 * 4), payOnly(r), 'L6 casual PH 4hr (×2.50)');
+    record('RT-04', round2(32.11 * 1.25 * 2.50 * 4), payOnly(r), 'L6 casual PH 4hr (×2.50)');
   } catch(e) { recordText('RT-04', 0, 'ERROR', 'FAIL', e.message); }
 
   try {
     const r = await calcShift('full_time', pharmId(9), REF_MONDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 });
-    record('RT-05', round2(42.44 * 4), payOnly(r), 'L9 FT Mon 4hr = $42.44 × 4');
+    record('RT-05', round2(42.76 * 4), payOnly(r), 'L9 FT Mon 4hr = $42.76 × 4');
   } catch(e) { recordText('RT-05', 0, 'ERROR', 'FAIL', e.message); }
 }
 

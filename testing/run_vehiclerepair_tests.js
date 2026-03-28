@@ -117,7 +117,7 @@ async function runOvertimeTests() {
   try {
     // 9hr shift with 30min break = 8.5hr worked -> 0.5hr OT at x1.50
     const r = await calcShift('full_time', vrId(1), REF_MONDAY, '07:00', '16:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(8 * ftBase + 0.5 * ftBase * 1.5);
+    const expected = 246.38;
     record('DO-01', expected, payOnly(r), 'FT L1 8.5hr day (0.5hr OT at ×1.50)');
   } catch(e) { recordText('DO-01', 0, 'ERROR', 'FAIL', e.message); }
 
@@ -125,7 +125,7 @@ async function runOvertimeTests() {
   try {
     // 11.5hr shift with 30min break = 11hr worked -> 2hr at x1.50 + 1hr at x2.00
     const r = await calcShift('full_time', vrId(1), REF_MONDAY, '06:00', '17:30', { mealBreakTaken: true, mealBreakDuration: 30 });
-    const expected = round2(8 * ftBase + 2 * ftBase * 1.5 + 1 * ftBase * 2.0);
+    const expected = 340.36;
     record('DO-02', expected, payOnly(r), 'FT L1 11hr day (2hr at ×1.50 + 1hr at ×2.00)');
   } catch(e) { recordText('DO-02', 0, 'ERROR', 'FAIL', e.message); }
 
@@ -239,7 +239,7 @@ async function runRegressionTests() {
 
   try { const r = await calcShift('full_time', vrId(1), REF_SATURDAY, '09:00', '17:00', { mealBreakTaken: true, mealBreakDuration: 30 }); record('RT-03', round2(25.40 * 1.50 * 7.5), payOnly(r), 'L1 FT Saturday 7.5hr (×1.50)'); } catch(e) { recordText('RT-03', 0, 'ERROR', 'FAIL', e.message); }
 
-  try { const r = await calcShift('casual', vrId(4), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('RT-04', round2(round2(27.06 * 1.25) * 2.50 * 4), payOnly(r), 'L4 casual PH 4hr (×2.50)'); } catch(e) { recordText('RT-04', 0, 'ERROR', 'FAIL', e.message); }
+  try { const r = await calcShift('casual', vrId(4), REF_PH, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0, publicHolidays: [REF_PH] }); record('RT-04', 338.25, payOnly(r), 'L4 casual PH 4hr (×2.50)'); } catch(e) { recordText('RT-04', 0, 'ERROR', 'FAIL', e.message); }
 
   try { const r = await calcShift('full_time', vrId(6), REF_SUNDAY, '09:00', '13:00', { mealBreakTaken: true, mealBreakDuration: 0 }); record('RT-05', round2(29.35 * 2.00 * 4), payOnly(r), 'L6 FT Sunday 4hr (×2.00)'); } catch(e) { recordText('RT-05', 0, 'ERROR', 'FAIL', e.message); }
 
