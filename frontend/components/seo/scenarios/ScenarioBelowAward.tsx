@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,10 @@ const faqData = [
   { question: 'If the shortfall is small — is it still worth pursuing?', answer: 'Yes. Small weekly shortfalls compound quickly. $2/hr shortfall \u00d7 20hrs/week \u00d7 52 weeks = over $2,000/year. Over 3 years, that\u0027s $6,000+.' },
 ];
 
-export default function ScenarioBelowAward() {
+export default function ScenarioBelowAward({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -62,16 +67,13 @@ export default function ScenarioBelowAward() {
               </tr>
             </thead>
             <tbody>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>$42.18/hr</td><td style={tdStyle}>$54.23/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$44.24/hr</td><td style={tdStyle}>$56.88/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>$45.68/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
+              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>{l1 ? formatCurrency(l1.casualRate) : '$30.13'}/hr</td><td style={tdStyle}>{l1 ? formatCurrency(l1.sundayCasual) : '$42.18'}/hr</td><td style={tdStyle}>{l1 ? formatCurrency(l1.publicHolidayCasual) : '$54.23'}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>{l2 ? formatCurrency(l2.casualRate) : '$31.60'}/hr</td><td style={tdStyle}>{l2 ? formatCurrency(l2.sundayCasual) : '$44.24'}/hr</td><td style={tdStyle}>{l2 ? formatCurrency(l2.publicHolidayCasual) : '$56.88'}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>{l3 ? formatCurrency(l3.casualRate) : '$32.63'}/hr</td><td style={tdStyle}>{l3 ? formatCurrency(l3.sundayCasual) : '$45.68'}/hr</td><td style={tdStyle}>{l3 ? formatCurrency(l3.publicHolidayCasual) : '$58.73'}/hr</td></tr>
             </tbody>
           </table>
         </div>
-        <p style={smallStyle}>Effective 1 July 2025.</p>
+        <p style={smallStyle}>Effective {rates?.effectiveDate ?? '1 July 2025'}.</p>
       </section>
 
       <section style={sectionStyle}>

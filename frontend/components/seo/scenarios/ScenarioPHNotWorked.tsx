@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,9 @@ const faqData = [
   { question: 'Can my employer require me to work on a public holiday?', answer: 'They can request it — but you have the right to refuse if the request is unreasonable. If you do work, the 2.25\u00d7 public holiday rate applies.' },
 ];
 
-export default function ScenarioPHNotWorked() {
+export default function ScenarioPHNotWorked({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -79,7 +83,7 @@ export default function ScenarioPHNotWorked() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A permanent employee who should receive a paid day off on each public holiday but doesn&apos;t &mdash; and works 5 days/week &mdash; misses approximately 8&ndash;10 paid days per year (depending on state). At Level 2 permanent rates, that&apos;s 8 &times; 7.6hrs &times; {/* TODO: dynamic rate */}$25.85/hr = approximately $1,572/year in paid leave not received.
+          A permanent employee who should receive a paid day off on each public holiday but doesn&apos;t &mdash; and works 5 days/week &mdash; misses approximately 8&ndash;10 paid days per year (depending on state). At Level 2 permanent rates, that&apos;s 8 &times; 7.6hrs &times; {formatCurrency(l2?.ftRate ?? 0)}/hr = approximately {formatCurrency((l2?.ftRate ?? 0) * 8 * 7.6)}/year in paid leave not received.
         </p>
       </section>
 

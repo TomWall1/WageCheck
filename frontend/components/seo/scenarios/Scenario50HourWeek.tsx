@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,21 @@ const faqData = [
   { question: 'What if I\'m on a salary?', answer: 'A salary only covers overtime if it demonstrably exceeds all award obligations for every week worked. If you regularly work 50-hour weeks on a salary designed for 38, it almost certainly doesn\'t cover it.' },
 ];
 
-export default function Scenario50HourWeek() {
+export default function Scenario50HourWeek({ rates }: { rates?: HospitalityRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+
+  const l3FtRate = l3?.ftRate ?? 0;
+  const ot15 = Math.round(l3FtRate * 1.5 * 100) / 100;
+  const ot2 = Math.round(l3FtRate * 2 * 100) / 100;
+
+  const ordinaryTotal = Math.round(38 * l3FtRate * 100) / 100;
+  const ot15Total = Math.round(2 * ot15 * 100) / 100;
+  const ot2Total = Math.round(10 * ot2 * 100) / 100;
+  const weekTotal = Math.round((ordinaryTotal + ot15Total + ot2Total) * 100) / 100;
+  const flatTotal = Math.round(50 * l3FtRate * 100) / 100;
+  const weeklyUnderpayment = Math.round((weekTotal - flatTotal) * 100) / 100;
+  const annualUnderpayment = Math.round(weeklyUnderpayment * 52 * 100) / 100;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -53,16 +69,16 @@ export default function Scenario50HourWeek() {
             <strong>Permanent Level 3 employee. 50-hour week.</strong>
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>38 hours at {/* TODO: dynamic rate */}$26.10/hr = {/* TODO: dynamic rate */}$991.80</li>
-            <li>2 hours at {/* TODO: dynamic rate */}$39.15/hr = {/* TODO: dynamic rate */}$78.30</li>
-            <li>10 hours at {/* TODO: dynamic rate */}$52.20/hr = {/* TODO: dynamic rate */}$522.00</li>
-            <li><strong>Total: {/* TODO: dynamic rate */}$1,592.10</strong></li>
+            <li>38 hours at {formatCurrency(l3FtRate)}/hr = {formatCurrency(ordinaryTotal)}</li>
+            <li>2 hours at {formatCurrency(ot15)}/hr = {formatCurrency(ot15Total)}</li>
+            <li>10 hours at {formatCurrency(ot2)}/hr = {formatCurrency(ot2Total)}</li>
+            <li><strong>Total: {formatCurrency(weekTotal)}</strong></li>
           </ul>
           <p style={smallStyle}>
-            Compared to 50 hours at flat ordinary rate: {/* TODO: dynamic rate */}$1,305.00. Underpayment on this single week: {/* TODO: dynamic rate */}$287.10.
+            Compared to 50 hours at flat ordinary rate: {formatCurrency(flatTotal)}. Underpayment on this single week: {formatCurrency(weeklyUnderpayment)}.
           </p>
           <p style={{ ...pStyle, marginTop: '12px', marginBottom: 0, fontWeight: 600 }}>
-            Over 52 weeks, if this pattern is consistent: ~{/* TODO: dynamic rate */}$14,900/year in unpaid overtime.
+            Over 52 weeks, if this pattern is consistent: ~{formatCurrency(annualUnderpayment)}/year in unpaid overtime.
           </p>
         </div>
         <p style={pStyle}>

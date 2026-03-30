@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,9 @@ const faqData = [
   { question: 'I\'m permanent and my shifts keep changing — what are my rights?', answer: 'Permanent employees have agreed ordinary hours. Ongoing unilateral roster changes may amount to a variation of your employment terms, which requires your agreement.' },
 ];
 
-export default function ScenarioRosterChange() {
+export default function ScenarioRosterChange({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const satCasual = l2?.saturdayCasual ?? 37.92;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -52,7 +56,7 @@ export default function ScenarioRosterChange() {
             <strong>Example:</strong> Arrived for a Saturday casual shift (Level 2), sent home after 1 hour.
           </p>
           <p style={pStyle}>
-            You&apos;re owed 3 &times; {/* TODO: dynamic rate */}$37.92 = {/* TODO: dynamic rate */}$113.76, not 1 hour.
+            You&apos;re owed 3 &times; {formatCurrency(satCasual)} = {formatCurrency(satCasual * 3)}, not 1 hour.
           </p>
         </div>
         <p style={pStyle}>

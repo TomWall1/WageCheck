@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,15 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'What if I\'m casual — do I get overtime for 6-day weeks?', answer: 'The daily threshold (more than 10 hours in a day) applies to casuals. Weekly overtime in the same way as permanent employees generally doesn\'t apply to casual workers, but check your specific arrangement.' },
-  { question: 'My employer says a 6-day week is just "how hospitality works" — is that right?', answer: 'It\'s common — but the award applies regardless of industry norms. Every hour past 38 must be paid at overtime rates.' },
-  { question: 'What if each individual shift is under 10 hours but the week adds up to over 38?', answer: 'The weekly threshold still triggers. You don\'t need to exceed 10 hours in a single day for weekly overtime to apply.' },
-];
+export default function Scenario6DaysWeek({ rates }: { rates?: HospitalityRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
 
-export default function Scenario6DaysWeek() {
+  const faqData = [
+    { question: 'What if I\'m casual — do I get overtime for 6-day weeks?', answer: 'The daily threshold (more than 10 hours in a day) applies to casuals. Weekly overtime in the same way as permanent employees generally doesn\'t apply to casual workers, but check your specific arrangement.' },
+    { question: 'My employer says a 6-day week is just "how hospitality works" — is that right?', answer: 'It\'s common — but the award applies regardless of industry norms. Every hour past 38 must be paid at overtime rates.' },
+    { question: 'What if each individual shift is under 10 hours but the week adds up to over 38?', answer: 'The weekly threshold still triggers. You don\'t need to exceed 10 hours in a single day for weekly overtime to apply.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -54,12 +58,12 @@ export default function Scenario6DaysWeek() {
         <h2 style={h2Style}>What you should be paid</h2>
         <div style={exampleBoxStyle}>
           <p style={{ ...pStyle, marginBottom: '8px' }}>
-            <strong>Example:</strong> Your 6-day week totals 48 hours and your ordinary rate is {/* TODO: dynamic rate */}$26.10/hr (Level 3 permanent):
+            <strong>Example:</strong> Your 6-day week totals 48 hours and your ordinary rate is {formatCurrency(l3?.ftRate ?? 0)}/hr (Level 3 permanent):
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>Hours 1&ndash;38: {/* TODO: dynamic rate */}$26.10/hr</li>
-            <li>Hours 39&ndash;40: {/* TODO: dynamic rate */}$39.15/hr (time-and-a-half)</li>
-            <li>Hours 41&ndash;48: {/* TODO: dynamic rate */}$52.20/hr (double time)</li>
+            <li>Hours 1&ndash;38: {formatCurrency(l3?.ftRate ?? 0)}/hr</li>
+            <li>Hours 39&ndash;40: {formatCurrency((l3?.ftRate ?? 0) * 1.5)}/hr (time-and-a-half)</li>
+            <li>Hours 41&ndash;48: {formatCurrency((l3?.ftRate ?? 0) * 2)}/hr (double time)</li>
           </ul>
           <p style={smallStyle}>
             Plus: if your 6th day falls on a Saturday or Sunday, the applicable penalty rate applies to those hours instead of (or in addition to) the overtime rate &mdash; whichever is higher.

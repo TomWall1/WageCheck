@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
 import { getIntentPage, getAllIntentSlugs } from '@/lib/hospitality-pages';
+import { getRestaurantIntentPage, getAllRestaurantIntentSlugs } from '@/lib/restaurant-pages';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import dynamic from 'next/dynamic';
@@ -20,15 +22,27 @@ const intentComponents: Record<string, React.ComponentType<any>> = {
   'flat-rate-hospitality': dynamic(() => import('@/components/seo/intent/IntentFlatRate')),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const restaurantIntentComponents: Record<string, React.ComponentType<any>> = {
+  'am-i-being-underpaid': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentUnderpaid')),
+  'wrong-award-applied': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentWrongAward')),
+  'not-getting-overtime': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentOvertime')),
+  'junior-pay-rates': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentJuniorPay')),
+  'pay-too-low': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentPayTooLow')),
+  'flat-rate-restaurant': dynamic(() => import('@/components/seo/restaurant-intent/RestaurantIntentFlatRate')),
+};
+
 interface Props { params: Promise<{ awardSlug: string; intentSlug: string }>; }
 
 export function generateStaticParams() {
-  return getAllIntentSlugs().map(slug => ({ awardSlug: 'hospitality-award', intentSlug: slug }));
+  const hospitality = getAllIntentSlugs().map(slug => ({ awardSlug: 'hospitality-award', intentSlug: slug }));
+  const restaurant = getAllRestaurantIntentSlugs().map(slug => ({ awardSlug: 'restaurant-award', intentSlug: slug }));
+  return [...hospitality, ...restaurant];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { intentSlug } = await params;
-  const page = getIntentPage(intentSlug);
+  const { awardSlug, intentSlug } = await params;
+  const page = awardSlug === 'restaurant-award' ? getRestaurantIntentPage(intentSlug) : getIntentPage(intentSlug);
   if (!page) return {};
   return { title: page.metaTitle, description: page.metaDescription };
 }
@@ -36,20 +50,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function IntentPage({ params }: Props) {
   const { awardSlug, intentSlug } = await params;
   const award = getAwardBySlug(awardSlug);
-  const page = getIntentPage(intentSlug);
-  if (!award || !page || awardSlug !== 'hospitality-award') notFound();
 
-  const IntentContent = intentComponents[intentSlug];
+  const isHospitality = awardSlug === 'hospitality-award';
+  const isRestaurant = awardSlug === 'restaurant-award';
+
+  const page = isRestaurant ? getRestaurantIntentPage(intentSlug) : getIntentPage(intentSlug);
+  if (!award || !page || (!isHospitality && !isRestaurant)) notFound();
+
+  const IntentContent = isRestaurant ? restaurantIntentComponents[intentSlug] : intentComponents[intentSlug];
   let rates;
-  try { rates = await getHospitalityRates(); } catch { /* rates stay undefined */ }
+  try {
+    rates = isRestaurant ? await getRestaurantRates() : await getHospitalityRates();
+  } catch { /* rates stay undefined */ }
+
+  const awardLabel = isRestaurant ? 'Restaurant Award' : 'Hospitality Award';
+  const awardPath = `/awards/${awardSlug}`;
 
   return (
     <div>
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
         { label: 'Awards', href: '/awards' },
-        { label: 'Hospitality Award', href: '/awards/hospitality-award' },
-        { label: page.title, href: `/awards/hospitality-award/${intentSlug}` },
+        { label: awardLabel, href: awardPath },
+        { label: page.title, href: `${awardPath}/${intentSlug}` },
       ]} />
 
       <SubPageNav awardSlug={awardSlug} />

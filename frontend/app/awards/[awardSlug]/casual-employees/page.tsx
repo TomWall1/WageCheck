@@ -5,7 +5,9 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityCasualContent from '@/components/seo/awards/HospitalityCasualContent';
+import RestaurantCasualContent from '@/components/seo/awards/RestaurantCasualContent';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -21,6 +23,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: 'Hospitality Award Casual Pay Rates 2025\u201326 | Review My Pay',
       description: 'Casual loading, penalty rate stacking, and conversion rights under the Hospitality Award. What the 25% means \u2014 and what it doesn\u2019t.',
+    };
+  }
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Restaurant Award Casual Pay Rates 2025\u201326 | Review My Pay',
+      description: 'Casual loading, penalty rates, and conversion rights under the Restaurant Award. The 25% loading doesn\u2019t cover your Sunday rate \u2014 check yours here.',
     };
   }
   return {
@@ -46,11 +54,13 @@ export default async function CasualEmployeesPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="casual-employees" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Casual Pay Rates 2025\u201326' : `${award.shortName} — Casual Employees`}
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Casual Pay Rates 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Casual Pay Rates 2025\u201326' : `${award.shortName} — Casual Employees`}
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
         <HospitalityCasualContent rates={await getHospitalityRates()} />
+      ) : awardSlug === 'restaurant-award' ? (
+        <RestaurantCasualContent rates={await getRestaurantRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
 import { getHospitalityRates, getLevel } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import RestaurantCookContent from '@/components/seo/restaurant-roles/RestaurantCookContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -46,16 +48,22 @@ const faqData = [
 ];
 
 export function generateStaticParams() {
-  return [{ awardSlug: 'hospitality-award' }];
+  return [{ awardSlug: 'hospitality-award' }, { awardSlug: 'restaurant-award' }];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Cook Pay Rates 2025\u201326 | Restaurant Award',
+      description: 'Cook and chef pay rates under the Restaurant Award \u2014 trade qualifications, classification levels, Sunday rates, and how to check if your level is wrong.',
+    };
+  }
   return {
-    title: 'Cook Pay Rates Australia 2025\u201326 | Hospitality Award | Review My Pay',
-    description: 'Cook and chef pay rates under the Hospitality Award \u2014 grade levels, Sunday rates, and the most common underpayments in commercial kitchens.',
+    title: 'Cook Pay Rates 2025\u201326 | Hospitality Award',
+    description: 'Cook and chef pay rates under the Hospitality Award \u2014 grade levels, Sunday rates, and the most common underpayments in commercial kitchens. Check yours.',
   };
 }
 
@@ -63,6 +71,23 @@ export default async function CookPayRatesPage({ params }: Props) {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
+
+  if (awardSlug === 'restaurant-award') {
+    const restaurantRates = await getRestaurantRates();
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: 'Restaurant Award', href: '/awards/restaurant-award' },
+          { label: 'Cook Pay Rates', href: '/awards/restaurant-award/cook-pay-rates' },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} />
+        <h1 style={h1Style}>Cook Pay Rates 2025&ndash;26 &mdash; Restaurant Award</h1>
+        <RestaurantCookContent rates={restaurantRates} />
+      </div>
+    );
+  }
 
   const rates = await getHospitalityRates();
   const l2 = getLevel(rates, 2);

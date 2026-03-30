@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,18 @@ const faqData = [
   { question: 'Can I claim back unpaid overtime from previous years?', answer: 'Yes — up to 6 years. Depending on how many hours you\u0027ve worked over 38 per week and for how long, this could be a significant amount.' },
 ];
 
-export default function ScenarioManagerOvertime() {
+export default function ScenarioManagerOvertime({ rates }: { rates?: HospitalityRateData }) {
+  const l4 = rates ? getLevel(rates, 4) : undefined;
+
+  const l4FtRate = l4?.ftRate ?? 0;
+  const ot15 = Math.round(l4FtRate * 1.5 * 100) / 100;
+  const ot2 = Math.round(l4FtRate * 2 * 100) / 100;
+
+  const ordinaryTotal = Math.round(38 * l4FtRate * 100) / 100;
+  const ot15Total = Math.round(2 * ot15 * 100) / 100;
+  const ot2Total = Math.round(10 * ot2 * 100) / 100;
+  const weekTotal = Math.round((ordinaryTotal + ot15Total + ot2Total) * 100) / 100;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -60,15 +73,14 @@ export default function ScenarioManagerOvertime() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>The calculation test</h2>
         <div style={exampleBoxStyle}>
-          {/* TODO: dynamic rate */}
-          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>Level 4 permanent rate:</strong> $27.32/hr.</p>
+          <p style={{ ...pStyle, marginBottom: '4px' }}><strong>Level 4 permanent rate:</strong> {formatCurrency(l4FtRate)}/hr.</p>
           <p style={{ ...pStyle, marginBottom: '4px' }}>In a 50-hour week, total entitlement:</p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '4px' }}>
-            <li>38 &times; $27.32 = $1,038.16</li>
-            <li>2 &times; $40.98 = $81.96</li>
-            <li>10 &times; $54.64 = $546.40</li>
+            <li>38 &times; {formatCurrency(l4FtRate)} = {formatCurrency(ordinaryTotal)}</li>
+            <li>2 &times; {formatCurrency(ot15)} = {formatCurrency(ot15Total)}</li>
+            <li>10 &times; {formatCurrency(ot2)} = {formatCurrency(ot2Total)}</li>
           </ul>
-          <p style={{ ...smallStyle, fontWeight: 600 }}>Total: $1,666.52 for that week alone</p>
+          <p style={{ ...smallStyle, fontWeight: 600 }}>Total: {formatCurrency(weekTotal)} for that week alone</p>
           <p style={smallStyle}>
             If your weekly salary is less than this during busy weeks, the salary doesn&apos;t cover overtime.
           </p>
@@ -81,7 +93,7 @@ export default function ScenarioManagerOvertime() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A Level 4 permanent manager regularly working 50-hour weeks on a salary that covers only 38 hours is owed approximately {/* TODO: dynamic rate */}$350&ndash;$450/week in overtime. Over 52 weeks: ~$18,000&ndash;$23,000/year. For many hospitality managers, this is the single largest source of underpayment &mdash; and the one least likely to be raised because &quot;managers don&apos;t get overtime&quot; is accepted as fact.
+          A Level 4 permanent manager regularly working 50-hour weeks on a salary that covers only 38 hours is owed approximately $350&ndash;$450/week in overtime. Over 52 weeks: ~$18,000&ndash;$23,000/year. For many hospitality managers, this is the single largest source of underpayment &mdash; and the one least likely to be raised because &quot;managers don&apos;t get overtime&quot; is accepted as fact.
         </p>
       </section>
 

@@ -5,7 +5,9 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityOvertimeContent from '@/components/seo/awards/HospitalityOvertimeContent';
+import RestaurantOvertimeContent from '@/components/seo/awards/RestaurantOvertimeContent';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -21,6 +23,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: 'Hospitality Award Overtime Rates 2025\u201326 | Review My Pay',
       description: 'Overtime rules under the Hospitality Award: daily triggers, time-and-a-half, double-time, and how overtime interacts with penalty rates. MA000009.',
+    };
+  }
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Restaurant Award Overtime Rates 2025\u201326 | Review My Pay',
+      description: 'When overtime applies under the Restaurant Award, what it pays, and the most common ways it\u2019s missed for restaurant and caf\u00e9 workers. Check your shifts.',
     };
   }
   return {
@@ -46,11 +54,13 @@ export default async function OvertimePage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="overtime" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Overtime Rates 2025\u201326' : `${award.shortName} — Overtime Rates`}
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Overtime Rates 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Overtime Rates 2025\u201326' : `${award.shortName} — Overtime Rates`}
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
         <HospitalityOvertimeContent rates={await getHospitalityRates()} />
+      ) : awardSlug === 'restaurant-award' ? (
+        <RestaurantOvertimeContent rates={await getRestaurantRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

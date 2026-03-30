@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,10 @@ const faqData = [
   { question: 'If the all-in rate is insufficient, can I claim back pay?', answer: 'Yes — up to 6 years. The shortfall is the difference between your all-in rate and what the award requires for each affected shift type.' },
 ];
 
-export default function ScenarioAllInRate() {
+export default function ScenarioAllInRate({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2CasualPH = l2?.publicHolidayCasual ?? 56.88;
+  const l2Casual = l2?.casualRate ?? 31.60;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -43,9 +48,8 @@ export default function ScenarioAllInRate() {
           <li>The arrangement is genuinely better off overall for the employee compared to the award</li>
           <li>For casuals, the 25% loading is embedded in the comparison</li>
         </ul>
-        {/* TODO: dynamic rate */}
         <p style={pStyle}>
-          The public holiday rate is the critical test. At Level 2 casual, that&apos;s $56.88/hr. Any all-in rate that falls below this fails to cover public holiday shifts.
+          The public holiday rate is the critical test. At Level 2 casual, that&apos;s {formatCurrency(l2CasualPH)}/hr. Any all-in rate that falls below this fails to cover public holiday shifts.
         </p>
         <p style={pStyle}>
           If your all-in rate doesn&apos;t clearly exceed the public holiday rate for your level, <a href="/check-my-pay?award=MA000009" style={linkStyle}>See if your all-in rate is compliant &rarr;</a>
@@ -65,9 +69,8 @@ export default function ScenarioAllInRate() {
 
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Rate set above ordinary but below Sunday or public holiday rate</h3>
-          {/* TODO: dynamic rate */}
           <p style={{ ...pStyle, marginBottom: '4px' }}>
-            The most common failure. A rate of $38/hr clears the ordinary casual rate at Level 2 ($31.60) but falls well short of the public holiday rate ($56.88/hr).
+            The most common failure. A rate of $38/hr clears the ordinary casual rate at Level 2 ({formatCurrency(l2Casual)}) but falls well short of the public holiday rate ({formatCurrency(l2CasualPH)}/hr).
           </p>
         </div>
 
@@ -89,7 +92,7 @@ export default function ScenarioAllInRate() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          An all-in rate of $38/hr that doesn&apos;t cover the public holiday rate at Level 2 ({/* TODO: dynamic rate */}$56.88/hr) leaves a gap of {/* TODO: dynamic rate */}$18.88/hr on every public holiday hour worked. Over 6 public holiday shifts per year at 8 hours each: approximately $906 in underpayment &mdash; from public holidays alone, before accounting for any Sunday shortfalls.
+          An all-in rate of $38/hr that doesn&apos;t cover the public holiday rate at Level 2 ({formatCurrency(l2CasualPH)}/hr) leaves a gap of {formatCurrency(l2CasualPH - 38)}/hr on every public holiday hour worked. Over 6 public holiday shifts per year at 8 hours each: approximately $906 in underpayment &mdash; from public holidays alone, before accounting for any Sunday shortfalls.
         </p>
       </section>
 

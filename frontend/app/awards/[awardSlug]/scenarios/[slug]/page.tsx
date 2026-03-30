@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
 import { getScenarioPage, getAllScenarioSlugs } from '@/lib/hospitality-pages';
+import { getRestaurantScenarioPage, getAllRestaurantScenarioSlugs } from '@/lib/restaurant-pages';
+import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import dynamic from 'next/dynamic';
@@ -41,15 +44,51 @@ const scenarioComponents: Record<string, React.ComponentType<any>> = {
   'level-2-shift-breakdown': dynamic(() => import('@/components/seo/scenarios/ScenarioLevel2Breakdown')),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const restaurantScenarioComponents: Record<string, React.ComponentType<any>> = {
+  'sunday-rate-wrong': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioSundayRateWrong')),
+  'wrong-award-cafe': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioWrongAwardCafe')),
+  'trade-qualified-wrong-level': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioTradeQualified')),
+  'split-shift-allowance-missing': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioSplitShift')),
+  'kitchen-overtime-unpaid': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioKitchenOvertime')),
+  'junior-rate-no-penalty': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioJuniorNoPenalty')),
+  'public-holiday-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioPublicHoliday')),
+  'late-night-no-loading': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioLateNight')),
+  'casual-conversion-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioCasualConversion')),
+  'restaurant-flat-rate-legal': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioFlatRate')),
+  'saturday-rate-wrong': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioSaturdayRate')),
+  'classification-never-reviewed': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioClassification')),
+  'no-payslip-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioNoPayslip')),
+  'cash-in-hand-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioCashInHand')),
+  'super-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioSuper')),
+  '21st-birthday-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenario21stBirthday')),
+  'introductory-rate-too-long': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioIntroRate')),
+  'sent-home-early-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioSentHome')),
+  'chef-salary-overtime': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioChefSalary')),
+  'no-overtime-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioNoOvertime')),
+  'christmas-day-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioChristmasDay')),
+  'good-friday-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioGoodFriday')),
+  'tool-allowance-cook': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioToolAllowance')),
+  'meal-allowance-missed': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioMealAllowance')),
+  'pay-doesnt-match-roster': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioPayDoesntMatch')),
+  'annualised-salary-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioAnnualisedSalary')),
+  'below-award-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioBelowAward')),
+  'toil-restaurant': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioToil')),
+  'level3-shift-breakdown': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioLevel3Breakdown')),
+  'underpaid-years': dynamic(() => import('@/components/seo/restaurant-scenarios/RScenarioUnderpaidYears')),
+};
+
 interface Props { params: Promise<{ awardSlug: string; slug: string }>; }
 
 export function generateStaticParams() {
-  return getAllScenarioSlugs().map(slug => ({ awardSlug: 'hospitality-award', slug }));
+  const hospitality = getAllScenarioSlugs().map(slug => ({ awardSlug: 'hospitality-award', slug }));
+  const restaurant = getAllRestaurantScenarioSlugs().map(slug => ({ awardSlug: 'restaurant-award', slug }));
+  return [...hospitality, ...restaurant];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const page = getScenarioPage(slug);
+  const { awardSlug, slug } = await params;
+  const page = awardSlug === 'restaurant-award' ? getRestaurantScenarioPage(slug) : getScenarioPage(slug);
   if (!page) return {};
   return { title: page.metaTitle, description: page.metaDescription };
 }
@@ -57,18 +96,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ScenarioPage({ params }: Props) {
   const { awardSlug, slug } = await params;
   const award = getAwardBySlug(awardSlug);
-  const page = getScenarioPage(slug);
-  if (!award || !page || awardSlug !== 'hospitality-award') notFound();
 
-  const ScenarioContent = scenarioComponents[slug];
+  const isHospitality = awardSlug === 'hospitality-award';
+  const isRestaurant = awardSlug === 'restaurant-award';
+
+  const page = isRestaurant ? getRestaurantScenarioPage(slug) : getScenarioPage(slug);
+  if (!award || !page || (!isHospitality && !isRestaurant)) notFound();
+
+  const ScenarioContent = isRestaurant ? restaurantScenarioComponents[slug] : scenarioComponents[slug];
+  const awardLabel = isRestaurant ? 'Restaurant Award' : 'Hospitality Award';
+  const awardPath = `/awards/${awardSlug}`;
+
+  let rates;
+  try {
+    rates = isRestaurant ? await getRestaurantRates() : await getHospitalityRates();
+  } catch { /* rates stay undefined — components handle gracefully */ }
 
   return (
     <div>
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
         { label: 'Awards', href: '/awards' },
-        { label: 'Hospitality Award', href: '/awards/hospitality-award' },
-        { label: page.title, href: `/awards/hospitality-award/scenarios/${slug}` },
+        { label: awardLabel, href: awardPath },
+        { label: page.title, href: `${awardPath}/scenarios/${slug}` },
       ]} />
 
       <SubPageNav awardSlug={awardSlug} />
@@ -81,7 +131,7 @@ export default async function ScenarioPage({ params }: Props) {
       </h1>
 
       {ScenarioContent ? (
-        <ScenarioContent />
+        <ScenarioContent rates={rates} />
       ) : (
         <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', fontStyle: 'italic' }}>
           This scenario page is being expanded. Check back soon or use the calculator to check your pay now.

@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -16,13 +18,25 @@ const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collap
 const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600, textAlign: 'left', borderBottom: '2px solid var(--border)' };
 const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--secondary-muted)' };
 
-const faqData = [
-  { question: 'My employer says my casual loading covers the Sunday premium — is that right?', answer: 'No — and that claim is wrong. The 25% loading compensates for the absence of leave entitlements. It does not replace Sunday penalty rates, which are a separate and additional entitlement.' },
-  { question: 'I\u0027ve been paid the wrong Sunday rate for years — can I recover it?', answer: 'Yes — up to 6 years under the Fair Work Act. If you work one Sunday per week, the cumulative shortfall can be very significant.' },
-  { question: 'What\u0027s the Sunday rate for a permanent employee by comparison?', answer: 'Lower than the casual Sunday rate. Permanent Level 2 Sunday = $37.92/hr vs casual Level 2 Sunday = $44.24/hr.' },
-];
+export default function ScenarioSundayCasual({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l4 = rates ? getLevel(rates, 4) : undefined;
+  const l5 = rates ? getLevel(rates, 5) : undefined;
 
-export default function ScenarioSundayCasual() {
+  const l2CasualRate = l2?.casualRate ?? 0;
+  const l2SunCasual = l2?.sundayCasual ?? 0;
+  const l2FtRate = l2?.ftRate ?? 0;
+  const l2SunFt = l2?.sundayFt ?? 0;
+  const sunDiff = Math.round((l2SunCasual - l2CasualRate) * 100) / 100;
+
+  const faqData = [
+    { question: 'My employer says my casual loading covers the Sunday premium — is that right?', answer: 'No — and that claim is wrong. The 25% loading compensates for the absence of leave entitlements. It does not replace Sunday penalty rates, which are a separate and additional entitlement.' },
+    { question: 'I\u0027ve been paid the wrong Sunday rate for years — can I recover it?', answer: 'Yes — up to 6 years under the Fair Work Act. If you work one Sunday per week, the cumulative shortfall can be very significant.' },
+    { question: 'What\u0027s the Sunday rate for a permanent employee by comparison?', answer: `Lower than the casual Sunday rate. Permanent Level 2 Sunday = ${formatCurrency(l2SunFt)}/hr vs casual Level 2 Sunday = ${formatCurrency(l2SunCasual)}/hr.` },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -60,16 +74,11 @@ export default function ScenarioSundayCasual() {
               </tr>
             </thead>
             <tbody>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$30.13/hr</td><td style={tdStyle}>$42.18/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$31.60/hr</td><td style={tdStyle}>$44.24/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$32.63/hr</td><td style={tdStyle}>$45.68/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>$34.15/hr</td><td style={tdStyle}>$47.81/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>$35.75/hr</td><td style={tdStyle}>$50.05/hr</td></tr>
+              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>{formatCurrency(l1?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>{formatCurrency(l2CasualRate)}/hr</td><td style={tdStyle}>{formatCurrency(l2SunCasual)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>{formatCurrency(l3?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>{formatCurrency(l4?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l4?.sundayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>{formatCurrency(l5?.casualRate ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l5?.sundayCasual ?? 0)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -83,14 +92,13 @@ export default function ScenarioSundayCasual() {
         <h2 style={h2Style}>The maths</h2>
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Level 2 example</h3>
-          {/* TODO: dynamic rate */}
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '4px' }}>
-            <li>Base rate: $25.28/hr</li>
-            <li>Casual loading (25%): +$6.32/hr = $31.60/hr (ordinary casual rate)</li>
-            <li>Sunday penalty (1.4&times; the casual rate): $44.24/hr</li>
+            <li>Base rate: {formatCurrency(l2FtRate)}/hr</li>
+            <li>Casual loading (25%): +{formatCurrency(l2CasualRate - l2FtRate)}/hr = {formatCurrency(l2CasualRate)}/hr (ordinary casual rate)</li>
+            <li>Sunday penalty (1.4&times; the casual rate): {formatCurrency(l2SunCasual)}/hr</li>
           </ul>
           <p style={smallStyle}>
-            Getting $31.60 on a Sunday means the Sunday penalty hasn&apos;t been applied. That&apos;s ~$12.64/hr missing on every Sunday shift.
+            Getting {formatCurrency(l2CasualRate)} on a Sunday means the Sunday penalty hasn&apos;t been applied. That&apos;s ~{formatCurrency(sunDiff)}/hr missing on every Sunday shift.
           </p>
         </div>
       </section>
@@ -98,7 +106,7 @@ export default function ScenarioSundayCasual() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The gap between the ordinary casual rate and the Sunday casual rate at Level 2 is approximately {/* TODO: dynamic rate */}$12.64/hr. Working one 6-hour Sunday shift per week at the wrong rate: ~$75.84/week. Over 50 working weeks: ~$3,792/year &mdash; from a single shift type being underpaid.
+          The gap between the ordinary casual rate and the Sunday casual rate at Level 2 is approximately {formatCurrency(sunDiff)}/hr. Working one 6-hour Sunday shift per week at the wrong rate: ~{formatCurrency(sunDiff * 6)}/week. Over 50 working weeks: ~{formatCurrency(sunDiff * 6 * 50)}/year &mdash; from a single shift type being underpaid.
         </p>
       </section>
 
@@ -127,7 +135,7 @@ export default function ScenarioSundayCasual() {
       </section>
 
       <p style={{ ...smallStyle, marginTop: '2rem', fontStyle: 'italic' }}>
-        General information only. Verify at fairwork.gov.au.
+        General information only. Verify at <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>fairwork.gov.au</a>.
       </p>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

@@ -5,7 +5,9 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityHubContent from '@/components/seo/awards/HospitalityHubContent';
+import RestaurantHubContent from '@/components/seo/awards/RestaurantHubContent';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props {
   params: Promise<{ awardSlug: string }>;
@@ -25,6 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: 'Hospitality Award Pay Rates 2025\u201326 | Review My Pay',
       description: 'Check current Hospitality Award pay rates, penalty rates, overtime, and allowances. Free tool calculates exactly what you\u2019re owed under MA000009.',
       keywords: ['hospitality award pay rates', 'hospitality award penalty rates', 'hospitality award 2025', 'MA000009', 'hospitality casual pay rates'],
+    };
+  }
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Restaurant Award Pay Rates 2025\u201326 | Review My Pay',
+      description: 'Check Restaurant Award pay rates, penalty rates, and overtime for 2025\u201326. If you work in a restaurant or caf\u00e9, see what you\u2019re actually owed.',
+      keywords: ['restaurant award pay rates', 'restaurant award penalty rates', 'restaurant award 2025', 'MA000119', 'restaurant casual pay rates'],
     };
   }
   return {
@@ -58,7 +67,7 @@ export default async function AwardHubPage({ params }: Props) {
 
       <SubPageNav awardSlug={awardSlug} currentPage="" />
 
-      {/* Hospitality gets full custom content; others get generic template */}
+      {/* Hospitality and Restaurant get full custom content; others get generic template */}
       {awardSlug === 'hospitality-award' ? (
         <>
           <div style={{ paddingBottom: '1.5rem', borderBottom: '1.5px solid var(--border)', marginBottom: '2rem' }}>
@@ -85,6 +94,33 @@ export default async function AwardHubPage({ params }: Props) {
             </h1>
           </div>
           <HospitalityHubContent rates={await getHospitalityRates()} />
+        </>
+      ) : awardSlug === 'restaurant-award' ? (
+        <>
+          <div style={{ paddingBottom: '1.5rem', borderBottom: '1.5px solid var(--border)', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <span style={{
+                fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em',
+                color: '#ffffff', background: 'var(--primary)', padding: '3px 8px', borderRadius: '4px',
+              }}>
+                MA000119
+              </span>
+              <span style={{ fontSize: '12px', color: 'var(--secondary-muted)' }}>
+                Last updated: March 2026 &middot; Rates effective 1 July 2025
+              </span>
+            </div>
+            <h1 style={{
+              fontFamily: 'Fraunces, Georgia, serif',
+              fontSize: '1.75rem',
+              fontWeight: 600,
+              letterSpacing: '-0.03em',
+              color: 'var(--secondary)',
+              lineHeight: 1.2,
+            }}>
+              Restaurant Industry Award Pay Rates 2025&ndash;26
+            </h1>
+          </div>
+          <RestaurantHubContent rates={await getRestaurantRates()} />
         </>
       ) : (
         <>

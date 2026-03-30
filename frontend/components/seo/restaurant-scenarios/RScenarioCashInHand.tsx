@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { RestaurantRateData, getLevel } from '@/lib/restaurant-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,10 @@ const faqData = [
   { question: 'Does my employer have to pay super on cash payments?', answer: 'Yes. Superannuation is required regardless of payment method. Since November 2022, there is no minimum earnings threshold — all employees including casuals are entitled to super at 12% of ordinary time earnings.' },
 ];
 
-export default function RScenarioCashInHand() {
+export default function RScenarioCashInHand({ rates }: { rates?: RestaurantRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l3SundayCasual = l3?.sundayCasual ?? 45.00;
+  const sundayGap = Math.round((l3SundayCasual - 25) * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -63,7 +68,7 @@ export default function RScenarioCashInHand() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Cash-in-hand workers in restaurants frequently miss out on penalty rates, overtime, allowances, and superannuation. A casual Level 3 worker paid $25/hr cash on Sundays is being underpaid by ~$20/hr compared to the correct Sunday casual rate. Missing super at 12% costs thousands over a career. And not having tax withheld creates a personal tax liability you&apos;ll eventually owe.
+          Cash-in-hand workers in restaurants frequently miss out on penalty rates, overtime, allowances, and superannuation. A casual Level 3 worker paid $25/hr cash on Sundays is being underpaid by {formatCurrency(sundayGap)}/hr compared to the correct Sunday casual rate of {formatCurrency(l3SundayCasual)}/hr. Missing super at 12% costs thousands over a career. And not having tax withheld creates a personal tax liability you&apos;ll eventually owe.
         </p>
       </section>
 

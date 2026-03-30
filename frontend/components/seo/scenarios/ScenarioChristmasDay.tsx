@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,19 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'I wasn\'t rostered on Christmas Day but the venue was open — do I still get anything?', answer: 'If you\'re a permanent employee and Christmas Day would have been a normal working day for you, you\'re entitled to a paid day off instead.' },
-  { question: 'I was paid "double time" — is that right?', answer: 'No — the Hospitality Award specifies 2.25\u00d7, not 2\u00d7. Double time is technically underpayment on Christmas Day. The difference is real money on an 8-hour shift.' },
-  { question: 'My employer said it was just a normal Saturday rate — is that correct?', answer: 'No. Even when Christmas Day falls on a Saturday, the public holiday rate (2.25\u00d7) applies — not the Saturday rate (1.25\u00d7).' },
-];
+export default function ScenarioChristmasDay({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l4 = rates ? getLevel(rates, 4) : undefined;
+  const l5 = rates ? getLevel(rates, 5) : undefined;
 
-export default function ScenarioChristmasDay() {
+  const faqData = [
+    { question: 'I wasn\'t rostered on Christmas Day but the venue was open — do I still get anything?', answer: 'If you\'re a permanent employee and Christmas Day would have been a normal working day for you, you\'re entitled to a paid day off instead.' },
+    { question: 'I was paid "double time" — is that right?', answer: 'No — the Hospitality Award specifies 2.25\u00d7, not 2\u00d7. Double time is technically underpayment on Christmas Day. The difference is real money on an 8-hour shift.' },
+    { question: 'My employer said it was just a normal Saturday rate — is that correct?', answer: 'No. Even when Christmas Day falls on a Saturday, the public holiday rate (2.25\u00d7) applies — not the Saturday rate (1.25\u00d7).' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -55,17 +63,17 @@ export default function ScenarioChristmasDay() {
             <strong>Christmas Day rates by level (adult):</strong>
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>Level 1: {/* TODO: dynamic rate */}$54.23/hr</li>
-            <li>Level 2: {/* TODO: dynamic rate */}$56.88/hr</li>
-            <li>Level 3: {/* TODO: dynamic rate */}$58.73/hr</li>
-            <li>Level 4: {/* TODO: dynamic rate */}$61.47/hr</li>
-            <li>Level 5: {/* TODO: dynamic rate */}$64.35/hr</li>
+            <li>Level 1: {formatCurrency(l1?.publicHolidayFt ?? 0)}/hr</li>
+            <li>Level 2: {formatCurrency(l2?.publicHolidayFt ?? 0)}/hr</li>
+            <li>Level 3: {formatCurrency(l3?.publicHolidayFt ?? 0)}/hr</li>
+            <li>Level 4: {formatCurrency(l4?.publicHolidayFt ?? 0)}/hr</li>
+            <li>Level 5: {formatCurrency(l5?.publicHolidayFt ?? 0)}/hr</li>
           </ul>
           <p style={smallStyle}>
-            Rates effective 1 July 2025. Based on the Fair Work Commission pay guide for MA000009.
+            Rates effective {rates?.effectiveDate ?? '1 July 2025'}. Based on the Fair Work Commission pay guide for MA000009.
           </p>
           <p style={{ ...pStyle, marginTop: '12px', marginBottom: '0' }}>
-            <strong>Example:</strong> 8-hour Christmas Day shift, Level 2 casual = 8 &times; {/* TODO: dynamic rate */}$56.88 = {/* TODO: dynamic rate */}$455.04
+            <strong>Example:</strong> 8-hour Christmas Day shift, Level 2 casual = 8 &times; {formatCurrency(l2?.publicHolidayCasual ?? 0)} = {formatCurrency((l2?.publicHolidayCasual ?? 0) * 8)}
           </p>
         </div>
         <p style={pStyle}>
@@ -107,7 +115,7 @@ export default function ScenarioChristmasDay() {
       </section>
 
       <p style={{ ...smallStyle, marginTop: '2rem', fontStyle: 'italic' }}>
-        General information only. Verify at fairwork.gov.au.
+        General information only. Verify at <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>fairwork.gov.au</a>.
       </p>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

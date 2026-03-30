@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,10 @@ const faqData = [
   { question: 'What if my employer disputes the reclassification?', answer: 'You can request a review through the Fair Work Commission. The commission assesses actual duties performed.' },
 ];
 
-export default function ScenarioSupervisorPay() {
+export default function ScenarioSupervisorPay({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l4 = rates ? getLevel(rates, 4) : undefined;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -60,12 +65,12 @@ export default function ScenarioSupervisorPay() {
         <h2 style={h2Style}>What the difference in pay means</h2>
         <div style={exampleBoxStyle}>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li><strong>Level 2 casual:</strong> Ordinary {/* TODO: dynamic rate */}$31.60/hr &middot; Sunday {/* TODO: dynamic rate */}$44.24/hr &middot; Public holiday {/* TODO: dynamic rate */}$56.88/hr</li>
-            <li><strong>Level 3 casual:</strong> Ordinary {/* TODO: dynamic rate */}$32.63/hr &middot; Sunday {/* TODO: dynamic rate */}$45.68/hr &middot; Public holiday {/* TODO: dynamic rate */}$58.73/hr</li>
-            <li><strong>Level 4 casual:</strong> Ordinary {/* TODO: dynamic rate */}$34.15/hr &middot; Sunday {/* TODO: dynamic rate */}$47.81/hr &middot; Public holiday {/* TODO: dynamic rate */}$61.47/hr</li>
+            <li><strong>Level 2 casual:</strong> Ordinary {l2 ? formatCurrency(l2.casualRate) : '$31.60'}/hr &middot; Sunday {l2 ? formatCurrency(l2.sundayCasual) : '$44.24'}/hr &middot; Public holiday {l2 ? formatCurrency(l2.publicHolidayCasual) : '$56.88'}/hr</li>
+            <li><strong>Level 3 casual:</strong> Ordinary {l3 ? formatCurrency(l3.casualRate) : '$32.63'}/hr &middot; Sunday {l3 ? formatCurrency(l3.sundayCasual) : '$45.68'}/hr &middot; Public holiday {l3 ? formatCurrency(l3.publicHolidayCasual) : '$58.73'}/hr</li>
+            <li><strong>Level 4 casual:</strong> Ordinary {l4 ? formatCurrency(l4.casualRate) : '$34.15'}/hr &middot; Sunday {l4 ? formatCurrency(l4.sundayCasual) : '$47.81'}/hr &middot; Public holiday {l4 ? formatCurrency(l4.publicHolidayCasual) : '$61.47'}/hr</li>
           </ul>
           <p style={smallStyle}>
-            Being at Level 2 when Level 3 applies costs ~{/* TODO: dynamic rate */}$1/hr on ordinary shifts &mdash; and more on every penalty day.
+            Being at Level 2 when Level 3 applies costs ~{l2 && l3 ? formatCurrency(l3.casualRate - l2.casualRate) : '$1'}/hr on ordinary shifts &mdash; and more on every penalty day.
           </p>
         </div>
         <p style={pStyle}>
@@ -79,7 +84,7 @@ export default function ScenarioSupervisorPay() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The difference between Level 2 and Level 3 casual rates is approximately {/* TODO: dynamic rate */}$1.03/hr on ordinary hours &mdash; and larger on penalty days. Working 25 hours/week at the wrong level: approximately $25/week. Over a year: ~$1,300 &mdash; not counting the compounding effect on every weekend penalty rate.
+          The difference between Level 2 and Level 3 casual rates is approximately {l2 && l3 ? formatCurrency(l3.casualRate - l2.casualRate) : '$1.03'}/hr on ordinary hours &mdash; and larger on penalty days. Working 25 hours/week at the wrong level: approximately $25/week. Over a year: ~$1,300 &mdash; not counting the compounding effect on every weekend penalty rate.
         </p>
       </section>
 

@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,10 @@ const faqData = [
   { question: 'What penalty does an employer face for not providing payslips?', answer: 'Civil penalties of up to $16,500 per breach for a company, or $3,300 for an individual.' },
 ];
 
-export default function ScenarioNoPayslip() {
+export default function ScenarioNoPayslip({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2Casual = l2?.casualRate ?? 31.60;
+  const yearlyGap = Math.round(l2Casual * 0.5 * 5 * 52 * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -91,7 +96,7 @@ export default function ScenarioNoPayslip() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Without a payslip, you can&apos;t verify any of the following: whether your base rate is correct, whether penalty rates were applied, whether allowances were paid, or whether super was contributed. Workers without payslips are statistically more likely to be underpaid across multiple entitlements simultaneously. The total gap is often $3,000&ndash;$8,000/year when all missed entitlements are calculated together.
+          Without a payslip, you can&apos;t verify any of the following: whether your base rate is correct (e.g. Level 2 casual: {formatCurrency(l2Casual)}/hr), whether penalty rates were applied, whether allowances were paid, or whether super was contributed. Workers without payslips are statistically more likely to be underpaid across multiple entitlements simultaneously. The total gap is often {formatCurrency(3000)}&ndash;{formatCurrency(8000)}/year when all missed entitlements are calculated together.
         </p>
       </section>
 

@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,9 @@ const faqData = [
   { question: 'When do I move from trainee to standard classification?', answer: 'At the end of your formal traineeship or apprenticeship, or after 3 months for introductory-level workers. Adult rates apply from that point.' },
 ];
 
-export default function ScenarioTraineePay() {
+export default function ScenarioTraineePay({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -72,7 +76,7 @@ export default function ScenarioTraineePay() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Being held on an introductory rate beyond the 3-month threshold means being paid below Level 1 for every hour worked. The gap between the introductory rate and Level 1 is {/* TODO: dynamic rate */}$0.67/hr. Working 20 hours/week past that 3-month mark: approximately $13/week. Over 6 months of incorrect rate: ~$340.
+          Being held on an introductory rate beyond the 3-month threshold means being paid below Level 1 for every hour worked. Working 20 hours/week past that 3-month mark at the Level 1 rate of {formatCurrency(l1?.ftRate ?? 0)}/hr, the shortfall adds up. Over 6 months of incorrect rate, the total can reach hundreds of dollars.
         </p>
       </section>
 

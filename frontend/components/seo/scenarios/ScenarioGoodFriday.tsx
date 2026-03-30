@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,15 @@ const faqData = [
   { question: 'I wasn\u0027t asked to work but Good Friday would have been my ordinary working day — am I owed anything?', answer: 'If you\u0027re a permanent employee, yes — you\u0027re entitled to a paid day off on Good Friday if it falls on a day you\u0027d ordinarily work.' },
 ];
 
-export default function ScenarioGoodFriday() {
+export default function ScenarioGoodFriday({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l4 = rates ? getLevel(rates, 4) : undefined;
+  const l5 = rates ? getLevel(rates, 5) : undefined;
+
+  const l2PhCasual = l2?.publicHolidayCasual ?? 0;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -62,16 +72,11 @@ export default function ScenarioGoodFriday() {
               </tr>
             </thead>
             <tbody>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>$54.23/hr</td><td style={tdStyle}>$54.23/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>$56.88/hr</td><td style={tdStyle}>$56.88/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>$58.73/hr</td><td style={tdStyle}>$58.73/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>$61.47/hr</td><td style={tdStyle}>$61.47/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>$64.35/hr</td><td style={tdStyle}>$64.35/hr</td></tr>
+              <tr><td style={tdStyle}>Level 1</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l1?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 2</td><td style={tdStyle}>{formatCurrency(l2?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l2?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 3</td><td style={tdStyle}>{formatCurrency(l3?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l3?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 4</td><td style={tdStyle}>{formatCurrency(l4?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l4?.publicHolidayCasual ?? 0)}/hr</td></tr>
+              <tr><td style={tdStyle}>Level 5</td><td style={tdStyle}>{formatCurrency(l5?.publicHolidayFt ?? 0)}/hr</td><td style={tdStyle}>{formatCurrency(l5?.publicHolidayCasual ?? 0)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -81,9 +86,8 @@ export default function ScenarioGoodFriday() {
       <section style={sectionStyle}>
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Example</h3>
-          {/* TODO: dynamic rate */}
           <p style={{ ...pStyle, marginBottom: '4px' }}>
-            6-hour Good Friday shift, Level 2 casual = 6 &times; $56.88 = $341.28
+            6-hour Good Friday shift, Level 2 casual = 6 &times; {formatCurrency(l2PhCasual)} = {formatCurrency(l2PhCasual * 6)}
           </p>
         </div>
         <p style={pStyle}>
@@ -94,7 +98,7 @@ export default function ScenarioGoodFriday() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The difference between double time (2&times;) and the correct rate (2.25&times;) is 0.25&times; your ordinary rate per hour. At Level 2 permanent over an 8-hour Good Friday shift: approximately $50 underpaid. Multiply across Easter Friday, Easter Monday, Christmas Day, Boxing Day, and Australia Day &mdash; the annual total from this single multiplier error is often $200&ndash;$300.
+          The difference between double time (2&times;) and the correct rate (2.25&times;) is 0.25&times; your ordinary rate per hour. At Level 2 permanent over an 8-hour Good Friday shift: approximately {formatCurrency((l2?.ftRate ?? 0) * 0.25 * 8)} underpaid. Multiply across Easter Friday, Easter Monday, Christmas Day, Boxing Day, and Australia Day &mdash; the annual total from this single multiplier error is often $200&ndash;$300.
         </p>
       </section>
 

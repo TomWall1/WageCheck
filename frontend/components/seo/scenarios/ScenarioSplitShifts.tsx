@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getAllowance } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,15 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'I\'m casual — do I get the split shift allowance?', answer: 'No. The split shift allowance applies to permanent and part-time employees only. Casual employees do not receive it.' },
-  { question: 'My breaks are sometimes shorter than 2 hours — does the allowance still apply?', answer: 'The allowance applies when the unpaid break is 2 hours or longer. Breaks shorter than 2 hours don\'t trigger it.' },
-  { question: 'My employer says the break is a meal break — does that change anything?', answer: 'A meal break during a continuous shift is different from a split shift. The allowance applies when you leave the workplace entirely and return for a separate work period, not when you take a break mid-shift.' },
-];
+export default function ScenarioSplitShifts({ rates }: { rates?: HospitalityRateData }) {
+  const splitShiftAllowance = rates ? getAllowance(rates, 'split_shift') : 0;
 
-export default function ScenarioSplitShifts() {
+  const faqData = [
+    { question: 'I\'m casual — do I get the split shift allowance?', answer: 'No. The split shift allowance applies to permanent and part-time employees only. Casual employees do not receive it.' },
+    { question: 'My breaks are sometimes shorter than 2 hours — does the allowance still apply?', answer: 'The allowance applies when the unpaid break is 2 hours or longer. Breaks shorter than 2 hours don\'t trigger it.' },
+    { question: 'My employer says the break is a meal break — does that change anything?', answer: 'A meal break during a continuous shift is different from a split shift. The allowance applies when you leave the workplace entirely and return for a separate work period, not when you take a break mid-shift.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -41,8 +45,7 @@ export default function ScenarioSplitShifts() {
           Under the Hospitality Award (MA000009), a split shift allowance applies when your working day is broken into two or more separate periods with an unpaid gap:
         </p>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li><strong>Gap of 2&ndash;3 hours:</strong> {/* TODO: dynamic rate */}$3.53/day allowance</li>
-          <li><strong>Gap of more than 3 hours:</strong> {/* TODO: dynamic rate */}$5.34/day allowance</li>
+          <li><strong>Split shift allowance:</strong> {formatCurrency(splitShiftAllowance)}/day</li>
         </ul>
         <p style={pStyle}>
           This allowance applies to permanent and part-time employees only &mdash; casual employees are not entitled to it.
@@ -57,8 +60,8 @@ export default function ScenarioSplitShifts() {
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
             <li>Hourly rate applies for both working periods as normal</li>
-            <li>Split shift allowance: {/* TODO: dynamic rate */}$5.34/day &times; 5 days = {/* TODO: dynamic rate */}$26.70/week</li>
-            <li>Over 50 working weeks: {/* TODO: dynamic rate */}$1,335/year in allowances owed</li>
+            <li>Split shift allowance: {formatCurrency(splitShiftAllowance)}/day &times; 5 days = {formatCurrency(splitShiftAllowance * 5)}/week</li>
+            <li>Over 50 working weeks: {formatCurrency(splitShiftAllowance * 5 * 50)}/year in allowances owed</li>
           </ul>
         </div>
         <p style={pStyle}>
@@ -69,7 +72,7 @@ export default function ScenarioSplitShifts() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The split shift allowance is {/* TODO: dynamic rate */}$5.34/day when the break exceeds 3 hours. Working 5 split shifts per week: ~$26.70/week. Over 50 working weeks: ~$1,335/year &mdash; money that should appear on every payslip and almost never does.
+          The split shift allowance is {formatCurrency(splitShiftAllowance)}/day. Working 5 split shifts per week: ~{formatCurrency(splitShiftAllowance * 5)}/week. Over 50 working weeks: ~{formatCurrency(splitShiftAllowance * 5 * 50)}/year &mdash; money that should appear on every payslip and almost never does.
         </p>
       </section>
 
@@ -77,7 +80,7 @@ export default function ScenarioSplitShifts() {
         <h2 style={h2Style}>What to check on your payslip</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
           <li>Is there a split shift allowance line for each day you worked a broken shift?</li>
-          <li>Does the allowance amount match the gap duration ({/* TODO: dynamic rate */}$3.53 for 2&ndash;3hr gap, {/* TODO: dynamic rate */}$5.34 for 3hr+ gap)?</li>
+          <li>Does the allowance amount match ({formatCurrency(splitShiftAllowance)}/day)?</li>
         </ul>
       </section>
 

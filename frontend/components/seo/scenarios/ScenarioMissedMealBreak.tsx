@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getAllowance } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,8 @@ const faqData = [
   { question: 'What about planned overtime — does the allowance apply?', answer: 'The allowance applies specifically to unplanned overtime where adequate notice wasn\'t given. If the extended hours were pre-rostered, the allowance may not apply — though the obligation to provide a meal break or allowance remains.' },
 ];
 
-export default function ScenarioMissedMealBreak() {
+export default function ScenarioMissedMealBreak({ rates }: { rates?: HospitalityRateData }) {
+  const mealAllowance = rates ? getAllowance(rates, 'meal') : 16.73;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -39,7 +42,7 @@ export default function ScenarioMissedMealBreak() {
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>Under the Hospitality Award (MA000009):</p>
         <p style={pStyle}>
-          <strong>Meal allowance &mdash; when it applies:</strong> Full-time and part-time employees required to work <a href="/awards/hospitality-award/overtime" style={linkStyle}>overtime</a> without being given at least the required prior notice, where a meal time falls during that overtime period, are entitled to a meal allowance of {/* TODO: dynamic rate */}$16.73 per meal.
+          <strong>Meal allowance &mdash; when it applies:</strong> Full-time and part-time employees required to work <a href="/awards/hospitality-award/overtime" style={linkStyle}>overtime</a> without being given at least the required prior notice, where a meal time falls during that overtime period, are entitled to a meal allowance of {formatCurrency(mealAllowance)} per meal.
         </p>
         <p style={pStyle}>This applies when:</p>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
@@ -68,14 +71,14 @@ export default function ScenarioMissedMealBreak() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The meal allowance for unplanned overtime is {/* TODO: dynamic rate */}$16.73 per meal. If this applies twice per week &mdash; common in busy kitchens and high-volume service &mdash; that&apos;s $16.73 &times; 2 = approximately $33.46/week. Over 50 weeks: ~$1,673/year in allowances owed but never paid.
+          The meal allowance for unplanned overtime is {formatCurrency(mealAllowance)} per meal. If this applies twice per week &mdash; common in busy kitchens and high-volume service &mdash; that&apos;s {formatCurrency(mealAllowance)} &times; 2 = approximately {formatCurrency(mealAllowance * 2)}/week. Over 50 weeks: ~{formatCurrency(mealAllowance * 2 * 50)}/year in allowances owed but never paid.
         </p>
       </section>
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>What to check on your payslip</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li>Does a meal allowance ({/* TODO: dynamic rate */}$16.73) appear on any pay period where you worked unplanned overtime through a meal time?</li>
+          <li>Does a meal allowance ({formatCurrency(mealAllowance)}) appear on any pay period where you worked unplanned overtime through a meal time?</li>
           <li>If you&apos;re full-time or part-time and have been asked to stay back unexpectedly, has the allowance been paid?</li>
         </ul>
       </section>

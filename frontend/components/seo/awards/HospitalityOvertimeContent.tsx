@@ -118,8 +118,8 @@ export default function HospitalityOvertimeContent({ rates }: { rates: Hospitali
             </thead>
             <tbody>
               <tr><td style={tdStyle}>Ordinary (up to threshold)</td><td style={tdStyle}>1&times;</td><td style={tdStyle}>{formatCurrency(l2Base)}/hr</td><td style={tdStyle}>{formatCurrency(l3Base)}/hr</td></tr>
-              <tr><td style={tdStyle}>Overtime &mdash; first 2 hours</td><td style={tdStyle}>1.5&times;</td><td style={tdStyle}>{formatCurrency(l2Ot15)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot15)}/hr</td></tr>
-              <tr><td style={tdStyle}>Overtime &mdash; after 2 hours</td><td style={tdStyle}>2&times;</td><td style={tdStyle}>{formatCurrency(l2Ot20)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot20)}/hr</td></tr>
+              <tr><td style={tdStyle}>Overtime &mdash; first 3 hours</td><td style={tdStyle}>1.5&times;</td><td style={tdStyle}>{formatCurrency(l2Ot15)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot15)}/hr</td></tr>
+              <tr><td style={tdStyle}>Overtime &mdash; after 3 hours</td><td style={tdStyle}>2&times;</td><td style={tdStyle}>{formatCurrency(l2Ot20)}/hr</td><td style={tdStyle}>{formatCurrency(l3Ot20)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -208,6 +208,13 @@ export default function HospitalityOvertimeContent({ rates }: { rates: Hospitali
         ))}
       </section>
 
+      {/* Related pages */}
+      <section style={sectionStyle}>
+        <p style={smallStyle}>
+          See also: <a href="/awards/hospitality-award/" style={linkStyle}>Full Hospitality Award guide</a> | <a href="/awards/hospitality-award/penalty-rates" style={linkStyle}>Penalty rates</a> | <a href="/awards/hospitality-award/pay-rates" style={linkStyle}>Pay rate tables</a>
+        </p>
+      </section>
+
       {/* Closing CTA */}
       <section style={sectionStyle}>
         <p style={pStyle}>
@@ -227,7 +234,7 @@ export default function HospitalityOvertimeContent({ rates }: { rates: Hospitali
 
       {/* Disclaimer */}
       <p style={{ ...smallStyle, marginTop: '2rem', fontStyle: 'italic' }}>
-        Rates sourced from the Fair Work Commission pay guide for the Hospitality Industry (General) Award 2020 (MA000009), effective 1 July 2025. General information only &mdash; not legal advice. Verify at fairwork.gov.au.
+        Rates sourced from the Fair Work Commission pay guide for the Hospitality Industry (General) Award 2020 (MA000009), effective 1 July 2025. General information only &mdash; not legal advice. Verify at <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>fairwork.gov.au</a>.
       </p>
 
       {/* FAQPage Schema */}

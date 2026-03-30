@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,12 @@ const faqData = [
   { question: 'Australia Day was a substitute day for me — does the same rate apply?', answer: 'Yes. The substitute public holiday attracts the same 2.25\u00d7 rate as the original public holiday.' },
 ];
 
-export default function ScenarioAustraliaDay() {
+export default function ScenarioAustraliaDay({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2FtRate = l2?.ftRate ?? 25.28;
+  const doubleTime = l2FtRate * 2 * 8;
+  const correctRate = l2FtRate * 2.25 * 8;
+  const shortfall = correctRate - doubleTime;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -45,12 +52,12 @@ export default function ScenarioAustraliaDay() {
         </p>
         <div style={exampleBoxStyle}>
           <p style={{ ...pStyle, marginBottom: '8px' }}>
-            <strong>On an 8-hour shift at Level 2 permanent ({/* TODO: dynamic rate */}$25.28/hr):</strong>
+            <strong>On an 8-hour shift at Level 2 permanent ({formatCurrency(l2FtRate)}/hr):</strong>
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>2&times; = {/* TODO: dynamic rate */}$404.48</li>
-            <li>2.25&times; = {/* TODO: dynamic rate */}$455.04</li>
-            <li><strong>Shortfall: {/* TODO: dynamic rate */}$50.56 for that single shift</strong></li>
+            <li>2&times; = {formatCurrency(doubleTime)}</li>
+            <li>2.25&times; = {formatCurrency(correctRate)}</li>
+            <li><strong>Shortfall: {formatCurrency(shortfall)} for that single shift</strong></li>
           </ul>
         </div>
       </section>

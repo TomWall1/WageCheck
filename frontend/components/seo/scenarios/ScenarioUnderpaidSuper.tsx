@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,11 @@ const faqData = [
   { question: 'My payslip shows super contributions but nothing has appeared in my fund in months — what should I do?', answer: 'Contact the ATO immediately. This is a serious breach — it means your employer is withholding super they\u0027ve deducted from your entitlements.' },
 ];
 
-export default function ScenarioUnderpaidSuper() {
+export default function ScenarioUnderpaidSuper({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const weeklyPay = Math.round((l2?.casualRate ?? 31.60) * 20 * 100) / 100;
+  const weeklySuper = Math.round(weeklyPay * 0.12 * 100) / 100;
+  const yearlySuper = Math.round(weeklySuper * 52 * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -83,7 +89,7 @@ export default function ScenarioUnderpaidSuper() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Super at 12% on $500/week in earnings = $60/week owed. If super hasn&apos;t been paid at all: $60 &times; 52 = ~$3,120/year in retirement savings not accumulating. Over 3 years: ~$9,360 &mdash; plus lost investment returns on that balance. The compounding effect over a working lifetime is substantial.
+          Super at 12% on {formatCurrency(weeklyPay)}/week in earnings = {formatCurrency(weeklySuper)}/week owed. If super hasn&apos;t been paid at all: {formatCurrency(weeklySuper)} &times; 52 = ~{formatCurrency(yearlySuper)}/year in retirement savings not accumulating. Over 3 years: ~{formatCurrency(yearlySuper * 3)} &mdash; plus lost investment returns on that balance. The compounding effect over a working lifetime is substantial.
         </p>
       </section>
 

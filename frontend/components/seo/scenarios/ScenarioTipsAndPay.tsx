@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,9 @@ const faqData = [
   { question: 'I rely on tips to make a reasonable income — is my base rate still correct?', answer: 'Your base rate must meet the award minimum for your classification regardless of tips. If it doesn\u0027t, you\u0027re being underpaid even before the tips question.' },
 ];
 
-export default function ScenarioTipsAndPay() {
+export default function ScenarioTipsAndPay({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -66,7 +70,7 @@ export default function ScenarioTipsAndPay() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          If your base pay is below the award minimum &mdash; for example, $28/hr when the Sunday casual rate at your level is {/* TODO: dynamic rate */}$44.24/hr &mdash; tips don&apos;t fill that gap legally. The shortfall is owed regardless of how much you earned in tips. On a Sunday shift where the pay gap is $15+/hr, a 6-hour shift means $90+ owed per shift on top of any tipping income.
+          If your base pay is below the award minimum &mdash; for example, $28/hr when the Sunday casual rate at your level is {formatCurrency(l2?.sundayCasual ?? 0)}/hr &mdash; tips don&apos;t fill that gap legally. The shortfall is owed regardless of how much you earned in tips. On a Sunday shift where the pay gap is $15+/hr, a 6-hour shift means $90+ owed per shift on top of any tipping income.
         </p>
       </section>
 

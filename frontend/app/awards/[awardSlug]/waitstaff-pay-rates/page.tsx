@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug } from '@/lib/awards';
 import { getHospitalityRates, getLevel, getEveningLoading } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 import { formatCurrency } from '@/lib/utils';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import RestaurantWaitstaffContent from '@/components/seo/restaurant-roles/RestaurantWaitstaffContent';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -47,16 +49,22 @@ const faqData = [
 ];
 
 export function generateStaticParams() {
-  return [{ awardSlug: 'hospitality-award' }];
+  return [{ awardSlug: 'hospitality-award' }, { awardSlug: 'restaurant-award' }];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Waitstaff Pay Rates 2025\u201326 | Restaurant Award',
+      description: 'Pay rates for waitstaff under the Restaurant Award \u2014 Sunday rates, split shift allowance, and the most common underpayments for front-of-house staff.',
+    };
+  }
   return {
-    title: 'Waitstaff Pay Rates Australia 2025\u201326 | Hospitality Award | Review My Pay',
-    description: 'Current pay rates for waitstaff under the Hospitality Award \u2014 casual, weekend, and evening rates. Check if you\u2019re being paid correctly.',
+    title: 'Waitstaff Pay Rates 2025\u201326 | Hospitality Award',
+    description: 'Current pay rates for waitstaff under the Hospitality Award \u2014 casual, weekend, and evening rates. Check if your employer is paying you correctly here.',
   };
 }
 
@@ -64,6 +72,23 @@ export default async function WaitstaffPayRatesPage({ params }: Props) {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
+
+  if (awardSlug === 'restaurant-award') {
+    const restaurantRates = await getRestaurantRates();
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: 'Restaurant Award', href: '/awards/restaurant-award' },
+          { label: 'Waitstaff Pay Rates', href: '/awards/restaurant-award/waitstaff-pay-rates' },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} />
+        <h1 style={h1Style}>Waitstaff Pay Rates 2025&ndash;26 &mdash; Restaurant Award</h1>
+        <RestaurantWaitstaffContent rates={restaurantRates} />
+      </div>
+    );
+  }
 
   const rates = await getHospitalityRates();
   const l2 = getLevel(rates, 2);

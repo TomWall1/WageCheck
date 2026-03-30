@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
   return {
-    title: 'Kitchen Hand Pay Rates Australia 2025\u201326 | Hospitality Award | Review My Pay',
+    title: 'Kitchen Hand Pay Rates 2025\u201326 | Hospitality Award',
     description: 'Minimum pay rates for kitchen hands under the Hospitality Award \u2014 weekends, public holidays, and the most common underpayments in the role.',
   };
 }
@@ -94,6 +94,9 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
         </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           If you work as a kitchen hand, kitchen assistant, or dishwasher in any hospitality venue &mdash; this applies to you.
+        </p>
+        <p style={pStyle}>
+          For the full Hospitality Award overview, see the <a href="/awards/hospitality-award/" style={linkStyle}>Hospitality Award pay guide</a>.
         </p>
       </section>
 
@@ -216,7 +219,7 @@ export default async function KitchenHandPayRatesPage({ params }: Props) {
 
       {/* Disclaimer */}
       <p style={{ ...smallStyle, marginTop: '2rem', fontStyle: 'italic' }}>
-        Rates sourced from the Fair Work Commission pay guide for MA000009, effective 1 July 2025. General information only &mdash; not legal advice. Verify at fairwork.gov.au.
+        Rates sourced from the Fair Work Commission pay guide for MA000009, effective 1 July 2025. General information only &mdash; not legal advice. Verify at <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>fairwork.gov.au</a>.
       </p>
 
       {/* FAQPage Schema */}

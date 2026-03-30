@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,10 @@ const faqData = [
   { question: 'My roster is shared digitally — can the employer change it after the fact?', answer: 'Yes, which is why keeping contemporary records (screenshots taken at the time) is important. If the roster is changed retroactively to match a lower payslip, that\u0027s a more serious issue.' },
 ];
 
-export default function ScenarioPayDoesntMatch() {
+export default function ScenarioPayDoesntMatch({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l2Casual = l2?.casualRate ?? 31.60;
+  const weeklyShortfall = Math.round(l2Casual * 0.5 * 5 * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -73,7 +78,7 @@ export default function ScenarioPayDoesntMatch() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Even a small recurring discrepancy adds up fast. A 30-minute per shift undercount across 5 shifts per week at Level 2 casual rates: approximately $20&ndash;$25/week. Over a year: $1,000&ndash;$1,300 &mdash; from what looks like a minor rounding issue on each individual payslip.
+          Even a small recurring discrepancy adds up fast. A 30-minute per shift undercount across 5 shifts per week at Level 2 casual rates: approximately {formatCurrency(weeklyShortfall)}/week. Over a year: ~{formatCurrency(weeklyShortfall * 52)} &mdash; from what looks like a minor rounding issue on each individual payslip.
         </p>
       </section>
 

@@ -264,7 +264,7 @@ export default function HospitalityPenaltyContent({ rates }: { rates: Hospitalit
 
       {/* Disclaimer */}
       <p style={{ ...smallStyle, marginTop: '2rem', fontStyle: 'italic' }}>
-        Rates sourced from the Fair Work Commission pay guide for the Hospitality Industry (General) Award 2020 (MA000009), effective 1 July 2025. General information only — not legal advice. Verify at fairwork.gov.au.
+        Rates sourced from the Fair Work Commission pay guide for the Hospitality Industry (General) Award 2020 (MA000009), effective 1 July 2025. General information only — not legal advice. Verify at <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>fairwork.gov.au</a>.
       </p>
 
       {/* FAQPage Schema */}

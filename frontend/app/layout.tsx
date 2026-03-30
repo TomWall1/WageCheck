@@ -3,10 +3,19 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://reviewmypay.com'),
   title: 'Review My Pay — Know Your Workplace Rights',
   description:
     'Find out what you should be paid under your Fair Work modern award. Free, plain-English, and built for workers — not lawyers.',
   keywords: ['wage theft', 'hospitality award', 'retail award', 'fitness award', 'fair work', 'underpaid', 'Australia', 'award wages'],
+  openGraph: {
+    type: 'website',
+    locale: 'en_AU',
+    siteName: 'Review My Pay',
+  },
+  twitter: {
+    card: 'summary',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

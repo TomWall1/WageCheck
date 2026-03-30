@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,9 @@ const faqData = [
   { question: 'What if I\'ve been paid cash and underpaid for years?', answer: 'You can still recover back pay going back 6 years. Bank statements can help reconstruct payment history even without payslips.' },
 ];
 
-export default function ScenarioCashInHand() {
+export default function ScenarioCashInHand({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -87,7 +91,7 @@ export default function ScenarioCashInHand() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A cash rate of $25/hr on a Sunday &mdash; when the Sunday casual rate at Level 2 is {/* TODO: dynamic rate */}$44.24/hr &mdash; is a shortfall of over $19/hr. On a 6-hour Sunday shift, that&apos;s over $115 in one shift. If you&apos;ve been paid a flat cash rate across weekends for a year: potentially $5,000+ in underpayment.
+          A cash rate of $25/hr on a Sunday &mdash; when the Sunday casual rate at Level 2 is {formatCurrency(l2?.sundayCasual ?? 0)}/hr &mdash; is a shortfall of over {formatCurrency((l2?.sundayCasual ?? 0) - 25)}/hr. On a 6-hour Sunday shift, that&apos;s over $115 in one shift. If you&apos;ve been paid a flat cash rate across weekends for a year: potentially $5,000+ in underpayment.
         </p>
       </section>
 

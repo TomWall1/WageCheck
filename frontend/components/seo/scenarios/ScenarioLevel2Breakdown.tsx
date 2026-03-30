@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -16,13 +18,30 @@ const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collap
 const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600, textAlign: 'left', borderBottom: '2px solid var(--border)' };
 const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--secondary-muted)' };
 
-const faqData = [
-  { question: 'How do I know if I\u0027m Level 2 or should be Level 3?', answer: 'Level 2 is for workers who work independently in their area after being shown what to do. If you\u0027re also training others, handling complaints, or running sections — Level 3 likely applies.' },
-  { question: 'My rate is $34/hr — is that right for Level 2?', answer: '$34/hr is above the Level 2 ordinary casual rate ($31.60). But check whether $34 covers your Sunday and public holiday scenarios — Sunday casual at Level 2 is $44.24/hr, and $34 falls short.' },
-  { question: 'What if I moved from Level 2 to Level 3 duties midway through my employment?', answer: 'Your pay should have been updated when your duties changed. If it wasn\u0027t, the shortfall from the date of the change is recoverable.' },
-];
+export default function ScenarioLevel2Breakdown({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const eveningLoading = rates ? getEveningLoading(rates) : 0;
+  const nightLoading = rates ? getNightLoading(rates) : 0;
 
-export default function ScenarioLevel2Breakdown() {
+  const ftRate = l2?.ftRate ?? 0;
+  const casualRate = l2?.casualRate ?? 0;
+  const satFt = l2?.saturdayFt ?? 0;
+  const satCasual = l2?.saturdayCasual ?? 0;
+  const sunFt = l2?.sundayFt ?? 0;
+  const sunCasual = l2?.sundayCasual ?? 0;
+  const phFt = l2?.publicHolidayFt ?? 0;
+  const phCasual = l2?.publicHolidayCasual ?? 0;
+
+  const satDiff = Math.round((satCasual - casualRate) * 100) / 100;
+  const sunDiff = Math.round((sunCasual - casualRate) * 100) / 100;
+  const phDiff = Math.round((phCasual - casualRate) * 100) / 100;
+
+  const faqData = [
+    { question: 'How do I know if I\u0027m Level 2 or should be Level 3?', answer: 'Level 2 is for workers who work independently in their area after being shown what to do. If you\u0027re also training others, handling complaints, or running sections — Level 3 likely applies.' },
+    { question: `My rate is $34/hr — is that right for Level 2?`, answer: `$34/hr is above the Level 2 ordinary casual rate (${formatCurrency(casualRate)}). But check whether $34 covers your Sunday and public holiday scenarios — Sunday casual at Level 2 is ${formatCurrency(sunCasual)}/hr, and $34 falls short.` },
+    { question: 'What if I moved from Level 2 to Level 3 duties midway through my employment?', answer: 'Your pay should have been updated when your duties changed. If it wasn\u0027t, the shortfall from the date of the change is recoverable.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -49,18 +68,12 @@ export default function ScenarioLevel2Breakdown() {
               </tr>
             </thead>
             <tbody>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>$25.28/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>$27.75/hr (+$2.47)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>$30.10/hr (+$4.82)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$31.60/hr (1.25&times;)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$37.92/hr (1.5&times;)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$56.88/hr (2.25&times;)</td></tr>
+              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>{formatCurrency(ftRate)}/hr</td></tr>
+              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>{formatCurrency(ftRate + eveningLoading)}/hr (+{formatCurrency(eveningLoading)})</td></tr>
+              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>{formatCurrency(ftRate + nightLoading)}/hr (+{formatCurrency(nightLoading)})</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{formatCurrency(satFt)}/hr (1.25&times;)</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{formatCurrency(sunFt)}/hr (1.5&times;)</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{formatCurrency(phFt)}/hr (2.25&times;)</td></tr>
             </tbody>
           </table>
         </div>
@@ -77,18 +90,12 @@ export default function ScenarioLevel2Breakdown() {
               </tr>
             </thead>
             <tbody>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>$31.60/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>~$34.07/hr (+$2.47)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>~$36.42/hr (+$4.82)</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>$37.92/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>$44.24/hr</td></tr>
-              {/* TODO: dynamic rate */}
-              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>$56.88/hr</td></tr>
+              <tr><td style={tdStyle}>Ordinary weekday</td><td style={tdStyle}>{formatCurrency(casualRate)}/hr</td></tr>
+              <tr><td style={tdStyle}>Evening (7pm&ndash;midnight)</td><td style={tdStyle}>~{formatCurrency(casualRate + eveningLoading)}/hr (+{formatCurrency(eveningLoading)})</td></tr>
+              <tr><td style={tdStyle}>Late night (midnight&ndash;7am)</td><td style={tdStyle}>~{formatCurrency(casualRate + nightLoading)}/hr (+{formatCurrency(nightLoading)})</td></tr>
+              <tr><td style={tdStyle}>Saturday</td><td style={tdStyle}>{formatCurrency(satCasual)}/hr</td></tr>
+              <tr><td style={tdStyle}>Sunday</td><td style={tdStyle}>{formatCurrency(sunCasual)}/hr</td></tr>
+              <tr><td style={tdStyle}>Public holiday</td><td style={tdStyle}>{formatCurrency(phCasual)}/hr</td></tr>
             </tbody>
           </table>
         </div>
@@ -103,9 +110,8 @@ export default function ScenarioLevel2Breakdown() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>Which is the most commonly underpaid?</h2>
         <div style={exampleBoxStyle}>
-          {/* TODO: dynamic rate */}
           <p style={{ ...pStyle, marginBottom: '4px' }}>
-            Sunday is the most frequently underpaid shift type for Level 2 workers. The gap between ordinary casual ($31.60/hr) and Sunday casual ($44.24/hr) is over $12/hr. Working one Sunday per week at the wrong rate costs approximately $2,600/year.
+            Sunday is the most frequently underpaid shift type for Level 2 workers. The gap between ordinary casual ({formatCurrency(casualRate)}/hr) and Sunday casual ({formatCurrency(sunCasual)}/hr) is over {formatCurrency(sunDiff)}/hr. Working one Sunday per week at the wrong rate costs approximately {formatCurrency(sunDiff * 5 * 52)}/year.
           </p>
         </div>
         <p style={pStyle}>
@@ -116,7 +122,7 @@ export default function ScenarioLevel2Breakdown() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A Level 2 casual worker paid the ordinary weekday rate for every shift misses: approximately {/* TODO: dynamic rate */}$6.32/hr on Saturdays, {/* TODO: dynamic rate */}$12.64/hr on Sundays, and {/* TODO: dynamic rate */}$25.28/hr on public holidays. Working one Sunday and one Saturday per week: ~$113.76/week. Over a year: ~$5,688 &mdash; from two shifts per week being underpaid.
+          A Level 2 casual worker paid the ordinary weekday rate for every shift misses: approximately {formatCurrency(satDiff)}/hr on Saturdays, {formatCurrency(sunDiff)}/hr on Sundays, and {formatCurrency(phDiff)}/hr on public holidays. Working one Sunday and one Saturday per week: ~{formatCurrency((satDiff + sunDiff) * 6)}/week. Over a year: ~{formatCurrency((satDiff + sunDiff) * 6 * 52)} &mdash; from two shifts per week being underpaid.
         </p>
       </section>
 

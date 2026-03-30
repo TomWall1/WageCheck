@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -22,7 +24,11 @@ const faqData = [
   { question: 'I\u0027m 17 and working as a bartender — do adult rates apply because I\u0027m in liquor service?', answer: 'Yes. Employees in liquor service receive adult rates regardless of age under the Hospitality Award.' },
 ];
 
-export default function ScenarioStudentPay() {
+export default function ScenarioStudentPay({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l1SundayCasual = l1?.sundayCasual ?? 42.18;
+  const juniorSunday = Math.round(l1SundayCasual * 0.70 * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -74,10 +80,9 @@ export default function ScenarioStudentPay() {
         </p>
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Example: 18-year-old casual Level 1 working Sunday</h3>
-          {/* TODO: dynamic rate */}
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '4px' }}>
-            <li>Adult casual Sunday rate: $42.18/hr</li>
-            <li>Junior rate (70%): $42.18 &times; 0.70 = $29.53/hr</li>
+            <li>Adult casual Sunday rate: {formatCurrency(l1SundayCasual)}/hr</li>
+            <li>Junior rate (70%): {formatCurrency(l1SundayCasual)} &times; 0.70 = {formatCurrency(juniorSunday)}/hr</li>
           </ul>
           <p style={smallStyle}>
             If your Sunday rate looks identical to your Tuesday rate as a junior employee, the penalty multiplier isn&apos;t being applied.
@@ -91,7 +96,7 @@ export default function ScenarioStudentPay() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A worker who turned 21 six months ago and hasn&apos;t had their rate updated is being paid at 90% of the adult rate instead of 100%. At Level 2 base, that gap is approximately {/* TODO: dynamic rate */}$2.59/hr. Working 20hrs/week for 6 months: approximately $1,347 in underpayment since the 21st birthday.
+          A worker who turned 21 six months ago and hasn&apos;t had their rate updated is being paid at 90% of the adult rate instead of 100%. At Level 2 base, that gap is approximately {formatCurrency((l2?.casualRate ?? 25.92) * 0.10)}/hr. Working 20hrs/week for 6 months: approximately $1,347 in underpayment since the 21st birthday.
         </p>
       </section>
 

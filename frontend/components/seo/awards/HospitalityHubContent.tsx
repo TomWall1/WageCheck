@@ -158,6 +158,73 @@ export default function HospitalityHubContent({ rates }: { rates: HospitalityRat
       {/* CTA mid-page */}
       <CheckPayCTA awardCode="MA000009" awardName="Hospitality Award" />
 
+      {/* Pay rates by role */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Pay rates by role</h2>
+        <p style={pStyle}>See pay rates specific to your job:</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem' }}>
+          {[
+            { href: '/awards/hospitality-award/waitstaff-pay-rates', label: 'Waitstaff pay rates' },
+            { href: '/awards/hospitality-award/cook-pay-rates', label: 'Cook pay rates' },
+            { href: '/awards/hospitality-award/kitchen-hand-pay-rates', label: 'Kitchen hand pay rates' },
+            { href: '/awards/hospitality-award/bartender-pay-rates', label: 'Bartender pay rates' },
+            { href: '/awards/hospitality-award/hotel-worker-pay-rates', label: 'Hotel worker pay rates' },
+            { href: '/awards/hospitality-award/function-centre-pay-rates', label: 'Function centre pay rates' },
+          ].map((link, i) => (
+            <a key={i} href={link.href} style={{
+              display: 'block', padding: '12px 16px', border: '1.5px solid var(--border)',
+              borderRadius: '8px', textDecoration: 'none', fontSize: '14px', fontWeight: 500,
+              color: 'var(--secondary)',
+            }}>
+              {link.label} &rarr;
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* Intent page links */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Think something&apos;s wrong with your pay?</h2>
+        <p style={pStyle}>Start with the issue that sounds most like your situation:</p>
+        <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
+          <li><a href="/awards/hospitality-award/am-i-being-underpaid" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Am I being underpaid?</a> &mdash; the signs and what to do</li>
+          <li><a href="/awards/hospitality-award/not-getting-overtime" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Not getting overtime?</a> &mdash; the 38-hour weekly trigger</li>
+          <li><a href="/awards/hospitality-award/hourly-rate-check" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Hourly rate check</a> &mdash; compare your rate to the award minimum</li>
+          <li><a href="/awards/hospitality-award/no-penalty-rates-paid" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>No penalty rates paid?</a> &mdash; weekends and public holidays</li>
+          <li><a href="/awards/hospitality-award/unpaid-trial-shifts" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Unpaid trial shifts</a> &mdash; when trials must be paid</li>
+          <li><a href="/awards/hospitality-award/casual-conversion-refused" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Casual conversion refused?</a> &mdash; your rights after 12 months</li>
+          <li><a href="/awards/hospitality-award/pay-too-low" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Pay feels too low?</a> &mdash; diagnostic checklist</li>
+          <li><a href="/awards/hospitality-award/flat-rate-hospitality" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Flat rate &mdash; is it legal?</a> &mdash; the pass/fail test</li>
+        </ul>
+      </section>
+
+      {/* Common scenarios */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Common scenarios</h2>
+        <p style={pStyle}>Answers to specific situations hospitality workers ask about:</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.5rem' }}>
+          {[
+            { href: '/awards/hospitality-award/scenarios/6-days-week-pay', label: 'Working 6 days a week — what am I owed?' },
+            { href: '/awards/hospitality-award/scenarios/casual-late-nights', label: 'Casual late night shifts — no loading paid' },
+            { href: '/awards/hospitality-award/scenarios/split-shifts-pay', label: 'Split shifts — am I owed an allowance?' },
+            { href: '/awards/hospitality-award/scenarios/christmas-day-pay', label: 'Worked Christmas Day — correct rate?' },
+            { href: '/awards/hospitality-award/scenarios/sent-home-early', label: 'Sent home early — minimum hours owed' },
+            { href: '/awards/hospitality-award/scenarios/double-shift', label: 'Double shift — overtime after 10 hours?' },
+            { href: '/awards/hospitality-award/scenarios/50-hour-week', label: '50-hour week — where is my overtime?' },
+            { href: '/awards/hospitality-award/scenarios/sunday-casual-rate', label: 'Sunday casual rate looks wrong' },
+            { href: '/awards/hospitality-award/scenarios/good-friday-pay', label: 'Worked Good Friday — correct rate?' },
+            { href: '/awards/hospitality-award/scenarios/below-award-pay', label: 'Paid below award — what can I do?' },
+          ].map((link, i) => (
+            <a key={i} href={link.href} style={{
+              display: 'block', padding: '10px 14px', fontSize: '13.5px',
+              color: 'var(--secondary)', textDecoration: 'underline', textDecorationColor: 'var(--border)',
+            }}>
+              {link.label} &rarr;
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* Pay rates table */}
       <section style={{ ...sectionStyle, marginTop: '2.5rem' }}>
         <h2 style={h2Style}>Hospitality Casual Pay Rates 2025 — Classification Levels</h2>
@@ -237,6 +304,8 @@ export default function HospitalityHubContent({ rates }: { rates: HospitalityRat
               { '@type': 'Question', name: 'Can my employer pay me a flat rate instead of award rates?', acceptedAnswer: { '@type': 'Answer', text: 'Only if that flat rate is demonstrably higher than every scenario under the award across all shifts worked — including penalty rates and allowances. A flat rate that averages lower is not legal.' } },
               { '@type': 'Question', name: 'Do casual employees get penalty rates?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Casual employees are entitled to penalty rates under the Hospitality Award. The casual loading and penalty rates are completely separate entitlements that both apply.' } },
               { '@type': 'Question', name: 'Does the Hospitality Award cover trial shifts?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Unpaid trial shifts are almost never legal. Any trial shift longer than a reasonable period must be paid.' } },
+              { '@type': 'Question', name: 'Am I owed a split shift allowance?', acceptedAnswer: { '@type': 'Answer', text: 'In most cases, yes — and this is one of the most commonly missed entitlements in hospitality. If your working day is broken into two or more separate periods with an unpaid gap, the split shift allowance applies on top of your hourly rate. Most workers in this situation don\'t know they\'re entitled to it.' } },
+              { '@type': 'Question', name: 'What if I think I\'ve been underpaid?', acceptedAnswer: { '@type': 'Answer', text: 'Check your pay using the tool below. If it shows a shortfall, raise it with your employer first. If that doesn\'t resolve it, contact the Fair Work Ombudsman on 13 13 94 — they have the power to recover unpaid wages on your behalf and have recovered hundreds of millions of dollars doing exactly that.' } },
             ],
           }),
         }}

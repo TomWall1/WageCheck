@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,17 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'Does the minimum apply if I leave early voluntarily?', answer: 'If you chose to leave early of your own accord, the minimum engagement may not apply. But if you were sent home — even politely — the minimum still applies.' },
-  { question: 'I\'m a permanent employee — does a minimum engagement apply to me?', answer: 'Permanent employees have agreed rostered hours. Being sent home early as a permanent employee is more complex and relates to your agreed hours rather than a casual minimum.' },
-  { question: 'My employer says it\'s slow so they can\'t afford to pay the minimum — is that a valid reason?', answer: 'No. The minimum engagement applies regardless of business conditions.' },
-];
+export default function ScenarioSentHomeEarly({ rates }: { rates?: HospitalityRateData }) {
+  const l1 = rates ? getLevel(rates, 1) : undefined;
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const l3 = rates ? getLevel(rates, 3) : undefined;
 
-export default function ScenarioSentHomeEarly() {
+  const faqData = [
+    { question: 'Does the minimum apply if I leave early voluntarily?', answer: 'If you chose to leave early of your own accord, the minimum engagement may not apply. But if you were sent home — even politely — the minimum still applies.' },
+    { question: 'I\'m a permanent employee — does a minimum engagement apply to me?', answer: 'Permanent employees have agreed rostered hours. Being sent home early as a permanent employee is more complex and relates to your agreed hours rather than a casual minimum.' },
+    { question: 'My employer says it\'s slow so they can\'t afford to pay the minimum — is that a valid reason?', answer: 'No. The minimum engagement applies regardless of business conditions.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -58,12 +64,12 @@ export default function ScenarioSentHomeEarly() {
         <div style={exampleBoxStyle}>
           <p style={{ ...pStyle, marginBottom: '8px' }}><strong>Minimum 3-hour pay (Level 1&ndash;3 casual):</strong></p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>Weekday: {/* TODO: dynamic rate */}$30.13 / {/* TODO: dynamic rate */}$31.60 / {/* TODO: dynamic rate */}$32.63 per hour</li>
-            <li>Saturday: {/* TODO: dynamic rate */}$36.15 / {/* TODO: dynamic rate */}$37.92 / {/* TODO: dynamic rate */}$39.15 per hour</li>
-            <li>Sunday: {/* TODO: dynamic rate */}$42.18 / {/* TODO: dynamic rate */}$44.24 / {/* TODO: dynamic rate */}$45.68 per hour</li>
+            <li>Weekday: {formatCurrency(l1?.casualRate ?? 0)} / {formatCurrency(l2?.casualRate ?? 0)} / {formatCurrency(l3?.casualRate ?? 0)} per hour</li>
+            <li>Saturday: {formatCurrency(l1?.saturdayCasual ?? 0)} / {formatCurrency(l2?.saturdayCasual ?? 0)} / {formatCurrency(l3?.saturdayCasual ?? 0)} per hour</li>
+            <li>Sunday: {formatCurrency(l1?.sundayCasual ?? 0)} / {formatCurrency(l2?.sundayCasual ?? 0)} / {formatCurrency(l3?.sundayCasual ?? 0)} per hour</li>
           </ul>
           <p style={smallStyle}>
-            Minimum 3 hours = 3 &times; the applicable rate. Rates effective 1 July 2025. Based on the Fair Work Commission pay guide for MA000009.
+            Minimum 3 hours = 3 &times; the applicable rate. Rates effective {rates?.effectiveDate ?? '1 July 2025'}. Based on the Fair Work Commission pay guide for MA000009.
           </p>
         </div>
         <p style={pStyle}>

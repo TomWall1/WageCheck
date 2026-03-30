@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,9 @@ const faqData = [
   { question: 'What if the meeting was only 10 minutes?', answer: 'For casual employees, the minimum engagement of 3 hours applies to any engagement. A 10-minute mandatory meeting on a day you\u0027re called in for that purpose means 3 hours\u0027 pay.' },
 ];
 
-export default function ScenarioUnpaidMeeting() {
+export default function ScenarioUnpaidMeeting({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -84,7 +88,7 @@ export default function ScenarioUnpaidMeeting() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A 45-minute pre-shift briefing 5 days per week, unpaid, at Level 2 casual: approximately 3.75 hours/week &times; {/* TODO: dynamic rate */}$31.60/hr = ~$118/week in uncompensated working time. Over a year: ~$6,150. For a Sunday meeting, the Sunday casual rate applies &mdash; making the hourly gap larger.
+          A 45-minute pre-shift briefing 5 days per week, unpaid, at Level 2 casual: approximately 3.75 hours/week &times; {formatCurrency(l2?.casualRate ?? 0)}/hr = ~{formatCurrency((l2?.casualRate ?? 0) * 3.75)}/week in uncompensated working time. Over a year: ~{formatCurrency((l2?.casualRate ?? 0) * 3.75 * 50)}. For a Sunday meeting, the Sunday casual rate applies &mdash; making the hourly gap larger.
         </p>
       </section>
 

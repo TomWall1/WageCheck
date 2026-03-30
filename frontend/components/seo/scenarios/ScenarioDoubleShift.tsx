@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,17 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'I\'m casual — do I get overtime on a double shift?', answer: 'Yes — the daily overtime threshold applies to casual employees. Hours beyond 10 in a single day attract overtime rates.' },
-  { question: 'My employer says it\'s just "a long shift" not a double shift — does the label matter?', answer: 'No. The overtime threshold applies based on hours worked, not on how the shift is labelled.' },
-  { question: 'Am I also entitled to a meal break on a double shift?', answer: 'Yes. The Hospitality Award requires meal breaks on extended shifts. If your employer provides the meal, no cash allowance applies. If not, a meal allowance applies.' },
-];
+export default function ScenarioDoubleShift({ rates }: { rates?: HospitalityRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const eveningLoading = rates ? getEveningLoading(rates) : 0;
+  const nightLoading = rates ? getNightLoading(rates) : 0;
 
-export default function ScenarioDoubleShift() {
+  const faqData = [
+    { question: 'I\'m casual — do I get overtime on a double shift?', answer: 'Yes — the daily overtime threshold applies to casual employees. Hours beyond 10 in a single day attract overtime rates.' },
+    { question: 'My employer says it\'s just "a long shift" not a double shift — does the label matter?', answer: 'No. The overtime threshold applies based on hours worked, not on how the shift is labelled.' },
+    { question: 'Am I also entitled to a meal break on a double shift?', answer: 'Yes. The Hospitality Award requires meal breaks on extended shifts. If your employer provides the meal, no cash allowance applies. If not, a meal allowance applies.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -42,8 +48,8 @@ export default function ScenarioDoubleShift() {
           <li><strong>Daily overtime triggers after 10 hours</strong> in a single day</li>
           <li>First 2 hours of overtime: 1.5&times; your ordinary rate</li>
           <li>After 2 hours of overtime: 2&times; your ordinary rate</li>
-          <li>Evening loading (7pm&ndash;midnight): {/* TODO: dynamic rate */}+$2.47/hr on top of the applicable rate</li>
-          <li>Late-night loading (midnight&ndash;7am): {/* TODO: dynamic rate */}+$4.82/hr on top</li>
+          <li>Evening loading (7pm&ndash;midnight): +{formatCurrency(eveningLoading)}/hr on top of the applicable rate</li>
+          <li>Late-night loading (midnight&ndash;7am): +{formatCurrency(nightLoading)}/hr on top</li>
         </ul>
         <p style={pStyle}>
           All of these stack. A double shift that runs from noon to 2am involves ordinary hours, overtime hours, evening loadings, and late-night loadings &mdash; all calculated separately.
@@ -58,11 +64,11 @@ export default function ScenarioDoubleShift() {
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
             <li>Hours 1&ndash;10 (noon&ndash;10pm): ordinary rate + evening loading after 7pm</li>
-            <li>Hours 11&ndash;12 (10pm&ndash;midnight): overtime time-and-a-half ({/* TODO: dynamic rate */}$39.15/hr) + evening loading</li>
-            <li>Hours 13&ndash;14 (midnight&ndash;2am): overtime double time ({/* TODO: dynamic rate */}$52.20/hr) + late-night loading</li>
+            <li>Hours 11&ndash;12 (10pm&ndash;midnight): overtime time-and-a-half ({formatCurrency((l3?.ftRate ?? 0) * 1.5)}/hr) + evening loading</li>
+            <li>Hours 13&ndash;14 (midnight&ndash;2am): overtime double time ({formatCurrency((l3?.ftRate ?? 0) * 2)}/hr) + late-night loading</li>
           </ul>
           <p style={smallStyle}>
-            Total should be significantly higher than 14 &times; {/* TODO: dynamic rate */}$26.10/hr.
+            Total should be significantly higher than 14 &times; {formatCurrency(l3?.ftRate ?? 0)}/hr.
           </p>
         </div>
         <p style={pStyle}>

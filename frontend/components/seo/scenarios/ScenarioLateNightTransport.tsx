@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -19,7 +21,9 @@ const faqData = [
   { question: 'I have to pay for my own transport home — can I claim it?', answer: 'Under the standard Hospitality Award, there\'s no automatic reimbursement for transport home. However, if you were required to work late due to your employer\'s direction and public transport is unavailable, some arrangements may apply. Check your enterprise agreement or raise it with the Fair Work Ombudsman.' },
 ];
 
-export default function ScenarioLateNightTransport() {
+export default function ScenarioLateNightTransport({ rates }: { rates?: HospitalityRateData }) {
+  const eveningLoad = rates ? getEveningLoading(rates) : 2.47;
+  const nightLoad = rates ? getNightLoading(rates) : 4.82;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -38,7 +42,7 @@ export default function ScenarioLateNightTransport() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>
-          Under the Hospitality Award (MA000009), the primary financial compensation for late-night work is the late-night loading &mdash; an additional {/* TODO: dynamic rate */}$4.82/hr applied to all hours worked between midnight and 7am on top of any other applicable rate.
+          Under the Hospitality Award (MA000009), the primary financial compensation for late-night work is the late-night loading &mdash; an additional {formatCurrency(nightLoad)}/hr applied to all hours worked between midnight and 7am on top of any other applicable rate.
         </p>
         <p style={pStyle}>
           On the question of transport specifically: the award does not contain a blanket transport entitlement for all late-night workers. However, some enterprise agreements or venue-specific arrangements do include transport provisions &mdash; check your employment contract or any applicable enterprise agreement.
@@ -52,8 +56,8 @@ export default function ScenarioLateNightTransport() {
         <h2 style={h2Style}>What you should be paid for late nights</h2>
         <div style={exampleBoxStyle}>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li><strong>7pm&ndash;midnight:</strong> {/* TODO: dynamic rate */}+$2.47/hr (evening loading) on top of applicable rate</li>
-            <li><strong>Midnight&ndash;7am:</strong> {/* TODO: dynamic rate */}+$4.82/hr (late-night loading) on top of applicable rate</li>
+            <li><strong>7pm&ndash;midnight:</strong> +{formatCurrency(eveningLoad)}/hr (evening loading) on top of applicable rate</li>
+            <li><strong>Midnight&ndash;7am:</strong> +{formatCurrency(nightLoad)}/hr (late-night loading) on top of applicable rate</li>
           </ul>
           <p style={smallStyle}>
             These apply on top of whatever day rate (weekday, Saturday, Sunday, or public holiday) is in effect.
@@ -67,7 +71,7 @@ export default function ScenarioLateNightTransport() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          The late-night loading of {/* TODO: dynamic rate */}$4.22/hr applies to every hour after midnight. Working 3 nights per week finishing at 2am (2 hours of late-night time each): $4.22 &times; 2hrs &times; 3 nights = approximately $25/week in missed loading. Over a year: ~$1,300.
+          The late-night loading of {formatCurrency(nightLoad)}/hr applies to every hour after midnight. Working 3 nights per week finishing at 2am (2 hours of late-night time each): {formatCurrency(nightLoad)} &times; 2hrs &times; 3 nights = approximately {formatCurrency(nightLoad * 2 * 3)}/week in missed loading. Over a year: ~{formatCurrency(nightLoad * 2 * 3 * 52)}.
         </p>
       </section>
 

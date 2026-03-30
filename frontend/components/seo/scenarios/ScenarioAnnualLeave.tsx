@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,11 @@ const faqData = [
   { question: 'Do I get annual leave loading if my employer cashes out my leave?', answer: 'If annual leave is cashed out (which requires agreement), the loading should apply to the cashed-out amount in the same way it would for leave taken.' },
 ];
 
-export default function ScenarioAnnualLeave() {
+export default function ScenarioAnnualLeave({ rates }: { rates?: HospitalityRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l3FtRate = l3?.ftRate ?? 26.10;
+  const loading = Math.round(l3FtRate * 0.175 * 100) / 100;
+  const totalWithLoading = Math.round((l3FtRate + loading) * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -48,14 +54,13 @@ export default function ScenarioAnnualLeave() {
         <h2 style={h2Style}>What annual leave should pay for permanent staff</h2>
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Example: Permanent Level 3 hospitality worker</h3>
-          {/* TODO: dynamic rate */}
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '4px' }}>
-            <li>Annual leave ordinary pay: $26.10/hr</li>
-            <li>Plus 17.5% loading: +$4.57/hr</li>
-            <li>Total during annual leave: $30.67/hr</li>
+            <li>Annual leave ordinary pay: {formatCurrency(l3FtRate)}/hr</li>
+            <li>Plus 17.5% loading: +{formatCurrency(loading)}/hr</li>
+            <li>Total during annual leave: {formatCurrency(totalWithLoading)}/hr</li>
           </ul>
           <p style={smallStyle}>
-            If you&apos;re a permanent worker receiving only $26.10/hr during leave, the loading is being missed.
+            If you&apos;re a permanent worker receiving only {formatCurrency(l3FtRate)}/hr during leave, the loading is being missed.
           </p>
         </div>
         <p style={pStyle}>
@@ -66,7 +71,7 @@ export default function ScenarioAnnualLeave() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Annual leave loading is 17.5% on top of ordinary pay during leave. For a permanent Level 3 employee taking 4 weeks&apos; leave (38hrs/week): 17.5% &times; {/* TODO: dynamic rate */}$26.70/hr &times; 152hrs = approximately $710 in leave loading owed per year. If your employer pays ordinary rates during leave without the loading, this amount is missed every single year.
+          Annual leave loading is 17.5% on top of ordinary pay during leave. For a permanent Level 3 employee taking 4 weeks&apos; leave (38hrs/week): 17.5% &times; {formatCurrency(l3FtRate)}/hr &times; 152hrs = approximately {formatCurrency(l3FtRate * 0.175 * 152)} in leave loading owed per year. If your employer pays ordinary rates during leave without the loading, this amount is missed every single year.
         </p>
       </section>
 

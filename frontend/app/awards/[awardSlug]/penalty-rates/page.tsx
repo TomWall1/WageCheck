@@ -6,7 +6,9 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityPenaltyContent from '@/components/seo/awards/HospitalityPenaltyContent';
+import RestaurantPenaltyContent from '@/components/seo/awards/RestaurantPenaltyContent';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -22,6 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: 'Hospitality Award Penalty Rates 2025\u201326 | Review My Pay',
       description: 'Full Hospitality Award penalty rates for weekends, public holidays, and late nights. See every multiplier and dollar amount under MA000009.',
+    };
+  }
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Restaurant Award Penalty Rates 2025\u201326 | Review My Pay',
+      description: 'Restaurant Award penalty rates for Saturdays, Sundays, and public holidays. The Sunday rate differs by classification level \u2014 check yours is correct here.',
     };
   }
   return {
@@ -69,11 +77,13 @@ export default async function PenaltyRatesPage({ params }: Props) {
         fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600,
         letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px',
       }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Penalty Rates 2025\u201326' : `${award.shortName} Penalty Rates 2025`}
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Penalty Rates 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Penalty Rates 2025\u201326' : `${award.shortName} Penalty Rates 2025`}
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
         <HospitalityPenaltyContent rates={await getHospitalityRates()} />
+      ) : awardSlug === 'restaurant-award' ? (
+        <RestaurantPenaltyContent rates={await getRestaurantRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

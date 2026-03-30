@@ -6,7 +6,9 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 import HospitalityClassificationsContent from '@/components/seo/awards/HospitalityClassificationsContent';
+import RestaurantClassificationsContent from '@/components/seo/awards/RestaurantClassificationsContent';
 import { getHospitalityRates } from '@/lib/hospitality-rates';
+import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -22,6 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: 'Hospitality Award Classifications 2025\u201326 | Review My Pay',
       description: 'Hospitality Award classification levels explained: Level 1 through Level 5, with duties, indicative job titles, and base rates for each. MA000009.',
+    };
+  }
+  if (awardSlug === 'restaurant-award') {
+    return {
+      title: 'Restaurant Award Classifications 2025\u201326 | Review My Pay',
+      description: 'Restaurant Award classification levels explained \u2014 what each means, how to identify yours, and the most common misclassification in restaurants and caf\u00e9s.',
     };
   }
   return {
@@ -59,11 +67,13 @@ export default async function ClassificationsPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="classifications" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Classifications 2025\u201326' : `${award.shortName} — Classification Levels`}
+        {awardSlug === 'hospitality-award' ? 'Hospitality Award Classifications 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Classification Levels 2025 \u2014 Which Level Are You?' : `${award.shortName} — Classification Levels`}
       </h1>
 
       {awardSlug === 'hospitality-award' ? (
         <HospitalityClassificationsContent rates={await getHospitalityRates()} />
+      ) : awardSlug === 'restaurant-award' ? (
+        <RestaurantClassificationsContent rates={await getRestaurantRates()} />
       ) : (
       <>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>

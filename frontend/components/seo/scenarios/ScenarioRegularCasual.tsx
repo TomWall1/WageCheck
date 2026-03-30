@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,9 @@ const faqData = [
   { question: 'If I convert, can my employer then reduce my hours?', answer: 'Your permanent hours should reflect your regular casual pattern to the extent practicable. An immediate reduction in hours after conversion may be challengeable.' },
 ];
 
-export default function ScenarioRegularCasual() {
+export default function ScenarioRegularCasual({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -72,7 +76,7 @@ export default function ScenarioRegularCasual() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          Annual leave as a permanent part-time employee working 24hrs/week = 4 weeks &times; 24hrs &times; {/* TODO: dynamic rate */}$25.85/hr = approximately $2,480/year in leave entitlements not accruing. That&apos;s on top of any pay rate shortfalls. Workers kept casual indefinitely on regular schedules often miss $2,000&ndash;$4,000/year in leave value alone.
+          Annual leave as a permanent part-time employee working 24hrs/week = 4 weeks &times; 24hrs &times; {formatCurrency(l2?.ftRate ?? 0)}/hr = approximately {formatCurrency((l2?.ftRate ?? 0) * 4 * 24)}/year in leave entitlements not accruing. That&apos;s on top of any pay rate shortfalls. Workers kept casual indefinitely on regular schedules often miss $2,000&ndash;$4,000/year in leave value alone.
         </p>
       </section>
 

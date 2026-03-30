@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
   return {
-    title: 'Function Centre Worker Pay Rates 2025\u201326 | Hospitality Award | Review My Pay',
+    title: 'Function Centre Pay Rates 2025\u201326 | Hospitality Award',
     description: 'Pay rates for function and events staff under the Hospitality Award \u2014 casual rates, late finish loadings, and the most common underpayments at events.',
   };
 }

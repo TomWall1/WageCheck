@@ -3,6 +3,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { RestaurantRateData, getLevel } from '@/lib/restaurant-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -18,7 +20,12 @@ const faqData = [
   { question: 'Can I claim unpaid super?', answer: 'Yes. If your employer hasn\'t been paying your super, you can report it to the Australian Taxation Office (ATO). The ATO can investigate and recover unpaid super on your behalf, including a charge for late payment.' },
 ];
 
-export default function RScenarioSuper() {
+export default function RScenarioSuper({ rates }: { rates?: RestaurantRateData }) {
+  const l3 = rates ? getLevel(rates, 3) : undefined;
+  const l3Casual = l3?.casualRate ?? 32.63;
+  const annualOTE = Math.round(l3Casual * 20 * 52 * 100) / 100;
+  const annualSuper = Math.round(annualOTE * 0.12 * 100) / 100;
+  const fiveYearSuper = Math.round(annualSuper * 5 * 100) / 100;
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -64,7 +71,7 @@ export default function RScenarioSuper() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>What this costs you</h2>
         <p style={pStyle}>
-          A <a href="/awards/restaurant-award/casual-employees" style={linkStyle}>casual</a> Level 3 working 20 hours per week at ~$32.63/hr earns approximately $33,934 in ordinary time per year. At 12%, that&apos;s ~$4,072/year in super contributions your employer should be making. Over a 5-year period of missed super, that&apos;s over $20,000 in lost retirement savings &mdash; before accounting for investment returns.
+          A <a href="/awards/restaurant-award/casual-employees" style={linkStyle}>casual</a> Level 3 working 20 hours per week at {formatCurrency(l3Casual)}/hr earns approximately {formatCurrency(annualOTE)} in ordinary time per year. At 12%, that&apos;s {formatCurrency(annualSuper)}/year in super contributions your employer should be making. Over a 5-year period of missed super, that&apos;s over {formatCurrency(fiveYearSuper)} in lost retirement savings &mdash; before accounting for investment returns.
         </p>
       </section>
 

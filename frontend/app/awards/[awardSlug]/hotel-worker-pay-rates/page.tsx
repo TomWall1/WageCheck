@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
   return {
-    title: 'Hotel Worker Pay Rates Australia 2025\u201326 | Hospitality Award | Review My Pay',
+    title: 'Hotel Worker Pay Rates 2025\u201326 | Hospitality Award',
     description: 'Pay rates for hotel workers \u2014 front office, housekeeping, concierge, and night audit. Check what you\u2019re owed under the Hospitality Award MA000009.',
   };
 }

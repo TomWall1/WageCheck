@@ -4,6 +4,8 @@
  */
 
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
+import { HospitalityRateData, getLevel, getEveningLoading, getNightLoading } from '@/lib/hospitality-rates';
+import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
 const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
@@ -13,13 +15,17 @@ const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
 const exampleBoxStyle: React.CSSProperties = { background: '#f8f9fa', border: '1.5px solid var(--border)', borderRadius: '10px', padding: '20px', marginBottom: '1.5rem' };
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
-const faqData = [
-  { question: 'Do the evening/late-night loadings apply on weekdays too?', answer: 'Yes. The loadings apply on any day of the week — weekday evenings and late nights attract the loading just as weekend shifts do.' },
-  { question: 'I finish at 11:30pm — does the late-night loading still apply?', answer: 'No — the late-night loading begins at midnight. Work between 7pm and midnight attracts the evening loading only.' },
-  { question: 'Can my employer pay a flat rate that covers these loadings?', answer: 'Only if the flat rate demonstrably exceeds the highest possible rate combination across all shifts. For late weekend nights, that\'s a high bar.' },
-];
+export default function ScenarioCasualLateNights({ rates }: { rates?: HospitalityRateData }) {
+  const l2 = rates ? getLevel(rates, 2) : undefined;
+  const eveningLoading = rates ? getEveningLoading(rates) : 0;
+  const nightLoading = rates ? getNightLoading(rates) : 0;
 
-export default function ScenarioCasualLateNights() {
+  const faqData = [
+    { question: 'Do the evening/late-night loadings apply on weekdays too?', answer: 'Yes. The loadings apply on any day of the week — weekday evenings and late nights attract the loading just as weekend shifts do.' },
+    { question: 'I finish at 11:30pm — does the late-night loading still apply?', answer: 'No — the late-night loading begins at midnight. Work between 7pm and midnight attracts the evening loading only.' },
+    { question: 'Can my employer pay a flat rate that covers these loadings?', answer: 'Only if the flat rate demonstrably exceeds the highest possible rate combination across all shifts. For late weekend nights, that\'s a high bar.' },
+  ];
+
   return (
     <>
       <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
@@ -41,8 +47,8 @@ export default function ScenarioCasualLateNights() {
           Under the Hospitality Award (MA000009), adult employees are entitled to additional loadings on top of their base or casual rate:
         </p>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li><strong>Evening work (7pm&ndash;midnight):</strong> {/* TODO: dynamic rate */}+$2.47/hr on top of the applicable rate</li>
-          <li><strong>Late night work (midnight&ndash;7am):</strong> {/* TODO: dynamic rate */}+$4.82/hr on top of the applicable rate</li>
+          <li><strong>Evening work (7pm&ndash;midnight):</strong> +{formatCurrency(eveningLoading)}/hr on top of the applicable rate</li>
+          <li><strong>Late night work (midnight&ndash;7am):</strong> +{formatCurrency(nightLoading)}/hr on top of the applicable rate</li>
         </ul>
         <p style={pStyle}>
           These loadings stack on top of whatever day rate applies. A Saturday night shift running past midnight attracts the Saturday casual rate plus the evening loading plus (from midnight) the late-night loading.
@@ -56,11 +62,11 @@ export default function ScenarioCasualLateNights() {
             <strong>Example:</strong> Casual bar attendant, Level 2. Shift runs 7pm&ndash;2am on a Saturday.
           </p>
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '8px' }}>
-            <li>7pm&ndash;midnight: Saturday casual rate ({/* TODO: dynamic rate */}$37.92/hr) + evening loading ({/* TODO: dynamic rate */}$2.47/hr) = {/* TODO: dynamic rate */}$40.39/hr</li>
-            <li>Midnight&ndash;2am: Sunday casual rate ({/* TODO: dynamic rate */}$44.24/hr) + late-night loading ({/* TODO: dynamic rate */}$4.82/hr) = {/* TODO: dynamic rate */}$49.06/hr</li>
+            <li>7pm&ndash;midnight: Saturday casual rate ({formatCurrency(l2?.saturdayCasual ?? 0)}/hr) + evening loading ({formatCurrency(eveningLoading)}/hr) = {formatCurrency((l2?.saturdayCasual ?? 0) + eveningLoading)}/hr</li>
+            <li>Midnight&ndash;2am: Sunday casual rate ({formatCurrency(l2?.sundayCasual ?? 0)}/hr) + late-night loading ({formatCurrency(nightLoading)}/hr) = {formatCurrency((l2?.sundayCasual ?? 0) + nightLoading)}/hr</li>
           </ul>
           <p style={smallStyle}>
-            If you&apos;re being paid {/* TODO: dynamic rate */}$31.60/hr for that whole shift, the shortfall is significant.
+            If you&apos;re being paid {formatCurrency(l2?.casualRate ?? 0)}/hr for that whole shift, the shortfall is significant.
           </p>
         </div>
         <p style={pStyle}>
