@@ -58,9 +58,11 @@ export default async function PayRatesPage({ params }: Props) {
   } catch { /* API unavailable — render template */ }
 
   // Build rate lookup: classificationId -> base hourly rate
+  // API returns rates ordered by effective_date DESC, so the first match
+  // for each classification is the most current rate — keep only that one.
   const rateMap: Record<number, number> = {};
   for (const r of rates) {
-    if (r.rate_type === 'base_hourly') {
+    if (r.rate_type === 'base_hourly' && !(r.classification_id in rateMap)) {
       rateMap[r.classification_id] = parseFloat(r.rate_amount);
     }
   }
