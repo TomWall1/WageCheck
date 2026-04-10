@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
+import { getDeepContent } from '@/lib/award-content-registry';
 import { serverFetch } from '@/lib/api-server';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
-import HospitalityPenaltyContent from '@/components/seo/awards/HospitalityPenaltyContent';
-import RestaurantPenaltyContent from '@/components/seo/awards/RestaurantPenaltyContent';
-import { getHospitalityRates } from '@/lib/hospitality-rates';
-import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -20,20 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
-  if (awardSlug === 'hospitality-award') {
-    return {
-      title: 'Hospitality Award Penalty Rates 2025\u201326 | Review My Pay',
-      description: 'Full Hospitality Award penalty rates for weekends, public holidays, and late nights. See every multiplier and dollar amount under MA000009.',
-    };
-  }
-  if (awardSlug === 'restaurant-award') {
-    return {
-      title: 'Restaurant Award Penalty Rates 2025\u201326 | Review My Pay',
-      description: 'Restaurant Award penalty rates for Saturdays, Sundays, and public holidays. The Sunday rate differs by classification level \u2014 check yours is correct here.',
-    };
+  const dc = getDeepContent(awardSlug);
+  if (dc?.subPageMeta?.['penalty-rates']) {
+    return { title: dc.subPageMeta['penalty-rates'].title, description: dc.subPageMeta['penalty-rates'].description };
   }
   return {
-    title: `${award.shortName} Penalty Rates 2025 — Weekend, Evening & Public Holiday | Review My Pay`,
+    title: `${award.shortName} Penalty Rates 2025 \u2014 Weekend, Evening & Public Holiday | Review My Pay`,
     description: `${award.shortName} penalty rate multipliers for Saturday, Sunday, public holidays, evenings, and late nights. Full-time, part-time, and casual rates.`,
   };
 }
@@ -48,6 +37,36 @@ export default async function PenaltyRatesPage({ params }: Props) {
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
 
+  const dc = getDeepContent(awardSlug);
+
+  // If this award has a custom penalty-rates component, render it
+  if (dc?.subPageComponents?.['penalty-rates']) {
+    const PenaltyContent = dc.subPageComponents['penalty-rates'];
+    let rates;
+    if (dc.getRates) {
+      try { rates = await dc.getRates(); } catch { /* rates stay undefined */ }
+    }
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: award.shortName, href: `/awards/${awardSlug}` },
+          { label: 'Penalty Rates', href: `/awards/${awardSlug}/penalty-rates` },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} currentPage="penalty-rates" />
+        <h1 style={{
+          fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600,
+          letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px',
+        }}>
+          {award.shortName} Penalty Rates 2025&ndash;26
+        </h1>
+        <PenaltyContent rates={rates} awardCode={award.code} awardName={award.shortName} awardSlug={awardSlug} />
+      </div>
+    );
+  }
+
+  // Generic template
   let penalties: PenaltyRate[] = [];
   try {
     penalties = await serverFetch<PenaltyRate[]>(`/api/award/penalty-rates?award=${award.code}`);
@@ -58,7 +77,7 @@ export default async function PenaltyRatesPage({ params }: Props) {
 
   const dayOrder = ['weekday', 'saturday', 'sunday', 'public_holiday'];
   const dayLabels: Record<string, string> = {
-    weekday: 'Monday – Friday', saturday: 'Saturday',
+    weekday: 'Monday \u2013 Friday', saturday: 'Saturday',
     sunday: 'Sunday', public_holiday: 'Public Holiday',
   };
 
@@ -77,17 +96,14 @@ export default async function PenaltyRatesPage({ params }: Props) {
         fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600,
         letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px',
       }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Penalty Rates 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Penalty Rates 2025\u201326' : `${award.shortName} Penalty Rates 2025`}
+        {award.shortName} Penalty Rates 2025
       </h1>
 
-      {awardSlug === 'hospitality-award' ? (
-        <HospitalityPenaltyContent rates={await getHospitalityRates()} />
-      ) : awardSlug === 'restaurant-award' ? (
-        <RestaurantPenaltyContent rates={await getRestaurantRates()} />
-      ) : (
-      <>
+      <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>
+        Last updated: March 2026 &middot; Rates effective 1 July 2025
+      </p>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-        Penalty rates are higher pay rates for working at particular times — weekends, public holidays, evenings, and late nights. These multipliers are applied to your base hourly rate.
+        Penalty rates are higher pay rates for working at particular times &mdash; weekends, public holidays, evenings, and late nights. These multipliers are applied to your base hourly rate.
       </p>
 
       {ftPenalties.length > 0 && (
@@ -161,9 +177,16 @@ export default async function PenaltyRatesPage({ params }: Props) {
         <p><strong>Tip:</strong> Sunday shifts are the most commonly underpaid in many awards. If you regularly work weekends, use our calculator to check your pay is correct.</p>
       </div>
 
+      <div style={{ fontSize: '13px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+        <p>
+          <strong>Source:</strong> Fair Work Ombudsman pay guide for{' '}
+          <a href="https://www.fairwork.gov.au/pay-and-wages/paying-wages" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+            {award.code}
+          </a>. Penalty rates are updated annually following the Fair Work Commission Annual Wage Review, typically effective from 1 July.
+        </p>
+      </div>
+
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
-      </>
-      )}
     </div>
   );
 }

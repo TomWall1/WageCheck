@@ -41,6 +41,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen flex flex-col">
+        {/* Organization + WebApplication schema for E-E-A-T */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'Review My Pay',
+          url: 'https://reviewmypay.com',
+          description: 'Free tool helping Australian workers check if they are being paid correctly under Fair Work modern awards.',
+          sameAs: [],
+        }) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          name: 'Review My Pay Calculator',
+          url: 'https://reviewmypay.com/check-my-pay',
+          applicationCategory: 'FinanceApplication',
+          operatingSystem: 'All',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD' },
+          description: 'Free pay calculator for Australian workers. Check your shifts against Fair Work modern award rates including penalty rates, overtime, and allowances.',
+        }) }} />
 
         {/* Legal disclaimer — quiet strip */}
         <div style={{
@@ -184,6 +203,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </footer>
 
+
+        {/* Organization + WebSite schema for AI search visibility */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'Organization',
+              '@id': 'https://reviewmypay.com/#organization',
+              name: 'Review My Pay',
+              url: 'https://reviewmypay.com',
+              description: 'Free Australian wage compliance tool helping workers check their pay under Fair Work modern awards.',
+              foundingDate: '2026',
+              areaServed: {
+                '@type': 'Country',
+                name: 'Australia',
+              },
+              sameAs: [],
+            },
+            {
+              '@type': 'WebSite',
+              '@id': 'https://reviewmypay.com/#website',
+              url: 'https://reviewmypay.com',
+              name: 'Review My Pay',
+              publisher: { '@id': 'https://reviewmypay.com/#organization' },
+              inLanguage: 'en-AU',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: 'https://reviewmypay.com/awards?q={search_term_string}',
+                'query-input': 'required name=search_term_string',
+              },
+            },
+          ],
+        }) }} />
 
       </body>
     </html>

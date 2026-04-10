@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
+import { getDeepContent } from '@/lib/award-content-registry';
 import { serverFetch } from '@/lib/api-server';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
-import HospitalityAllowancesContent from '@/components/seo/awards/HospitalityAllowancesContent';
-import RestaurantAllowancesContent from '@/components/seo/awards/RestaurantAllowancesContent';
-import { getHospitalityRates } from '@/lib/hospitality-rates';
-import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -20,20 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
-  if (awardSlug === 'hospitality-award') {
-    return {
-      title: 'Hospitality Award Allowances 2025\u201326 | Review My Pay',
-      description: 'Hospitality Award allowances explained: meal, split shift, first aid, uniform, tool, and vehicle. What triggers each one and current dollar amounts under MA000009.',
-    };
-  }
-  if (awardSlug === 'restaurant-award') {
-    return {
-      title: 'Restaurant Award Allowances 2025\u201326 | Review My Pay',
-      description: 'Every allowance under the Restaurant Award with current amounts \u2014 split shift, meal, tool, and clothing. The most consistently missed entitlements.',
-    };
+  const dc = getDeepContent(awardSlug);
+  if (dc?.subPageMeta?.['allowances']) {
+    return { title: dc.subPageMeta['allowances'].title, description: dc.subPageMeta['allowances'].description };
   }
   return {
-    title: `${award.shortName} Allowances 2025 — Meal, Uniform, Vehicle & More | Review My Pay`,
+    title: `${award.shortName} Allowances 2025 \u2014 Meal, Uniform, Vehicle & More | Review My Pay`,
     description: `All allowances under the ${award.shortName}: meal, uniform, laundry, vehicle, first aid, and more. Current dollar amounts for 2025.`,
   };
 }
@@ -47,6 +36,31 @@ export default async function AllowancesPage({ params }: Props) {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
+
+  const dc = getDeepContent(awardSlug);
+
+  if (dc?.subPageComponents?.['allowances']) {
+    const AllowancesContent = dc.subPageComponents['allowances'];
+    let rates;
+    if (dc.getRates) {
+      try { rates = await dc.getRates(); } catch { /* rates stay undefined */ }
+    }
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: award.shortName, href: `/awards/${awardSlug}` },
+          { label: 'Allowances', href: `/awards/${awardSlug}/allowances` },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} currentPage="allowances" />
+        <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
+          {award.shortName} Allowances 2025&ndash;26
+        </h1>
+        <AllowancesContent rates={rates} awardCode={award.code} awardName={award.shortName} awardSlug={awardSlug} />
+      </div>
+    );
+  }
 
   let allowances: Allowance[] = [];
   try {
@@ -65,15 +79,12 @@ export default async function AllowancesPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="allowances" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Allowances 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Allowances 2025\u201326' : `${award.shortName} — Allowances`}
+        {award.shortName} &mdash; Allowances
       </h1>
 
-      {awardSlug === 'hospitality-award' ? (
-        <HospitalityAllowancesContent rates={await getHospitalityRates()} />
-      ) : awardSlug === 'restaurant-award' ? (
-        <RestaurantAllowancesContent rates={await getRestaurantRates()} />
-      ) : (
-      <>
+      <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>
+        Last updated: March 2026 &middot; Rates effective 1 July 2025
+      </p>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Allowances are extra payments for specific conditions, skills, or expenses. They are one of the most commonly missed entitlements after penalty rates.
       </p>
@@ -108,12 +119,19 @@ export default async function AllowancesPage({ params }: Props) {
       )}
 
       <p style={{ fontSize: '13px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
-        See also: <a href={`/awards/${awardSlug}/pay-rates`} style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Pay rates</a> | <a href="/guides/allowances-and-loadings" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Allowances & loadings guide</a>
+        See also: <a href={`/awards/${awardSlug}/pay-rates`} style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Pay rates</a> | <a href="/guides/allowances-and-loadings" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Allowances &amp; loadings guide</a>
       </p>
 
+      <div style={{ fontSize: '13px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+        <p>
+          <strong>Source:</strong> Fair Work Ombudsman pay guide for{' '}
+          <a href="https://www.fairwork.gov.au/pay-and-wages/paying-wages" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+            {award.code}
+          </a>. Allowance amounts are updated annually following the Fair Work Commission Annual Wage Review, typically effective from 1 July.
+        </p>
+      </div>
+
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
-      </>
-      )}
     </div>
   );
 }

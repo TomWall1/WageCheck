@@ -1,13 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
+import { getDeepContent } from '@/lib/award-content-registry';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
-import HospitalityOvertimeContent from '@/components/seo/awards/HospitalityOvertimeContent';
-import RestaurantOvertimeContent from '@/components/seo/awards/RestaurantOvertimeContent';
-import { getHospitalityRates } from '@/lib/hospitality-rates';
-import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -19,20 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
-  if (awardSlug === 'hospitality-award') {
-    return {
-      title: 'Hospitality Award Overtime Rates 2025\u201326 | Review My Pay',
-      description: 'Overtime rules under the Hospitality Award: daily triggers, time-and-a-half, double-time, and how overtime interacts with penalty rates. MA000009.',
-    };
-  }
-  if (awardSlug === 'restaurant-award') {
-    return {
-      title: 'Restaurant Award Overtime Rates 2025\u201326 | Review My Pay',
-      description: 'When overtime applies under the Restaurant Award, what it pays, and the most common ways it\u2019s missed for restaurant and caf\u00e9 workers. Check your shifts.',
-    };
+  const dc = getDeepContent(awardSlug);
+  if (dc?.subPageMeta?.['overtime']) {
+    return { title: dc.subPageMeta['overtime'].title, description: dc.subPageMeta['overtime'].description };
   }
   return {
-    title: `${award.shortName} Overtime Rates 2025 — Daily & Weekly Thresholds | Review My Pay`,
+    title: `${award.shortName} Overtime Rates 2025 \u2014 Daily & Weekly Thresholds | Review My Pay`,
     description: `Overtime rules under the ${award.shortName}: daily and weekly thresholds, time-and-a-half, double-time, and TOIL provisions.`,
   };
 }
@@ -41,6 +30,31 @@ export default async function OvertimePage({ params }: Props) {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
+
+  const dc = getDeepContent(awardSlug);
+
+  if (dc?.subPageComponents?.['overtime']) {
+    const OvertimeContent = dc.subPageComponents['overtime'];
+    let rates;
+    if (dc.getRates) {
+      try { rates = await dc.getRates(); } catch { /* rates stay undefined */ }
+    }
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: award.shortName, href: `/awards/${awardSlug}` },
+          { label: 'Overtime', href: `/awards/${awardSlug}/overtime` },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} currentPage="overtime" />
+        <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
+          {award.shortName} Overtime Rates 2025&ndash;26
+        </h1>
+        <OvertimeContent rates={rates} awardCode={award.code} awardName={award.shortName} awardSlug={awardSlug} />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -54,15 +68,12 @@ export default async function OvertimePage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="overtime" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Overtime Rates 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Overtime Rates 2025\u201326' : `${award.shortName} — Overtime Rates`}
+        {award.shortName} &mdash; Overtime Rates
       </h1>
 
-      {awardSlug === 'hospitality-award' ? (
-        <HospitalityOvertimeContent rates={await getHospitalityRates()} />
-      ) : awardSlug === 'restaurant-award' ? (
-        <RestaurantOvertimeContent rates={await getRestaurantRates()} />
-      ) : (
-      <>
+      <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>
+        Last updated: March 2026
+      </p>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
         Overtime is paid when you work beyond your ordinary hours. Most awards use a two-tier system: time-and-a-half for the first 2 hours, then double-time after that.
       </p>
@@ -101,7 +112,7 @@ export default async function OvertimePage({ params }: Props) {
           Time off in lieu (TOIL)
         </h2>
         <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.7 }}>
-          Some awards allow employers and employees to agree to take time off instead of being paid overtime. TOIL must be agreed in writing and taken at the overtime rate — for example, 1 hour of overtime at time-and-a-half equals 1.5 hours of TOIL.
+          Some awards allow employers and employees to agree to take time off instead of being paid overtime. TOIL must be agreed in writing and taken at the overtime rate &mdash; for example, 1 hour of overtime at time-and-a-half equals 1.5 hours of TOIL.
         </p>
       </section>
 
@@ -109,9 +120,16 @@ export default async function OvertimePage({ params }: Props) {
         See also: <a href={`/awards/${awardSlug}/penalty-rates`} style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Penalty rates</a> | <a href={`/awards/${awardSlug}/pay-rates`} style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Full pay rate tables</a> | <a href="/guides/overtime-pay-australia" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Overtime pay guide</a>
       </p>
 
+      <div style={{ fontSize: '13px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+        <p>
+          <strong>Source:</strong>{' '}
+          <a href="https://www.fairwork.gov.au/pay-and-wages/overtime" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+            Fair Work Ombudsman &mdash; overtime
+          </a>. Overtime thresholds and rates are set by the applicable modern award and the Fair Work Act 2009.
+        </p>
+      </div>
+
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
-      </>
-      )}
     </div>
   );
 }

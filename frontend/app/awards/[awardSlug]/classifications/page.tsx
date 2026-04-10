@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAwardBySlug, getAllAwardSlugs } from '@/lib/awards';
+import { getDeepContent } from '@/lib/award-content-registry';
 import { serverFetch } from '@/lib/api-server';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import SubPageNav from '@/components/seo/SubPageNav';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
-import HospitalityClassificationsContent from '@/components/seo/awards/HospitalityClassificationsContent';
-import RestaurantClassificationsContent from '@/components/seo/awards/RestaurantClassificationsContent';
-import { getHospitalityRates } from '@/lib/hospitality-rates';
-import { getRestaurantRates } from '@/lib/restaurant-rates';
 
 interface Props { params: Promise<{ awardSlug: string }>; }
 
@@ -20,20 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) return {};
-  if (awardSlug === 'hospitality-award') {
-    return {
-      title: 'Hospitality Award Classifications 2025\u201326 | Review My Pay',
-      description: 'Hospitality Award classification levels explained: Level 1 through Level 5, with duties, indicative job titles, and base rates for each. MA000009.',
-    };
-  }
-  if (awardSlug === 'restaurant-award') {
-    return {
-      title: 'Restaurant Award Classifications 2025\u201326 | Review My Pay',
-      description: 'Restaurant Award classification levels explained \u2014 what each means, how to identify yours, and the most common misclassification in restaurants and caf\u00e9s.',
-    };
+  const dc = getDeepContent(awardSlug);
+  if (dc?.subPageMeta?.['classifications']) {
+    return { title: dc.subPageMeta['classifications'].title, description: dc.subPageMeta['classifications'].description };
   }
   return {
-    title: `${award.shortName} Classification Levels 2025 — Which Level Are You? | Review My Pay`,
+    title: `${award.shortName} Classification Levels 2025 \u2014 Which Level Are You? | Review My Pay`,
     description: `${award.shortName} classification levels explained: duties, indicative tasks, and base rates for each level. Find out if you're correctly classified.`,
   };
 }
@@ -47,6 +36,31 @@ export default async function ClassificationsPage({ params }: Props) {
   const { awardSlug } = await params;
   const award = getAwardBySlug(awardSlug);
   if (!award) notFound();
+
+  const dc = getDeepContent(awardSlug);
+
+  if (dc?.subPageComponents?.['classifications']) {
+    const ClassificationsContent = dc.subPageComponents['classifications'];
+    let rates;
+    if (dc.getRates) {
+      try { rates = await dc.getRates(); } catch { /* rates stay undefined */ }
+    }
+    return (
+      <div>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Awards', href: '/awards' },
+          { label: award.shortName, href: `/awards/${awardSlug}` },
+          { label: 'Classifications', href: `/awards/${awardSlug}/classifications` },
+        ]} />
+        <SubPageNav awardSlug={awardSlug} currentPage="classifications" />
+        <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
+          {award.shortName} Classification Levels 2025&ndash;26
+        </h1>
+        <ClassificationsContent rates={rates} awardCode={award.code} awardName={award.shortName} awardSlug={awardSlug} />
+      </div>
+    );
+  }
 
   let classifications: Classification[] = [];
   try {
@@ -67,17 +81,14 @@ export default async function ClassificationsPage({ params }: Props) {
       <SubPageNav awardSlug={awardSlug} currentPage="classifications" />
 
       <h1 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.5rem', fontWeight: 600, letterSpacing: '-0.03em', color: 'var(--secondary)', marginBottom: '8px' }}>
-        {awardSlug === 'hospitality-award' ? 'Hospitality Award Classifications 2025\u201326' : awardSlug === 'restaurant-award' ? 'Restaurant Award Classification Levels 2025 \u2014 Which Level Are You?' : `${award.shortName} — Classification Levels`}
+        {award.shortName} &mdash; Classification Levels
       </h1>
 
-      {awardSlug === 'hospitality-award' ? (
-        <HospitalityClassificationsContent rates={await getHospitalityRates()} />
-      ) : awardSlug === 'restaurant-award' ? (
-        <RestaurantClassificationsContent rates={await getRestaurantRates()} />
-      ) : (
-      <>
+      <p style={{ fontSize: '12.5px', color: 'var(--secondary-muted)', marginBottom: '1rem', fontStyle: 'italic' }}>
+        Last updated: March 2026
+      </p>
       <p style={{ fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-        Your classification level determines your minimum pay rate. Being classified one level too low can cost you $2–4 per hour — more than $3,000 per year for a full-time worker.
+        Your classification level determines your minimum pay rate. Being classified one level too low can cost you $2&ndash;4 per hour &mdash; more than $3,000 per year for a full-time worker.
       </p>
 
       {sorted.length > 0 ? (
@@ -114,9 +125,16 @@ export default async function ClassificationsPage({ params }: Props) {
         See also: <a href={`/awards/${awardSlug}/pay-rates`} style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Pay rates by classification</a> | <a href="/guides/am-i-being-underpaid" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Am I being underpaid?</a>
       </p>
 
+      <div style={{ fontSize: '13px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+        <p>
+          <strong>Source:</strong> Classification levels and duties are defined in the{' '}
+          <a href="https://www.fairwork.gov.au/find-help-for/industries-and-jobs" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+            {award.fullName}
+          </a>, published by the Fair Work Commission.
+        </p>
+      </div>
+
       <CheckPayCTA awardCode={award.code} awardName={award.shortName} />
-      </>
-      )}
     </div>
   );
 }
