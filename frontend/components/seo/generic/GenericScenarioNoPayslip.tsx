@@ -72,7 +72,7 @@ export default function GenericScenarioNoPayslip({ rates, awardCode, awardName, 
           <li style={{ marginBottom: '6px' }}>It arrives within 1 working day of pay day</li>
           <li style={{ marginBottom: '6px' }}>Hours are broken down by ordinary, weekend, and public holiday</li>
           <li style={{ marginBottom: '6px' }}>Each rate matches the {awardName} minimums for your classification level</li>
-          <li style={{ marginBottom: '6px' }}>Super contributions are listed and match 11.5% of ordinary time earnings</li>
+          <li style={{ marginBottom: '6px' }}>Super contributions are listed and match 12% of ordinary time earnings</li>
         </ul>
         <CheckPayCTA awardCode={awardCode} awardName={awardName} />
       </section>

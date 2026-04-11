@@ -22,7 +22,7 @@ interface Props {
 
 export default function GenericScenarioSuperNotPaid({ rates, awardCode, awardName, awardSlug }: Props) {
   const l1 = rates ? getLevel(rates, 1) : undefined;
-  const superRate = 0.115;
+  const superRate = 0.12;
 
   const faqData = [
     { question: 'Is there a minimum earnings threshold for super?', answer: 'No. Since 1 July 2022, the $450 per month threshold was removed. Your employer must pay super on all ordinary time earnings regardless of how much you earn or how many hours you work. This applies to casuals, part-timers, and full-timers alike.' },
@@ -38,14 +38,14 @@ export default function GenericScenarioSuperNotPaid({ rates, awardCode, awardNam
 
       <section style={sectionStyle}>
         <p style={pStyle}>
-          If your employer is not paying super on your {awardName} earnings, they are breaking the law. Super is 11.5% of your ordinary time earnings with no minimum earnings threshold &mdash; every dollar you earn attracts super.{l1 && <> For a Level 1 full-time worker earning {formatCurrency(l1.ftRate)}/hr, that is {formatCurrency(l1.ftRate * 38 * superRate)} per week your employer should be putting into your super fund.</>} Report unpaid super to the ATO &mdash; it is free and confidential.
+          If your employer is not paying super on your {awardName} earnings, they are breaking the law. Super is 12% of your ordinary time earnings with no minimum earnings threshold &mdash; every dollar you earn attracts super.{l1 && <> For a Level 1 full-time worker earning {formatCurrency(l1.ftRate)}/hr, that is {formatCurrency(l1.ftRate * 38 * superRate)} per week your employer should be putting into your super fund.</>} Report unpaid super to the ATO &mdash; it is free and confidential.
         </p>
       </section>
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>
-          Under the Superannuation Guarantee, employers must contribute 11.5% of each employee&apos;s ordinary time earnings to their nominated super fund. There is no minimum earnings threshold &mdash; this was removed on 1 July 2022. Super must be paid at least quarterly. Ordinary time earnings include your base rate, shift loadings, and casual loading, but generally exclude overtime. If your employer is not paying, you report it to the ATO (not the Fair Work Ombudsman &mdash; super is administered by the ATO).
+          Under the Superannuation Guarantee, employers must contribute 12% of each employee&apos;s ordinary time earnings to their nominated super fund. There is no minimum earnings threshold &mdash; this was removed on 1 July 2022. Super must be paid at least quarterly. Ordinary time earnings include your base rate, shift loadings, and casual loading, but generally exclude overtime. If your employer is not paying, you report it to the ATO (not the Fair Work Ombudsman &mdash; super is administered by the ATO).
         </p>
       </section>
 
@@ -57,7 +57,7 @@ export default function GenericScenarioSuperNotPaid({ rates, awardCode, awardNam
               <strong>Scenario:</strong> Full-time Level 1 employee under the {awardName} earning {formatCurrency(l1.ftRate)}/hr for 38 hours per week. Their employer has not paid any super for 2 years.
             </p>
             <p style={pStyle}>
-              <strong>Weekly super owed:</strong> {formatCurrency(l1.ftRate)} &times; 38 hrs &times; 11.5% = <strong>{formatCurrency(l1.ftRate * 38 * superRate)}</strong>
+              <strong>Weekly super owed:</strong> {formatCurrency(l1.ftRate)} &times; 38 hrs &times; 12% = <strong>{formatCurrency(l1.ftRate * 38 * superRate)}</strong>
             </p>
             <p style={pStyle}>
               <strong>Annual super owed:</strong> {formatCurrency(l1.ftRate * 38 * superRate * 48)}
@@ -72,7 +72,7 @@ export default function GenericScenarioSuperNotPaid({ rates, awardCode, awardNam
       <section style={sectionStyle}>
         <h2 style={h2Style}>What to check on your payslip</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li style={{ marginBottom: '6px' }}>Super contributions are listed on your payslip at 11.5% of ordinary time earnings</li>
+          <li style={{ marginBottom: '6px' }}>Super contributions are listed on your payslip at 12% of ordinary time earnings</li>
           <li style={{ marginBottom: '6px' }}>Contributions actually appear in your super fund account (payslip alone is not proof of payment)</li>
           <li style={{ marginBottom: '6px' }}>There are no gaps in quarterly contributions when you check your super fund statement</li>
           <li style={{ marginBottom: '6px' }}>Your employer has your correct super fund details and TFN on file</li>

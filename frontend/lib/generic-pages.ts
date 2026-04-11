@@ -94,7 +94,7 @@ const SCENARIO_TEMPLATES = [
     slugSuffix: 'super-not-paid',
     titleTemplate: (name: string) => `Super Not Being Paid Under the ${name} — What Can I Do?`,
     metaTitleTemplate: (name: string) => `Super Not Paid? | ${name}`,
-    metaDescTemplate: (name: string) => `All employees under the ${name} are entitled to superannuation at 11.5% of ordinary time earnings. Check if your employer is paying correctly.`,
+    metaDescTemplate: (name: string) => `All employees under the ${name} are entitled to superannuation at 12% of ordinary time earnings. Check if your employer is paying correctly.`,
   },
   {
     slugSuffix: 'casual-conversion',

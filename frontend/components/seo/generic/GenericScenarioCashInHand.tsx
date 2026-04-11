@@ -45,7 +45,7 @@ export default function GenericScenarioCashInHand({ rates, awardCode, awardName,
       <section style={sectionStyle}>
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>
-          There is nothing in the {awardName} or the Fair Work Act that prohibits cash as a payment method. What is required regardless of how you are paid: a payslip within 1 working day of pay day, superannuation at 11.5% of ordinary time earnings, correct penalty rates for weekends and public holidays, tax withheld and reported to the ATO, and at least the minimum award rate for your classification level.
+          There is nothing in the {awardName} or the Fair Work Act that prohibits cash as a payment method. What is required regardless of how you are paid: a payslip within 1 working day of pay day, superannuation at 12% of ordinary time earnings, correct penalty rates for weekends and public holidays, tax withheld and reported to the ATO, and at least the minimum award rate for your classification level.
         </p>
         <p style={pStyle}>
           If any of these are missing, the arrangement is not just informal &mdash; it is a breach of workplace law.
@@ -60,7 +60,7 @@ export default function GenericScenarioCashInHand({ rates, awardCode, awardName,
               <strong>Scenario:</strong> Casual Level 1 worker under the {awardName} is paid $25/hr cash for 20 hours per week including a Sunday shift.
             </p>
             <p style={pStyle}>
-              <strong>What they should receive:</strong> Weekday casual rate of {formatCurrency(l1.casualRate)}/hr plus the Sunday casual rate of {formatCurrency(l1.sundayCasual)}/hr for the Sunday shift, plus 11.5% super on ordinary time earnings.
+              <strong>What they should receive:</strong> Weekday casual rate of {formatCurrency(l1.casualRate)}/hr plus the Sunday casual rate of {formatCurrency(l1.sundayCasual)}/hr for the Sunday shift, plus 12% super on ordinary time earnings.
             </p>
             <p style={pStyle}>
               <strong>Super alone:</strong> {formatCurrency(l1.casualRate)} &times; 20 hrs &times; {superRate} = <strong>{formatCurrency(l1.casualRate * 20 * superRate)}/week</strong> in super not being paid.
