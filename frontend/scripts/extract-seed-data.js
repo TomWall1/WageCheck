@@ -197,7 +197,7 @@ function extractFromSeed(filePath) {
       vm.runInContext(`result = [${allowanceMatch[1]}]`, sandbox);
       for (const a of sandbox.result) {
         allowances.push({
-          type: a.allowance_type,
+          type: a.allowance_type || a.type || '',
           name: a.name,
           amount: a.amount || 0,
           perUnit: a.per_unit || '',

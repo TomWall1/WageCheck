@@ -23067,6 +23067,7 @@
     "penalties": [],
     "allowances": [
       {
+        "type": "broken_shift_1",
         "name": "Broken shift allowance - 1 unpaid break",
         "amount": 20.82,
         "perUnit": "per_shift",
@@ -23074,6 +23075,7 @@
         "description": "Paid when your shift includes 1 unpaid break (broken shift). Disability services work."
       },
       {
+        "type": "broken_shift_2",
         "name": "Broken shift allowance - 2 unpaid breaks",
         "amount": 27.56,
         "perUnit": "per_shift",
@@ -23081,6 +23083,7 @@
         "description": "Paid when your shift includes 2 unpaid breaks (broken shift). Disability services work."
       },
       {
+        "type": "first_aid_ft",
         "name": "First aid allowance - full-time",
         "amount": 20.46,
         "perUnit": "per_week",
@@ -23088,6 +23091,7 @@
         "description": "Paid if you hold a current first aid certificate and are required to perform first aid duties."
       },
       {
+        "type": "first_aid_ptcas",
         "name": "First aid allowance - part-time or casual",
         "amount": 0.54,
         "perUnit": "per_hour",
@@ -23095,6 +23099,7 @@
         "description": "Paid per hour if you hold a current first aid certificate and are required to perform first aid duties."
       },
       {
+        "type": "hot_work_40_46",
         "name": "Hot work allowance - 40°C to 46°C",
         "amount": 0.61,
         "perUnit": "per_hour",
@@ -23102,6 +23107,7 @@
         "description": "Paid per hour if you work in temperatures between 40°C and 46°C."
       },
       {
+        "type": "hot_work_over_46",
         "name": "Hot work allowance - over 46°C",
         "amount": 0.73,
         "perUnit": "per_hour",
@@ -23109,6 +23115,7 @@
         "description": "Paid per hour if you work in temperatures over 46°C."
       },
       {
+        "type": "laundry_shift",
         "name": "Laundry allowance",
         "amount": 0.32,
         "perUnit": "per_shift",
@@ -23116,6 +23123,7 @@
         "description": "Paid per shift if you are required to launder your own uniform."
       },
       {
+        "type": "laundry_not_uniform",
         "name": "Laundry allowance - not a uniform",
         "amount": 0.32,
         "perUnit": "per_shift",
@@ -23123,6 +23131,7 @@
         "description": "Paid per shift for non-uniform required clothing."
       },
       {
+        "type": "meal",
         "name": "Meal allowance",
         "amount": 16.62,
         "perUnit": "per_meal",
@@ -23130,6 +23139,7 @@
         "description": "Paid when you work overtime for more than 2 hours and your employer did not give you notice the day before."
       },
       {
+        "type": "on_call_weekday",
         "name": "On call allowance - Mon-Fri",
         "amount": 24.5,
         "perUnit": "per_24hr_period",
@@ -23137,6 +23147,7 @@
         "description": "Paid for any 24-hour period or part thereof when on call between finishing ordinary duty Monday to finishing ordinary duty Friday."
       },
       {
+        "type": "on_call_weekend",
         "name": "On call allowance - weekend/PH",
         "amount": 48.51,
         "perUnit": "per_24hr_period",
@@ -23144,6 +23155,7 @@
         "description": "Paid for any other 24-hour period or public holiday, or part thereof, when on call."
       },
       {
+        "type": "sleepover",
         "name": "Sleepover allowance",
         "amount": 60.02,
         "perUnit": "per_sleepover",
@@ -23151,6 +23163,7 @@
         "description": "Paid for each sleepover where you are required to sleep at the workplace or client premises overnight."
       },
       {
+        "type": "uniform",
         "name": "Uniform allowance",
         "amount": 1.23,
         "perUnit": "per_shift",
@@ -23158,6 +23171,7 @@
         "description": "Paid per shift if you are required to wear a uniform and your employer does not provide it."
       },
       {
+        "type": "vehicle",
         "name": "Vehicle allowance",
         "amount": 0.99,
         "perUnit": "per_km",

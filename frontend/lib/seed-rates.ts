@@ -29,7 +29,7 @@ interface SeedAward {
   allowances: AllowanceInfo[];
 }
 
-const data = seedData as Record<string, SeedAward>;
+const data = seedData as unknown as Record<string, SeedAward>;
 
 export function getAwardRatesFromSeed(awardCode: string): AwardRateData {
   const award = data[awardCode];
