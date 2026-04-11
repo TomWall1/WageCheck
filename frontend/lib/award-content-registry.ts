@@ -191,12 +191,12 @@ export const AWARD_DEEP_CONTENT: Record<string, AwardDeepContent> = {
       'level-2-shift-breakdown': dynamic(() => import('@/components/seo/scenarios/ScenarioLevel2Breakdown')),
     },
     roleComponents: {
-      'waitstaff-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityWaitstaffContent')),
-      'cook-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityCookContent')),
-      'kitchen-hand-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityKitchenHandContent')),
-      'bartender-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityBartenderContent')),
-      'hotel-worker-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityHotelWorkerContent')),
-      'function-centre-pay-rates': dynamic(() => import('@/components/seo/roles/HospitalityFunctionCentreContent')),
+      'waitstaff-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      'cook-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      'kitchen-hand-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      'bartender-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      'hotel-worker-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      'function-centre-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
     },
     hubComponent: dynamic(() => import('@/components/seo/awards/HospitalityHubContent')),
     subPageComponents: {
