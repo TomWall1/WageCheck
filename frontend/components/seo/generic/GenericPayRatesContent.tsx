@@ -33,34 +33,51 @@ export default function GenericPayRatesContent({ rates, awardCode, awardName, aw
         Current hourly pay rates under the {awardName}, effective from {effectiveDate}. Casual rates include the 25% casual loading.
       </p>
 
-      {levels.length > 0 ? (
-        <section style={sectionStyle}>
-          <div style={{ overflowX: 'auto', marginBottom: '2rem' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid var(--border)', textAlign: 'left' }}>
-                  <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Classification</th>
-                  <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Level</th>
-                  <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>FT/PT Hourly</th>
-                  <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Casual Hourly</th>
-                </tr>
-              </thead>
-              <tbody>
-                {levels.map((l, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--secondary-muted)' }}>{l.title}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--secondary-muted)' }}>{l.level}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.ftRate)}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.casualRate)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p style={smallStyle}>
-            Rates sourced from the Fair Work Commission pay guide for {awardCode}, effective {effectiveDate}.
-          </p>
-        </section>
+      {levels.length > 0 ? (() => {
+        const streams = [...new Set(levels.map(l => l.stream))];
+        const hasMultipleStreams = streams.length > 1;
+        const formatStream = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+        return (
+          <section style={sectionStyle}>
+            {streams.map(stream => {
+              const streamLevels = levels.filter(l => l.stream === stream);
+              return (
+                <div key={stream} style={{ marginBottom: hasMultipleStreams ? '2rem' : 0 }}>
+                  {hasMultipleStreams && (
+                    <h2 style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.05rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px' }}>
+                      {formatStream(stream)}
+                    </h2>
+                  )}
+                  <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '2px solid var(--border)', textAlign: 'left' }}>
+                          <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Classification</th>
+                          <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>FT/PT Hourly</th>
+                          <th style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600 }}>Casual Hourly</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {streamLevels.map((l, i) => (
+                          <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                            <td style={{ padding: '10px 12px', color: 'var(--secondary-muted)' }}>{l.title}</td>
+                            <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.ftRate)}</td>
+                            <td style={{ padding: '10px 12px', color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.casualRate)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
+            <p style={smallStyle}>
+              Rates sourced from the Fair Work Commission pay guide for {awardCode}, effective {effectiveDate}.
+            </p>
+          </section>
+        );
+      })()
       ) : (
         <p style={{ ...pStyle, fontStyle: 'italic' }}>
           Pay rate data is not currently available for this award. Check the{' '}

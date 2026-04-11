@@ -178,39 +178,57 @@ export default function GenericHubContent({
       </section>
 
       {/* Classification table */}
-      {rates && rates.levels.length > 0 && (
+      {rates && rates.levels.length > 0 && (() => {
+        const streams = [...new Set(rates.levels.map(l => l.stream))];
+        const multiStream = streams.length > 1;
+        const fmtStream = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+        return (
         <section style={sectionStyle}>
           <h2 style={h2Style}>{awardName} pay rates &mdash; classification levels</h2>
           <p style={pStyle}>
-            Your pay rate depends on your classification level. The table below shows the minimum hourly rates for each level effective {effectiveDate}.
+            Your pay rate depends on your classification level. The table{multiStream ? 's' : ''} below show{multiStream ? '' : 's'} the minimum hourly rates effective {effectiveDate}.
           </p>
-          <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  <th style={thStyle}>Classification</th>
-                  <th style={thStyle}>Full-time rate</th>
-                  <th style={thStyle}>Casual rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rates.levels.map((l, i) => (
-                  <tr key={i}>
-                    <td style={{ ...tdStyle, fontWeight: 500, color: 'var(--secondary)' }}>
-                      {l.title || `Level ${l.level}`}
-                      {l.stream && l.stream !== 'general' ? ` (${l.stream})` : ''}
-                    </td>
-                    <td style={tdStyle}>{formatCurrency(l.ftRate)}/hr</td>
-                    <td style={tdStyle}>{formatCurrency(l.casualRate)}/hr</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {streams.map(stream => {
+            const streamLevels = rates.levels.filter(l => l.stream === stream);
+            return (
+              <div key={stream} style={{ marginBottom: multiStream ? '1.5rem' : 0 }}>
+                {multiStream && (
+                  <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '8px' }}>
+                    {fmtStream(stream)}
+                  </h3>
+                )}
+                <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
+                  <table style={tableStyle}>
+                    <thead>
+                      <tr>
+                        <th style={thStyle}>Classification</th>
+                        <th style={thStyle}>Full-time rate</th>
+                        <th style={thStyle}>Casual rate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {streamLevels.map((l, i) => (
+                        <tr key={i}>
+                          <td style={{ ...tdStyle, fontWeight: 500, color: 'var(--secondary)' }}>
+                            {l.title || `Level ${l.level}`}
+                          </td>
+                          <td style={tdStyle}>{formatCurrency(l.ftRate)}/hr</td>
+                          <td style={tdStyle}>{formatCurrency(l.casualRate)}/hr</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
           <p style={smallStyle}>
             Casual rates include the 25% casual loading. Rates sourced from the Fair Work Commission pay guide for {awardCode}, effective {effectiveDate}.
           </p>
         </section>
+        );
+      })()
       )}
 
       {/* Sub-page card grid */}
