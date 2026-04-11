@@ -191,12 +191,7 @@ export const AWARD_DEEP_CONTENT: Record<string, AwardDeepContent> = {
       'level-2-shift-breakdown': dynamic(() => import('@/components/seo/scenarios/ScenarioLevel2Breakdown')),
     },
     roleComponents: {
-      'waitstaff-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
-      'cook-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
-      'kitchen-hand-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
-      'bartender-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
-      'hotel-worker-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
-      'function-centre-pay-rates': dynamic(() => import('@/components/seo/generic/GenericRoleContent')),
+      // Hospitality roles have dedicated page files — no registry components needed
     },
     hubComponent: dynamic(() => import('@/components/seo/awards/HospitalityHubContent')),
     subPageComponents: {
@@ -399,14 +394,7 @@ export const AWARD_DEEP_CONTENT: Record<string, AwardDeepContent> = {
       'supervisor-pay-rates': dynamic(() => import('@/components/seo/retail-roles/RetailSupervisorContent')),
     },
     hubComponent: dynamic(() => import('@/components/seo/awards/RetailHubContent')),
-    subPageComponents: {
-      'pay-rates': dynamic(() => import('@/components/seo/awards/RetailPayRatesContent')),
-      'penalty-rates': dynamic(() => import('@/components/seo/awards/RetailPenaltyContent')),
-      'casual-employees': dynamic(() => import('@/components/seo/awards/RetailCasualContent')),
-      'overtime': dynamic(() => import('@/components/seo/awards/RetailOvertimeContent')),
-      'allowances': dynamic(() => import('@/components/seo/awards/RetailAllowancesContent')),
-      'classifications': dynamic(() => import('@/components/seo/awards/RetailClassificationsContent')),
-    },
+    // subPageComponents not yet created for Retail — pages use generic fallback
     getRates: () => getAwardRates('MA000004'),
   },
 
