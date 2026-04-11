@@ -81,7 +81,7 @@ export default function ScenarioUnderpaidSuper({ rates }: { rates?: HospitalityR
         <div style={exampleBoxStyle}>
           <h3 style={h3Style}>Wrong rate applied</h3>
           <p style={{ ...pStyle, marginBottom: '4px' }}>
-            Super rates increased from 10% to 10.5% (July 2022), to 11% (July 2023), to 11.5% (July 2024), to 12% (July 2025). Employers still applying earlier rates are underpaying.
+            The current super rate is 12%. Employers paying anything less are underpaying your super.
           </p>
         </div>
       </section>

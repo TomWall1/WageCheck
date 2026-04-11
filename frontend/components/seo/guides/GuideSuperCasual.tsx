@@ -20,7 +20,7 @@ const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px 
 const faqData = [
   { question: 'My employer says I\'m not entitled to super because I\'m casual — is that right?', answer: 'No — and that claim is wrong. Since November 2022, all employees including casuals are entitled to super. If you\'ve been told this, there\'s a strong chance your super hasn\'t been paid.' },
   { question: 'I have multiple casual jobs — do I get super from each employer?', answer: 'Yes. Each employer calculates and pays super independently on your earnings with them.' },
-  { question: 'My employer is paying at 10% — is that still correct?', answer: 'No. From 1 July 2024 the rate was 11.5%. From 1 July 2025 it is 12%. If your employer is still at 10%, they\'re underpaying your super.' },
+  { question: 'My employer is paying at 10% — is that still correct?', answer: 'No. The current superannuation rate is 12%. If your employer is paying anything less, they are underpaying your super.' },
   { question: 'How far back can I claim unpaid super?', answer: 'The ATO can pursue unpaid super going back 5 years in most cases. Act sooner rather than later.' },
 ];
 
@@ -126,7 +126,7 @@ export default function GuideSuperCasual({ rates }: { rates?: HospitalityRateDat
 
           <h3 style={h3Style}>Wrong rate applied</h3>
           <p style={pStyle}>
-            From July 2024, the rate was 11.5%. From July 2025, it is 12%. Employers still using 10% or 10.5% are underpaying super.
+            The current rate is 12%. Employers paying anything less are underpaying your super.
           </p>
 
           <h3 style={h3Style}>No super fund set up for new casual workers</h3>
