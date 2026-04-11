@@ -570,6 +570,15 @@ const genericScenarioComponents: Record<string, React.ComponentType<any>> = { //
 
 const genericHubComponent = dynamic(() => import('@/components/seo/generic/GenericHubContent'));
 
+const genericSubPageComponents: Record<string, React.ComponentType<any>> = { // eslint-disable-line @typescript-eslint/no-explicit-any
+  'pay-rates': dynamic(() => import('@/components/seo/generic/GenericPayRatesContent')),
+  'penalty-rates': dynamic(() => import('@/components/seo/generic/GenericPenaltyContent')),
+  'casual-employees': dynamic(() => import('@/components/seo/generic/GenericCasualContent')),
+  'overtime': dynamic(() => import('@/components/seo/generic/GenericOvertimeContent')),
+  'allowances': dynamic(() => import('@/components/seo/generic/GenericAllowancesContent')),
+  'classifications': dynamic(() => import('@/components/seo/generic/GenericClassificationsContent')),
+};
+
 // Auto-register every award that doesn't already have a hand-crafted entry
 for (const award of AWARDS) {
   if (AWARD_DEEP_CONTENT[award.slug]) continue; // skip hand-crafted awards
@@ -583,6 +592,7 @@ for (const award of AWARDS) {
     scenarioComponents: genericScenarioComponents,
     roleComponents: {},
     hubComponent: genericHubComponent,
+    subPageComponents: genericSubPageComponents,
     getRates: () => getAwardRates(award.code),
   };
 }
