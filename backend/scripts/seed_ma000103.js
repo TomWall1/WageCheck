@@ -37,7 +37,7 @@ async function seed() {
     // ── Classifications ───────────────────────────────────────────────────────
     // MA000103 uses a single stream ('supported_employment') with Grades 1-7 plus A and B.
     // Grade A and B are transitional supported wage classifications.
-    // We map Grade A → level 8, Grade B → level 9 for database storage.
+    // We map Grade A -> level 8, Grade B -> level 9 for database storage.
 
     const classifications = [
       {
@@ -167,7 +167,7 @@ async function seed() {
 
     // ── Pay rates ─────────────────────────────────────────────────────────────
     // Source: FWO pay guide MA000103, effective 10 October 2025.
-    // Casual rate = adult FT/PT rate × 1.25 (25% casual loading).
+    // Casual rates from PDF (includes 25% casual loading).
     // Grade A and B use transitional rates (1 July 2025 to 29 June 2026).
     const baseRates = {
       1: 24.28,
@@ -233,17 +233,17 @@ async function seed() {
     // Source: MA000103 — Penalty rates
     //
     // FT/PT penalty multipliers:
-    //   Weekday ordinary:   ×1.0
-    //   Saturday (6am-6pm): ×1.5
-    //   Sunday (6am-6pm, non-catering): ×2.0
-    //   Public holiday:     ×2.5
+    //   Weekday ordinary:   x1.0
+    //   Saturday (6am-6pm): x1.5
+    //   Sunday (6am-6pm, non-catering): x2.0
+    //   Public holiday:     x2.5
     //
     // Casual penalty multipliers (applied to casual base rate which already includes 25% loading):
-    //   Saturday (6am-6pm): ×1.5
-    //   Sunday (6am-6pm, non-catering): ×2.0
-    //   Public holiday:     ×1.8 (casual OT rates imply this)
+    //   Saturday (6am-6pm): x1.5
+    //   Sunday (6am-6pm, non-catering): x2.0
+    //   Public holiday:     x1.8
     //
-    // Note: Catering employees get Sunday ×1.75 instead of ×2.0.
+    // Note: Catering employees get Sunday x1.75 instead of x2.0.
     // We use the non-catering (higher) rate as the standard penalty.
 
     const penaltyRates = [
@@ -258,19 +258,19 @@ async function seed() {
         employment_type: 'full_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Saturday (6am–6pm) — ×1.5',
+        description: 'Saturday (6am-6pm) — x1.5',
       },
       {
         employment_type: 'full_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.0, addition_per_hour: null,
-        description: 'Sunday (6am–6pm, non-catering) — ×2.0',
+        description: 'Sunday (6am-6pm, non-catering) — x2.0',
       },
       {
         employment_type: 'full_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — ×2.5',
+        description: 'Public holiday — x2.5',
       },
       // ── Part-time (same as full-time) ──────────────────────────────────────
       {
@@ -283,19 +283,19 @@ async function seed() {
         employment_type: 'part_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Saturday (6am–6pm) — ×1.5',
+        description: 'Saturday (6am-6pm) — x1.5',
       },
       {
         employment_type: 'part_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.0, addition_per_hour: null,
-        description: 'Sunday (6am–6pm, non-catering) — ×2.0',
+        description: 'Sunday (6am-6pm, non-catering) — x2.0',
       },
       {
         employment_type: 'part_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — ×2.5',
+        description: 'Public holiday — x2.5',
       },
       // ── Casual ─────────────────────────────────────────────────────────────
       {
@@ -308,19 +308,19 @@ async function seed() {
         employment_type: 'casual', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Casual Saturday (6am–6pm) — ×1.5 of casual base',
+        description: 'Casual Saturday (6am-6pm) — x1.5 of casual base',
       },
       {
         employment_type: 'casual', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.0, addition_per_hour: null,
-        description: 'Casual Sunday (6am–6pm, non-catering) — ×2.0 of casual base',
+        description: 'Casual Sunday (6am-6pm, non-catering) — x2.0 of casual base',
       },
       {
         employment_type: 'casual', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.8, addition_per_hour: null,
-        description: 'Casual public holiday — ×1.8 of casual base',
+        description: 'Casual public holiday — x1.8 of casual base',
       },
     ];
 
@@ -341,83 +341,83 @@ async function seed() {
 
     // ── Overtime rates ────────────────────────────────────────────────────────
     // MA000103 — Overtime
-    // Daily threshold 7.6hr: first 2hr ×1.5, after ×2.0
-    // Weekly threshold 38hr: first 2hr ×1.5, after ×2.0
+    // Daily threshold 7.6hr: first 2hr x1.5, after x2.0
+    // Weekly threshold 38hr: first 2hr x1.5, after x2.0
     const overtimeRates = [
       // ── Full-time ──────────────────────────────────────────────────────────
       {
         employment_type: 'full_time',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Daily overtime — first 2 hours over 7.6 (×1.5)',
+        description: 'Daily overtime — first 2 hours over 7.6 (x1.5)',
       },
       {
         employment_type: 'full_time',
         threshold_hours: 9.6, period: 'daily',
         multiplier: 2.0,
-        description: 'Daily overtime — after 9.6 hours (×2.0)',
+        description: 'Daily overtime — after 9.6 hours (x2.0)',
       },
       {
         employment_type: 'full_time',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Weekly overtime — first 2 hours over 38 (×1.5)',
+        description: 'Weekly overtime — first 2 hours over 38 (x1.5)',
       },
       {
         employment_type: 'full_time',
         threshold_hours: 40, period: 'weekly',
         multiplier: 2.0,
-        description: 'Weekly overtime — after 40 hours (×2.0)',
+        description: 'Weekly overtime — after 40 hours (x2.0)',
       },
       // ── Part-time ──────────────────────────────────────────────────────────
       {
         employment_type: 'part_time',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Part-time daily overtime — first 2 hours over 7.6 (×1.5)',
+        description: 'Part-time daily overtime — first 2 hours over 7.6 (x1.5)',
       },
       {
         employment_type: 'part_time',
         threshold_hours: 9.6, period: 'daily',
         multiplier: 2.0,
-        description: 'Part-time daily overtime — after 9.6 hours (×2.0)',
+        description: 'Part-time daily overtime — after 9.6 hours (x2.0)',
       },
       {
         employment_type: 'part_time',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Part-time weekly overtime — first 2 hours over 38 (×1.5)',
+        description: 'Part-time weekly overtime — first 2 hours over 38 (x1.5)',
       },
       {
         employment_type: 'part_time',
         threshold_hours: 40, period: 'weekly',
         multiplier: 2.0,
-        description: 'Part-time weekly overtime — after 40 hours (×2.0)',
+        description: 'Part-time weekly overtime — after 40 hours (x2.0)',
       },
       // ── Casual ─────────────────────────────────────────────────────────────
       {
         employment_type: 'casual',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Casual daily overtime — first 2 hours over 7.6 (×1.5)',
+        description: 'Casual daily overtime — first 2 hours over 7.6 (x1.5)',
       },
       {
         employment_type: 'casual',
         threshold_hours: 9.6, period: 'daily',
         multiplier: 2.0,
-        description: 'Casual daily overtime — after 9.6 hours (×2.0)',
+        description: 'Casual daily overtime — after 9.6 hours (x2.0)',
       },
       {
         employment_type: 'casual',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Casual weekly overtime — first 2 hours over 38 (×1.5)',
+        description: 'Casual weekly overtime — first 2 hours over 38 (x1.5)',
       },
       {
         employment_type: 'casual',
         threshold_hours: 40, period: 'weekly',
         multiplier: 2.0,
-        description: 'Casual weekly overtime — after 40 hours (×2.0)',
+        description: 'Casual weekly overtime — after 40 hours (x2.0)',
       },
     ];
 
@@ -450,16 +450,16 @@ async function seed() {
       },
       {
         allowance_type: 'leading_hand_small',
-        name: 'Leading hand allowance (3–10 employees)',
-        description: 'All-purpose allowance for Grade 4 and below employees in charge of 3–10 employees.',
-        trigger_condition: 'Grade 4 or below, in charge of 3–10 employees',
+        name: 'Leading hand allowance (3-10 employees)',
+        description: 'All-purpose allowance for Grade 4 and below employees in charge of 3-10 employees.',
+        trigger_condition: 'Grade 4 or below, in charge of 3-10 employees',
         amount: 1.27, amount_type: 'hourly', per_unit: 'per_hour',
       },
       {
         allowance_type: 'leading_hand_medium',
-        name: 'Leading hand allowance (11–20 employees)',
-        description: 'All-purpose allowance for Grade 4 and below employees in charge of 11–20 employees.',
-        trigger_condition: 'Grade 4 or below, in charge of 11–20 employees',
+        name: 'Leading hand allowance (11-20 employees)',
+        description: 'All-purpose allowance for Grade 4 and below employees in charge of 11-20 employees.',
+        trigger_condition: 'Grade 4 or below, in charge of 11-20 employees',
         amount: 1.90, amount_type: 'hourly', per_unit: 'per_hour',
       },
       {

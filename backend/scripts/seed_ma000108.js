@@ -1,7 +1,7 @@
 /**
  * Seed script — Professional Diving Industry (Industrial) Award 2020 [MA000108]
  * Pay rates effective 1 July 2025 (following 2025 Annual Wage Review)
- * Rates sourced from FWC MAPD API.
+ * Source: FWO pay guide MA000108, effective 1 July 2025
  *
  * Run after migrate.js: node scripts/seed_ma000108.js
  */
@@ -32,278 +32,180 @@ async function seed() {
     ]);
 
     // ── Classifications ───────────────────────────────────────────────────────
+    // Two streams: offshore_divers (10 classifications) and inshore_divers (4 classifications).
+    // 14 unique classifications total (deduplicated from original 34).
+    // Offshore divers use hourly rates for our purposes.
+
     const classifications = [
-      {
-        level: 1, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Diver’s Attendant',
-        description: 'Diver’s Attendant',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 10,
-      },
-      {
-        level: 1, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Diver’s Attendant',
-        description: 'Diver’s Attendant',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 20,
-      },
+      // ── Inshore divers ─────────────────────────────────────────────────────
       {
         level: 1, stream: 'inshore_divers',
-        title: 'Diver’s Attendant',
-        description: 'Diver’s Attendant',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 30,
-      },
-      {
-        level: 1, stream: 'offshore_divers',
-        title: 'Diver’s Attendant',
-        description: 'Diver’s Attendant',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 40,
+        title: 'Diver\'s Attendant',
+        description: 'Inshore diver\'s attendant. Assists divers during inshore diving operations.',
+        duties: [
+          'Attending to divers during inshore operations',
+          'Maintaining diving equipment on site',
+          'Assisting with surface support tasks',
+        ],
+        indicative_tasks: ['Inshore diver\'s attendant'],
+        sort_order: 10,
       },
       {
         level: 2, stream: 'inshore_divers',
         title: 'Diver',
-        description: 'Diver',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 50,
-      },
-      {
-        level: 2, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Diver',
-        description: 'Diver',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 60,
-      },
-      {
-        level: 2, stream: 'offshore_divers',
-        title: 'Diver',
-        description: 'Diver',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 70,
-      },
-      {
-        level: 2, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Diver',
-        description: 'Diver',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 80,
-      },
-      {
-        level: 2, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Operator (ADS Operations)',
-        description: 'Operator (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 90,
-      },
-      {
-        level: 2, stream: 'offshore_divers',
-        title: 'Operator (ADS Operations)',
-        description: 'Operator (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 100,
-      },
-      {
-        level: 2, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Operator (ADS Operations)',
-        description: 'Operator (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 110,
+        description: 'Inshore diver. Performs diving work in inshore environments.',
+        duties: [
+          'Performing diving tasks in inshore waters',
+          'Conducting underwater inspections and maintenance',
+          'Operating diving equipment',
+        ],
+        indicative_tasks: ['Inshore diver'],
+        sort_order: 20,
       },
       {
         level: 3, stream: 'inshore_divers',
         title: 'Hyperbaric Welder',
-        description: 'Hyperbaric Welder',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 120,
-      },
-      {
-        level: 3, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Systems Maintenance Technician',
-        description: 'Systems Maintenance Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 130,
-      },
-      {
-        level: 3, stream: 'offshore_divers',
-        title: 'Systems Maintenance Technician',
-        description: 'Systems Maintenance Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 140,
-      },
-      {
-        level: 3, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Systems Maintenance Technician',
-        description: 'Systems Maintenance Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 150,
+        description: 'Inshore hyperbaric welder. Performs welding tasks in hyperbaric environments.',
+        duties: [
+          'Performing hyperbaric welding in inshore environments',
+          'Inspecting underwater structures',
+          'Operating specialist welding equipment',
+        ],
+        indicative_tasks: ['Inshore hyperbaric welder'],
+        sort_order: 30,
       },
       {
         level: 4, stream: 'inshore_divers',
         title: 'Diving Supervisor',
-        description: 'Diving Supervisor',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 160,
+        description: 'Inshore diving supervisor. Supervises inshore diving operations.',
+        duties: [
+          'Supervising inshore diving operations',
+          'Managing dive teams and safety procedures',
+          'Coordinating diving work schedules',
+        ],
+        indicative_tasks: ['Inshore diving supervisor'],
+        sort_order: 40,
+      },
+      // ── Offshore divers ────────────────────────────────────────────────────
+      {
+        level: 1, stream: 'offshore_divers',
+        title: 'Diver\'s Attendant',
+        description: 'Offshore diver\'s attendant. Assists divers during offshore diving operations.',
+        duties: [
+          'Attending to divers during offshore operations',
+          'Maintaining diving equipment on support vessels',
+          'Assisting with surface support and safety tasks',
+        ],
+        indicative_tasks: ['Offshore diver\'s attendant'],
+        sort_order: 50,
+      },
+      {
+        level: 2, stream: 'offshore_divers',
+        title: 'Diver',
+        description: 'Offshore diver. Performs diving work in offshore environments.',
+        duties: [
+          'Performing diving tasks in offshore waters',
+          'Conducting underwater inspections, maintenance and repairs',
+          'Operating diving equipment in offshore conditions',
+        ],
+        indicative_tasks: ['Offshore diver'],
+        sort_order: 60,
+      },
+      {
+        level: 3, stream: 'offshore_divers',
+        title: 'ADS Operations — Operator',
+        description: 'Operator in atmospheric diving suit (ADS) operations.',
+        duties: [
+          'Operating atmospheric diving suits',
+          'Performing tasks during ADS operations',
+          'Maintaining ADS equipment',
+        ],
+        indicative_tasks: ['ADS operations operator'],
+        sort_order: 70,
       },
       {
         level: 4, stream: 'offshore_divers',
-        title: 'Life Support Technician',
-        description: 'Life Support Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 170,
-      },
-      {
-        level: 4, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Life Support Technician',
-        description: 'Life Support Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 180,
-      },
-      {
-        level: 4, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Life Support Technician',
-        description: 'Life Support Technician',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 190,
-      },
-      {
-        level: 4, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Senior Operator (OMB Operations)',
-        description: 'Senior Operator (OMB Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 200,
-      },
-      {
-        level: 4, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Senior Operator (OMB Operations)',
-        description: 'Senior Operator (OMB Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 210,
-      },
-      {
-        level: 4, stream: 'offshore_divers',
-        title: 'Senior Operator (OMB Operations)',
-        description: 'Senior Operator (OMB Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 220,
-      },
-      {
-        level: 5, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Hyperbaric Welder',
-        description: 'Hyperbaric Welder',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 230,
-      },
-      {
-        level: 5, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Hyperbaric Welder',
-        description: 'Hyperbaric Welder',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 240,
+        title: 'Systems Maintenance Technician',
+        description: 'Offshore systems maintenance technician. Maintains diving systems and equipment.',
+        duties: [
+          'Maintaining and repairing diving systems',
+          'Conducting technical inspections of equipment',
+          'Ensuring diving system integrity and safety',
+        ],
+        indicative_tasks: ['Offshore systems maintenance technician'],
+        sort_order: 80,
       },
       {
         level: 5, stream: 'offshore_divers',
-        title: 'Hyperbaric Welder',
-        description: 'Hyperbaric Welder',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 250,
-      },
-      {
-        level: 6, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Diving Supervisor',
-        description: 'Diving Supervisor',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 260,
+        title: 'Life Support Technician',
+        description: 'Offshore life support technician. Operates and maintains life support systems.',
+        duties: [
+          'Operating life support systems during diving operations',
+          'Monitoring and maintaining gas supply systems',
+          'Ensuring safety of saturation diving systems',
+        ],
+        indicative_tasks: ['Offshore life support technician'],
+        sort_order: 90,
       },
       {
         level: 6, stream: 'offshore_divers',
-        title: 'Diving Supervisor',
-        description: 'Diving Supervisor',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 270,
-      },
-      {
-        level: 6, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Diving Supervisor',
-        description: 'Diving Supervisor',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 280,
-      },
-      {
-        level: 6, stream: 'offshore_divers',
-        title: 'Supervisor (ADS Operations)',
-        description: 'Supervisor (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 290,
-      },
-      {
-        level: 6, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Supervisor (ADS Operations)',
-        description: 'Supervisor (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 300,
-      },
-      {
-        level: 6, stream: 'offshore_divers_total_hourly_rate',
-        title: 'Supervisor (ADS Operations)',
-        description: 'Supervisor (ADS Operations)',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 310,
-      },
-      {
-        level: 7, stream: 'offshore_divers_total_monthly_rate',
-        title: 'Diving Superintendent',
-        description: 'Diving Superintendent',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 320,
+        title: 'OMB Operations — Senior Operator',
+        description: 'Senior operator in one-man-bell (OMB) operations.',
+        duties: [
+          'Operating one-man-bell diving systems',
+          'Supervising OMB diving operations',
+          'Managing OMB equipment and safety',
+        ],
+        indicative_tasks: ['OMB operations senior operator'],
+        sort_order: 100,
       },
       {
         level: 7, stream: 'offshore_divers',
-        title: 'Diving Superintendent',
-        description: 'Diving Superintendent',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 330,
+        title: 'Hyperbaric Welder',
+        description: 'Offshore hyperbaric welder. Performs welding in hyperbaric offshore environments.',
+        duties: [
+          'Performing hyperbaric welding in offshore environments',
+          'Welding underwater structures and pipelines',
+          'Operating specialist offshore welding equipment',
+        ],
+        indicative_tasks: ['Offshore hyperbaric welder'],
+        sort_order: 110,
       },
       {
-        level: 7, stream: 'offshore_divers_total_hourly_rate',
+        level: 8, stream: 'offshore_divers',
+        title: 'Diving Supervisor',
+        description: 'Offshore diving supervisor. Supervises offshore diving operations.',
+        duties: [
+          'Supervising offshore diving operations',
+          'Managing offshore dive teams',
+          'Ensuring compliance with offshore diving safety regulations',
+        ],
+        indicative_tasks: ['Offshore diving supervisor'],
+        sort_order: 120,
+      },
+      {
+        level: 9, stream: 'offshore_divers',
+        title: 'ADS Operations — Supervisor',
+        description: 'Supervisor of atmospheric diving suit (ADS) operations.',
+        duties: [
+          'Supervising ADS diving operations',
+          'Managing ADS dive teams and equipment',
+          'Coordinating ADS operational safety',
+        ],
+        indicative_tasks: ['ADS operations supervisor'],
+        sort_order: 130,
+      },
+      {
+        level: 10, stream: 'offshore_divers',
         title: 'Diving Superintendent',
-        description: 'Diving Superintendent',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 340,
+        description: 'Offshore diving superintendent. Manages all diving operations.',
+        duties: [
+          'Managing all offshore diving operations',
+          'Overseeing diving safety and compliance',
+          'Coordinating with vessel operations and clients',
+        ],
+        indicative_tasks: ['Offshore diving superintendent'],
+        sort_order: 140,
       },
     ];
 
@@ -325,21 +227,47 @@ async function seed() {
     console.log(`✓ Inserted ${classifications.length} classifications`);
 
     // ── Pay rates ─────────────────────────────────────────────────────────────
+    // Source: FWO pay guide MA000108, effective 1 July 2025.
+    // Inshore divers — FT hourly rates from PDF.
+    // Offshore divers — FT hourly rates from PDF.
+    // Casual rates from PDF (offshore) or base x 1.25 (inshore).
     const baseRates = {
       '1_inshore_divers': 27.77,
-      '1_offshore_divers': 50.81,
       '2_inshore_divers': 33.78,
-      '2_offshore_divers': 58.95,
-      '2_offshore_divers': 58.95,
       '3_inshore_divers': 35.33,
-      '3_offshore_divers': 63.31,
       '4_inshore_divers': 45.53,
-      '4_offshore_divers': 67.93,
-      '4_offshore_divers': 67.93,
-      '5_offshore_divers': 72.32,
-      '6_offshore_divers': 74.94,
-      '6_offshore_divers': 74.94,
-      '7_offshore_divers': 80.55,
+      '1_offshore_divers': 50.81,
+      '2_offshore_divers': 58.95,
+      '3_offshore_divers': 58.95,   // ADS Operations Operator — same rate as Diver
+      '4_offshore_divers': 63.31,   // Systems Maintenance Technician
+      '5_offshore_divers': 67.93,   // Life Support Technician
+      '6_offshore_divers': 67.93,   // OMB Operations Senior Operator — same rate as Life Support Tech
+      '7_offshore_divers': 72.32,   // Hyperbaric Welder
+      '8_offshore_divers': 74.94,   // Diving Supervisor
+      '9_offshore_divers': 74.94,   // ADS Operations Supervisor — same rate as Diving Supervisor
+      '10_offshore_divers': 80.55,  // Diving Superintendent
+    };
+
+    // Offshore casual rates from PDF (not base x 1.25; they use a different formula)
+    const offshoreCasualRates = {
+      '1_offshore_divers': 30.54,
+      '2_offshore_divers': 34.93,
+      '3_offshore_divers': 34.93,
+      '4_offshore_divers': 37.15,
+      '5_offshore_divers': 39.68,
+      '6_offshore_divers': 39.68,
+      '7_offshore_divers': 41.85,
+      '8_offshore_divers': 43.36,
+      '9_offshore_divers': 43.36,
+      '10_offshore_divers': 46.40,
+    };
+
+    // Inshore casual rates from PDF
+    const inshoreCasualRates = {
+      '1_inshore_divers': 34.71,
+      '2_inshore_divers': 42.23,
+      '3_inshore_divers': 44.16,
+      '4_inshore_divers': 56.91,
     };
 
     const classResult = await client.query(
@@ -348,10 +276,13 @@ async function seed() {
     );
 
     for (const cls of classResult.rows) {
-      const baseRate = baseRates[`${cls.level}_${cls.stream}`];
+      const key = `${cls.level}_${cls.stream}`;
+      const baseRate = baseRates[key];
       if (!baseRate) continue;
 
-      const casualRate = Math.round(baseRate * 1.25 * 100) / 100;
+      const casualRate = cls.stream === 'offshore_divers'
+        ? offshoreCasualRates[key]
+        : inshoreCasualRates[key];
 
       for (const empType of ['full_time', 'part_time']) {
         await client.query(`
@@ -362,19 +293,21 @@ async function seed() {
         `, [AWARD_CODE, cls.id, empType, baseRate, EFFECTIVE_DATE]);
       }
 
-      await client.query(`
-        INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
-        VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
-        ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
-        DO UPDATE SET rate_amount = EXCLUDED.rate_amount
-      `, [AWARD_CODE, cls.id, casualRate, EFFECTIVE_DATE]);
+      if (casualRate) {
+        await client.query(`
+          INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
+          VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
+          ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
+          DO UPDATE SET rate_amount = EXCLUDED.rate_amount
+        `, [AWARD_CODE, cls.id, casualRate, EFFECTIVE_DATE]);
 
-      await client.query(`
-        INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
-        VALUES ($1, $2, 'casual', 'casual_loading', 0.25, $3)
-        ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
-        DO UPDATE SET rate_amount = EXCLUDED.rate_amount
-      `, [AWARD_CODE, cls.id, EFFECTIVE_DATE]);
+        await client.query(`
+          INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
+          VALUES ($1, $2, 'casual', 'casual_loading', 0.25, $3)
+          ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
+          DO UPDATE SET rate_amount = EXCLUDED.rate_amount
+        `, [AWARD_CODE, cls.id, EFFECTIVE_DATE]);
+      }
     }
     console.log('✓ Inserted pay rates');
 
@@ -384,73 +317,73 @@ async function seed() {
         employment_type: 'full_time', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Ordinary weekday — ×1',
+        description: 'Ordinary weekday — x1',
       },
       {
         employment_type: 'full_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Monday to Saturday - after 2 hours — full_time ×2',
+        description: 'Monday to Saturday — after 2 hours — full-time x2',
       },
       {
         employment_type: 'full_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Sunday - all day — full_time ×2',
+        description: 'Sunday — all day — full-time x2',
       },
       {
         employment_type: 'full_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — full_time ×2.5',
+        description: 'Public holiday — full-time x2.5',
       },
       {
         employment_type: 'part_time', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Ordinary weekday — ×1',
+        description: 'Ordinary weekday — x1',
       },
       {
         employment_type: 'part_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Saturday — ×1.5',
+        description: 'Saturday — x1.5',
       },
       {
         employment_type: 'part_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Sunday — ×2',
+        description: 'Sunday — x2',
       },
       {
         employment_type: 'part_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — ×2.5',
+        description: 'Public holiday — x2.5',
       },
       {
         employment_type: 'casual', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Ordinary weekday — ×1',
+        description: 'Ordinary weekday — x1',
       },
       {
         employment_type: 'casual', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Saturday — ×1.5',
+        description: 'Saturday — x1.5',
       },
       {
         employment_type: 'casual', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Sunday — ×2',
+        description: 'Sunday — x2',
       },
       {
         employment_type: 'casual', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — Casual ×2.5',
+        description: 'Public holiday — Casual x2.5',
       },
     ];
 
@@ -471,18 +404,18 @@ async function seed() {
 
     // ── Overtime rates ────────────────────────────────────────────────────────
     const overtimeRates = [
-      { employment_type: 'full_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Full-time daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'full_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Full-time daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'full_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Full-time weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'full_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Full-time weekly overtime — after 40 hours (×2.0)' },
-      { employment_type: 'part_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Part-time daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'part_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Part-time daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'part_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Part-time weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'part_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Part-time weekly overtime — after 40 hours (×2.0)' },
-      { employment_type: 'casual', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Casual daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'casual', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Casual daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'casual', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Casual weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Casual weekly overtime — after 40 hours (×2.0)' },
+      { employment_type: 'full_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Full-time daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'full_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Full-time daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'full_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Full-time weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'full_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Full-time weekly overtime — after 40 hours (x2.0)' },
+      { employment_type: 'part_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Part-time daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'part_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Part-time daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'part_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Part-time weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'part_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Part-time weekly overtime — after 40 hours (x2.0)' },
+      { employment_type: 'casual', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Casual daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'casual', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Casual daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'casual', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Casual weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Casual weekly overtime — after 40 hours (x2.0)' },
     ];
 
     await client.query(`DELETE FROM overtime_rates WHERE award_code = $1`, [AWARD_CODE]);
@@ -498,45 +431,45 @@ async function seed() {
     // ── Allowances ────────────────────────────────────────────────────────────
     const allowances = [
       {
-        allowance_type: 'uniform',
-        name: 'Clothing and equipment allowances—Casual employees',
-        description: 'Clothing and equipment allowances—Casual employees',
-        trigger_condition: 'As per award conditions',
+        allowance_type: 'clothing_casual',
+        name: 'Clothing and equipment allowance — Casual employees',
+        description: 'Clothing and equipment allowance for casual employees.',
+        trigger_condition: 'Casual employees as per award conditions',
         amount: 8.75, amount_type: 'fixed', per_unit: 'per_shift',
       },
       {
-        allowance_type: 'uniform',
-        name: 'Clothing and equipment allowances—Full-time employees',
-        description: 'Clothing and equipment allowances—Full-time employees',
-        trigger_condition: 'As per award conditions',
-        amount: 108.61, amount_type: 'fixed', per_unit: 'per_shift',
+        allowance_type: 'clothing_fulltime',
+        name: 'Clothing and equipment allowance — Full-time employees',
+        description: 'Clothing and equipment allowance for full-time employees.',
+        trigger_condition: 'Full-time employees as per award conditions',
+        amount: 108.61, amount_type: 'fixed', per_unit: 'per_month',
       },
       {
-        allowance_type: 'meal',
-        name: 'Distant work allowance—Accommodation and meals',
-        description: 'Distant work allowance—Accommodation and meals',
-        trigger_condition: 'As per award conditions',
+        allowance_type: 'distant_work_accommodation',
+        name: 'Distant work allowance — Accommodation and meals',
+        description: 'Allowance for accommodation and meals when working away from home.',
+        trigger_condition: 'Working distant from home as per award conditions',
         amount: 487.71, amount_type: 'weekly', per_unit: 'per_week',
       },
       {
-        allowance_type: 'meal',
-        name: 'Distant work allowance—Accommodation and meals—broken parts of the week',
-        description: 'Distant work allowance—Accommodation and meals—broken parts of the week',
-        trigger_condition: 'As per award conditions',
+        allowance_type: 'distant_work_broken',
+        name: 'Distant work allowance — Accommodation and meals (broken parts of the week)',
+        description: 'Daily rate for broken parts of the week when working distant.',
+        trigger_condition: 'Working distant from home, broken parts of the week',
         amount: 69.73, amount_type: 'fixed', per_unit: 'per_shift',
       },
       {
-        allowance_type: 'distant_work_allowance_expenses',
-        name: 'Distant work allowance—Expenses',
-        description: 'Distant work allowance—Expenses',
-        trigger_condition: 'As per award conditions',
+        allowance_type: 'distant_work_expenses',
+        name: 'Distant work allowance — Expenses',
+        description: 'Expenses allowance for distant work.',
+        trigger_condition: 'Working distant from home as per award conditions',
         amount: 9.34, amount_type: 'fixed', per_unit: 'per_shift',
       },
       {
         allowance_type: 'vehicle_car',
-        name: 'Distant work allowance—Use of own vehicle allowance',
-        description: 'Distant work allowance—Use of own vehicle allowance',
-        trigger_condition: 'As per award conditions',
+        name: 'Distant work allowance — Use of own vehicle',
+        description: 'Vehicle allowance for using own vehicle for work purposes.',
+        trigger_condition: 'Using own vehicle for work purposes',
         amount: 0.98, amount_type: 'per_km', per_unit: 'per_km',
       },
     ];
@@ -591,37 +524,55 @@ async function seed() {
         award_code: AWARD_CODE,
         question_key: 'a108_stream',
         question_text: 'What area do you work in?',
-        help_text: 'Select the stream that best matches your role.',
+        help_text: 'Select whether you work in inshore or offshore diving operations.',
         question_type: 'single',
         stream: null,
         parent_question_key: null,
         parent_answer_key: null,
         sort_order: 1,
         answers: [
-          { answer_key: 'offshore_divers_total_monthly_rate', answer_text: 'Offshore Divers Total Monthly Rate', sort_order: 1 },
-          { answer_key: 'offshore_divers_total_hourly_rate', answer_text: 'Offshore Divers Total Hourly Rate', sort_order: 2 },
-          { answer_key: 'inshore_divers', answer_text: 'Inshore Divers', sort_order: 3 },
-          { answer_key: 'offshore_divers', answer_text: 'Offshore Divers', sort_order: 4 },
+          { answer_key: 'inshore_divers', answer_text: 'Inshore divers', sort_order: 1 },
+          { answer_key: 'offshore_divers', answer_text: 'Offshore divers', sort_order: 2 },
         ],
       },
       {
         award_code: AWARD_CODE,
-        question_key: 'a108_level',
-        question_text: 'What is your classification level?',
-        help_text: 'Select the level that best matches your role and experience.',
+        question_key: 'a108_inshore_level',
+        question_text: 'What is your classification?',
+        help_text: 'Select the classification that best matches your role.',
         question_type: 'single',
         stream: null,
-        parent_question_key: null,
-        parent_answer_key: null,
+        parent_question_key: 'a108_stream',
+        parent_answer_key: 'inshore_divers',
         sort_order: 2,
         answers: [
-          { answer_key: 'level_1', answer_text: 'Diver’s Attendant', sort_order: 1 },
+          { answer_key: 'level_1', answer_text: 'Diver\'s Attendant', sort_order: 1 },
           { answer_key: 'level_2', answer_text: 'Diver', sort_order: 2 },
           { answer_key: 'level_3', answer_text: 'Hyperbaric Welder', sort_order: 3 },
           { answer_key: 'level_4', answer_text: 'Diving Supervisor', sort_order: 4 },
-          { answer_key: 'level_5', answer_text: 'Hyperbaric Welder', sort_order: 5 },
-          { answer_key: 'level_6', answer_text: 'Diving Supervisor', sort_order: 6 },
-          { answer_key: 'level_7', answer_text: 'Diving Superintendent', sort_order: 7 },
+        ],
+      },
+      {
+        award_code: AWARD_CODE,
+        question_key: 'a108_offshore_level',
+        question_text: 'What is your classification?',
+        help_text: 'Select the classification that best matches your role.',
+        question_type: 'single',
+        stream: null,
+        parent_question_key: 'a108_stream',
+        parent_answer_key: 'offshore_divers',
+        sort_order: 3,
+        answers: [
+          { answer_key: 'level_1', answer_text: 'Diver\'s Attendant', sort_order: 1 },
+          { answer_key: 'level_2', answer_text: 'Diver', sort_order: 2 },
+          { answer_key: 'level_3', answer_text: 'ADS Operations — Operator', sort_order: 3 },
+          { answer_key: 'level_4', answer_text: 'Systems Maintenance Technician', sort_order: 4 },
+          { answer_key: 'level_5', answer_text: 'Life Support Technician', sort_order: 5 },
+          { answer_key: 'level_6', answer_text: 'OMB Operations — Senior Operator', sort_order: 6 },
+          { answer_key: 'level_7', answer_text: 'Hyperbaric Welder', sort_order: 7 },
+          { answer_key: 'level_8', answer_text: 'Diving Supervisor', sort_order: 8 },
+          { answer_key: 'level_9', answer_text: 'ADS Operations — Supervisor', sort_order: 9 },
+          { answer_key: 'level_10', answer_text: 'Diving Superintendent', sort_order: 10 },
         ],
       },
     ];

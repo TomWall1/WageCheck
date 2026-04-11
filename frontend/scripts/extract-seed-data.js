@@ -55,6 +55,7 @@ function extractFromSeed(filePath) {
   const rateVarNames = [
     'rates', 'baseRates', 'BASE_RATES', 'ftRates', 'rateByLevel',
     'nonLiquorRates', 'coachBaseRates', 'clericalBaseRates', 'adultRates', 'payRates',
+    'dailyRates', 'hourlyRates',
   ];
 
   function extractBalancedObject(src, varName) {
@@ -116,15 +117,28 @@ function extractFromSeed(filePath) {
             rateMap[`${key}_general`] = val;
           } else if (typeof val === 'object' && val.ft) {
             // Object with ft/casual: { ft: 24.28, casual: 30.35 }
-            // Key format may be 'stream:level' or 'level_stream'
-            const parts = key.includes(':') ? key.split(':') : key.split('_');
-            if (parts.length === 2) {
-              // Determine which part is level vs stream
+            // Key format: 'stream:level', 'level_stream', or 'level_long_stream_name'
+            let level, stream;
+            if (key.includes(':')) {
+              const parts = key.split(':');
               const isFirstNum = /^\d+$/.test(parts[0]);
-              const level = isFirstNum ? parts[0] : parts[1];
-              const stream = isFirstNum ? parts[1] : parts[0];
-              rateMap[`${level}_${stream}`] = val.ft;
+              level = isFirstNum ? parts[0] : parts[1];
+              stream = isFirstNum ? parts[1] : parts[0];
+            } else {
+              // Split on first underscore only: '1_cement_and_lime' -> ['1', 'cement_and_lime']
+              const idx = key.indexOf('_');
+              if (idx > 0) {
+                const first = key.substring(0, idx);
+                const rest = key.substring(idx + 1);
+                const isFirstNum = /^\d+$/.test(first);
+                level = isFirstNum ? first : rest;
+                stream = isFirstNum ? rest : first;
+              } else {
+                level = key;
+                stream = 'general';
+              }
             }
+            rateMap[`${level}_${stream}`] = val.ft;
           } else if (typeof val === 'object') {
             // Nested: { admin: { 1: 25.54 } } — key is stream
             for (const [level, rate] of Object.entries(val)) {

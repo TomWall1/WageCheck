@@ -152,7 +152,7 @@ async function seed() {
           'Contributing to design research and analysis',
           'Performing studio and office support tasks',
         ],
-        indicative_tasks: ['Architecture student (under 21, 14–26 weeks)'],
+        indicative_tasks: ['Architecture student (under 21, 14-26 weeks)'],
         sort_order: 90,
       },
       {
@@ -164,7 +164,7 @@ async function seed() {
           'Assisting with project documentation',
           'Participating in design development tasks',
         ],
-        indicative_tasks: ['Architecture student (under 21, 27–52 weeks)'],
+        indicative_tasks: ['Architecture student (under 21, 27-52 weeks)'],
         sort_order: 100,
       },
       {
@@ -261,7 +261,12 @@ async function seed() {
 
     // ── Pay rates ─────────────────────────────────────────────────────────────
     // Source: FWO pay guide MA000079, effective 1 July 2025.
-    // Casual rate = adult FT/PT rate × 1.25 (25% casual loading).
+    // Casual rate = adult FT/PT rate x 1.25 (25% casual loading).
+    // FT/PT hourly rates from PDF:
+    //   Graduate: $32.84, $34.58, $36.31, $37.97
+    //   Registered: $37.97, $39.14, $40.32
+    //   Student (under 21): $11.49, $16.42, $21.35, $22.99, $24.63; (21+): $24.95
+    //   Bachelor pathway: $27.91, $29.56, $31.20
     const baseRates = {
       graduate: { 1: 32.84, 2: 34.58, 3: 36.31, 4: 37.97 },
       registered: { 1: 37.97, 2: 39.14, 3: 40.32 },
@@ -309,8 +314,8 @@ async function seed() {
 
     // ── Penalty rates ─────────────────────────────────────────────────────────
     // Source: MA000079 — Architects Award 2020
-    // FT/PT: No Saturday/Sunday penalties. Public holiday: ×1.5.
-    // Casual: Public holiday: ×1.2 of casual rate (= ×1.5 of FT rate).
+    // FT/PT: No Saturday/Sunday penalties. Public holiday: x1.5.
+    // Casual: Public holiday: x1.2 of casual rate (= x1.5 of FT rate).
     const penaltyRates = [
       // ── Full-time ──────────────────────────────────────────────────────────
       {
@@ -323,19 +328,19 @@ async function seed() {
         employment_type: 'full_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Saturday — no penalty (×1.0)',
+        description: 'Saturday — no penalty (x1.0)',
       },
       {
         employment_type: 'full_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Sunday — no penalty (×1.0)',
+        description: 'Sunday — no penalty (x1.0)',
       },
       {
         employment_type: 'full_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.50, addition_per_hour: null,
-        description: 'Public holiday — time and a half (×1.5)',
+        description: 'Public holiday — time and a half (x1.5)',
       },
       // ── Part-time (same as full-time) ──────────────────────────────────────
       {
@@ -348,19 +353,19 @@ async function seed() {
         employment_type: 'part_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Saturday — no penalty (×1.0)',
+        description: 'Saturday — no penalty (x1.0)',
       },
       {
         employment_type: 'part_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Sunday — no penalty (×1.0)',
+        description: 'Sunday — no penalty (x1.0)',
       },
       {
         employment_type: 'part_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.50, addition_per_hour: null,
-        description: 'Public holiday — time and a half (×1.5)',
+        description: 'Public holiday — time and a half (x1.5)',
       },
       // ── Casual ─────────────────────────────────────────────────────────────
       // Casual base rate already includes 25% loading. Multipliers relative to casual base.
@@ -374,19 +379,19 @@ async function seed() {
         employment_type: 'casual', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Casual Saturday — no penalty (×1.0 of casual base)',
+        description: 'Casual Saturday — no penalty (x1.0 of casual base)',
       },
       {
         employment_type: 'casual', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.0, addition_per_hour: null,
-        description: 'Casual Sunday — no penalty (×1.0 of casual base)',
+        description: 'Casual Sunday — no penalty (x1.0 of casual base)',
       },
       {
         employment_type: 'casual', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.20, addition_per_hour: null,
-        description: 'Casual public holiday — ×1.20 of casual base (150% of FT rate)',
+        description: 'Casual public holiday — x1.20 of casual base (150% of FT rate)',
       },
     ];
 
@@ -406,48 +411,48 @@ async function seed() {
     console.log(`✓ Inserted ${penaltyRates.length} penalty rate rules`);
 
     // ── Overtime rates ────────────────────────────────────────────────────────
-    // MA000079 — flat ×1.5 overtime rate with no ×2.0 tier.
+    // MA000079 — flat x1.5 overtime rate with no x2.0 tier.
     // Daily threshold: 7.6 hours. Weekly threshold: 38 hours.
-    // Both tiers set to ×1.5 (no double-time tier).
+    // Both tiers set to x1.5 (no double-time tier).
     const overtimeRates = [
       // ── Full-time ──────────────────────────────────────────────────────────
       {
         employment_type: 'full_time',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Daily overtime — after 7.6 hours (×1.5)',
+        description: 'Daily overtime — after 7.6 hours (x1.5)',
       },
       {
         employment_type: 'full_time',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Weekly overtime — after 38 hours (×1.5)',
+        description: 'Weekly overtime — after 38 hours (x1.5)',
       },
       // ── Part-time ──────────────────────────────────────────────────────────
       {
         employment_type: 'part_time',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Part-time daily overtime — after 7.6 hours (×1.5)',
+        description: 'Part-time daily overtime — after 7.6 hours (x1.5)',
       },
       {
         employment_type: 'part_time',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Part-time weekly overtime — after 38 hours (×1.5)',
+        description: 'Part-time weekly overtime — after 38 hours (x1.5)',
       },
       // ── Casual ─────────────────────────────────────────────────────────────
       {
         employment_type: 'casual',
         threshold_hours: 7.6, period: 'daily',
         multiplier: 1.5,
-        description: 'Casual daily overtime — after 7.6 hours (×1.5)',
+        description: 'Casual daily overtime — after 7.6 hours (x1.5)',
       },
       {
         employment_type: 'casual',
         threshold_hours: 38, period: 'weekly',
         multiplier: 1.5,
-        description: 'Casual weekly overtime — after 38 hours (×1.5)',
+        description: 'Casual weekly overtime — after 38 hours (x1.5)',
       },
     ];
 
@@ -526,13 +531,6 @@ async function seed() {
     console.log(`✓ Inserted ${breaks.length} break entitlement rules`);
 
     // ── Classification questions ───────────────────────────────────────────────
-    // Parent-gated question flow for MA000079:
-    //   Q1: arch_stream — which qualifications?
-    //   Q2: student_age — are you 21+? (parent: arch_stream=student)
-    //   Q3: student_experience — how long employed? (parent: student_age=no)
-    //   Q4: graduate_level — which pay point? (parent: arch_stream=graduate)
-    //   Q5: registered_level — which pay point? (parent: arch_stream=registered)
-    //   Q6: bachelor_year — which year? (parent: arch_stream=bachelor_pathway)
     const questions = [
       {
         award_code: AWARD_CODE,
