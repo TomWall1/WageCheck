@@ -8,10 +8,15 @@ export const metadata: Metadata = {
   description:
     'Find out what you should be paid under your Fair Work modern award. Free, plain-English, and built for workers — not lawyers.',
   keywords: ['wage theft', 'hospitality award', 'retail award', 'fitness award', 'fair work', 'underpaid', 'Australia', 'award wages'],
+  alternates: {
+    canonical: './',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_AU',
     siteName: 'Review My Pay',
+    title: 'Review My Pay \u2014 Know Your Workplace Rights',
+    description: 'Free tool helping Australian workers check if they are being paid correctly under Fair Work modern awards.',
   },
   twitter: {
     card: 'summary',
