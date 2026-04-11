@@ -25515,7 +25515,864 @@
   "MA000122": {
     "awardCode": "MA000122",
     "effectiveDate": "2025-07-01",
-    "classifications": [],
+    "classifications": [
+      {
+        "level": 1,
+        "stream": "dc_cat1_18",
+        "title": "Master",
+        "description": "Master — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 346.91
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat1_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 341.2
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat1_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 295.67
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat1_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 273.51
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat1_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 262.13
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat1_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 247.91
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat1_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo up to 19,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 225.77
+      },
+      {
+        "level": 1,
+        "stream": "dc_cat1_aov",
+        "title": "Master",
+        "description": "Master — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 338.6
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat1_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 333.07
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat1_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 288.88
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat1_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 267.38
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat1_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 256.33
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat1_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 242.51
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat1_aov",
+        "title": "Second cook",
+        "description": "Second cook — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 226.5
+      },
+      {
+        "level": 8,
+        "stream": "dc_cat1_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo up to 19,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 220.97
+      },
+      {
+        "level": 1,
+        "stream": "dc_cat2_18",
+        "title": "Master",
+        "description": "Master — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 357.57
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat2_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 351.66
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat2_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 304.41
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat2_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 280.79
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat2_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 269.61
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat2_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 251.9
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat2_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo 19,000-39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 229.01
+      },
+      {
+        "level": 1,
+        "stream": "dc_cat2_aov",
+        "title": "Master",
+        "description": "Master — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 348.96
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat2_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 343.23
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat2_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 297.35
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat2_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 275.06
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat2_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 263.59
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat2_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 246.4
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat2_aov",
+        "title": "Second cook",
+        "description": "Second cook — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 229.85
+      },
+      {
+        "level": 8,
+        "stream": "dc_cat2_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo 19,000-39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 224.12
+      },
+      {
+        "level": 1,
+        "stream": "dc_cat3_18",
+        "title": "Master",
+        "description": "Master — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 370.11
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat3_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 363.96
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat3_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 314.69
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat3_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 290.07
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat3_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 275.32
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat3_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 253.76
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat3_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo over 39,000t, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 230.01
+      },
+      {
+        "level": 1,
+        "stream": "dc_cat3_aov",
+        "title": "Master",
+        "description": "Master — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 361.15
+      },
+      {
+        "level": 2,
+        "stream": "dc_cat3_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 355.19
+      },
+      {
+        "level": 3,
+        "stream": "dc_cat3_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 307.35
+      },
+      {
+        "level": 4,
+        "stream": "dc_cat3_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 283.45
+      },
+      {
+        "level": 5,
+        "stream": "dc_cat3_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 269.13
+      },
+      {
+        "level": 6,
+        "stream": "dc_cat3_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 248.2
+      },
+      {
+        "level": 7,
+        "stream": "dc_cat3_aov",
+        "title": "Second cook",
+        "description": "Second cook — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 234.05
+      },
+      {
+        "level": 8,
+        "stream": "dc_cat3_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Dry cargo over 39,000t, all other vessels.",
+        "duties": [],
+        "ftRate": 225.08
+      },
+      {
+        "level": 1,
+        "stream": "crude_18",
+        "title": "Master",
+        "description": "Master — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 419.44
+      },
+      {
+        "level": 2,
+        "stream": "crude_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 412.31
+      },
+      {
+        "level": 3,
+        "stream": "crude_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 351.59
+      },
+      {
+        "level": 4,
+        "stream": "crude_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 326.58
+      },
+      {
+        "level": 5,
+        "stream": "crude_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 305.15
+      },
+      {
+        "level": 6,
+        "stream": "crude_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 273.63
+      },
+      {
+        "level": 7,
+        "stream": "crude_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Crude tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 245.06
+      },
+      {
+        "level": 1,
+        "stream": "crude_aov",
+        "title": "Master",
+        "description": "Master — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 405.7
+      },
+      {
+        "level": 2,
+        "stream": "crude_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 398.84
+      },
+      {
+        "level": 3,
+        "stream": "crude_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 340.47
+      },
+      {
+        "level": 4,
+        "stream": "crude_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 316.42
+      },
+      {
+        "level": 5,
+        "stream": "crude_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 295.81
+      },
+      {
+        "level": 6,
+        "stream": "crude_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 265.54
+      },
+      {
+        "level": 7,
+        "stream": "crude_aov",
+        "title": "Second cook",
+        "description": "Second cook — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 248.35
+      },
+      {
+        "level": 8,
+        "stream": "crude_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Crude tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 235.85
+      },
+      {
+        "level": 1,
+        "stream": "product_18",
+        "title": "Master",
+        "description": "Master — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 435.8
+      },
+      {
+        "level": 2,
+        "stream": "product_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 428.32
+      },
+      {
+        "level": 3,
+        "stream": "product_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 361.09
+      },
+      {
+        "level": 4,
+        "stream": "product_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 334.95
+      },
+      {
+        "level": 5,
+        "stream": "product_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 316.27
+      },
+      {
+        "level": 6,
+        "stream": "product_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 282.63
+      },
+      {
+        "level": 7,
+        "stream": "product_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Other product tankers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 257.14
+      },
+      {
+        "level": 1,
+        "stream": "product_aov",
+        "title": "Master",
+        "description": "Master — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 418.01
+      },
+      {
+        "level": 2,
+        "stream": "product_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 410.88
+      },
+      {
+        "level": 3,
+        "stream": "product_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 346.87
+      },
+      {
+        "level": 4,
+        "stream": "product_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 321.95
+      },
+      {
+        "level": 5,
+        "stream": "product_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 304.17
+      },
+      {
+        "level": 6,
+        "stream": "product_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 272.79
+      },
+      {
+        "level": 7,
+        "stream": "product_aov",
+        "title": "Second cook",
+        "description": "Second cook — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 255
+      },
+      {
+        "level": 8,
+        "stream": "product_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Other product tankers, all other vessels.",
+        "duties": [],
+        "ftRate": 247.88
+      },
+      {
+        "level": 1,
+        "stream": "gas_18",
+        "title": "Master",
+        "description": "Master — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 425.97
+      },
+      {
+        "level": 2,
+        "stream": "gas_18",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 424.13
+      },
+      {
+        "level": 3,
+        "stream": "gas_18",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 357.68
+      },
+      {
+        "level": 4,
+        "stream": "gas_18",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 331.84
+      },
+      {
+        "level": 5,
+        "stream": "gas_18",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 318.9
+      },
+      {
+        "level": 6,
+        "stream": "gas_18",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 291.2
+      },
+      {
+        "level": 7,
+        "stream": "gas_18",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Gas carriers, manned at 18 or below.",
+        "duties": [],
+        "ftRate": 265.98
+      },
+      {
+        "level": 1,
+        "stream": "gas_aov",
+        "title": "Master",
+        "description": "Master — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 420.77
+      },
+      {
+        "level": 2,
+        "stream": "gas_aov",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 413.62
+      },
+      {
+        "level": 3,
+        "stream": "gas_aov",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 349.07
+      },
+      {
+        "level": 4,
+        "stream": "gas_aov",
+        "title": "Second mate / Second engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electro-technical officer — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 323.98
+      },
+      {
+        "level": 5,
+        "stream": "gas_aov",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 311.43
+      },
+      {
+        "level": 6,
+        "stream": "gas_aov",
+        "title": "Chief integrated rating / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Chief cook / Chief steward — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 284.53
+      },
+      {
+        "level": 7,
+        "stream": "gas_aov",
+        "title": "Second cook",
+        "description": "Second cook — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 270.84
+      },
+      {
+        "level": 8,
+        "stream": "gas_aov",
+        "title": "Integrated rating / Assistant steward / Catering attendant",
+        "description": "Integrated rating / Assistant steward / Catering attendant — Gas carriers, all other vessels.",
+        "duties": [],
+        "ftRate": 260.08
+      },
+      {
+        "level": 1,
+        "stream": "research",
+        "title": "Master",
+        "description": "Master — Research vessel.",
+        "duties": [],
+        "ftRate": 315.55
+      },
+      {
+        "level": 2,
+        "stream": "research",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Research vessel.",
+        "duties": [],
+        "ftRate": 309.85
+      },
+      {
+        "level": 3,
+        "stream": "research",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Research vessel.",
+        "duties": [],
+        "ftRate": 263.93
+      },
+      {
+        "level": 4,
+        "stream": "research",
+        "title": "Second mate / Second engineer / Electrical engineer / Electro-technical officer",
+        "description": "Second mate / Second engineer / Electrical engineer / Electro-technical officer — Research vessel.",
+        "duties": [],
+        "ftRate": 241.47
+      },
+      {
+        "level": 5,
+        "stream": "research",
+        "title": "Third mate / Third engineer / Electrician",
+        "description": "Third mate / Third engineer / Electrician — Research vessel.",
+        "duties": [],
+        "ftRate": 231.58
+      },
+      {
+        "level": 6,
+        "stream": "research",
+        "title": "Bosun / Chief steward / Chief cook / Chief integrated rating",
+        "description": "Bosun / Chief steward / Chief cook / Chief integrated rating — Research vessel.",
+        "duties": [],
+        "ftRate": 220.97
+      },
+      {
+        "level": 7,
+        "stream": "research",
+        "title": "Integrated rating / AB / Greaser / Second cook",
+        "description": "Integrated rating / AB / Greaser / Second cook — Research vessel.",
+        "duties": [],
+        "ftRate": 204.06
+      },
+      {
+        "level": 1,
+        "stream": "temp_licence",
+        "title": "Master",
+        "description": "Master — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 43.91
+      },
+      {
+        "level": 2,
+        "stream": "temp_licence",
+        "title": "Chief engineer",
+        "description": "Chief engineer — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 43.18
+      },
+      {
+        "level": 3,
+        "stream": "temp_licence",
+        "title": "First mate / First engineer",
+        "description": "First mate / First engineer — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 37.44
+      },
+      {
+        "level": 4,
+        "stream": "temp_licence",
+        "title": "Second mate / Second engineer / Radio officer / Electrical engineer",
+        "description": "Second mate / Second engineer / Radio officer / Electrical engineer — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 34.65
+      },
+      {
+        "level": 5,
+        "stream": "temp_licence",
+        "title": "Third mate / Third engineer",
+        "description": "Third mate / Third engineer — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 33.21
+      },
+      {
+        "level": 6,
+        "stream": "temp_licence",
+        "title": "Chief integrated rating / Bosun / Chief cook / Chief steward",
+        "description": "Chief integrated rating / Bosun / Chief cook / Chief steward — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 31.43
+      },
+      {
+        "level": 7,
+        "stream": "temp_licence",
+        "title": "Carpenter / Fitter / Repairer / Donkeyman / Electrician",
+        "description": "Carpenter / Fitter / Repairer / Donkeyman / Electrician — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 31.43
+      },
+      {
+        "level": 8,
+        "stream": "temp_licence",
+        "title": "Integrated rating / Able seaman / Fireman / Motorman / Pumpman / Oiler greaser / Steward",
+        "description": "Integrated rating / Able seaman / Fireman / Motorman / Pumpman / Oiler greaser / Steward — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 28.64
+      },
+      {
+        "level": 9,
+        "stream": "temp_licence",
+        "title": "OS / Wiper / Deckboy / Catering boy / 2nd cook / Messroom steward (first 6 months)",
+        "description": "OS / Wiper / Deckboy / Catering boy / 2nd cook / Messroom steward (first 6 months of employment) — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 24.28
+      },
+      {
+        "level": 10,
+        "stream": "temp_licence",
+        "title": "OS / Wiper / Deckboy / Catering boy / 2nd cook / Messroom steward (after 6 months)",
+        "description": "OS / Wiper / Deckboy / Catering boy / 2nd cook / Messroom steward (after 6 months of employment) — Vessels granted a temporary licence.",
+        "duties": [],
+        "ftRate": 24.95
+      }
+    ],
     "penalties": [
       {
         "dayType": "weekday",

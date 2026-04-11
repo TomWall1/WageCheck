@@ -32,6 +32,23 @@ function extractFromSeed(filePath) {
     try {
       const sandbox = {};
       vm.createContext(sandbox);
+      // Inject any helper functions defined before the classifications array
+      // Use brace-counting to extract complete function bodies
+      const beforeClass = content.substring(0, classMatch.index);
+      const funcStarts = [...beforeClass.matchAll(/function (\w+)\s*\(/g)];
+      for (const fm of funcStarts) {
+        const funcStart = fm.index;
+        const braceStart = beforeClass.indexOf('{', funcStart);
+        if (braceStart === -1) continue;
+        let depth = 1, j = braceStart + 1;
+        while (j < beforeClass.length && depth > 0) {
+          if (beforeClass[j] === '{') depth++;
+          else if (beforeClass[j] === '}') depth--;
+          j++;
+        }
+        const funcBody = beforeClass.substring(funcStart, j);
+        try { vm.runInContext(funcBody, sandbox); } catch { /* skip */ }
+      }
       vm.runInContext(`result = [${classMatch[1]}]`, sandbox);
       for (const c of sandbox.result) {
         classifications.push({
