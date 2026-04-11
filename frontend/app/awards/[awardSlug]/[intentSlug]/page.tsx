@@ -69,6 +69,18 @@ export default async function IntentPage({ params }: Props) {
           This page is being expanded. Check back soon or use the calculator to check your pay now.
         </p>
       )}
+
+      {/* Article schema for AI search visibility */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: page.title,
+        description: page.metaDescription,
+        dateModified: new Date().toISOString().split('T')[0],
+        author: { '@type': 'Organization', name: 'Review My Pay', url: 'https://reviewmypay.com' },
+        publisher: { '@type': 'Organization', name: 'Review My Pay', url: 'https://reviewmypay.com' },
+        mainEntityOfPage: `https://reviewmypay.com/awards/${awardSlug}/${intentSlug}`,
+      }) }} />
     </div>
   );
 }
