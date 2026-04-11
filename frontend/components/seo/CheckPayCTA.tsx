@@ -13,24 +13,13 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
 
   return (
     <div style={{
-      background: 'linear-gradient(135deg, #004D40 0%, #00695C 100%)',
+      background: '#004D40',
       borderRadius: '12px',
       padding: '32px 28px',
-      textAlign: 'center',
+      textAlign: 'center' as const,
       marginTop: '2rem',
-      position: 'relative',
-      overflow: 'hidden',
+      borderTop: '4px solid #FFB74D',
     }}>
-      {/* Subtle accent stripe */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '4px',
-        background: 'var(--accent)',
-      }} />
-
       <p style={{
         fontFamily: 'Fraunces, Georgia, serif',
         fontSize: '1.35rem',
@@ -46,7 +35,7 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
       <p style={{
         fontSize: '14.5px',
         color: 'rgba(255, 255, 255, 0.85)',
-        marginBottom: '20px',
+        marginBottom: '24px',
         lineHeight: 1.5,
         maxWidth: '420px',
         marginLeft: 'auto',
@@ -59,16 +48,15 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
         className="cta-button"
         style={{
           display: 'inline-block',
-          background: 'var(--accent)',
-          color: '#263238',
+          background: '#ffffff',
+          color: '#004D40',
           fontWeight: 700,
           fontSize: '16px',
-          padding: '14px 36px',
+          padding: '16px 40px',
           borderRadius: '8px',
           textDecoration: 'none',
           letterSpacing: '-0.01em',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-          transition: 'transform 0.15s, box-shadow 0.15s',
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.25)',
         }}
       >
         Check my pay now
@@ -76,8 +64,8 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
       <p style={{
         fontSize: '12px',
         color: 'rgba(255, 255, 255, 0.6)',
-        marginTop: '12px',
-        margin: '12px 0 0 0',
+        marginTop: '14px',
+        marginBottom: 0,
       }}>
         No sign-up required
       </p>

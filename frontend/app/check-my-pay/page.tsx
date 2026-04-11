@@ -49,16 +49,15 @@ export default function CheckMyPayPage() {
           className="cta-button"
           style={{
             display: 'block',
-            background: 'var(--accent)',
-            color: '#263238',
+            background: '#004D40',
+            color: '#ffffff',
             fontWeight: 700,
             fontSize: '16px',
             padding: '16px 28px',
             borderRadius: '8px',
             textDecoration: 'none',
-            textAlign: 'center',
+            textAlign: 'center' as const,
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-            transition: 'transform 0.15s, box-shadow 0.15s',
           }}
         >
           Start checking your pay now
