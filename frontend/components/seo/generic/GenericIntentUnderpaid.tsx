@@ -45,6 +45,9 @@ export default function GenericIntentUnderpaid({ rates, awardCode, awardName, aw
         <p style={pStyle}>
           If you work under the {awardName} and have never checked your pay against the award, there is a real chance you are being underpaid. Underpayment is not always obvious &mdash; it often hides in missing penalty rates, incorrect classification levels, or allowances that never appear on your payslip.
         </p>
+        <p style={pStyle}>
+          The Fair Work Ombudsman recovered $358 million for more than 249,000 underpaid workers in 2024&ndash;25. In investigated food and hospitality businesses, 86% were found in breach &mdash; most commonly for failing to pay penalty rates. (<a href="https://www.fairwork.gov.au/newsroom/media-releases/2025-media-releases/october-2025/20251029-annual-report-2024-25-media-release" target="_blank" rel="noopener noreferrer" style={linkStyle}>FWO Annual Report 2024&ndash;25</a>)
+        </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           Common roles covered: {examples}. If any of those sound like your job &mdash; keep reading.
         </p>

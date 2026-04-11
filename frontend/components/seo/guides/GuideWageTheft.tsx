@@ -33,7 +33,7 @@ export default function GuideWageTheft() {
       {/* Intro */}
       <section style={sectionStyle}>
         <p style={pStyle}>
-          Wage theft is not a niche problem in Australia. It is endemic. The Fair Work Ombudsman recovers tens of millions of dollars in underpaid wages every year &mdash; and research consistently shows that represents a fraction of the total. Most underpayment never gets reported, not because it doesn&apos;t exist, but because most workers don&apos;t know it&apos;s happening to them.
+          Wage theft is not a niche problem in Australia. It is endemic. The Fair Work Ombudsman recovered $358 million for more than 249,000 underpaid workers in 2024&ndash;25 alone, bringing the five-year total to over $2 billion. And that is only what gets reported and recovered &mdash; the true scale is significantly larger.
         </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           If you work in hospitality, retail, fast food, cleaning, or construction &mdash; your industry is among the highest risk.
@@ -59,9 +59,12 @@ export default function GuideWageTheft() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>The scale of wage theft in Australia</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li>The Fair Work Ombudsman recovers tens of millions in underpaid wages annually, with large employer self-reported underpayments adding hundreds of millions more</li>
-          <li>Independent research suggests the true figure of underpayment across Australian workplaces is significantly higher than what gets reported</li>
-          <li>Hospitality, retail, and fast food consistently top the list of most investigated industries</li>
+          <li>The Fair Work Ombudsman recovered $358 million for 249,000+ underpaid workers in 2024&ndash;25 (<a href="https://www.fairwork.gov.au/newsroom/media-releases/2025-media-releases/october-2025/20251029-annual-report-2024-25-media-release" target="_blank" rel="noopener noreferrer" style={linkStyle}>FWO Annual Report</a>)</li>
+          <li>Over $2 billion recovered for workers in the past five years</li>
+          <li>In investigated fast food, restaurant, and caf&eacute; businesses, 86% were found to have breached workplace laws</li>
+          <li>Most common breaches: failure to pay penalty rates and underpaying minimum wages</li>
+          <li>Anonymous tip-offs to the FWO increased 50% in 2024&ndash;25 (25,608 reports)</li>
+          <li>Fast food, restaurants, cafes, aged care, and construction are priority sectors for FWO enforcement in 2025&ndash;26</li>
           <li>Workers aged 15&ndash;24 are the most likely to be underpaid &mdash; and the least likely to report it</li>
         </ul>
         <p style={pStyle}>

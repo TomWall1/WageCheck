@@ -44,7 +44,7 @@ export default function GenericScenarioBelowAward({ rates, awardCode, awardName,
       <section style={sectionStyle}>
         <h2 style={h2Style}>The rule</h2>
         <p style={pStyle}>
-          The {awardName} sets legally binding minimum rates of pay for every classification level. These rates are updated annually (usually from 1 July) by the Fair Work Commission. Paying below these rates is a contravention of the Fair Work Act 2009 and can result in penalties for the employer. You can lodge a free complaint with the Fair Work Ombudsman, who has the power to investigate and recover the underpayment on your behalf.
+          The {awardName} sets legally binding minimum rates of pay for every classification level. These rates are updated annually (usually from 1 July) by the Fair Work Commission. Paying below these rates is a contravention of the Fair Work Act 2009 and can result in penalties for the employer. You can lodge a free complaint with the Fair Work Ombudsman, who has the power to investigate and recover the underpayment on your behalf. In 2024&ndash;25, the FWO recovered $358 million for over 249,000 underpaid workers and secured $23.7 million in court penalties against non-compliant employers. (<a href="https://www.fairwork.gov.au/newsroom/media-releases/2025-media-releases/october-2025/20251029-annual-report-2024-25-media-release" target="_blank" rel="noopener noreferrer" style={linkStyle}>FWO Annual Report 2024&ndash;25</a>)
         </p>
       </section>
 

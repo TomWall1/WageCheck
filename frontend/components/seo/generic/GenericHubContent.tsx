@@ -262,6 +262,20 @@ export default function GenericHubContent({
         </div>
       </section>
 
+      {/* Underpayment scale — sourced from FWO Annual Report 2024-25 */}
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Underpayment in Australia is widespread</h2>
+        <p style={pStyle}>
+          The Fair Work Ombudsman recovered <strong>$358 million</strong> for more than <strong>249,000 underpaid workers</strong> in 2024&ndash;25 alone. Over the past five years, total recoveries have exceeded <strong>$2 billion</strong>.
+        </p>
+        <p style={pStyle}>
+          In investigations of fast food, restaurant, and caf&eacute; businesses, <strong>86% were found to have breached workplace laws</strong>. The most common breaches: failure to pay penalty rates and underpaying minimum wages for ordinary hours.
+        </p>
+        <p style={smallStyle}>
+          Source: <a href="https://www.fairwork.gov.au/newsroom/media-releases/2025-media-releases/october-2025/20251029-annual-report-2024-25-media-release" target="_blank" rel="noopener noreferrer" style={linkStyle}>Fair Work Ombudsman Annual Report 2024&ndash;25</a>
+        </p>
+      </section>
+
       {/* CTA mid-page */}
       <CheckPayCTA awardCode={awardCode} awardName={awardName} />
 

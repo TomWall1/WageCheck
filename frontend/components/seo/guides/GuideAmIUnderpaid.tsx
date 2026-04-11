@@ -33,7 +33,7 @@ export default function GuideAmIUnderpaid() {
       {/* Intro */}
       <section style={sectionStyle}>
         <p style={pStyle}>
-          If you&apos;re asking this question, there&apos;s a high chance the answer is yes. Wage underpayment is widespread in Australia &mdash; the Fair Work Ombudsman recovers tens of millions in underpaid wages every year, and research consistently shows that&apos;s a fraction of the total. Most underpayment never gets reported because workers either don&apos;t know it&apos;s happening or don&apos;t know how to check. This guide gives you a clear process.
+          If you&apos;re asking this question, there&apos;s a high chance the answer is yes. The Fair Work Ombudsman recovered $358 million for more than 249,000 underpaid workers in 2024&ndash;25 &mdash; and that is just the reported cases. In investigated fast food, restaurant, and caf&eacute; businesses, 86% were found to have breached workplace laws. Most underpayment never gets reported because workers don&apos;t know it&apos;s happening. This guide gives you a clear process to check. (<a href="https://www.fairwork.gov.au/newsroom/media-releases/2025-media-releases/october-2025/20251029-annual-report-2024-25-media-release" target="_blank" rel="noopener noreferrer" style={linkStyle}>Source: FWO Annual Report 2024&ndash;25</a>)
         </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           If you work in hospitality, retail, fast food, cleaning, or almost any non-professional role and have never checked your award &mdash; start here.
