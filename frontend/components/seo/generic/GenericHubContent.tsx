@@ -94,6 +94,9 @@ export default function GenericHubContent({
   examples,
 }: Props) {
   const effectiveDate = rates?.effectiveDate ?? '1 July 2025';
+  const streams = rates ? [...new Set(rates.levels.map(l => l.stream))] : [];
+  const multiStream = streams.length > 1;
+  const fmtStream = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
   const faqData = [
     {
@@ -178,12 +181,7 @@ export default function GenericHubContent({
       </section>
 
       {/* Classification table */}
-      {rates && rates.levels.length > 0 && (() => {
-        const streams = [...new Set(rates.levels.map(l => l.stream))];
-        const multiStream = streams.length > 1;
-        const fmtStream = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-        return (
+      {rates && rates.levels.length > 0 && (
         <section style={sectionStyle}>
           <h2 style={h2Style}>{awardName} pay rates &mdash; classification levels</h2>
           <p style={pStyle}>
@@ -227,8 +225,7 @@ export default function GenericHubContent({
             Casual rates include the 25% casual loading. Rates sourced from the Fair Work Commission pay guide for {awardCode}, effective {effectiveDate}.
           </p>
         </section>
-        );
-      })()
+      )
       )}
 
       {/* Sub-page card grid */}
