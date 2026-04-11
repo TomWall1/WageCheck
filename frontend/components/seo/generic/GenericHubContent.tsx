@@ -28,7 +28,7 @@ const h2Style: React.CSSProperties = {
 
 const h3Style: React.CSSProperties = {
   fontSize: '14.5px',
-  fontWeight: 600,
+  fontWeight: 700,
   color: 'var(--secondary)',
   marginBottom: '6px',
   marginTop: '0',
@@ -73,7 +73,7 @@ const tableStyle: React.CSSProperties = {
 const thStyle: React.CSSProperties = {
   padding: '10px 12px',
   color: 'var(--secondary)',
-  fontWeight: 600,
+  fontWeight: 700,
   textAlign: 'left' as const,
   borderBottom: '2px solid var(--border)',
 };
@@ -140,7 +140,7 @@ export default function GenericHubContent({
       {/* Trigger moment */}
       <section style={sectionStyle}>
         <div style={warningBoxStyle}>
-          <p style={{ ...pStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '8px' }}>
+          <p style={{ ...pStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '8px' }}>
             If your pay is the same regardless of the day or time you work, you may be missing penalty rates, overtime, or allowances.
           </p>
           <p style={{ ...smallStyle, margin: 0 }}>
@@ -254,7 +254,7 @@ export default function GenericHubContent({
               'Casual loading described as "covering weekends and penalties"',
               'Your classification level has never been reviewed despite gaining experience or qualifications',
             ].map((item, i) => (
-              <p key={i} style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', margin: 0 }}>
+              <p key={i} style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', margin: 0 }}>
                 &bull; {item}
               </p>
             ))}
@@ -320,16 +320,16 @@ export default function GenericHubContent({
           href={`/check-my-pay?award=${awardCode}`}
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
       </section>
 

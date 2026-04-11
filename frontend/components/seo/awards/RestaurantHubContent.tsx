@@ -18,7 +18,7 @@ const h2Style: React.CSSProperties = {
 
 const h3Style: React.CSSProperties = {
   fontSize: '14.5px',
-  fontWeight: 600,
+  fontWeight: 700,
   color: 'var(--secondary)',
   marginBottom: '6px',
   marginTop: '0',
@@ -96,7 +96,7 @@ export default function RestaurantHubContent({ rates }: { rates: RestaurantRateD
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '12px' }}>
             <li>Sunday casual Level 3 &mdash; {formatCurrency(l3?.sundayCasual ?? 0)}/hr</li>
           </ul>
-          <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
+          <p style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)' }}>
             Underpayment per Sunday shift: {formatCurrency((l3?.sundayCasual ?? 0) - (l3?.casualRate ?? 0))}/hr difference.
           </p>
           <p style={smallStyle}>
@@ -201,7 +201,7 @@ export default function RestaurantHubContent({ rates }: { rates: RestaurantRateD
               'Flat rate quoted regardless of day',
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
               </div>
             ))}
           </div>
@@ -221,7 +221,7 @@ export default function RestaurantHubContent({ rates }: { rates: RestaurantRateD
               { title: 'Split shift allowance never paid', desc: 'If your working day is broken into two or more separate periods with an unpaid gap, you\'re owed the split shift allowance on top of your hourly rate.' },
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
                 <p style={{ ...smallStyle, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -347,16 +347,16 @@ export default function RestaurantHubContent({ rates }: { rates: RestaurantRateD
           href="/check-my-pay?award=MA000119"
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
         <p style={{ ...smallStyle, marginTop: '12px' }}>
           Based on official pay rates from the Fair Work Commission (MA000119).

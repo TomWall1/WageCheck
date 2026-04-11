@@ -8,7 +8,7 @@ import { AwardRateData, getLevel } from '@/lib/award-rates';
 import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
-const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
+const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
 const pStyle: React.CSSProperties = { fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginBottom: '1rem' };
 const smallStyle: React.CSSProperties = { fontSize: '12.5px', color: 'var(--secondary-muted)', lineHeight: 1.6 };
 const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
@@ -17,7 +17,7 @@ const warningBoxStyle: React.CSSProperties = { background: 'var(--accent-light)'
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
 const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' };
-const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
+const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 700, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
 const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--secondary-muted)' };
 
 const faqData = [
@@ -72,7 +72,7 @@ export default function RetailHubContent({ rates }: { rates?: AwardRateData }) {
           <ul style={{ ...pStyle, paddingLeft: '1.25rem', marginBottom: '12px' }}>
             <li>{l1 ? formatCurrency(l1.casualRate) : '&mdash;'} &times; 11 hours = {l1 ? formatCurrency(l1.casualRate * 11) : '&mdash;'}</li>
           </ul>
-          <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
+          <p style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)' }}>
             Underpayment per weekend: ~$110. Over a year: ~$5,280.
           </p>
           <p style={smallStyle}>
@@ -131,7 +131,7 @@ export default function RetailHubContent({ rates }: { rates?: AwardRateData }) {
                 { level: 8, roles: 'Senior specialist, complex operations', rate: l8 ? formatCurrency(l8.ftRate) : '&mdash;' },
               ].map((row) => (
                 <tr key={row.level}>
-                  <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--secondary)' }}>Level {row.level}</td>
+                  <td style={{ ...tdStyle, fontWeight: 700, color: 'var(--secondary)' }}>Level {row.level}</td>
                   <td style={tdStyle}>{row.roles}</td>
                   <td style={tdStyle}>{row.rate}/hr</td>
                 </tr>
@@ -173,7 +173,7 @@ export default function RetailHubContent({ rates }: { rates?: AwardRateData }) {
               'Same rate for years despite taking on more responsibilities',
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
               </div>
             ))}
           </div>
@@ -192,7 +192,7 @@ export default function RetailHubContent({ rates }: { rates?: AwardRateData }) {
               { title: 'Level never reviewed', desc: 'If you have gained experience, taken on supervisory duties, or specialised in a product area, your level should have increased. Many workers stay at Level 1 for years despite doing Level 2 or 3 work.' },
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
                 <p style={{ ...smallStyle, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -300,16 +300,16 @@ export default function RetailHubContent({ rates }: { rates?: AwardRateData }) {
           href="/check-my-pay?award=MA000004"
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
         <p style={{ ...smallStyle, marginTop: '12px' }}>
           Based on official pay rates from the Fair Work Commission (MA000004).

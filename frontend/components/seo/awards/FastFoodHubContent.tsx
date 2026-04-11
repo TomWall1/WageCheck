@@ -18,7 +18,7 @@ const h2Style: React.CSSProperties = {
 
 const h3Style: React.CSSProperties = {
   fontSize: '14.5px',
-  fontWeight: 600,
+  fontWeight: 700,
   color: 'var(--secondary)',
   marginBottom: '6px',
   marginTop: '0',
@@ -51,7 +51,7 @@ const sectionStyle: React.CSSProperties = {
 
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' };
-const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
+const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 700, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
 const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--secondary-muted)' };
 
 const faqData = [
@@ -108,7 +108,7 @@ export default function FastFoodHubContent({ rates }: { rates?: AwardRateData })
             <li>Sunday shift (casual): {g1 ? formatCurrency(g1.sundayCasual) : '&mdash;'}/hr (175% of casual rate at Grade 1)</li>
             <li>Public holiday shift (casual): {g1 ? formatCurrency(g1.publicHolidayCasual) : '&mdash;'}/hr (275% of casual rate at Grade 1)</li>
           </ul>
-          <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
+          <p style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)' }}>
             Estimated underpayment: $110&ndash;$340 in that week alone.
           </p>
           <p style={smallStyle}>
@@ -163,7 +163,7 @@ export default function FastFoodHubContent({ rates }: { rates?: AwardRateData })
               { title: 'Minimum engagement not honoured', desc: 'Casual fast food workers must be paid for a minimum of 2 hours per shift, even if sent home early.' },
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
                 <p style={{ ...smallStyle, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -319,16 +319,16 @@ export default function FastFoodHubContent({ rates }: { rates?: AwardRateData })
           href="/check-my-pay?award=MA000003"
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
         <p style={{ ...smallStyle, marginTop: '12px' }}>
           Based on official pay rates from the Fair Work Commission (MA000003).

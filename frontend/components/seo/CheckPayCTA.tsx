@@ -13,47 +13,74 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
 
   return (
     <div style={{
-      background: 'var(--primary-light)',
-      border: '1.5px solid var(--primary)',
-      borderRadius: '10px',
-      padding: '24px',
+      background: 'linear-gradient(135deg, #004D40 0%, #00695C 100%)',
+      borderRadius: '12px',
+      padding: '32px 28px',
       textAlign: 'center',
       marginTop: '2rem',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
+      {/* Subtle accent stripe */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '4px',
+        background: 'var(--accent)',
+      }} />
+
       <p style={{
         fontFamily: 'Fraunces, Georgia, serif',
-        fontSize: '1.15rem',
+        fontSize: '1.35rem',
         fontWeight: 600,
-        color: 'var(--secondary)',
+        color: '#ffffff',
         marginBottom: '8px',
+        lineHeight: 1.3,
       }}>
         {awardName
-          ? `Check your ${awardName} pay now`
-          : 'Check if you\'re being paid correctly'}
+          ? `Not sure if your ${awardName} pay is right?`
+          : 'Not sure if you\u2019re being paid correctly?'}
       </p>
       <p style={{
-        fontSize: '13.5px',
-        color: 'var(--secondary-muted)',
-        marginBottom: '16px',
+        fontSize: '14.5px',
+        color: 'rgba(255, 255, 255, 0.85)',
+        marginBottom: '20px',
         lineHeight: 1.5,
+        maxWidth: '420px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       }}>
-        Enter your shifts and we'll calculate exactly what you should be paid under your award.
+        Enter your shifts and find out in 2 minutes. Free, instant, based on official Fair Work rates.
       </p>
       <a
         href={href}
+        className="cta-button"
         style={{
           display: 'inline-block',
-          background: 'var(--primary)',
-          color: '#ffffff',
-          fontWeight: 600,
-          fontSize: '14px',
-          padding: '10px 28px',
+          background: 'var(--accent)',
+          color: '#263238',
+          fontWeight: 700,
+          fontSize: '16px',
+          padding: '14px 36px',
           borderRadius: '8px',
           textDecoration: 'none',
+          letterSpacing: '-0.01em',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+          transition: 'transform 0.15s, box-shadow 0.15s',
         }}
       >
-        Check my pay &rarr;
+        Check my pay now
       </a>
+      <p style={{
+        fontSize: '12px',
+        color: 'rgba(255, 255, 255, 0.6)',
+        marginTop: '12px',
+        margin: '12px 0 0 0',
+      }}>
+        No sign-up required
+      </p>
     </div>
   );
 }

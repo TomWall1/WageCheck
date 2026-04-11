@@ -19,7 +19,7 @@ const h2Style: React.CSSProperties = {
 
 const h3Style: React.CSSProperties = {
   fontSize: '14.5px',
-  fontWeight: 600,
+  fontWeight: 700,
   color: 'var(--secondary)',
   marginBottom: '6px',
   marginTop: '0',
@@ -89,7 +89,7 @@ export default function HospitalityHubContent({ rates }: { rates: HospitalityRat
             <li>Sunday shift: ~{formatCurrency(l2?.sundayCasual ?? 0)}/hr (casual Sunday rate at Level 2)</li>
             <li>Public holiday shift: ~{formatCurrency(l2?.publicHolidayCasual ?? 0)}/hr (casual public holiday rate at Level 2)</li>
           </ul>
-          <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
+          <p style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)' }}>
             Estimated underpayment: $75–$185 in that week alone.
           </p>
           <p style={smallStyle}>
@@ -144,7 +144,7 @@ export default function HospitalityHubContent({ rates }: { rates: HospitalityRat
               { title: 'No split shift or meal allowance paid', desc: 'If your shift is broken into separate blocks, or you work extended hours without a provided meal break, you are owed additional amounts on top of your hourly rate.' },
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
                 <p style={{ ...smallStyle, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -323,16 +323,16 @@ export default function HospitalityHubContent({ rates }: { rates: HospitalityRat
           href="/check-my-pay?award=MA000009"
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
         <p style={{ ...smallStyle, marginTop: '12px' }}>
           Based on official pay rates from the Fair Work Commission (MA000009).

@@ -80,6 +80,16 @@
     outline-offset: 2px;
   }
 
+  /* CTA button hover/active state */
+  .cta-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+    background: #FFC107 !important;
+  }
+  .cta-button:active {
+    transform: translateY(0);
+  }
+
   .btn-secondary {
     display: inline-flex;
     align-items: center;

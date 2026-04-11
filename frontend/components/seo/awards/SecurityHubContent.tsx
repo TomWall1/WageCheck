@@ -8,7 +8,7 @@ import { AwardRateData, getLevel } from '@/lib/award-rates';
 import { formatCurrency } from '@/lib/utils';
 
 const h2Style: React.CSSProperties = { fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500, color: 'var(--secondary)', marginBottom: '10px', marginTop: '0' };
-const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
+const h3Style: React.CSSProperties = { fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)', marginBottom: '6px', marginTop: '0' };
 const pStyle: React.CSSProperties = { fontSize: '14px', color: 'var(--secondary-muted)', lineHeight: 1.7, marginBottom: '1rem' };
 const smallStyle: React.CSSProperties = { fontSize: '12.5px', color: 'var(--secondary-muted)', lineHeight: 1.6 };
 const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem' };
@@ -17,7 +17,7 @@ const warningBoxStyle: React.CSSProperties = { background: 'var(--accent-light)'
 const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration: 'underline' };
 
 const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' };
-const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 600, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
+const thStyle: React.CSSProperties = { padding: '10px 12px', color: 'var(--secondary)', fontWeight: 700, textAlign: 'left' as const, borderBottom: '2px solid var(--border)' };
 const tdStyle: React.CSSProperties = { padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--secondary-muted)' };
 
 const faqData = [
@@ -66,7 +66,7 @@ export default function SecurityHubContent({ rates }: { rates?: AwardRateData })
             <li>Hours between midnight and 6am attract additional night loading on top</li>
             <li>Hours beyond 7.6 attract overtime rates</li>
           </ul>
-          <p style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--secondary)' }}>
+          <p style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--secondary)' }}>
             Estimated underpayment: $80&ndash;$120 per overnight shift. Over 48 weeks: $3,840&ndash;$5,760 per year.
           </p>
           <p style={smallStyle}>
@@ -119,7 +119,7 @@ export default function SecurityHubContent({ rates }: { rates?: AwardRateData })
                 { level: 5, roles: 'Manager, advanced specialist', rate: l5 ? formatCurrency(l5.ftRate) : '&mdash;' },
               ].map((row) => (
                 <tr key={row.level}>
-                  <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--secondary)' }}>Level {row.level}</td>
+                  <td style={{ ...tdStyle, fontWeight: 700, color: 'var(--secondary)' }}>Level {row.level}</td>
                   <td style={tdStyle}>{row.roles}</td>
                   <td style={tdStyle}>{row.rate}/hr</td>
                 </tr>
@@ -162,7 +162,7 @@ export default function SecurityHubContent({ rates }: { rates?: AwardRateData })
               'Told you are a "contractor" but you work set shifts',
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', margin: 0 }}>&bull; {item}</p>
               </div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default function SecurityHubContent({ rates }: { rates?: AwardRateData })
               { title: 'No first aid or uniform allowance', desc: 'If you hold a first aid certificate or are required to maintain a uniform, specific allowances apply. These are frequently unpaid.' },
             ].map((item, i) => (
               <div key={i}>
-                <p style={{ ...smallStyle, fontWeight: 600, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
+                <p style={{ ...smallStyle, fontWeight: 700, color: 'var(--secondary)', marginBottom: '2px' }}>{item.title}</p>
                 <p style={{ ...smallStyle, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
@@ -290,16 +290,16 @@ export default function SecurityHubContent({ rates }: { rates?: AwardRateData })
           href="/check-my-pay?award=MA000016"
           style={{
             display: 'inline-block',
-            background: 'var(--primary)',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '15px',
-            padding: '12px 32px',
+            background: 'var(--accent)',
+            color: '#263238',
+            fontWeight: 700,
+            fontSize: '16px',
+            padding: '14px 36px',
             borderRadius: '8px',
             textDecoration: 'none',
           }}
         >
-          Check my pay &rarr;
+          Check my pay now
         </a>
         <p style={{ ...smallStyle, marginTop: '12px' }}>
           Based on official pay rates from the Fair Work Commission (MA000016).
