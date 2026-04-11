@@ -80,7 +80,21 @@
     outline-offset: 2px;
   }
 
-  /* CTA button hover/active state */
+  /* CTA button — must use !important to override Tailwind Preflight */
+  .cta-button {
+    display: inline-block !important;
+    background: #ffffff !important;
+    color: #004D40 !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    padding: 16px 40px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    letter-spacing: -0.01em !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25) !important;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s !important;
+    cursor: pointer !important;
+  }
   .cta-button:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;

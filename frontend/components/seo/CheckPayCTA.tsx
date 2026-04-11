@@ -1,6 +1,9 @@
 /**
  * Reusable "Check your pay" call-to-action block.
  * Links to /check-my-pay with optional award pre-fill.
+ *
+ * Button styling is in globals.css (.cta-button) with !important
+ * to override Tailwind Preflight's anchor colour reset.
  */
 
 interface Props {
@@ -43,22 +46,7 @@ export default function CheckPayCTA({ awardCode, awardName }: Props) {
       }}>
         Enter your shifts and find out in 2 minutes. Free, instant, based on official Fair Work rates.
       </p>
-      <a
-        href={href}
-        className="cta-button"
-        style={{
-          display: 'inline-block',
-          background: '#ffffff',
-          color: '#004D40',
-          fontWeight: 700,
-          fontSize: '16px',
-          padding: '16px 40px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          letterSpacing: '-0.01em',
-          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.25)',
-        }}
-      >
+      <a href={href} className="cta-button">
         Check my pay now
       </a>
       <p style={{
