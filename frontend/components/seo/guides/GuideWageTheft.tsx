@@ -33,7 +33,7 @@ export default function GuideWageTheft() {
       {/* Intro */}
       <section style={sectionStyle}>
         <p style={pStyle}>
-          Wage theft is not a niche problem in Australia. It is endemic. The Fair Work Ombudsman recovers over half a billion dollars in underpaid wages every year &mdash; and research consistently shows that represents a fraction of the total. Most underpayment never gets reported, not because it doesn&apos;t exist, but because most workers don&apos;t know it&apos;s happening to them.
+          Wage theft is not a niche problem in Australia. It is endemic. The Fair Work Ombudsman recovers tens of millions of dollars in underpaid wages every year &mdash; and research consistently shows that represents a fraction of the total. Most underpayment never gets reported, not because it doesn&apos;t exist, but because most workers don&apos;t know it&apos;s happening to them.
         </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           If you work in hospitality, retail, fast food, cleaning, or construction &mdash; your industry is among the highest risk.
@@ -59,8 +59,8 @@ export default function GuideWageTheft() {
       <section style={sectionStyle}>
         <h2 style={h2Style}>The scale of wage theft in Australia</h2>
         <ul style={{ ...pStyle, paddingLeft: '1.25rem' }}>
-          <li>The Fair Work Ombudsman recovers $500m+ in underpaid wages annually</li>
-          <li>Independent research suggests the true figure across Australian workplaces is several billion dollars per year</li>
+          <li>The Fair Work Ombudsman recovers tens of millions in underpaid wages annually, with large employer self-reported underpayments adding hundreds of millions more</li>
+          <li>Independent research suggests the true figure of underpayment across Australian workplaces is significantly higher than what gets reported</li>
           <li>Hospitality, retail, and fast food consistently top the list of most investigated industries</li>
           <li>Workers aged 15&ndash;24 are the most likely to be underpaid &mdash; and the least likely to report it</li>
         </ul>

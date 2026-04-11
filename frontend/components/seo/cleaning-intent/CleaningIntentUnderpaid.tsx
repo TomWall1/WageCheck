@@ -17,7 +17,7 @@ const linkStyle: React.CSSProperties = { color: 'var(--primary)', textDecoration
 const faqData = [
   { question: 'I get paid cash — does the Cleaning Award still apply to me?', answer: 'Yes. Every employee in Australia is covered by workplace laws regardless of how they\'re paid. Being paid cash does not make you a contractor and does not exempt your employer from the Cleaning Services Award. If someone controls your hours, provides your equipment, and tells you where to work, you\'re an employee.' },
   { question: 'My employer says I\'m a contractor — can they pay below the award?', answer: 'If you work set hours, use the employer\'s equipment, wear their uniform, and clean where they tell you to clean, you\'re almost certainly an employee regardless of what the contract says. Sham contracting is rampant in the cleaning industry. The Fair Work Ombudsman can determine your real status.' },
-  { question: 'Can I recover underpayments from previous years?', answer: 'Yes. The Fair Work Ombudsman can recover underpayments going back up to 6 years. For cleaning workers paid below award rates for extended periods, back-pay claims of $10,000 to $50,000+ are common.' },
+  { question: 'Can I recover underpayments from previous years?', answer: 'Yes. The Fair Work Ombudsman can recover underpayments going back up to 6 years. For cleaning workers paid below award rates for extended periods, back-pay claims can be significant \u2014 the amount depends on the size of the shortfall and how long it continued.' },
 ];
 
 export default function CleaningIntentUnderpaid({ rates }: { rates?: AwardRateData }) {

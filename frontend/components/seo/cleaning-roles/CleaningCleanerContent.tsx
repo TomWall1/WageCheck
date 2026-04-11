@@ -32,7 +32,7 @@ export default function CleaningCleanerContent({ rates }: { rates?: AwardRateDat
 
       <section style={sectionStyle}>
         <p style={pStyle}>
-          Cleaners are among the most underpaid workers in Australia. The Fair Work Ombudsman recovers millions in stolen wages from the cleaning industry every year, and those are just the cases that get reported. If you clean offices, schools, hospitals, shopping centres, or any commercial building, the Cleaning Services Award sets your legal minimum pay. Your employer cannot pay less, regardless of what your contract says.
+          Cleaners are among the most underpaid workers in Australia. The Fair Work Ombudsman regularly investigates and recovers underpaid wages in the cleaning industry, and reported cases represent a fraction of the total. If you clean offices, schools, hospitals, shopping centres, or any commercial building, the Cleaning Services Award sets your legal minimum pay. Your employer cannot pay less, regardless of what your contract says.
         </p>
         <p style={{ ...pStyle, fontWeight: 600 }}>
           If you&apos;re a cleaner earning less than {l1 ? formatCurrency(l1.ftRate) : '&mdash;'}/hr (permanent) or {l1 ? formatCurrency(l1.casualRate) : '&mdash;'}/hr (casual), you are being underpaid right now.
