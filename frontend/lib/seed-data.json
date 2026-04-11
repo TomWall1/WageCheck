@@ -21011,112 +21011,113 @@
         "level": 1,
         "stream": "junior_employees",
         "title": "At 17 years",
-        "description": "At 17 years",
-        "duties": [],
+        "description": "Junior salt industry employee aged 17 years, performing basic production and labouring duties at a junior rate of pay.",
+        "duties": [
+          "Performing basic production and labouring tasks under supervision",
+          "Assisting with salt harvesting and processing operations",
+          "Maintaining cleanliness of work areas and equipment"
+        ],
         "ftRate": 25.36
       },
       {
         "level": 1,
         "stream": "junior_employees",
         "title": "At 18 years",
-        "description": "At 18 years",
-        "duties": [],
+        "description": "Junior salt industry employee aged 18 years, performing basic production and labouring duties at a junior rate of pay.",
+        "duties": [
+          "Performing basic production and labouring tasks under supervision",
+          "Assisting with salt harvesting and processing operations",
+          "Operating basic equipment under guidance"
+        ],
         "ftRate": 25.36
       },
       {
         "level": 1,
         "stream": "junior_employees",
         "title": "At 19 years",
-        "description": "At 19 years",
-        "duties": [],
+        "description": "Junior salt industry employee aged 19 years, performing production duties with developing skills at a junior rate of pay.",
+        "duties": [
+          "Performing production tasks with increasing independence",
+          "Operating basic salt processing equipment",
+          "Assisting experienced workers with operational tasks"
+        ],
         "ftRate": 25.36
       },
       {
         "level": 1,
         "stream": "general",
         "title": "Level 1—Introductory",
-        "description": "Level 1—Introductory",
-        "duties": [],
-        "ftRate": 25.36
-      },
-      {
-        "level": 1,
-        "stream": "general",
-        "title": "Level 1—Introductory",
-        "description": "Level 1—Introductory",
-        "duties": [],
+        "description": "Entry-level salt industry employee at the introductory level, performing basic production, labouring, and site maintenance duties under direct supervision.",
+        "duties": [
+          "Performing basic salt harvesting and production tasks",
+          "Cleaning and maintaining processing equipment and areas",
+          "Assisting with loading, unloading, and stockpiling salt",
+          "Following safety procedures and wearing required PPE"
+        ],
         "ftRate": 25.36
       },
       {
         "level": 1,
         "stream": "junior_employees",
         "title": "Under 17 years",
-        "description": "Under 17 years",
-        "duties": [],
+        "description": "Junior salt industry employee under 17 years of age, performing the most basic duties at a junior rate of pay.",
+        "duties": [
+          "Performing basic labouring tasks under close supervision",
+          "Assisting with cleaning and tidying work areas",
+          "Learning workplace safety and operational procedures"
+        ],
         "ftRate": 25.36
       },
       {
         "level": 2,
         "stream": "general",
         "title": "Level 2—Basic",
-        "description": "Level 2—Basic",
-        "duties": [],
-        "ftRate": 26.08
-      },
-      {
-        "level": 2,
-        "stream": "general",
-        "title": "Level 2—Basic",
-        "description": "Level 2—Basic",
-        "duties": [],
+        "description": "Salt industry employee at the basic level with developing skills, performing a range of production tasks including equipment operation and quality monitoring.",
+        "duties": [
+          "Operating basic salt processing and handling equipment",
+          "Performing quality checks on salt products",
+          "Assisting with maintenance of production machinery",
+          "Following production schedules and recording output data"
+        ],
         "ftRate": 26.08
       },
       {
         "level": 3,
         "stream": "general",
         "title": "Level 3—Intermediate",
-        "description": "Level 3—Intermediate",
-        "duties": [],
-        "ftRate": 27.09
-      },
-      {
-        "level": 3,
-        "stream": "general",
-        "title": "Level 3—Intermediate",
-        "description": "Level 3—Intermediate",
-        "duties": [],
+        "description": "Experienced salt industry employee at the intermediate level, performing skilled production tasks and operating complex equipment with limited supervision.",
+        "duties": [
+          "Operating complex salt production and processing equipment",
+          "Performing detailed quality control testing and inspections",
+          "Training and guiding lower-level employees",
+          "Coordinating production workflows and team activities"
+        ],
         "ftRate": 27.09
       },
       {
         "level": 4,
         "stream": "general",
         "title": "Level 4—Competent",
-        "description": "Level 4—Competent",
-        "duties": [],
-        "ftRate": 28.12
-      },
-      {
-        "level": 4,
-        "stream": "general",
-        "title": "Level 4—Competent",
-        "description": "Level 4—Competent",
-        "duties": [],
+        "description": "Senior salt industry employee at the competent level, performing advanced production, maintenance, or supervisory duties with significant autonomy.",
+        "duties": [
+          "Performing trade-level maintenance on production equipment",
+          "Supervising production teams and allocating daily work",
+          "Troubleshooting production issues and equipment faults",
+          "Ensuring compliance with safety and quality standards"
+        ],
         "ftRate": 28.12
       },
       {
         "level": 5,
         "stream": "general",
         "title": "Level 5—Advanced",
-        "description": "Level 5—Advanced",
-        "duties": [],
-        "ftRate": 29.25
-      },
-      {
-        "level": 5,
-        "stream": "general",
-        "title": "Level 5—Advanced",
-        "description": "Level 5—Advanced",
-        "duties": [],
+        "description": "Advanced salt industry employee performing the most skilled production, technical, or management duties with broad expertise and leadership responsibilities.",
+        "duties": [
+          "Managing production schedules and resource allocation",
+          "Developing and implementing production procedures",
+          "Overseeing quality assurance programs and regulatory compliance",
+          "Leading continuous improvement initiatives across operations"
+        ],
         "ftRate": 29.25
       }
     ],

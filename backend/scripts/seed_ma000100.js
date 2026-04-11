@@ -154,6 +154,70 @@ async function seed() {
       { level: 6, pp: 1, stream: 'home_care_aged', title: 'HC Aged Care - Team Leader', ft: 38.74, cas: 48.43, ft_arvo: 43.58, ft_night: 44.55, cas_arvo: 53.27, cas_night: 54.24, sort: 460, ft_24hr: 480.40, cas_24hr: 557.84 },
     ];
 
+    // ── Description helper ──────────────────────────────────────────────────
+    const streamDescriptions = {
+      social_community: {
+        prefix: 'Social and community services employee',
+        levels: {
+          1: 'performing entry-level community services work under close supervision.',
+          2: 'performing community services work requiring relevant qualifications and experience.',
+          3: 'performing experienced community services work with substantial autonomy.',
+          4: 'performing senior community services work with specialist expertise or supervision responsibilities.',
+          5: 'performing advanced community services work with significant management or specialist responsibilities.',
+          6: 'performing high-level community services work with broad organisational or program management duties.',
+          7: 'performing executive-level community services work with strategic leadership responsibilities.',
+          8: 'performing the most senior community services work with enterprise-wide leadership and governance.',
+        },
+      },
+      crisis_accommodation: {
+        prefix: 'Crisis accommodation worker',
+        levels: {
+          1: 'providing direct support to residents in crisis accommodation facilities.',
+          2: 'coordinating programs and supervising staff in crisis accommodation services.',
+          3: 'managing crisis accommodation operations with specialist expertise.',
+          4: 'providing senior leadership and strategic management of crisis accommodation services.',
+        },
+      },
+      family_day_care: {
+        prefix: 'Family day care worker',
+        levels: {
+          1: 'performing entry-level coordination and support duties in family day care schemes.',
+          2: 'performing experienced coordination duties with developing expertise in family day care.',
+          3: 'coordinating family day care programs with significant autonomy and specialist knowledge.',
+          4: 'performing senior coordination and management duties in family day care services.',
+          5: 'managing family day care programs with broad responsibilities and strategic oversight.',
+        },
+      },
+      home_care_disability: {
+        prefix: 'Home care disability worker',
+        levels: {
+          1: 'providing basic personal care and support to people with a disability in their home.',
+          2: 'providing experienced personal care and support services to people with a disability.',
+          3: 'performing skilled care work including complex support needs for people with a disability.',
+          4: 'performing senior care work with supervisory responsibilities and specialist disability support.',
+          5: 'managing disability home care programs with broad expertise and leadership responsibilities.',
+        },
+      },
+      home_care_aged: {
+        prefix: 'Home care aged care worker',
+        levels: {
+          1: 'providing introductory personal care and domestic assistance to elderly clients.',
+          2: 'providing experienced personal care and in-home support to aged care clients.',
+          3: 'providing qualified care including medication assistance and complex support for aged clients.',
+          4: 'performing senior care coordination and specialist support for aged care clients.',
+          5: 'providing specialist aged care services with advanced skills and qualifications.',
+          6: 'leading aged care home care teams and coordinating complex care programs.',
+        },
+      },
+    };
+
+    function getDescription(c) {
+      const sd = streamDescriptions[c.stream];
+      if (!sd) return c.title;
+      const levelDesc = sd.levels[c.level] || '';
+      return `${sd.prefix} at ${c.title.split(' - ')[0] || c.title}, ${levelDesc}`;
+    }
+
     // Insert all classifications
     for (const c of classifications) {
       await client.query(`
@@ -163,7 +227,7 @@ async function seed() {
           title = EXCLUDED.title,
           description = EXCLUDED.description,
           sort_order = EXCLUDED.sort_order
-      `, [AWARD_CODE, c.level, c.stream, c.pp, c.title, c.title, c.sort]);
+      `, [AWARD_CODE, c.level, c.stream, c.pp, c.title, getDescription(c), c.sort]);
     }
     console.log(`✓ Inserted ${classifications.length} classifications (5 streams with pay points)`);
 
