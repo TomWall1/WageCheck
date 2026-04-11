@@ -225,7 +225,6 @@ export default function GenericHubContent({
             Casual rates include the 25% casual loading. Rates sourced from the Fair Work Commission pay guide for {awardCode}, effective {effectiveDate}.
           </p>
         </section>
-      )
       )}
 
       {/* Sub-page card grid */}
