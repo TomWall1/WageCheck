@@ -32,3 +32,13 @@ export function getEveningLoading(rates: RestaurantRateData): number {
 export function getNightLoading(rates: RestaurantRateData): number {
   return rates.penalties.find(p => p.timeBandLabel === 'night_midnight_to_7am')?.additionPerHour ?? 0;
 }
+
+export function getLateNightLoading(rates: RestaurantRateData): number {
+  return rates.penalties.find(p => p.timeBandLabel === 'evening_10pm_to_midnight')?.additionPerHour
+    ?? rates.penalties.find(p => p.timeBandLabel === 'late_night')?.additionPerHour
+    ?? 0;
+}
+
+export function getEarlyMorningLoading(rates: RestaurantRateData): number {
+  return rates.penalties.find(p => p.timeBandLabel === 'early_morning' || p.timeBandLabel === 'night_midnight_to_7am')?.additionPerHour ?? 0;
+}

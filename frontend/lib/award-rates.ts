@@ -85,3 +85,7 @@ export function getPenalty(rates: AwardRateData, dayType: string): PenaltyInfo |
 export function getTimeBandLoading(rates: AwardRateData, timeBand: string): number {
   return rates.penalties.find(p => p.timeBandLabel === timeBand)?.additionPerHour ?? 0;
 }
+
+export function getTimeBandMultiplier(rates: AwardRateData, timeBand: string): number {
+  return rates.penalties.find(p => p.timeBandLabel === timeBand)?.ftMultiplier ?? 0;
+}
