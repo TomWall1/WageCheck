@@ -90,10 +90,12 @@ function round2(n: number): number {
  * Called from server components — uses ISR caching.
  */
 export async function getAwardRates(awardCode: string): Promise<AwardRateData> {
+  // Fetch all data in parallel — let errors propagate so Next.js ISR
+  // knows to retry instead of caching empty results.
   const [classifications, penalties, allowancesRaw] = await Promise.all([
-    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${awardCode}`).catch(() => [] as ApiClassification[]),
-    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${awardCode}`).catch(() => [] as ApiPenaltyRate[]),
-    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${awardCode}`).catch(() => [] as ApiAllowance[]),
+    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${awardCode}`),
+    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${awardCode}`),
+    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${awardCode}`),
   ]);
 
   // Include all classifications so non-general streams (e.g. MA000003
@@ -106,35 +108,38 @@ export async function getAwardRates(awardCode: string): Promise<AwardRateData> {
   const getFtMult = (day: string) => parseFloat(ftPenalties.find(p => p.day_type === day)?.multiplier || '1');
   const getCasMult = (day: string) => parseFloat(casualPenalties.find(p => p.day_type === day)?.multiplier || '1');
 
-  // Build level rates
-  const levelRates: LevelRate[] = [];
-  for (const cls of targetCls) {
-    try {
-      const rates = await serverFetch<ApiPayRate[]>(
+  // Build level rates — fetch all classification rates in parallel
+  const rateResults = await Promise.all(
+    targetCls.map(cls =>
+      serverFetch<ApiPayRate[]>(
         `/api/award/rates?award=${awardCode}&classification_id=${cls.id}&employment_type=full_time`
-      );
-      const ftRate = rates.find(r => r.rate_type === 'base_hourly');
-      if (!ftRate) continue;
+      )
+    )
+  );
 
-      const ft = parseFloat(ftRate.rate_amount);
-      const casual = round2(ft * 1.25);
+  const levelRates: LevelRate[] = [];
+  for (let i = 0; i < targetCls.length; i++) {
+    const cls = targetCls[i];
+    const rates = rateResults[i];
+    const ftRate = rates.find(r => r.rate_type === 'base_hourly');
+    if (!ftRate) continue;
 
-      levelRates.push({
-        level: cls.level,
-        stream: cls.stream,
-        title: cls.title,
-        ftRate: ft,
-        casualRate: casual,
-        saturdayFt: round2(ft * getFtMult('saturday')),
-        saturdayCasual: round2(casual * getCasMult('saturday')),
-        sundayFt: round2(ft * getFtMult('sunday')),
-        sundayCasual: round2(casual * getCasMult('sunday')),
-        publicHolidayFt: round2(ft * getFtMult('public_holiday')),
-        publicHolidayCasual: round2(casual * getCasMult('public_holiday')),
-      });
-    } catch {
-      // Skip classifications where rate fetch fails
-    }
+    const ft = parseFloat(ftRate.rate_amount);
+    const casual = round2(ft * 1.25);
+
+    levelRates.push({
+      level: cls.level,
+      stream: cls.stream,
+      title: cls.title,
+      ftRate: ft,
+      casualRate: casual,
+      saturdayFt: round2(ft * getFtMult('saturday')),
+      saturdayCasual: round2(casual * getCasMult('saturday')),
+      sundayFt: round2(ft * getFtMult('sunday')),
+      sundayCasual: round2(casual * getCasMult('sunday')),
+      publicHolidayFt: round2(ft * getFtMult('public_holiday')),
+      publicHolidayCasual: round2(casual * getCasMult('public_holiday')),
+    });
   }
 
   // Transform penalties
@@ -165,20 +170,16 @@ export async function getAwardRates(awardCode: string): Promise<AwardRateData> {
       description: a.description,
     }));
 
-  // Determine effective date
+  // Determine effective date from the first rate we already fetched
   let effectiveDate = '1 July 2025';
-  if (levelRates.length > 0 && targetCls.length > 0) {
-    try {
-      const rates = await serverFetch<ApiPayRate[]>(
-        `/api/award/rates?award=${awardCode}&classification_id=${targetCls[0].id}&employment_type=full_time`
-      );
-      const r = rates.find(r2 => r2.rate_type === 'base_hourly');
-      if (r?.effective_date) {
-        const d = new Date(r.effective_date);
-        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        effectiveDate = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-      }
-    } catch { /* use default */ }
+  if (rateResults.length > 0) {
+    const firstRates = rateResults[0];
+    const r = firstRates?.find(r2 => r2.rate_type === 'base_hourly');
+    if (r?.effective_date) {
+      const d = new Date(r.effective_date);
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      effectiveDate = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
   }
 
   return { awardCode, levels: levelRates, penalties: penaltyInfo, allowances: allowanceInfo, effectiveDate };

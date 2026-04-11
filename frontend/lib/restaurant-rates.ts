@@ -68,9 +68,9 @@ const AWARD_CODE = 'MA000119';
 
 export async function getRestaurantRates(): Promise<RestaurantRateData> {
   const [classifications, penalties, allowances] = await Promise.all([
-    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${AWARD_CODE}`).catch(() => [] as ApiClassification[]),
-    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${AWARD_CODE}`).catch(() => [] as ApiPenaltyRate[]),
-    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${AWARD_CODE}`).catch(() => [] as ApiAllowance[]),
+    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${AWARD_CODE}`),
+    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${AWARD_CODE}`),
+    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${AWARD_CODE}`),
   ]);
 
   const generalCls = classifications

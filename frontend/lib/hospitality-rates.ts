@@ -91,9 +91,9 @@ const AWARD_CODE = 'MA000009';
 export async function getHospitalityRates(): Promise<HospitalityRateData> {
   // Fetch in parallel
   const [classifications, penalties, allowances] = await Promise.all([
-    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${AWARD_CODE}`).catch(() => [] as ApiClassification[]),
-    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${AWARD_CODE}`).catch(() => [] as ApiPenaltyRate[]),
-    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${AWARD_CODE}`).catch(() => [] as ApiAllowance[]),
+    serverFetch<ApiClassification[]>(`/api/award/classifications?award=${AWARD_CODE}`),
+    serverFetch<ApiPenaltyRate[]>(`/api/award/penalty-rates?award=${AWARD_CODE}`),
+    serverFetch<ApiAllowance[]>(`/api/award/allowances?award=${AWARD_CODE}`),
   ]);
 
   // Get the "general" stream classifications (main levels 0–5 + 7 for Managerial)
