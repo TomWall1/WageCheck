@@ -51,25 +51,34 @@ function extractFromSeed(filePath) {
   // Extract rates - try all known variable names and patterns
   const rateMap = {}; // key: "level_stream" -> ftRate
 
-  // Try multiple variable name patterns for the rates object
-  const rateVarPatterns = [
-    /const rates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const baseRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const BASE_RATES\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const ftRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const rateByLevel\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const nonLiquorRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const coachBaseRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const clericalBaseRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const adultRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
-    /const payRates\s*=\s*\{([\s\S]*?)\};\s*\n/,
+  // Extract rate objects using brace-counting (handles nested objects correctly)
+  const rateVarNames = [
+    'rates', 'baseRates', 'BASE_RATES', 'ftRates', 'rateByLevel',
+    'nonLiquorRates', 'coachBaseRates', 'clericalBaseRates', 'adultRates', 'payRates',
   ];
 
-  // Try ALL patterns — some awards have multiple rate variables
+  function extractBalancedObject(src, varName) {
+    // Find "const varName" then scan for the opening {
+    const declPos = src.indexOf(`const ${varName}`);
+    if (declPos === -1) return null;
+    // Find the opening { after the variable name
+    const startIdx = src.indexOf('{', declPos);
+    if (startIdx === -1 || startIdx > declPos + 50) return null; // must be within ~50 chars
+    let depth = 1;
+    let i = startIdx + 1;
+    while (i < src.length && depth > 0) {
+      if (src[i] === '{') depth++;
+      else if (src[i] === '}') depth--;
+      i++;
+    }
+    const objBody = src.substring(startIdx + 1, i - 1);
+    return [`const ${varName}`, objBody];
+  }
+
   const allRatesMatches = [];
-  for (const pattern of rateVarPatterns) {
-    const m = content.match(pattern);
-    if (m) allRatesMatches.push(m);
+  for (const varName of rateVarNames) {
+    const result = extractBalancedObject(content, varName);
+    if (result) allRatesMatches.push(result);
   }
 
   for (const ratesMatch of allRatesMatches) {

@@ -1,7 +1,7 @@
 /**
  * Seed script — Cement, Lime and Quarrying Award 2020 [MA000055]
  * Pay rates effective 1 July 2025 (following 2025 Annual Wage Review)
- * Rates sourced from FWC MAPD API.
+ * Rates sourced from FWO Pay Guide published 23 July 2025.
  *
  * Run after migrate.js: node scripts/seed_ma000055.js
  */
@@ -32,75 +32,77 @@ async function seed() {
     ]);
 
     // ── Classifications ───────────────────────────────────────────────────────
+    // Cement and lime industry: Level 1–7 (rates include industry disability allowance)
+    // Quarrying industry: Grade 1–6 (rates include industry disability allowance)
     const classifications = [
       {
-        level: 1, stream: 'quarrying_industry',
-        title: 'Grade 1',
-        description: 'Grade 1',
+        level: 1, stream: 'cement_and_lime_industry',
+        title: 'Level 1',
+        description: 'Cement and lime industry — Level 1',
         duties: [],
         indicative_tasks: [],
         sort_order: 10,
       },
       {
-        level: 1, stream: 'quarrying_industry',
-        title: 'Grade 1',
-        description: 'Grade 1',
+        level: 2, stream: 'cement_and_lime_industry',
+        title: 'Level 2',
+        description: 'Cement and lime industry — Level 2',
         duties: [],
         indicative_tasks: [],
         sort_order: 20,
       },
       {
-        level: 1, stream: 'cement_and_lime_industry',
-        title: 'Level 1',
-        description: 'Level 1',
+        level: 3, stream: 'cement_and_lime_industry',
+        title: 'Level 3',
+        description: 'Cement and lime industry — Level 3',
         duties: [],
         indicative_tasks: [],
         sort_order: 30,
       },
       {
-        level: 1, stream: 'cement_and_lime_industry',
-        title: 'Level 1',
-        description: 'Level 1',
+        level: 4, stream: 'cement_and_lime_industry',
+        title: 'Level 4',
+        description: 'Cement and lime industry — Level 4',
         duties: [],
         indicative_tasks: [],
         sort_order: 40,
       },
       {
-        level: 2, stream: 'quarrying_industry',
-        title: 'Grade 2',
-        description: 'Grade 2',
+        level: 5, stream: 'cement_and_lime_industry',
+        title: 'Level 5',
+        description: 'Cement and lime industry — Level 5',
         duties: [],
         indicative_tasks: [],
         sort_order: 50,
       },
       {
-        level: 2, stream: 'quarrying_industry',
-        title: 'Grade 2',
-        description: 'Grade 2',
+        level: 6, stream: 'cement_and_lime_industry',
+        title: 'Level 6',
+        description: 'Cement and lime industry — Level 6',
         duties: [],
         indicative_tasks: [],
         sort_order: 60,
       },
       {
-        level: 2, stream: 'cement_and_lime_industry',
-        title: 'Level 2',
-        description: 'Level 2',
+        level: 7, stream: 'cement_and_lime_industry',
+        title: 'Level 7',
+        description: 'Cement and lime industry — Level 7',
         duties: [],
         indicative_tasks: [],
         sort_order: 70,
       },
       {
-        level: 2, stream: 'cement_and_lime_industry',
-        title: 'Level 2',
-        description: 'Level 2',
+        level: 1, stream: 'quarrying_industry',
+        title: 'Grade 1',
+        description: 'Quarrying industry — Grade 1',
         duties: [],
         indicative_tasks: [],
         sort_order: 80,
       },
       {
-        level: 3, stream: 'quarrying_industry',
-        title: 'Grade 3',
-        description: 'Grade 3',
+        level: 2, stream: 'quarrying_industry',
+        title: 'Grade 2',
+        description: 'Quarrying industry — Grade 2',
         duties: [],
         indicative_tasks: [],
         sort_order: 90,
@@ -108,138 +110,34 @@ async function seed() {
       {
         level: 3, stream: 'quarrying_industry',
         title: 'Grade 3',
-        description: 'Grade 3',
+        description: 'Quarrying industry — Grade 3',
         duties: [],
         indicative_tasks: [],
         sort_order: 100,
       },
       {
-        level: 3, stream: 'cement_and_lime_industry',
-        title: 'Level 3',
-        description: 'Level 3',
+        level: 4, stream: 'quarrying_industry',
+        title: 'Grade 4',
+        description: 'Quarrying industry — Grade 4',
         duties: [],
         indicative_tasks: [],
         sort_order: 110,
       },
       {
-        level: 3, stream: 'cement_and_lime_industry',
-        title: 'Level 3',
-        description: 'Level 3',
+        level: 5, stream: 'quarrying_industry',
+        title: 'Grade 5',
+        description: 'Quarrying industry — Grade 5',
         duties: [],
         indicative_tasks: [],
         sort_order: 120,
       },
       {
-        level: 4, stream: 'quarrying_industry',
-        title: 'Grade 4',
-        description: 'Grade 4',
+        level: 6, stream: 'quarrying_industry',
+        title: 'Grade 6',
+        description: 'Quarrying industry — Grade 6',
         duties: [],
         indicative_tasks: [],
         sort_order: 130,
-      },
-      {
-        level: 4, stream: 'quarrying_industry',
-        title: 'Grade 4',
-        description: 'Grade 4',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 140,
-      },
-      {
-        level: 4, stream: 'cement_and_lime_industry',
-        title: 'Level 4',
-        description: 'Level 4',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 150,
-      },
-      {
-        level: 4, stream: 'cement_and_lime_industry',
-        title: 'Level 4',
-        description: 'Level 4',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 160,
-      },
-      {
-        level: 5, stream: 'quarrying_industry',
-        title: 'Grade 5',
-        description: 'Grade 5',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 170,
-      },
-      {
-        level: 5, stream: 'quarrying_industry',
-        title: 'Grade 5',
-        description: 'Grade 5',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 180,
-      },
-      {
-        level: 5, stream: 'cement_and_lime_industry',
-        title: 'Level 5',
-        description: 'Level 5',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 190,
-      },
-      {
-        level: 5, stream: 'cement_and_lime_industry',
-        title: 'Level 5',
-        description: 'Level 5',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 200,
-      },
-      {
-        level: 6, stream: 'quarrying_industry',
-        title: 'Grade 6',
-        description: 'Grade 6',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 210,
-      },
-      {
-        level: 6, stream: 'quarrying_industry',
-        title: 'Grade 6',
-        description: 'Grade 6',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 220,
-      },
-      {
-        level: 6, stream: 'cement_and_lime_industry',
-        title: 'Level 6',
-        description: 'Level 6',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 230,
-      },
-      {
-        level: 6, stream: 'cement_and_lime_industry',
-        title: 'Level 6',
-        description: 'Level 6',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 240,
-      },
-      {
-        level: 7, stream: 'cement_and_lime_industry',
-        title: 'Level 7',
-        description: 'Level 7',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 250,
-      },
-      {
-        level: 7, stream: 'cement_and_lime_industry',
-        title: 'Level 7',
-        description: 'Level 7',
-        duties: [],
-        indicative_tasks: [],
-        sort_order: 260,
       },
     ];
 
@@ -261,20 +159,22 @@ async function seed() {
     console.log(`✓ Inserted ${classifications.length} classifications`);
 
     // ── Pay rates ─────────────────────────────────────────────────────────────
+    // FT/PT hourly rates from FWO pay guide (include industry disability allowance)
+    // Casual rates from FWO pay guide casual tables
     const baseRates = {
-      '1_quarrying_industry': 24.28,
-      '1_cement_and_lime_industry': 24.28,
-      '2_quarrying_industry': 24.95,
-      '2_cement_and_lime_industry': 25.49,
-      '3_quarrying_industry': 26.53,
-      '3_cement_and_lime_industry': 26.27,
-      '4_quarrying_industry': 27.29,
-      '4_cement_and_lime_industry': 26.79,
-      '5_quarrying_industry': 28.12,
-      '5_cement_and_lime_industry': 27.31,
-      '6_quarrying_industry': 28.98,
-      '6_cement_and_lime_industry': 28.12,
-      '7_cement_and_lime_industry': 28.98,
+      '1_cement_and_lime_industry': { ft: 26.33, casual: 32.91 },
+      '2_cement_and_lime_industry': { ft: 27.54, casual: 34.43 },
+      '3_cement_and_lime_industry': { ft: 28.32, casual: 35.40 },
+      '4_cement_and_lime_industry': { ft: 28.84, casual: 36.05 },
+      '5_cement_and_lime_industry': { ft: 29.36, casual: 36.70 },
+      '6_cement_and_lime_industry': { ft: 30.17, casual: 37.71 },
+      '7_cement_and_lime_industry': { ft: 31.03, casual: 38.79 },
+      '1_quarrying_industry':       { ft: 25.17, casual: 31.46 },
+      '2_quarrying_industry':       { ft: 25.84, casual: 32.30 },
+      '3_quarrying_industry':       { ft: 27.42, casual: 34.28 },
+      '4_quarrying_industry':       { ft: 28.18, casual: 35.23 },
+      '5_quarrying_industry':       { ft: 29.01, casual: 36.26 },
+      '6_quarrying_industry':       { ft: 29.87, casual: 37.34 },
     };
 
     const classResult = await client.query(
@@ -283,10 +183,8 @@ async function seed() {
     );
 
     for (const cls of classResult.rows) {
-      const baseRate = baseRates[`${cls.level}_${cls.stream}`];
-      if (!baseRate) continue;
-
-      const casualRate = Math.round(baseRate * 1.25 * 100) / 100;
+      const rates = baseRates[`${cls.level}_${cls.stream}`];
+      if (!rates) continue;
 
       for (const empType of ['full_time', 'part_time']) {
         await client.query(`
@@ -294,7 +192,7 @@ async function seed() {
           VALUES ($1, $2, $3, 'base_hourly', $4, $5)
           ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
           DO UPDATE SET rate_amount = EXCLUDED.rate_amount
-        `, [AWARD_CODE, cls.id, empType, baseRate, EFFECTIVE_DATE]);
+        `, [AWARD_CODE, cls.id, empType, rates.ft, EFFECTIVE_DATE]);
       }
 
       await client.query(`
@@ -302,7 +200,7 @@ async function seed() {
         VALUES ($1, $2, 'casual', 'base_hourly', $3, $4)
         ON CONFLICT (award_code, classification_id, employment_type, rate_type, effective_date)
         DO UPDATE SET rate_amount = EXCLUDED.rate_amount
-      `, [AWARD_CODE, cls.id, casualRate, EFFECTIVE_DATE]);
+      `, [AWARD_CODE, cls.id, rates.casual, EFFECTIVE_DATE]);
 
       await client.query(`
         INSERT INTO pay_rates (award_code, classification_id, employment_type, rate_type, rate_amount, effective_date)
@@ -319,73 +217,73 @@ async function seed() {
         employment_type: 'full_time', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Day — full_time ×1',
+        description: 'Ordinary weekday — full-time x1',
       },
       {
         employment_type: 'full_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
-        multiplier: 2, addition_per_hour: null,
-        description: 'Monday - Saturday After 2 hours — full_time ×2',
+        multiplier: 1.5, addition_per_hour: null,
+        description: 'Saturday — full-time x1.5',
       },
       {
         employment_type: 'full_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Sunday — full_time ×2',
+        description: 'Sunday — full-time x2',
       },
       {
         employment_type: 'full_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — full_time ×2.5',
+        description: 'Public holiday — full-time x2.5',
       },
       {
         employment_type: 'part_time', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Ordinary weekday — ×1',
+        description: 'Ordinary weekday — part-time x1',
       },
       {
         employment_type: 'part_time', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.5, addition_per_hour: null,
-        description: 'Saturday — ×1.5',
+        description: 'Saturday — part-time x1.5',
       },
       {
         employment_type: 'part_time', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2, addition_per_hour: null,
-        description: 'Sunday — ×2',
+        description: 'Sunday — part-time x2',
       },
       {
         employment_type: 'part_time', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.5, addition_per_hour: null,
-        description: 'Public holiday — ×2.5',
+        description: 'Public holiday — part-time x2.5',
       },
       {
         employment_type: 'casual', day_type: 'weekday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1, addition_per_hour: null,
-        description: 'Day — Casual ×1',
+        description: 'Ordinary weekday — casual x1',
       },
       {
         employment_type: 'casual', day_type: 'saturday',
         time_band_start: null, time_band_end: null, time_band_label: null,
-        multiplier: 1.4, addition_per_hour: null,
-        description: 'Saturday — Casual ×1.4',
+        multiplier: 1.5, addition_per_hour: null,
+        description: 'Saturday — casual x1.5',
       },
       {
         employment_type: 'casual', day_type: 'sunday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 1.8, addition_per_hour: null,
-        description: 'Sunday — Casual ×1.8',
+        description: 'Sunday — casual x1.8',
       },
       {
         employment_type: 'casual', day_type: 'public_holiday',
         time_band_start: null, time_band_end: null, time_band_label: null,
         multiplier: 2.2, addition_per_hour: null,
-        description: 'Public holiday — Casual ×2.2',
+        description: 'Public holiday — casual x2.2',
       },
     ];
 
@@ -406,18 +304,18 @@ async function seed() {
 
     // ── Overtime rates ────────────────────────────────────────────────────────
     const overtimeRates = [
-      { employment_type: 'full_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Full-time daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'full_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Full-time daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'full_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Full-time weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'full_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Full-time weekly overtime — after 40 hours (×2.0)' },
-      { employment_type: 'part_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Part-time daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'part_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Part-time daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'part_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Part-time weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'part_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Part-time weekly overtime — after 40 hours (×2.0)' },
-      { employment_type: 'casual', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Casual daily overtime — first 2 hours over 7.6 (×1.5)' },
-      { employment_type: 'casual', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Casual daily overtime — after 9.6 hours (×2.0)' },
-      { employment_type: 'casual', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Casual weekly overtime — first 2 hours over 38 (×1.5)' },
-      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Casual weekly overtime — after 40 hours (×2.0)' },
+      { employment_type: 'full_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Full-time daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'full_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Full-time daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'full_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Full-time weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'full_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Full-time weekly overtime — after 40 hours (x2.0)' },
+      { employment_type: 'part_time', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Part-time daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'part_time', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Part-time daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'part_time', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Part-time weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'part_time', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Part-time weekly overtime — after 40 hours (x2.0)' },
+      { employment_type: 'casual', threshold_hours: 7.6, period: 'daily', multiplier: 1.5, description: 'Casual daily overtime — first 2 hours over 7.6 (x1.5)' },
+      { employment_type: 'casual', threshold_hours: 9.6, period: 'daily', multiplier: 2.0, description: 'Casual daily overtime — after 9.6 hours (x2.0)' },
+      { employment_type: 'casual', threshold_hours: 38, period: 'weekly', multiplier: 1.5, description: 'Casual weekly overtime — first 2 hours over 38 (x1.5)' },
+      { employment_type: 'casual', threshold_hours: 40, period: 'weekly', multiplier: 2.0, description: 'Casual weekly overtime — after 40 hours (x2.0)' },
     ];
 
     await client.query(`DELETE FROM overtime_rates WHERE award_code = $1`, [AWARD_CODE]);
@@ -433,32 +331,39 @@ async function seed() {
     // ── Allowances ────────────────────────────────────────────────────────────
     const allowances = [
       {
+        allowance_type: 'first_aid_cement_and_lime',
+        name: 'First aid allowance — Cement and lime industry',
+        description: 'First aid allowance — Cement and lime industry',
+        trigger_condition: 'As per award conditions',
+        amount: 0.71, amount_type: 'per_hour', per_unit: 'per_hour',
+      },
+      {
+        allowance_type: 'first_aid_quarrying',
+        name: 'First aid allowance — Quarrying industry',
+        description: 'First aid allowance — Quarrying industry',
+        trigger_condition: 'As per award conditions',
+        amount: 0.52, amount_type: 'per_hour', per_unit: 'per_hour',
+      },
+      {
         allowance_type: 'meal',
-        name: 'Meal allowance—overtime',
-        description: 'Meal allowance—overtime',
+        name: 'Meal allowance — overtime',
+        description: 'Meal allowance — overtime',
         trigger_condition: 'As per award conditions',
         amount: 18.27, amount_type: 'fixed', per_unit: 'per_shift',
       },
       {
-        allowance_type: 'reasonable_board_and_lodging_cement_and_',
-        name: 'Reasonable board and lodging—Cement and lime industry',
-        description: 'Reasonable board and lodging—Cement and lime industry',
+        allowance_type: 'reasonable_board_and_lodging_cement',
+        name: 'Reasonable board and lodging — Cement and lime industry',
+        description: 'Reasonable board and lodging — Cement and lime industry',
         trigger_condition: 'As per award conditions',
-        amount: 609.8, amount_type: 'weekly', per_unit: 'per_week',
+        amount: 609.80, amount_type: 'weekly', per_unit: 'per_week',
       },
       {
-        allowance_type: 'reasonable_board_and_lodging_quarrying_i',
-        name: 'Reasonable board and lodging—Quarrying industry',
-        description: 'Reasonable board and lodging—Quarrying industry',
+        allowance_type: 'reasonable_board_and_lodging_quarrying',
+        name: 'Reasonable board and lodging — Quarrying industry',
+        description: 'Reasonable board and lodging — Quarrying industry',
         trigger_condition: 'As per award conditions',
         amount: 610.15, amount_type: 'weekly', per_unit: 'per_week',
-      },
-      {
-        allowance_type: 'meal',
-        name: 'Travel board and lodging—meals',
-        description: 'Travel board and lodging—meals',
-        trigger_condition: 'As per award conditions',
-        amount: 18.27, amount_type: 'fixed', per_unit: 'per_shift',
       },
       {
         allowance_type: 'vehicle_car',
@@ -466,13 +371,6 @@ async function seed() {
         description: 'Vehicle allowance',
         trigger_condition: 'As per award conditions',
         amount: 0.98, amount_type: 'per_km', per_unit: 'per_km',
-      },
-      {
-        allowance_type: 'first_aid',
-        name: 'Cement and lime industry—First aid',
-        description: 'Cement and lime industry—First aid',
-        trigger_condition: 'As per award conditions',
-        amount: 26.98, amount_type: 'weekly', per_unit: 'per_week',
       },
     ];
 
@@ -533,8 +431,8 @@ async function seed() {
         parent_answer_key: null,
         sort_order: 1,
         answers: [
-          { answer_key: 'quarrying_industry', answer_text: 'Quarrying Industry', sort_order: 1 },
-          { answer_key: 'cement_and_lime_industry', answer_text: 'Cement And Lime Industry', sort_order: 2 },
+          { answer_key: 'cement_and_lime_industry', answer_text: 'Cement And Lime Industry', sort_order: 1 },
+          { answer_key: 'quarrying_industry', answer_text: 'Quarrying Industry', sort_order: 2 },
         ],
       },
       {
@@ -548,13 +446,13 @@ async function seed() {
         parent_answer_key: null,
         sort_order: 2,
         answers: [
-          { answer_key: 'level_1', answer_text: 'Grade 1', sort_order: 1 },
-          { answer_key: 'level_2', answer_text: 'Grade 2', sort_order: 2 },
-          { answer_key: 'level_3', answer_text: 'Grade 3', sort_order: 3 },
-          { answer_key: 'level_4', answer_text: 'Grade 4', sort_order: 4 },
-          { answer_key: 'level_5', answer_text: 'Grade 5', sort_order: 5 },
-          { answer_key: 'level_6', answer_text: 'Grade 6', sort_order: 6 },
-          { answer_key: 'level_7', answer_text: 'Level 7', sort_order: 7 },
+          { answer_key: 'level_1', answer_text: 'Level 1 / Grade 1', sort_order: 1 },
+          { answer_key: 'level_2', answer_text: 'Level 2 / Grade 2', sort_order: 2 },
+          { answer_key: 'level_3', answer_text: 'Level 3 / Grade 3', sort_order: 3 },
+          { answer_key: 'level_4', answer_text: 'Level 4 / Grade 4', sort_order: 4 },
+          { answer_key: 'level_5', answer_text: 'Level 5 / Grade 5', sort_order: 5 },
+          { answer_key: 'level_6', answer_text: 'Level 6 / Grade 6', sort_order: 6 },
+          { answer_key: 'level_7', answer_text: 'Level 7 (Cement and Lime only)', sort_order: 7 },
         ],
       },
     ];
