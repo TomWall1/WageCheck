@@ -79,5 +79,6 @@ export function getAwardRatesFromSeed(awardCode: string): AwardRateData {
     penalties: award.penalties || [],
     allowances: award.allowances || [],
     effectiveDate,
+    rateType: (award as Record<string, unknown>).rateType === 'daily' ? 'daily' as const : 'hourly' as const,
   };
 }

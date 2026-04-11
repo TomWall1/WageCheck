@@ -113,7 +113,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000002": {
     "awardCode": "MA000002",
@@ -372,7 +373,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear protective footwear and does not supply it, you are entitled to reimbursement of the reasonable cost of the footwear."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000003": {
     "awardCode": "MA000003",
@@ -558,7 +560,8 @@
         "isAllPurpose": false,
         "description": "If you use your own vehicle for other work purposes (not delivery), you are entitled to a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000004": {
     "awardCode": "MA000004",
@@ -799,7 +802,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000005": {
     "awardCode": "MA000005",
@@ -967,7 +971,8 @@
         "isAllPurpose": false,
         "description": "If you work in the Broken Hill district, you receive a weekly district allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000006": {
     "awardCode": "MA000006",
@@ -1063,7 +1068,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000007": {
     "awardCode": "MA000007",
@@ -1159,7 +1165,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000008": {
     "awardCode": "MA000008",
@@ -1245,7 +1252,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000010": {
     "awardCode": "MA000010",
@@ -1455,7 +1463,8 @@
         "isAllPurpose": false,
         "description": "If you are a carpenter or joiner required to provide and maintain your own tools, you are entitled to $33.88 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000011": {
     "awardCode": "MA000011",
@@ -1551,7 +1560,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000012": {
     "awardCode": "MA000012",
@@ -1769,7 +1779,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear a uniform and does not supply it, part-time and casual employees are entitled to $1.25 per shift."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000013": {
     "awardCode": "MA000013",
@@ -2007,7 +2018,8 @@
         "isAllPurpose": false,
         "description": "If you are a casual liquor employee and you finish work after 10:00 pm, you are entitled to an additional $5.62 per engagement."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000014": {
     "awardCode": "MA000014",
@@ -2103,7 +2115,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000015": {
     "awardCode": "MA000015",
@@ -2214,7 +2227,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000016": {
     "awardCode": "MA000016",
@@ -2382,7 +2396,8 @@
         "isAllPurpose": false,
         "description": "If you are required to perform security duties at an airport or aviation facility, you are entitled to an hourly aviation allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000017": {
     "awardCode": "MA000017",
@@ -2478,7 +2493,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000018": {
     "awardCode": "MA000018",
@@ -2733,7 +2749,8 @@
         "isAllPurpose": false,
         "description": "If you are required to launder your own uniform, you are entitled to $1.49 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000019": {
     "awardCode": "MA000019",
@@ -2907,7 +2924,8 @@
         "isAllPurpose": false,
         "description": "If you are required to be on stand-by on a Saturday, Sunday or public holiday, you are entitled to $46.26 per day."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000020": {
     "awardCode": "MA000020",
@@ -3094,7 +3112,8 @@
         "isAllPurpose": false,
         "description": "If you are required to camp at or near the construction site, you are entitled to a camping allowance of $254.97 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000021": {
     "awardCode": "MA000021",
@@ -3290,7 +3309,8 @@
         "isAllPurpose": false,
         "description": "If you are appointed to supervise more than 10 employees, you are entitled to a leading hand allowance of $66.24 per week. This is an all-purpose allowance, which means it is included when calculating overtime, penalties, and leave."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000022": {
     "awardCode": "MA000022",
@@ -3521,7 +3541,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own motorcycle for work purposes, you receive a per-kilometre vehicle allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000023": {
     "awardCode": "MA000023",
@@ -3820,7 +3841,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000024": {
     "awardCode": "MA000024",
@@ -3916,7 +3938,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000025": {
     "awardCode": "MA000025",
@@ -4099,7 +4122,8 @@
         "isAllPurpose": false,
         "description": "If you are required to supply and maintain your own tools, you are entitled to $22.31 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000026": {
     "awardCode": "MA000026",
@@ -4287,7 +4311,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000027": {
     "awardCode": "MA000027",
@@ -4601,7 +4626,8 @@
         "isAllPurpose": false,
         "description": "If you are required to be on call on a Sunday or public holiday, you are entitled to $50.18 per 24-hour period."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000028": {
     "awardCode": "MA000028",
@@ -4808,7 +4834,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to travel to a different work location, you are entitled to payment at your appropriate rate for the time spent travelling."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000029": {
     "awardCode": "MA000029",
@@ -4955,7 +4982,8 @@
         "isAllPurpose": false,
         "description": "If you are an assembler required to supply and maintain your own tools, you are entitled to $11.83 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000030": {
     "awardCode": "MA000030",
@@ -5204,7 +5232,8 @@
         "isAllPurpose": false,
         "description": "If your clothing or belongings are damaged or stolen at work, you are reimbursed up to a maximum of $501.20 per claim."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000031": {
     "awardCode": "MA000031",
@@ -5280,7 +5309,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000032": {
     "awardCode": "MA000032",
@@ -5474,7 +5504,8 @@
         "isAllPurpose": false,
         "description": "Payable when required to stay overnight away from home for work purposes."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000033": {
     "awardCode": "MA000033",
@@ -5649,7 +5680,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to supply your own tools or equipment, you are entitled to reimbursement of the cost of those tools and equipment."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000034": {
     "awardCode": "MA000034",
@@ -5847,7 +5879,8 @@
         "isAllPurpose": false,
         "description": "If you are required to launder your own uniform, you are entitled to $1.49 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000035": {
     "awardCode": "MA000035",
@@ -5966,7 +5999,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to a vehicle allowance of $0.96 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000036": {
     "awardCode": "MA000036",
@@ -6117,7 +6151,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to $0.98 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000037": {
     "awardCode": "MA000037",
@@ -6213,7 +6248,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000038": {
     "awardCode": "MA000038",
@@ -6397,7 +6433,8 @@
         "isAllPurpose": false,
         "description": "If you are required to travel away from your home depot overnight, you are entitled to a travelling allowance of $40.08 per day."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000039": {
     "awardCode": "MA000039",
@@ -6516,7 +6553,8 @@
         "isAllPurpose": false,
         "description": "If you are required to work in a temperature below 0°C, you are entitled to a cold work allowance of $0.56 per hour."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000040": {
     "awardCode": "MA000040",
@@ -6627,7 +6665,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000041": {
     "awardCode": "MA000041",
@@ -6832,7 +6871,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to $0.98 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000042": {
     "awardCode": "MA000042",
@@ -6951,7 +6991,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000043": {
     "awardCode": "MA000043",
@@ -7122,7 +7163,8 @@
         "isAllPurpose": false,
         "description": "If you are required to travel to a location other than your usual workplace, you are entitled to a transport allowance of $10.42 per day."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000044": {
     "awardCode": "MA000044",
@@ -7254,7 +7296,8 @@
         "isAllPurpose": false,
         "description": "If you are appointed as a first aid officer and hold current first aid qualifications, you are entitled to $16.78 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000045": {
     "awardCode": "MA000045",
@@ -7365,7 +7408,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000046": {
     "awardCode": "MA000046",
@@ -7492,7 +7536,8 @@
         "isAllPurpose": false,
         "description": "If you are required to launder your own work clothing, you are entitled to a laundry allowance of $3.55 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000047": {
     "awardCode": "MA000047",
@@ -7588,7 +7633,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000048": {
     "awardCode": "MA000048",
@@ -7684,7 +7730,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000049": {
     "awardCode": "MA000049",
@@ -8264,7 +8311,8 @@
         "isAllPurpose": false,
         "description": "Disability allowance—confined space (boiler)"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000050": {
     "awardCode": "MA000050",
@@ -8360,7 +8408,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000051": {
     "awardCode": "MA000051",
@@ -8456,7 +8505,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000052": {
     "awardCode": "MA000052",
@@ -8634,7 +8684,8 @@
         "isAllPurpose": false,
         "description": "Uniforms allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000053": {
     "awardCode": "MA000053",
@@ -8837,7 +8888,8 @@
         "isAllPurpose": false,
         "description": "Outports allowance—Overnight stay—transfer for flexible number of days"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000054": {
     "awardCode": "MA000054",
@@ -8943,7 +8995,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000055": {
     "awardCode": "MA000055",
@@ -9133,7 +9186,8 @@
         "isAllPurpose": false,
         "description": "Vehicle allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000056": {
     "awardCode": "MA000056",
@@ -9284,7 +9338,8 @@
         "isAllPurpose": false,
         "description": "Meal allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000057": {
     "awardCode": "MA000057",
@@ -9435,7 +9490,8 @@
         "isAllPurpose": false,
         "description": "First aid allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000058": {
     "awardCode": "MA000058",
@@ -9876,7 +9932,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000059": {
     "awardCode": "MA000059",
@@ -10035,7 +10092,8 @@
         "isAllPurpose": false,
         "description": "If your employer does not supply or launder required protective clothing, you are entitled to $3.60 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000060": {
     "awardCode": "MA000060",
@@ -10131,7 +10189,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000061": {
     "awardCode": "MA000061",
@@ -10227,7 +10286,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000062": {
     "awardCode": "MA000062",
@@ -10323,7 +10383,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000063": {
     "awardCode": "MA000063",
@@ -10521,7 +10582,8 @@
         "isAllPurpose": false,
         "description": "If you are required to undergo a medical examination as a condition of employment, the employer must reimburse the cost."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000064": {
     "awardCode": "MA000064",
@@ -10617,7 +10679,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000065": {
     "awardCode": "MA000065",
@@ -10795,7 +10858,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to $0.98 per kilometre driven."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000066": {
     "awardCode": "MA000066",
@@ -10891,7 +10955,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000067": {
     "awardCode": "MA000067",
@@ -10997,7 +11062,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000068": {
     "awardCode": "MA000068",
@@ -11111,7 +11177,8 @@
         "isAllPurpose": false,
         "description": "First aid allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000069": {
     "awardCode": "MA000069",
@@ -11301,7 +11368,8 @@
         "isAllPurpose": false,
         "description": "Gentian violet and similar substances—per hour"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000070": {
     "awardCode": "MA000070",
@@ -11397,7 +11465,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000071": {
     "awardCode": "MA000071",
@@ -11643,7 +11712,8 @@
         "isAllPurpose": false,
         "description": "Meal allowance when required to work overtime"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000072": {
     "awardCode": "MA000072",
@@ -11897,7 +11967,8 @@
         "isAllPurpose": false,
         "description": "Leading hand in charge of more than 20 employees"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000073": {
     "awardCode": "MA000073",
@@ -12024,7 +12095,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to $0.98 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000074": {
     "awardCode": "MA000074",
@@ -12215,7 +12287,8 @@
         "isAllPurpose": false,
         "description": "If you are appointed as a leading hand supervising 20 or more employees, you are entitled to an extra $65.35 per week. This is an all-purpose allowance, which means it is included when calculating overtime, penalty rates and leave."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000075": {
     "awardCode": "MA000075",
@@ -12331,7 +12404,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000076": {
     "awardCode": "MA000076",
@@ -12521,7 +12595,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear a uniform and does not launder it, you are entitled to $1.50 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000077": {
     "awardCode": "MA000077",
@@ -12645,7 +12720,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own motorcycle for work purposes, you are entitled to $0.33 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000078": {
     "awardCode": "MA000078",
@@ -12741,7 +12817,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $20.96."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000079": {
     "awardCode": "MA000079",
@@ -12995,7 +13072,8 @@
         "isAllPurpose": false,
         "description": "If you are required to travel by air for work, you are entitled to a meal allowance per meal."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000080": {
     "awardCode": "MA000080",
@@ -13324,7 +13402,8 @@
         "isAllPurpose": false,
         "description": "If you are required to operate a tractor or plant equipment, you are entitled to an hourly allowance (up to a weekly maximum)."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000081": {
     "awardCode": "MA000081",
@@ -13753,7 +13832,8 @@
         "isAllPurpose": false,
         "description": "Touring sound & lighting employees receive an embedded allowance in their hourly rate that compensates for the overtime and unsociable hours typical of touring work. This is already factored into the Touring S&L rates shown in the calculator — it does not need to be added separately."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000082": {
     "awardCode": "MA000082",
@@ -13957,7 +14037,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000083": {
     "awardCode": "MA000083",
@@ -14071,7 +14152,8 @@
         "isAllPurpose": false,
         "description": "If you are required to be away from home over a weekend because of work, you are entitled to $64.80 per weekend."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000084": {
     "awardCode": "MA000084",
@@ -14262,7 +14344,8 @@
         "isAllPurpose": false,
         "description": "If you are required to work at a different location than usual, you are entitled to reimbursement of additional fares and, on Monday to Saturday, additional travel time at your minimum hourly rate."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000085": {
     "awardCode": "MA000085",
@@ -14701,7 +14784,8 @@
         "isAllPurpose": false,
         "description": "Meal allowance when required to work overtime"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000086": {
     "awardCode": "MA000086",
@@ -15556,7 +15640,8 @@
         "isAllPurpose": false,
         "description": "Rest and recreation day allowance — employer does not provide meals and accommodation"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000087": {
     "awardCode": "MA000087",
@@ -15967,7 +16052,8 @@
         "isAllPurpose": false,
         "description": "Annual value of tools—Engineering Tradesperson (Mechanical)"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000088": {
     "awardCode": "MA000088",
@@ -16505,7 +16591,8 @@
         "isAllPurpose": false,
         "description": "Tool allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000089": {
     "awardCode": "MA000089",
@@ -16658,7 +16745,8 @@
         "isAllPurpose": false,
         "description": "If you are an apprentice in your 3rd or 4th year and are required to supply your own tools, you are entitled to $12.14 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000090": {
     "awardCode": "MA000090",
@@ -16849,7 +16937,8 @@
         "isAllPurpose": false,
         "description": "If you are required to perform work that is unusually dirty or unpleasant, you are entitled to an extra $0.22 per hour."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000091": {
     "awardCode": "MA000091",
@@ -17657,7 +17746,8 @@
         "isAllPurpose": false,
         "description": "If you are required to launder your own costume or wardrobe in motion picture production, you receive a daily allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000092": {
     "awardCode": "MA000092",
@@ -17917,7 +18007,8 @@
         "isAllPurpose": false,
         "description": "If you are a Snowsports Instructor in Category A, B, or C, your employer will reimburse your airfare up to $1,231 for travel to the resort."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000093": {
     "awardCode": "MA000093",
@@ -18174,7 +18265,8 @@
         "isAllPurpose": false,
         "description": "Uniform allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000094": {
     "awardCode": "MA000094",
@@ -18406,7 +18498,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own motorcycle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000095": {
     "awardCode": "MA000095",
@@ -18559,7 +18652,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to transfer to a different work location, you are entitled to reimbursement of reasonable travel costs."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000096": {
     "awardCode": "MA000096",
@@ -18722,7 +18816,8 @@
         "isAllPurpose": false,
         "description": "If you work overtime for more than 2 hours and your employer did not give you notice the day before, you are entitled to a meal allowance of $13.13."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000097": {
     "awardCode": "MA000097",
@@ -18873,7 +18968,8 @@
         "isAllPurpose": false,
         "description": "Leading hand allowance—11 to 21 employees"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000098": {
     "awardCode": "MA000098",
@@ -19039,7 +19135,8 @@
         "isAllPurpose": false,
         "description": "If you are required to stay overnight away from your usual station, you are entitled to an incidental allowance of $20.18 per day."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000099": {
     "awardCode": "MA000099",
@@ -19213,7 +19310,8 @@
         "isAllPurpose": false,
         "description": "If you are required to sleep over at a location away from your usual workplace during an excursion or camp, you are entitled to $82.00 per night."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000100": {
     "awardCode": "MA000100",
@@ -19942,7 +20040,8 @@
         "isAllPurpose": false,
         "description": "Paid per kilometre if you are required to use your own vehicle for work purposes."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000101": {
     "awardCode": "MA000101",
@@ -20149,7 +20248,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear or use specific clothing or equipment, you are entitled to reimbursement of the cost."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000102": {
     "awardCode": "MA000102",
@@ -20280,7 +20380,8 @@
         "isAllPurpose": false,
         "description": "If you are required to work overtime and a meal break falls during that overtime, you are entitled to a meal allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000103": {
     "awardCode": "MA000103",
@@ -20488,7 +20589,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own vehicle for work purposes, you are entitled to a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000104": {
     "awardCode": "MA000104",
@@ -20641,7 +20743,8 @@
         "isAllPurpose": false,
         "description": "If you agree with your employer to use your own motor vehicle on the employer's business, you are entitled to $0.98 per kilometre travelled."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000105": {
     "awardCode": "MA000105",
@@ -20864,7 +20967,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to be vaccinated for workplace health and safety purposes, you are entitled to reimbursement of the cost."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000106": {
     "awardCode": "MA000106",
@@ -21001,7 +21105,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own mobile phone for work purposes, you are entitled to a monthly allowance of 50% of the plan cost (up to a maximum of $100 per month)."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000107": {
     "awardCode": "MA000107",
@@ -21200,7 +21305,8 @@
         "isAllPurpose": false,
         "description": "Leading hand allowance—3 to 10 employees"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000108": {
     "awardCode": "MA000108",
@@ -21454,7 +21560,8 @@
         "isAllPurpose": false,
         "description": "Vehicle allowance for using own vehicle for work purposes."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000109": {
     "awardCode": "MA000109",
@@ -21528,7 +21635,8 @@
         "isAllPurpose": false,
         "description": "Language allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000110": {
     "awardCode": "MA000110",
@@ -22082,7 +22190,8 @@
         "isAllPurpose": false,
         "description": "Travelling—transport and fares—motor cycle allowance"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000111": {
     "awardCode": "MA000111",
@@ -22453,7 +22562,8 @@
         "isAllPurpose": false,
         "description": "Paid per kilometre when an employee uses their own motorcycle for work purposes."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000112": {
     "awardCode": "MA000112",
@@ -22702,7 +22812,8 @@
         "isAllPurpose": false,
         "description": "If you are a tradesperson required to supply and maintain your own tools, you are entitled to a tool allowance of $22.25 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000113": {
     "awardCode": "MA000113",
@@ -22910,7 +23021,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own motorcycle for work purposes, you are entitled to $0.33 per kilometre."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000114": {
     "awardCode": "MA000114",
@@ -23048,7 +23160,8 @@
         "isAllPurpose": false,
         "description": "Travelling time and allowance—use of private vehicle"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000115": {
     "awardCode": "MA000115",
@@ -23718,7 +23831,8 @@
         "isAllPurpose": false,
         "description": "Uniform allowance payable per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000116": {
     "awardCode": "MA000116",
@@ -23894,7 +24008,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear a uniform and does not supply or launder it, you are entitled to $3.65 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000117": {
     "awardCode": "MA000117",
@@ -24316,7 +24431,8 @@
         "isAllPurpose": false,
         "description": "Meal allowances—Overtime—at least one hour"
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000118": {
     "awardCode": "MA000118",
@@ -24590,7 +24706,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear a uniform and does not supply or launder it, you are entitled to $6.51 per week."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000119": {
     "awardCode": "MA000119",
@@ -24903,7 +25020,8 @@
         "isAllPurpose": false,
         "description": "If your employer requires you to wear special clothing (other than a standard uniform), and you are required to buy and maintain it yourself, you are entitled to reimbursement of reasonable costs."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000120": {
     "awardCode": "MA000120",
@@ -25196,7 +25314,8 @@
         "isAllPurpose": false,
         "description": "If you are required to use your own motorcycle for work purposes, you receive a per-kilometre allowance."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000121": {
     "awardCode": "MA000121",
@@ -25510,7 +25629,8 @@
         "isAllPurpose": false,
         "description": "If you are appointed as a first aid officer and hold a current first aid certificate, you are entitled to $15.12 per week ($786.05 per year)."
       }
-    ]
+    ],
+    "rateType": "hourly"
   },
   "MA000122": {
     "awardCode": "MA000122",
@@ -26460,6 +26580,7 @@
         "isAllPurpose": false,
         "description": "Compensation for damage to personal effects up to $5,439."
       }
-    ]
+    ],
+    "rateType": "daily"
   }
 }

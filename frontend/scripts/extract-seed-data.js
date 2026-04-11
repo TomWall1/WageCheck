@@ -198,6 +198,9 @@ function extractFromSeed(filePath) {
     }
   }
 
+  // Detect if this award uses daily rates (e.g. seagoing)
+  const usesDailyRates = content.includes("'base_daily'") || content.includes('"base_daily"');
+
   // Extract penalty rates
   const penaltyMatch = content.match(/const penaltyRates\s*=\s*\[([\s\S]*?)\];\s*\n/);
   const penalties = [];
@@ -250,7 +253,7 @@ function extractFromSeed(filePath) {
     }
   }
 
-  return { awardCode, effectiveDate, classifications, penalties, allowances };
+  return { awardCode, effectiveDate, classifications, penalties, allowances, rateType: usesDailyRates ? 'daily' : 'hourly' };
 }
 
 // Main

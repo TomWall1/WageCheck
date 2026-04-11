@@ -97,6 +97,8 @@ export default function GenericHubContent({
   const streams = rates ? [...new Set(rates.levels.map(l => l.stream))] : [];
   const multiStream = streams.length > 1;
   const fmtStream = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const isDaily = rates?.rateType === 'daily';
+  const rateSuffix = isDaily ? '/day' : '/hr';
 
   const faqData = [
     {
@@ -201,8 +203,8 @@ export default function GenericHubContent({
                     <thead>
                       <tr>
                         <th style={thStyle}>Classification</th>
-                        <th style={thStyle}>Full-time rate</th>
-                        <th style={thStyle}>Casual rate</th>
+                        <th style={thStyle}>Full-time {isDaily ? 'daily' : 'hourly'} rate</th>
+                        <th style={thStyle}>{isDaily ? '' : 'Casual rate'}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -211,8 +213,8 @@ export default function GenericHubContent({
                           <td style={{ ...tdStyle, fontWeight: 500, color: 'var(--secondary)' }}>
                             {l.title || `Level ${l.level}`}
                           </td>
-                          <td style={tdStyle}>{formatCurrency(l.ftRate)}/hr</td>
-                          <td style={tdStyle}>{formatCurrency(l.casualRate)}/hr</td>
+                          <td style={tdStyle}>{formatCurrency(l.ftRate)}{rateSuffix}</td>
+                          <td style={tdStyle}>{isDaily ? '' : formatCurrency(l.casualRate) + rateSuffix}</td>
                         </tr>
                       ))}
                     </tbody>

@@ -64,7 +64,7 @@ export default function GenericClassificationsContent({ rates, awardCode, awardN
                         <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--secondary)' }}>{l.title}</span>
                       </div>
                       <p style={{ fontSize: '13px', color: 'var(--secondary-muted)', margin: 0 }}>
-                        Base rate: {formatCurrency(l.ftRate)}/hr &middot; Casual: {formatCurrency(l.casualRate)}/hr
+                        Base rate: {formatCurrency(l.ftRate)}{rates?.rateType === 'daily' ? '/day' : '/hr'}{rates?.rateType !== 'daily' && <> &middot; Casual: {formatCurrency(l.casualRate)}/hr</>}
                       </p>
                     </div>
                   ))}

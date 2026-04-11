@@ -48,6 +48,8 @@ export interface AwardRateData {
   penalties: PenaltyInfo[];
   allowances: AllowanceInfo[];
   effectiveDate: string;
+  /** 'hourly' (default) or 'daily' for seagoing/maritime awards */
+  rateType: 'hourly' | 'daily';
 }
 
 // ── Main function ─────────────────────────────────────────────────────────

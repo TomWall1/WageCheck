@@ -30,6 +30,9 @@ export default function GenericPayRatesContent({ rates, awardCode, awardName, aw
   const levels = rates?.levels ?? [];
   const streams = [...new Set(levels.map(l => l.stream))];
   const multiStream = streams.length > 1;
+  const isDaily = rates?.rateType === 'daily';
+  const rateLabel = isDaily ? 'Daily' : 'Hourly';
+  const rateSuffix = isDaily ? '/day' : '/hr';
 
   return (
     <>
@@ -37,7 +40,7 @@ export default function GenericPayRatesContent({ rates, awardCode, awardName, aw
         Rates effective {effectiveDate} &middot; {awardCode}
       </p>
       <p style={pStyle}>
-        Current hourly pay rates under the {awardName}, effective from {effectiveDate}. Casual rates include the 25% casual loading.
+        Current {isDaily ? 'daily' : 'hourly'} pay rates under the {awardName}, effective from {effectiveDate}.{!isDaily && ' Casual rates include the 25% casual loading.'}
       </p>
 
       {levels.length > 0 ? (
@@ -56,16 +59,16 @@ export default function GenericPayRatesContent({ rates, awardCode, awardName, aw
                     <thead>
                       <tr>
                         <th style={thStyle}>Classification</th>
-                        <th style={thStyle}>FT/PT Hourly</th>
-                        <th style={thStyle}>Casual Hourly</th>
+                        <th style={thStyle}>FT/PT {rateLabel}</th>
+                        <th style={thStyle}>{isDaily ? 'Notes' : 'Casual ' + rateLabel}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {streamLevels.map((l, i) => (
                         <tr key={i}>
                           <td style={{ ...tdStyle, color: 'var(--secondary-muted)' }}>{l.title}</td>
-                          <td style={{ ...tdStyle, color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.ftRate)}</td>
-                          <td style={{ ...tdStyle, color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.casualRate)}</td>
+                          <td style={{ ...tdStyle, color: 'var(--secondary)', fontWeight: 500 }}>{formatCurrency(l.ftRate)}{rateSuffix}</td>
+                          <td style={{ ...tdStyle, color: 'var(--secondary)', fontWeight: 500 }}>{isDaily ? '' : formatCurrency(l.casualRate) + rateSuffix}</td>
                         </tr>
                       ))}
                     </tbody>
