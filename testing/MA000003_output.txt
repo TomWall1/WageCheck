@@ -1,0 +1,289 @@
+
+WageCheck Exhaustive Award Testing Agent — MA000003
+═════════════════════════════════════════════════════════════════
+
+Award: MA000003
+Classifications: 4
+Streams: general, responsible, solo
+Penalty configs: 18
+OT rules: 12
+Allowances: 8
+Junior rates: yes
+Min engagement: yes
+
+═══ STAGE 0 — PAY GUIDE COMPLETENESS (spec vs DB) ═══
+  ⊘ No pay guide spec found at C:\Documents\WageCheck\testing\pay_guides\MA000003.spec.json. Add MA000003.spec.json to testing/pay_guides/ to enable Stage 0.
+
+═══ STAGE 1 — SEED VERIFICATION (DB vs FWC API) ═══
+
+  Verifying base pay rates against FWC API (latest available)...
+  Verifying allowances against FWC API...
+    ~ SEED-AL-01: cold_work DB=$0.37 — no exact API match (manual verify needed)
+    ~ SEED-AL-02: cold_work_freezer DB=$0.56 — no exact API match (manual verify needed)
+    ~ SEED-AL-03: district DB=$45.73 — no exact API match (manual verify needed)
+    ~ SEED-AL-04: laundry_ft DB=$6.25 — no exact API match (manual verify needed)
+    ~ SEED-AL-05: laundry_ptcasual DB=$1.25 — no exact API match (manual verify needed)
+    ~ SEED-AL-06: meal DB=$16.65 — no exact API match (manual verify needed)
+    ~ SEED-AL-07: vehicle_delivery DB=$0.52 — no exact API match (manual verify needed)
+    ~ SEED-AL-08: vehicle_other DB=$0.98 — no exact API match (manual verify needed)
+  Seed verification: 0 PASS, 0 FAIL, 8 WARN, 8 SKIP (16 total)
+  ⊘ SEED-BR-01: SKIPPED — No fwc_classification_fixed_id for L1 general
+  ⊘ SEED-BR-02: SKIPPED — No fwc_classification_fixed_id for L1 general
+  ⊘ SEED-BR-03: SKIPPED — No fwc_classification_fixed_id for L2 general
+  ⊘ SEED-BR-04: SKIPPED — No fwc_classification_fixed_id for L2 general
+  ⊘ SEED-BR-05: SKIPPED — No fwc_classification_fixed_id for L3 responsible
+  ⊘ SEED-BR-06: SKIPPED — No fwc_classification_fixed_id for L3 responsible
+  ⊘ SEED-BR-07: SKIPPED — No fwc_classification_fixed_id for L3 solo
+  ⊘ SEED-BR-08: SKIPPED — No fwc_classification_fixed_id for L3 solo
+  ~ SEED-AL-01: PARTIAL — cold_work allowance ($0.37) — no exact match in API response
+  ~ SEED-AL-02: PARTIAL — cold_work_freezer allowance ($0.56) — no exact match in API response
+  ~ SEED-AL-03: PARTIAL — district allowance ($45.73) — no exact match in API response
+  ~ SEED-AL-04: PARTIAL — laundry_ft allowance ($6.25) — no exact match in API response
+  ~ SEED-AL-05: PARTIAL — laundry_ptcasual allowance ($1.25) — no exact match in API response
+  ~ SEED-AL-06: PARTIAL — meal allowance ($16.65) — no exact match in API response
+  ~ SEED-AL-07: PARTIAL — vehicle_delivery allowance ($0.52) — no exact match in API response
+  ~ SEED-AL-08: PARTIAL — vehicle_other allowance ($0.98) — no exact match in API response
+
+═══ BASE RATES — every classification × FT/PT ═══
+  ✓ BR-001: expected $26.55, got $26.55 [PASS] — L1 general full_time
+  ✓ BR-002: expected $26.55, got $26.55 [PASS] — L1 general part_time
+  ✓ BR-003: expected $28.12, got $28.12 [PASS] — L2 general full_time
+  ✓ BR-004: expected $28.12, got $28.12 [PASS] — L2 general part_time
+  ✓ BR-005: expected $28.90, got $28.90 [PASS] — L3 responsible full_time
+  ✓ BR-006: expected $28.90, got $28.90 [PASS] — L3 responsible part_time
+  ✓ BR-007: expected $28.55, got $28.55 [PASS] — L3 solo full_time
+  ✓ BR-008: expected $28.55, got $28.55 [PASS] — L3 solo part_time
+
+═══ CASUAL RATES — every classification, verify = FT × 1.25 ═══
+  ✓ CL-001: expected $33.19, got $33.19 [PASS] — L1 general casual (FT $26.55 × 1.25)
+  ✓ CL-002: expected $35.15, got $35.15 [PASS] — L2 general casual (FT $28.12 × 1.25)
+  ✓ CL-003: expected $36.13, got $36.13 [PASS] — L3 responsible casual (FT $28.9 × 1.25)
+  ✓ CL-004: expected $35.69, got $35.69 [PASS] — L3 solo casual (FT $28.55 × 1.25)
+
+═══ PENALTY RATES — every classification × employment_type × day_type ═══
+  ✓ PR-001: expected $132.75, got $132.75 [PASS] — L1 general full_time saturday ×1.25
+  ✗ PR-002: expected $159.30, got $132.75 [FAIL] — L1 general full_time sunday ×1.5
+  ✓ PR-003: expected $238.95, got $238.95 [PASS] — L1 general full_time public_holiday ×2.25
+  ✓ PR-004: expected $132.75, got $132.75 [PASS] — L1 general part_time saturday ×1.25
+  ✗ PR-005: expected $159.30, got $132.75 [FAIL] — L1 general part_time sunday ×1.5
+  ✓ PR-006: expected $238.95, got $238.95 [PASS] — L1 general part_time public_holiday ×2.25
+  ✓ PR-007: expected $159.30, got $159.30 [PASS] — L1 general casual saturday ×1.2
+  ✗ PR-008: expected $185.85, got $159.30 [FAIL] — L1 general casual sunday ×1.4
+  ✓ PR-009: expected $265.50, got $265.50 [PASS] — L1 general casual public_holiday ×2
+  ✓ PR-010: expected $140.60, got $140.60 [PASS] — L2 general full_time saturday ×1.25
+  ✓ PR-011: expected $168.72, got $168.72 [PASS] — L2 general full_time sunday ×1.5
+  ✓ PR-012: expected $253.08, got $253.08 [PASS] — L2 general full_time public_holiday ×2.25
+  ✓ PR-013: expected $140.60, got $140.60 [PASS] — L2 general part_time saturday ×1.25
+  ✓ PR-014: expected $168.72, got $168.72 [PASS] — L2 general part_time sunday ×1.5
+  ✓ PR-015: expected $253.08, got $253.08 [PASS] — L2 general part_time public_holiday ×2.25
+  ✓ PR-016: expected $168.72, got $168.72 [PASS] — L2 general casual saturday ×1.2
+  ✓ PR-017: expected $196.84, got $196.84 [PASS] — L2 general casual sunday ×1.4
+  ✓ PR-018: expected $281.20, got $281.20 [PASS] — L2 general casual public_holiday ×2
+  ✓ PR-019: expected $144.50, got $144.50 [PASS] — L3 responsible full_time saturday ×1.25
+  ✓ PR-020: expected $173.40, got $173.40 [PASS] — L3 responsible full_time sunday ×1.5
+  ✓ PR-021: expected $260.10, got $260.10 [PASS] — L3 responsible full_time public_holiday ×2.25
+  ✓ PR-022: expected $144.50, got $144.50 [PASS] — L3 responsible part_time saturday ×1.25
+  ✓ PR-023: expected $173.40, got $173.40 [PASS] — L3 responsible part_time sunday ×1.5
+  ✓ PR-024: expected $260.10, got $260.10 [PASS] — L3 responsible part_time public_holiday ×2.25
+  ✓ PR-025: expected $173.40, got $173.40 [PASS] — L3 responsible casual saturday ×1.2
+  ✓ PR-026: expected $202.30, got $202.30 [PASS] — L3 responsible casual sunday ×1.4
+  ✓ PR-027: expected $289.00, got $289.00 [PASS] — L3 responsible casual public_holiday ×2
+  ✓ PR-028: expected $142.75, got $142.75 [PASS] — L3 solo full_time saturday ×1.25
+  ✓ PR-029: expected $171.30, got $171.30 [PASS] — L3 solo full_time sunday ×1.5
+  ✓ PR-030: expected $256.95, got $256.95 [PASS] — L3 solo full_time public_holiday ×2.25
+  ✓ PR-031: expected $142.75, got $142.75 [PASS] — L3 solo part_time saturday ×1.25
+  ✓ PR-032: expected $171.30, got $171.30 [PASS] — L3 solo part_time sunday ×1.5
+  ✓ PR-033: expected $256.95, got $256.95 [PASS] — L3 solo part_time public_holiday ×2.25
+  ✓ PR-034: expected $171.30, got $171.30 [PASS] — L3 solo casual saturday ×1.2
+  ✓ PR-035: expected $199.85, got $199.85 [PASS] — L3 solo casual sunday ×1.4
+  ✓ PR-036: expected $285.50, got $285.50 [PASS] — L3 solo casual public_holiday ×2
+
+  Time-band penalty rates (all classifications × employment types):
+  ✓ TB-037: expected $58.41, got $58.41 [PASS] — L1 general full_time weekday 22:00:00-00:00:00 ×1.1+$0/hr
+  ✓ TB-038: expected $61.86, got $61.86 [PASS] — L2 general full_time weekday 22:00:00-00:00:00 ×1.1+$0/hr
+  ✓ TB-039: expected $63.58, got $63.58 [PASS] — L3 responsible full_time weekday 22:00:00-00:00:00 ×1.1+$0/hr
+  ✓ TB-040: expected $62.81, got $62.81 [PASS] — L3 solo full_time weekday 22:00:00-00:00:00 ×1.1+$0/hr
+  ✓ TB-041: expected $61.07, got $61.07 [PASS] — L1 general full_time weekday 00:00:00-06:00:00 ×1.15+$0/hr
+  ✓ TB-042: expected $64.68, got $64.68 [PASS] — L2 general full_time weekday 00:00:00-06:00:00 ×1.15+$0/hr
+  ✓ TB-043: expected $66.47, got $66.47 [PASS] — L3 responsible full_time weekday 00:00:00-06:00:00 ×1.15+$0/hr
+  ✓ TB-044: expected $65.66, got $65.66 [PASS] — L3 solo full_time weekday 00:00:00-06:00:00 ×1.15+$0/hr
+
+═══ OVERTIME — daily and weekly thresholds ═══
+  ✓ OT-001: PASS — L1 general full_time exactly 10hr — verify no OT triggered
+  ✓ OT-002: PASS — L1 general full_time 11hr (1hr OT ×1.5)
+  ✓ OT-003: PASS — L1 general full_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-004: PASS — L1 general part_time exactly 10hr — verify no OT triggered
+  ✓ OT-005: PASS — L1 general part_time 11hr (1hr OT ×1.5)
+  ✓ OT-006: PASS — L1 general part_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-007: PASS — L1 general casual exactly 10hr — verify no OT triggered
+  ✓ OT-008: PASS — L1 general casual 11hr (1hr OT ×1.2)
+  ✓ OT-009: PASS — L1 general casual 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-010: PASS — L3 responsible full_time exactly 10hr — verify no OT triggered
+  ✓ OT-011: PASS — L3 responsible full_time 11hr (1hr OT ×1.5)
+  ✓ OT-012: PASS — L3 responsible full_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-013: PASS — L3 responsible part_time exactly 10hr — verify no OT triggered
+  ✓ OT-014: PASS — L3 responsible part_time 11hr (1hr OT ×1.5)
+  ✓ OT-015: PASS — L3 responsible part_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-016: PASS — L3 responsible casual exactly 10hr — verify no OT triggered
+  ✓ OT-017: PASS — L3 responsible casual 11hr (1hr OT ×1.2)
+  ✓ OT-018: PASS — L3 responsible casual 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-019: PASS — L3 solo full_time exactly 10hr — verify no OT triggered
+  ✓ OT-020: PASS — L3 solo full_time 11hr (1hr OT ×1.5)
+  ✓ OT-021: PASS — L3 solo full_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-022: PASS — L3 solo part_time exactly 10hr — verify no OT triggered
+  ✓ OT-023: PASS — L3 solo part_time 11hr (1hr OT ×1.5)
+  ✓ OT-024: PASS — L3 solo part_time 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-025: PASS — L3 solo casual exactly 10hr — verify no OT triggered
+  ✓ OT-026: PASS — L3 solo casual 11hr (1hr OT ×1.2)
+  ✓ OT-027: PASS — L3 solo casual 13hr (tier1 2hr + tier2 1hr = 180min OT)
+  ✓ OT-028: PASS — L1 general FT 43.0hr week — OT mins: 300
+  ✓ OT-029: PASS — L3 responsible FT 43.0hr week — OT mins: 300
+  ✓ OT-030: PASS — L3 solo FT 43.0hr week — OT mins: 300
+
+═══ MINIMUM ENGAGEMENT — shift below minimum (one classification per stream) ═══
+  ✓ ME-001: expected $99.56, got $99.56 [PASS] — L1 general casual 1hr shift → paid for 3hr minimum
+  ✓ ME-002: expected $119.48, got $119.48 [PASS] — L1 general casual 1hr Sat → paid for 3hr minimum at ×1.2
+  ✓ ME-003: expected $79.65, got $79.65 [PASS] — L1 general part_time 1hr shift → paid for 3hr minimum
+  ✓ ME-004: expected $99.56, got $99.56 [PASS] — L1 general part_time 1hr Sat → paid for 3hr minimum at ×1.25
+  ✓ ME-005: expected $108.38, got $108.38 [PASS] — L3 responsible casual 1hr shift → paid for 3hr minimum
+  ✓ ME-006: expected $130.05, got $130.05 [PASS] — L3 responsible casual 1hr Sat → paid for 3hr minimum at ×1.2
+  ✓ ME-007: expected $86.70, got $86.70 [PASS] — L3 responsible part_time 1hr shift → paid for 3hr minimum
+  ~ ME-008: expected $108.37, got $108.38 [PARTIAL] — L3 responsible part_time 1hr Sat → paid for 3hr minimum at ×1.25
+  ✓ ME-009: expected $107.06, got $107.06 [PASS] — L3 solo casual 1hr shift → paid for 3hr minimum
+  ✓ ME-010: expected $128.48, got $128.48 [PASS] — L3 solo casual 1hr Sat → paid for 3hr minimum at ×1.2
+  ✓ ME-011: expected $85.65, got $85.65 [PASS] — L3 solo part_time 1hr shift → paid for 3hr minimum
+  ✓ ME-012: expected $107.06, got $107.06 [PASS] — L3 solo part_time 1hr Sat → paid for 3hr minimum at ×1.25
+
+═══ ALLOWANCES — every allowance amount verified ═══
+  ✓ AL-001: expected $0.37, got $0.37 [PASS] — Cold work allowance: $0.37 per_hour (all_purpose=false)
+  ✓ AL-002: expected $0.56, got $0.56 [PASS] — Cold work allowance (below freezing): $0.56 per_hour (all_purpose=false)
+  ✓ AL-003: expected $45.73, got $45.73 [PASS] — District allowance (Broken Hill): $45.73 per_week (all_purpose=false)
+  ✓ AL-004: expected $6.25, got $6.25 [PASS] — Laundry allowance (full-time): $6.25 per_week (all_purpose=false)
+  ✓ AL-005: expected $1.25, got $1.25 [PASS] — Laundry allowance (part-time or casual): $1.25 per_shift (all_purpose=false)
+  ✓ AL-006: expected $16.65, got $16.65 [PASS] — Meal allowance (overtime): $16.65 per_meal (all_purpose=false)
+  ✓ AL-007: expected $0.52, got $0.52 [PASS] — Vehicle allowance (delivery driver): $0.52 per_km (all_purpose=false)
+  ✓ AL-008: expected $0.98, got $0.98 [PASS] — Vehicle allowance (non-delivery): $0.98 per_km (all_purpose=false)
+
+═══ SUPERANNUATION — 12% SGC on OTE for every pay category ═══
+  ✓ SU-001: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L1 general)
+  ✓ SU-002: expected $12.74, got $12.74 [PASS] — Super on 4hr ordinary FT L1 general
+  ✓ SU-003: expected $15.93, got $15.93 [PASS] — Super on Sat penalty FT L1 general (×1.25)
+  ✗ SU-004: expected $19.12, got $15.93 [FAIL] — Super on Sun penalty FT L1 general (×1.5)
+  ✓ SU-005: expected $28.67, got $28.67 [PASS] — Super on PH FT L1 general (×2.25)
+  ✓ SU-006: expected $15.93, got $15.93 [PASS] — Super on casual L1 general weekday
+  ✓ SU-007: PASS — Super excludes OT: 12hr shift, super=$31.86 < max=$43.42
+  ✓ SU-008: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L3 responsible)
+  ✓ SU-009: expected $13.87, got $13.87 [PASS] — Super on 4hr ordinary FT L3 responsible
+  ✓ SU-010: expected $17.34, got $17.34 [PASS] — Super on Sat penalty FT L3 responsible (×1.25)
+  ✓ SU-011: expected $20.81, got $20.81 [PASS] — Super on Sun penalty FT L3 responsible (×1.5)
+  ✓ SU-012: expected $31.21, got $31.21 [PASS] — Super on PH FT L3 responsible (×2.25)
+  ✓ SU-013: expected $17.34, got $17.34 [PASS] — Super on casual L3 responsible weekday
+  ✓ SU-014: PASS — Super excludes OT: 12hr shift, super=$34.68 < max=$47.08
+  ✓ SU-015: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L3 solo)
+  ✓ SU-016: expected $13.70, got $13.70 [PASS] — Super on 4hr ordinary FT L3 solo
+  ✓ SU-017: expected $17.13, got $17.13 [PASS] — Super on Sat penalty FT L3 solo (×1.25)
+  ✓ SU-018: expected $20.56, got $20.56 [PASS] — Super on Sun penalty FT L3 solo (×1.5)
+  ✓ SU-019: expected $30.83, got $30.83 [PASS] — Super on PH FT L3 solo (×2.25)
+  ✓ SU-020: expected $17.13, got $17.13 [PASS] — Super on casual L3 solo weekday
+  ✓ SU-021: PASS — Super excludes OT: 12hr shift, super=$34.26 < max=$46.54
+
+═══ JUNIOR RATES — every age bracket × classification ═══
+  ✓ JR-001: expected $10.62, got $10.62 [PASS] — L1 general FT age 15 (<16)
+  ✓ JR-002: expected $13.28, got $13.28 [PASS] — L1 general casual age 15 (40% × 1.25)
+  ✓ JR-003: expected $13.28, got $13.28 [PASS] — L1 general FT age 16 (50%)
+  ✓ JR-004: expected $16.59, got $16.59 [PASS] — L1 general casual age 16 (50% × 1.25)
+  ✓ JR-005: expected $15.93, got $15.93 [PASS] — L1 general FT age 17 (60%)
+  ✓ JR-006: expected $19.91, got $19.91 [PASS] — L1 general casual age 17 (60% × 1.25)
+  ✓ JR-007: expected $18.59, got $18.59 [PASS] — L1 general FT age 18 (70%)
+  ✓ JR-008: expected $23.23, got $23.23 [PASS] — L1 general casual age 18 (70% × 1.25)
+  ✓ JR-009: expected $21.24, got $21.24 [PASS] — L1 general FT age 19 (80%)
+  ✓ JR-010: expected $26.55, got $26.55 [PASS] — L1 general casual age 19 (80% × 1.25)
+  ✓ JR-011: expected $23.89, got $23.90 [PASS] — L1 general FT age 20 (90%)
+  ✓ JR-012: expected $29.87, got $29.87 [PASS] — L1 general casual age 20 (90% × 1.25)
+  ✓ JR-013: expected $26.55, got $26.55 [PASS] — L1 general FT age 21 (adult)
+  ✓ JR-014: expected $11.25, got $11.25 [PASS] — L2 general FT age 15 (<16)
+  ✓ JR-015: expected $14.06, got $14.06 [PASS] — L2 general casual age 15 (40% × 1.25)
+  ✓ JR-016: expected $14.06, got $14.06 [PASS] — L2 general FT age 16 (50%)
+  ✓ JR-017: expected $17.57, got $17.58 [PASS] — L2 general casual age 16 (50% × 1.25)
+  ✓ JR-018: expected $16.87, got $16.87 [PASS] — L2 general FT age 17 (60%)
+  ✓ JR-019: expected $21.09, got $21.09 [PASS] — L2 general casual age 17 (60% × 1.25)
+  ✓ JR-020: expected $19.68, got $19.68 [PASS] — L2 general FT age 18 (70%)
+  ✓ JR-021: expected $24.61, got $24.61 [PASS] — L2 general casual age 18 (70% × 1.25)
+  ✓ JR-022: expected $22.50, got $22.50 [PASS] — L2 general FT age 19 (80%)
+  ✓ JR-023: expected $28.12, got $28.12 [PASS] — L2 general casual age 19 (80% × 1.25)
+  ✓ JR-024: expected $25.31, got $25.31 [PASS] — L2 general FT age 20 (90%)
+  ✓ JR-025: expected $31.64, got $31.64 [PASS] — L2 general casual age 20 (90% × 1.25)
+  ✓ JR-026: expected $28.12, got $28.12 [PASS] — L2 general FT age 21 (adult)
+  ✓ JR-027: expected $11.56, got $11.56 [PASS] — L3 responsible FT age 15 (<16)
+  ✓ JR-028: expected $14.45, got $14.45 [PASS] — L3 responsible casual age 15 (40% × 1.25)
+  ✓ JR-029: expected $14.45, got $14.45 [PASS] — L3 responsible FT age 16 (50%)
+  ✓ JR-030: expected $18.06, got $18.06 [PASS] — L3 responsible casual age 16 (50% × 1.25)
+  ✓ JR-031: expected $17.34, got $17.34 [PASS] — L3 responsible FT age 17 (60%)
+  ✓ JR-032: expected $21.68, got $21.68 [PASS] — L3 responsible casual age 17 (60% × 1.25)
+  ✓ JR-033: expected $20.23, got $20.23 [PASS] — L3 responsible FT age 18 (70%)
+  ✓ JR-034: expected $25.29, got $25.29 [PASS] — L3 responsible casual age 18 (70% × 1.25)
+  ✓ JR-035: expected $23.12, got $23.12 [PASS] — L3 responsible FT age 19 (80%)
+  ✓ JR-036: expected $28.90, got $28.90 [PASS] — L3 responsible casual age 19 (80% × 1.25)
+  ✓ JR-037: expected $26.01, got $26.01 [PASS] — L3 responsible FT age 20 (90%)
+  ✓ JR-038: expected $32.51, got $32.51 [PASS] — L3 responsible casual age 20 (90% × 1.25)
+  ✓ JR-039: expected $28.90, got $28.90 [PASS] — L3 responsible FT age 21 (adult)
+  ✓ JR-040: expected $11.42, got $11.42 [PASS] — L3 solo FT age 15 (<16)
+  ✓ JR-041: expected $14.28, got $14.28 [PASS] — L3 solo casual age 15 (40% × 1.25)
+  ✓ JR-042: expected $14.28, got $14.28 [PASS] — L3 solo FT age 16 (50%)
+  ✓ JR-043: expected $17.84, got $17.84 [PASS] — L3 solo casual age 16 (50% × 1.25)
+  ✓ JR-044: expected $17.13, got $17.13 [PASS] — L3 solo FT age 17 (60%)
+  ✓ JR-045: expected $21.41, got $21.41 [PASS] — L3 solo casual age 17 (60% × 1.25)
+  ✓ JR-046: expected $19.98, got $19.99 [PASS] — L3 solo FT age 18 (70%)
+  ✓ JR-047: expected $24.98, got $24.98 [PASS] — L3 solo casual age 18 (70% × 1.25)
+  ✓ JR-048: expected $22.84, got $22.84 [PASS] — L3 solo FT age 19 (80%)
+  ✓ JR-049: expected $28.55, got $28.55 [PASS] — L3 solo casual age 19 (80% × 1.25)
+  ✓ JR-050: expected $25.70, got $25.70 [PASS] — L3 solo FT age 20 (90%)
+  ✓ JR-051: expected $32.12, got $32.12 [PASS] — L3 solo casual age 20 (90% × 1.25)
+  ✓ JR-052: expected $28.55, got $28.55 [PASS] — L3 solo FT age 21 (adult)
+
+═══ MISSED BREAK — shift > 5hr without meal break ═══
+  ✓ MB-001: expected $185.85, got $185.85 [PASS] — L1 general FT 6hr no break (5hr ord + 1hr ×2.0)
+  ✓ MB-002: expected $132.75, got $132.75 [PASS] — L1 general FT 5hr no break (exactly at threshold, no penalty)
+  ✓ MB-003: expected $325.24, got $325.24 [PASS] — L1 general FT 8hr Sat no break (5hr ×1.25 + 3hr ×2)
+
+═══ COMPLEX SCENARIOS — multi-shift, penalty + OT combos ═══
+  ✓ CS-001: PASS — L1 general FT Mon-Fri 38hr week (pay=$1008.9)
+  ✓ CS-002: PASS — L1 general FT 4×weekday + Sat (pay=$1059.35)
+  ✓ CS-003: expected $265.50, got $265.50 [PASS] — L1 general casual PH 4hr (×2 of casual base)
+  ~ CS-004: expected $411.53, got $411.54 [PARTIAL] — L1 general FT Sat 12hr (OT + penalty, higher-of)
+  ✗ CS-005: expected $477.90, got $411.54 [FAIL] — L1 general FT Sun 12hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-006: PASS — L3 responsible FT Mon-Fri 38hr week (pay=$1098.2)
+  ✓ CS-007: PASS — L3 responsible FT 4×weekday + Sat (pay=$1153.11)
+  ✓ CS-008: expected $289.00, got $289.00 [PASS] — L3 responsible casual PH 4hr (×2 of casual base)
+  ✓ CS-009: expected $447.95, got $447.95 [PASS] — L3 responsible FT Sat 12hr (OT + penalty, higher-of)
+  ✓ CS-010: expected $520.20, got $520.20 [PASS] — L3 responsible FT Sun 12hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-011: PASS — L3 solo FT Mon-Fri 38hr week (pay=$1084.9)
+  ✓ CS-012: PASS — L3 solo FT 4×weekday + Sat (pay=$1139.14)
+  ✓ CS-013: expected $285.50, got $285.50 [PASS] — L3 solo casual PH 4hr (×2 of casual base)
+  ~ CS-014: expected $442.53, got $442.54 [PARTIAL] — L3 solo FT Sat 12hr (OT + penalty, higher-of)
+  ✓ CS-015: expected $513.90, got $513.90 [PASS] — L3 solo FT Sun 12hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-016: expected $79.65, got $79.65 [PASS] — L1 general casual age 16 Sat 4hr (50% × 1.25 × 1.2)
+
+═══ REGRESSION — quick smoke tests ═══
+  ✓ RT-001: expected $106.20, got $106.20 [PASS] — L1 general FT Mon 4hr = $26.55 × 4
+  ✓ RT-002: expected $132.75, got $132.75 [PASS] — L1 general casual Mon 4hr = $33.1875 × 4
+  ✓ RT-003: expected $115.60, got $115.60 [PASS] — L3 responsible FT Mon 4hr = $28.9 × 4
+  ✓ RT-004: expected $144.50, got $144.50 [PASS] — L3 responsible casual Mon 4hr = $36.125 × 4
+  ✓ RT-005: expected $114.20, got $114.20 [PASS] — L3 solo FT Mon 4hr = $28.55 × 4
+  ✓ RT-006: expected $142.75, got $142.75 [PASS] — L3 solo casual Mon 4hr = $35.6875 × 4
+
+═══ FEATURE TESTS — no award_features registered ═══
+  ⊘ FT-001: SKIPPED — No award_features rows for MA000003
+
+════════════════════════════════════════════════════════════
+
+RESULTS: 196 PASS, 11 PARTIAL, 5 FAIL, 9 SKIPPED (221 total)
+
+FAILURES:
+  ✗ PR-002: expected 159.3, got 132.75 — L1 general full_time sunday ×1.5
+  ✗ PR-005: expected 159.3, got 132.75 — L1 general part_time sunday ×1.5
+  ✗ PR-008: expected 185.85, got 159.3 — L1 general casual sunday ×1.4
+  ✗ SU-004: expected 19.12, got 15.93 — Super on Sun penalty FT L1 general (×1.5)
+  ✗ CS-005: expected 477.9, got 411.54 — L1 general FT Sun 12hr (Sun ×1.5 ≥ OT ×1.5)
+
+✓ Results written to C:\Documents\WageCheck\testing\MA000003_Exhaustive_Tests.xlsx

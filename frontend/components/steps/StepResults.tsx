@@ -270,7 +270,7 @@ export default function StepResults({ state, onAmountPaidChange, onStartOver }: 
   <tr><td>Ordinary hours pay</td><td style="text-align:right">${formatCurrency(summary.ordinaryPay)}</td><td>Yes (${sgcPct})</td></tr>
   ${summary.penaltyPay > 0 ? `<tr><td>Penalty rate loading</td><td style="text-align:right">${formatCurrency(summary.penaltyPay)}</td><td>Yes (${sgcPct})</td></tr>` : ''}
   ${summary.missedBreakPay > 0 ? `<tr><td>Missed break double time penalty</td><td style="text-align:right">${formatCurrency(summary.missedBreakPay)}</td><td>No (overtime-type penalty)</td></tr>` : ''}
-  ${summary.overtimePay > 0 ? `<tr><td>Overtime loading</td><td style="text-align:right">${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
+  ${summary.overtimePay > 0 ? `<tr><td>Overtime pay</td><td style="text-align:right">${formatCurrency(summary.overtimePay)}</td><td>No</td></tr>` : ''}
   ${summary.mealAllowancePay > 0 ? `<tr><td>Meal allowance for overtime (${summary.mealAllowancesOwed} × ${formatCurrency(summary.mealAllowanceRate)})</td><td style="text-align:right">${formatCurrency(summary.mealAllowancePay)}</td><td>No (expense allowance)</td></tr>` : ''}
   ${totalAllowancesOwed > 0 ? `<tr class="total-row"><td>Total wages owed</td><td style="text-align:right">${formatCurrency(summary.totalPayOwed)}</td><td>—</td></tr>` : ''}
   ${triggeredAllowances.map(a => {
@@ -445,7 +445,7 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           )}
           {summary.overtimePay > 0 && (
             <div className="flex justify-between py-1 border-b border-brand-100">
-              <span className="text-gray-600">Overtime loading</span>
+              <span className="text-gray-600">Overtime pay</span>
               <span className="font-medium">{formatCurrency(summary.overtimePay)}</span>
             </div>
           )}

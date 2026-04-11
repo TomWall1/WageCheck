@@ -499,13 +499,46 @@ async function seed() {
         indicative_tasks: ['Surveillance operator', 'Senior gaming finance manager'],
         sort_order: 115,
       },
+      // ── APPRENTICE COOKING (4-year apprenticeship, clause 20.5) ──────────
+      { level: 1, stream: 'apprentice_cooking', title: 'Apprentice Cook — Year 1 / Stage 1', description: 'First-year cooking apprentice.', duties: ['Learning basic cooking techniques under supervision'], indicative_tasks: ['1st year cooking apprentice'], sort_order: 200 },
+      { level: 2, stream: 'apprentice_cooking', title: 'Apprentice Cook — Year 2 / Stage 2', description: 'Second-year cooking apprentice.', duties: ['Developing cooking skills with moderate supervision'], indicative_tasks: ['2nd year cooking apprentice'], sort_order: 201 },
+      { level: 3, stream: 'apprentice_cooking', title: 'Apprentice Cook — Year 3 / Stage 3', description: 'Third-year cooking apprentice.', duties: ['Applying cooking skills with limited supervision'], indicative_tasks: ['3rd year cooking apprentice'], sort_order: 202 },
+      { level: 4, stream: 'apprentice_cooking', title: 'Apprentice Cook — Year 4 / Stage 4', description: 'Fourth-year cooking apprentice.', duties: ['Working at near-qualified level'], indicative_tasks: ['4th year cooking apprentice'], sort_order: 203 },
+      // ── APPRENTICE WAITING (2-year/4-stage apprenticeship) ──────────────
+      { level: 1, stream: 'apprentice_waiting', title: 'Apprentice Waiter — Stage 1 (0-6 months)', description: 'First six months of waiting apprenticeship.', duties: ['Learning table service and customer interaction'], indicative_tasks: ['1st stage waiting apprentice'], sort_order: 210 },
+      { level: 2, stream: 'apprentice_waiting', title: 'Apprentice Waiter — Stage 2 (7-12 months)', description: 'Second six months of waiting apprenticeship.', duties: ['Developing service skills'], indicative_tasks: ['2nd stage waiting apprentice'], sort_order: 211 },
+      { level: 3, stream: 'apprentice_waiting', title: 'Apprentice Waiter — Stage 3 (13-18 months)', description: 'Third six months of waiting apprenticeship.', duties: ['Applying service skills with increasing independence'], indicative_tasks: ['3rd stage waiting apprentice'], sort_order: 212 },
+      { level: 4, stream: 'apprentice_waiting', title: 'Apprentice Waiter — Stage 4 (19-24 months)', description: 'Final six months of waiting apprenticeship.', duties: ['Working at near-qualified service level'], indicative_tasks: ['4th stage waiting apprentice'], sort_order: 213 },
+      // ── APPRENTICE OTHER (4-year, same rates as cooking) ───────────────
+      { level: 1, stream: 'apprentice_other', title: 'Apprentice (Other) — Year 1 / Stage 1', description: 'First-year apprentice in a trade other than cooking or waiting.', duties: ['Learning trade skills under supervision'], indicative_tasks: ['1st year apprentice (non-cooking, non-waiting)'], sort_order: 220 },
+      { level: 2, stream: 'apprentice_other', title: 'Apprentice (Other) — Year 2 / Stage 2', description: 'Second-year apprentice.', duties: ['Developing trade skills'], indicative_tasks: ['2nd year apprentice'], sort_order: 221 },
+      { level: 3, stream: 'apprentice_other', title: 'Apprentice (Other) — Year 3 / Stage 3', description: 'Third-year apprentice.', duties: ['Applying trade skills with limited supervision'], indicative_tasks: ['3rd year apprentice'], sort_order: 222 },
+      { level: 4, stream: 'apprentice_other', title: 'Apprentice (Other) — Year 4 / Stage 4', description: 'Fourth-year apprentice.', duties: ['Working at near-qualified level'], indicative_tasks: ['4th year apprentice'], sort_order: 223 },
+      // ── ADULT APPRENTICE COOKING (post-1 Jan 2014) ─────────────────────
+      { level: 1, stream: 'adult_apprentice_cooking', title: 'Adult Apprentice Cook — Year 1 / Stage 1', description: 'First-year adult cooking apprentice (commenced on or after 1 January 2014).', duties: ['Learning cooking techniques as adult apprentice'], indicative_tasks: ['Adult 1st year cooking apprentice'], sort_order: 230 },
+      { level: 2, stream: 'adult_apprentice_cooking', title: 'Adult Apprentice Cook — Year 2 / Stage 2', description: 'Second-year adult cooking apprentice.', duties: ['Developing cooking skills'], indicative_tasks: ['Adult 2nd year cooking apprentice'], sort_order: 231 },
+      { level: 3, stream: 'adult_apprentice_cooking', title: 'Adult Apprentice Cook — Year 3 / Stage 3', description: 'Third-year adult cooking apprentice.', duties: ['Applying cooking skills'], indicative_tasks: ['Adult 3rd year cooking apprentice'], sort_order: 232 },
+      { level: 4, stream: 'adult_apprentice_cooking', title: 'Adult Apprentice Cook — Year 4 / Stage 4', description: 'Fourth-year adult cooking apprentice.', duties: ['Working at near-qualified level'], indicative_tasks: ['Adult 4th year cooking apprentice'], sort_order: 233 },
+      // ── ADULT APPRENTICE WAITING (post-1 Jan 2014) ─────────────────────
+      { level: 1, stream: 'adult_apprentice_waiting', title: 'Adult Apprentice Waiter — Stage 1 (0-6 months)', description: 'First stage adult waiting apprentice.', duties: ['Learning service skills as adult apprentice'], indicative_tasks: ['Adult 1st stage waiting apprentice'], sort_order: 240 },
+      { level: 2, stream: 'adult_apprentice_waiting', title: 'Adult Apprentice Waiter — Stage 2 (7-12 months)', description: 'Second stage adult waiting apprentice.', duties: ['Developing service skills'], indicative_tasks: ['Adult 2nd stage waiting apprentice'], sort_order: 241 },
+      { level: 3, stream: 'adult_apprentice_waiting', title: 'Adult Apprentice Waiter — Stage 3 (13-18 months)', description: 'Third stage adult waiting apprentice.', duties: ['Applying service skills'], indicative_tasks: ['Adult 3rd stage waiting apprentice'], sort_order: 242 },
+      { level: 4, stream: 'adult_apprentice_waiting', title: 'Adult Apprentice Waiter — Stage 4 (19-24 months)', description: 'Final stage adult waiting apprentice.', duties: ['Working at near-qualified level'], indicative_tasks: ['Adult 4th stage waiting apprentice'], sort_order: 243 },
+      // ── ADULT APPRENTICE OTHER (post-1 Jan 2014, same rates as adult cooking) ──
+      { level: 1, stream: 'adult_apprentice_other', title: 'Adult Apprentice (Other) — Year 1 / Stage 1', description: 'First-year adult apprentice (non-cooking, non-waiting).', duties: ['Learning trade skills as adult apprentice'], indicative_tasks: ['Adult 1st year apprentice'], sort_order: 250 },
+      { level: 2, stream: 'adult_apprentice_other', title: 'Adult Apprentice (Other) — Year 2 / Stage 2', description: 'Second-year adult apprentice.', duties: ['Developing trade skills'], indicative_tasks: ['Adult 2nd year apprentice'], sort_order: 251 },
+      { level: 3, stream: 'adult_apprentice_other', title: 'Adult Apprentice (Other) — Year 3 / Stage 3', description: 'Third-year adult apprentice.', duties: ['Applying trade skills'], indicative_tasks: ['Adult 3rd year apprentice'], sort_order: 252 },
+      { level: 4, stream: 'adult_apprentice_other', title: 'Adult Apprentice (Other) — Year 4 / Stage 4', description: 'Fourth-year adult apprentice.', duties: ['Working at near-qualified level'], indicative_tasks: ['Adult 4th year apprentice'], sort_order: 253 },
     ];
+
+    // Ensure fwc_classification_fixed_id column exists for FWC API mapping
+    await client.query(`ALTER TABLE classifications ADD COLUMN IF NOT EXISTS fwc_classification_fixed_id INTEGER`);
 
     for (const c of classifications) {
       await client.query(`
-        INSERT INTO classifications (award_code, level, stream, title, description, duties, indicative_tasks, sort_order)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (award_code, level, stream) DO UPDATE SET
+        INSERT INTO classifications (award_code, level, stream, title, description, duties, indicative_tasks, sort_order, pay_point)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT (award_code, level, stream, pay_point) DO UPDATE SET
           title = EXCLUDED.title,
           description = EXCLUDED.description,
           duties = EXCLUDED.duties,
@@ -513,7 +546,7 @@ async function seed() {
           sort_order = EXCLUDED.sort_order
       `, [
         AWARD_CODE, c.level, c.stream, c.title, c.description,
-        JSON.stringify(c.duties), JSON.stringify(c.indicative_tasks), c.sort_order
+        JSON.stringify(c.duties), JSON.stringify(c.indicative_tasks), c.sort_order, c.pay_point || 1
       ]);
     }
     console.log(`✓ Inserted ${classifications.length} classifications`);
@@ -544,6 +577,13 @@ async function seed() {
           '5_casino_table': 28.44, '5_casino_equipment': 28.87, '5_casino_finance': 28.87,
           '6_casino_table': 29.73, '6_casino_finance': 29.73,
           '7_casino_table': 30.59, '7_casino_finance': 30.59,
+          // Apprentice rates (2024 = 2025 / 1.035 rounded to 2dp)
+          '1_apprentice_cooking': 14.94, '2_apprentice_cooking': 17.66, '3_apprentice_cooking': 21.73, '4_apprentice_cooking': 25.81,
+          '1_apprentice_waiting': 19.01, '2_apprentice_waiting': 23.09, '3_apprentice_waiting': 26.07, '4_apprentice_waiting': 26.62,
+          '1_apprentice_other': 14.94, '2_apprentice_other': 17.66, '3_apprentice_other': 21.73, '4_apprentice_other': 25.81,
+          '1_adult_apprentice_cooking': 21.73, '2_adult_apprentice_cooking': 23.46, '3_adult_apprentice_cooking': 23.46, '4_adult_apprentice_cooking': 25.81,
+          '1_adult_apprentice_waiting': 21.73, '2_adult_apprentice_waiting': 23.09, '3_adult_apprentice_waiting': 26.07, '4_adult_apprentice_waiting': 26.62,
+          '1_adult_apprentice_other': 21.73, '2_adult_apprentice_other': 23.46, '3_adult_apprentice_other': 23.46, '4_adult_apprentice_other': 25.81,
         },
       },
       {
@@ -565,6 +605,13 @@ async function seed() {
           '5_casino_table': 29.44, '5_casino_equipment': 29.88, '5_casino_finance': 29.88,
           '6_casino_table': 30.77, '6_casino_finance': 30.77,
           '7_casino_table': 31.66, '7_casino_finance': 31.66,
+          // Apprentice rates (from FWO pay guide MA000009 effective 1 July 2025)
+          '1_apprentice_cooking': 15.46, '2_apprentice_cooking': 18.28, '3_apprentice_cooking': 22.49, '4_apprentice_cooking': 26.71,
+          '1_apprentice_waiting': 19.68, '2_apprentice_waiting': 23.90, '3_apprentice_waiting': 26.98, '4_apprentice_waiting': 27.55,
+          '1_apprentice_other': 15.46, '2_apprentice_other': 18.28, '3_apprentice_other': 22.49, '4_apprentice_other': 26.71,
+          '1_adult_apprentice_cooking': 22.49, '2_adult_apprentice_cooking': 24.28, '3_adult_apprentice_cooking': 24.28, '4_adult_apprentice_cooking': 26.71,
+          '1_adult_apprentice_waiting': 22.49, '2_adult_apprentice_waiting': 23.90, '3_adult_apprentice_waiting': 26.98, '4_adult_apprentice_waiting': 27.55,
+          '1_adult_apprentice_other': 22.49, '2_adult_apprentice_other': 24.28, '3_adult_apprentice_other': 24.28, '4_adult_apprentice_other': 26.71,
         },
       },
     ];
@@ -729,7 +776,11 @@ async function seed() {
       // ── Casual ────────────────────────────────────────────────────────────
       // Casual base rate already includes 25% casual loading.
       // Evening/night flat additions confirmed from FWO pay guide casual pay tables.
-      // Casual Saturday = casual base × 1.2; Sunday = × 1.4; PH = × 2.0
+      // Casual penalty multipliers apply to the CASUAL BASE (which includes 25% loading):
+      //   Saturday:  1.2 × casual base = 1.2 × (FT × 1.25) = FT × 1.50
+      //   Sunday:    1.4 × casual base = 1.4 × (FT × 1.25) = FT × 1.75
+      //   PH:        2.0 × casual base = 2.0 × (FT × 1.25) = FT × 2.50
+      // Verified against FWO pay guide MA000009 effective 1 July 2025 (published 15 Jan 2026).
       {
         employment_type: 'casual',
         day_type: 'weekday',
@@ -861,44 +912,76 @@ async function seed() {
         effectiveDate: EFFECTIVE_DATE,
         allowances: [
           // Split/broken shift — FT/PT only, two tiers. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.41, amount_type: 'fixed', per_unit: 'per_day' },
-          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.16, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.41, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.16, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // First aid — different rates by employment type. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.38, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.47, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.38, amount_type: 'weekly', per_unit: 'per_week', is_all_purpose: false },
+          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.47, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Tool allowance — cooks/apprentice cooks only. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 1.96, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 1.96, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Airport travel. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.16, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.16, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Laundry — catering employees. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 5.80, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 1.98, amount_type: 'fixed', per_unit: 'per_uniform' },
+          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 5.80, amount_type: 'weekly', per_unit: 'per_week', is_all_purpose: false },
+          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 1.98, amount_type: 'fixed', per_unit: 'per_uniform', is_all_purpose: false },
           // Meal allowance — overtime only, not casual. 2024 = 2025 / 1.035 rounded to 2dp
-          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.17, amount_type: 'fixed', per_unit: 'per_meal' },
+          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.17, amount_type: 'fixed', per_unit: 'per_meal', is_all_purpose: false },
           // Vehicle — managerial hotel staff only
-          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km', is_all_purpose: false },
+          // Split shift — loaded rate employees only
+          { allowance_type: 'split_shift_loaded', name: 'Split shift allowance (loaded rate employees, >3hr break)', description: 'Loaded rate employees with a split shift where the break between periods of work is more than 3 hours.', trigger_condition: 'Loaded rate employee, shift split, gap >3hrs', amount: 1.75, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          // Fork-lift driver allowances
+          { allowance_type: 'forklift_ft', name: 'Fork-lift driver allowance (full-time)', description: 'Full-time employees required to operate a fork-lift.', trigger_condition: 'FT employee required to operate fork-lift', amount: 0.41, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'forklift_ptcasual_elected', name: 'Fork-lift driver allowance (PT/casual, pre-23 Jan 2020, elected all-purpose)', description: 'Part-time or casual employees employed immediately prior to 23 January 2020 who elected the all-purpose hourly amount.', trigger_condition: 'PT/casual employed before 23 Jan 2020, elected all-purpose', amount: 0.41, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'forklift_ptcasual_not_elected', name: 'Fork-lift driver allowance (PT/casual, pre-23 Jan 2020, not elected)', description: 'Part-time or casual employees employed immediately prior to 23 January 2020 who did not elect the all-purpose hourly amount.', trigger_condition: 'PT/casual employed before 23 Jan 2020, not elected all-purpose. Max $16.03/wk', amount: 3.10, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          { allowance_type: 'forklift_ptcasual_post2020', name: 'Fork-lift driver allowance (PT/casual, post-23 Jan 2020)', description: 'Part-time or casual employees not employed immediately prior to 23 January 2020.', trigger_condition: 'PT/casual employed on or after 23 Jan 2020', amount: 0.41, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          // Laundry — motel employees
+          { allowance_type: 'laundry_motel', name: 'Laundry allowance (motel employees)', description: 'Motel employees required to launder their own uniform or special clothing.', trigger_condition: 'Motel employee required to launder own uniform. Max $7.20/wk', amount: 2.32, amount_type: 'fixed', per_unit: 'per_uniform', is_all_purpose: false },
+          // Overnight stay
+          { allowance_type: 'overnight_stay', name: 'Overnight stay allowance', description: 'Employees required to stay overnight away from their usual place of residence for work purposes.', trigger_condition: 'Required to stay overnight away from home for work, not casual', amount: 61.93, amount_type: 'fixed', per_unit: 'per_stay', is_all_purpose: false },
+          // Supervisor (in charge) — airport catering, 4 tiers
+          { allowance_type: 'supervisor_airport_5', name: 'Supervisor allowance — airport catering (up to 5 employees)', description: 'Airport catering employees put in charge of up to 5 other employees.', trigger_condition: 'Airport catering, in charge of up to 5 employees', amount: 0.54, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_10', name: 'Supervisor allowance — airport catering (6-10 employees)', description: 'Airport catering employees put in charge of 6 to 10 other employees.', trigger_condition: 'Airport catering, in charge of 6-10 employees', amount: 0.74, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_20', name: 'Supervisor allowance — airport catering (11-20 employees)', description: 'Airport catering employees put in charge of 11 to 20 other employees.', trigger_condition: 'Airport catering, in charge of 11-20 employees', amount: 0.84, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_20plus', name: 'Supervisor allowance — airport catering (>20 employees)', description: 'Airport catering employees put in charge of more than 20 other employees.', trigger_condition: 'Airport catering, in charge of more than 20 employees', amount: 1.41, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
         ],
       },
       {
         effectiveDate: EFFECTIVE_DATE_2025,
         allowances: [
           // Split/broken shift — FT/PT only, two tiers. Source: FWO pay guide MA000009 eff. 1 Jul 2025
-          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.53, amount_type: 'fixed', per_unit: 'per_day' },
-          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.34, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'split_shift_short', name: 'Split shift allowance (2–3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of 2–3 hours between them (not more than 3 hours), you get a split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap 2-3hrs, FT/PT only', amount: 3.53, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          { allowance_type: 'split_shift_long', name: 'Split shift allowance (more than 3 hour break)', description: 'If your shift is split into 2+ separate periods with a break of more than 3 hours between them, you get a higher split shift allowance. Does not apply to casual employees.', trigger_condition: 'Shift split, gap >3hrs, FT/PT only', amount: 5.34, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // First aid — different rates by employment type
-          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.82, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.56, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'first_aid_ft', name: 'First aid allowance (full-time)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a weekly first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — full-time employees', amount: 12.82, amount_type: 'weekly', per_unit: 'per_week', is_all_purpose: false },
+          { allowance_type: 'first_aid_ptcasual', name: 'First aid allowance (part-time or casual)', description: 'If you hold a first aid certificate and your employer has appointed you as the responsible first aider, you are entitled to a daily first aid allowance.', trigger_condition: 'Hold certificate AND appointed as first aider — part-time or casual employees', amount: 2.56, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Tool allowance — cooks/apprentice cooks only
-          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 2.03, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'tool', name: 'Tool and equipment allowance', description: 'If you are a cook or apprentice cook and your employer requires you to provide and maintain your own knives or other tools, you are entitled to a tool allowance.', trigger_condition: 'Cook or apprentice cook required to supply own tools/knives', amount: 2.03, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Airport travel
-          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.45, amount_type: 'fixed', per_unit: 'per_day' },
+          { allowance_type: 'airport_travel', name: 'Airport catering travel allowance', description: 'If you work for an airport catering employer, you are entitled to a travel allowance for each day you attend work.', trigger_condition: 'Works for airport catering employer', amount: 8.45, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
           // Laundry — catering employees
-          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 6.00, amount_type: 'weekly', per_unit: 'per_week' },
-          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 2.05, amount_type: 'fixed', per_unit: 'per_uniform' },
+          { allowance_type: 'laundry_ft', name: 'Laundry allowance (full-time catering)', description: 'Full-time catering employees required to launder their own uniform or special clothing are entitled to a weekly laundry allowance.', trigger_condition: 'FT catering employee required to launder own uniform', amount: 6.00, amount_type: 'weekly', per_unit: 'per_week', is_all_purpose: false },
+          { allowance_type: 'laundry_ptcasual', name: 'Laundry allowance (part-time or casual catering)', description: 'Part-time or casual catering employees required to launder their own uniform or special clothing are entitled to a per-garment laundry allowance.', trigger_condition: 'PT or casual catering employee required to launder own uniform', amount: 2.05, amount_type: 'fixed', per_unit: 'per_uniform', is_all_purpose: false },
           // Meal allowance — overtime only, not casual
-          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.73, amount_type: 'fixed', per_unit: 'per_meal' },
+          { allowance_type: 'meal', name: 'Meal allowance (overtime)', description: 'If you (FT or PT only, not casual) are required to work overtime without being given the required prior notice, and a meal time falls during that overtime, you are entitled to a meal allowance.', trigger_condition: 'Overtime without prior notice, meal period falls in OT, FT/PT only', amount: 16.73, amount_type: 'fixed', per_unit: 'per_meal', is_all_purpose: false },
           // Vehicle — managerial hotel staff only
-          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km' },
+          { allowance_type: 'vehicle', name: 'Vehicle/travel allowance', description: 'Managerial hotel staff required to use their own vehicle for work purposes are entitled to a per-kilometre allowance.', trigger_condition: 'Managerial hotel staff using own vehicle for work', amount: 0.99, amount_type: 'per_km', per_unit: 'per_km', is_all_purpose: false },
+          // Split shift — loaded rate employees only
+          { allowance_type: 'split_shift_loaded', name: 'Split shift allowance (loaded rate employees, >3hr break)', description: 'Loaded rate employees with a split shift where the break between periods of work is more than 3 hours.', trigger_condition: 'Loaded rate employee, shift split, gap >3hrs', amount: 1.81, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          // Fork-lift driver allowances
+          { allowance_type: 'forklift_ft', name: 'Fork-lift driver allowance (full-time)', description: 'Full-time employees required to operate a fork-lift.', trigger_condition: 'FT employee required to operate fork-lift', amount: 0.42, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'forklift_ptcasual_elected', name: 'Fork-lift driver allowance (PT/casual, pre-23 Jan 2020, elected all-purpose)', description: 'Part-time or casual employees employed immediately prior to 23 January 2020 who elected the all-purpose hourly amount.', trigger_condition: 'PT/casual employed before 23 Jan 2020, elected all-purpose', amount: 0.42, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'forklift_ptcasual_not_elected', name: 'Fork-lift driver allowance (PT/casual, pre-23 Jan 2020, not elected)', description: 'Part-time or casual employees employed immediately prior to 23 January 2020 who did not elect the all-purpose hourly amount.', trigger_condition: 'PT/casual employed before 23 Jan 2020, not elected all-purpose. Max $16.03/wk', amount: 3.21, amount_type: 'fixed', per_unit: 'per_day', is_all_purpose: false },
+          { allowance_type: 'forklift_ptcasual_post2020', name: 'Fork-lift driver allowance (PT/casual, post-23 Jan 2020)', description: 'Part-time or casual employees not employed immediately prior to 23 January 2020.', trigger_condition: 'PT/casual employed on or after 23 Jan 2020', amount: 0.42, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          // Laundry — motel employees
+          { allowance_type: 'laundry_motel', name: 'Laundry allowance (motel employees)', description: 'Motel employees required to launder their own uniform or special clothing.', trigger_condition: 'Motel employee required to launder own uniform. Max $7.45/wk', amount: 2.40, amount_type: 'fixed', per_unit: 'per_uniform', is_all_purpose: false },
+          // Overnight stay
+          { allowance_type: 'overnight_stay', name: 'Overnight stay allowance', description: 'Employees required to stay overnight away from their usual place of residence for work purposes.', trigger_condition: 'Required to stay overnight away from home for work, not casual', amount: 64.10, amount_type: 'fixed', per_unit: 'per_stay', is_all_purpose: false },
+          // Supervisor (in charge) — airport catering, 4 tiers
+          { allowance_type: 'supervisor_airport_5', name: 'Supervisor allowance — airport catering (up to 5 employees)', description: 'Airport catering employees put in charge of up to 5 other employees.', trigger_condition: 'Airport catering, in charge of up to 5 employees', amount: 0.56, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_10', name: 'Supervisor allowance — airport catering (6-10 employees)', description: 'Airport catering employees put in charge of 6 to 10 other employees.', trigger_condition: 'Airport catering, in charge of 6-10 employees', amount: 0.77, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_20', name: 'Supervisor allowance — airport catering (11-20 employees)', description: 'Airport catering employees put in charge of 11 to 20 other employees.', trigger_condition: 'Airport catering, in charge of 11-20 employees', amount: 0.87, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
+          { allowance_type: 'supervisor_airport_20plus', name: 'Supervisor allowance — airport catering (>20 employees)', description: 'Airport catering employees put in charge of more than 20 other employees.', trigger_condition: 'Airport catering, in charge of more than 20 employees', amount: 1.46, amount_type: 'fixed', per_unit: 'per_hour', is_all_purpose: true },
         ],
       },
     ];
@@ -909,11 +992,11 @@ async function seed() {
     for (const { effectiveDate, allowances: yearAllowances } of allowancesByYear) {
       for (const a of yearAllowances) {
         await client.query(`
-          INSERT INTO allowances (award_code, allowance_type, name, description, trigger_condition, amount, amount_type, per_unit, effective_date)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          INSERT INTO allowances (award_code, allowance_type, name, description, trigger_condition, amount, amount_type, per_unit, is_all_purpose, effective_date)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
           ON CONFLICT (award_code, allowance_type, effective_date) DO UPDATE SET
-            name = EXCLUDED.name, description = EXCLUDED.description, amount = EXCLUDED.amount
-        `, [AWARD_CODE, a.allowance_type, a.name, a.description, a.trigger_condition, a.amount, a.amount_type, a.per_unit, effectiveDate]);
+            name = EXCLUDED.name, description = EXCLUDED.description, amount = EXCLUDED.amount, is_all_purpose = EXCLUDED.is_all_purpose
+        `, [AWARD_CODE, a.allowance_type, a.name, a.description, a.trigger_condition, a.amount, a.amount_type, a.per_unit, a.is_all_purpose || false, effectiveDate]);
       }
     }
     console.log('✓ Inserted allowances (2024 + 2025)');

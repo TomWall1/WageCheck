@@ -110,9 +110,9 @@ async function seed() {
 
     for (const c of classifications) {
       await client.query(`
-        INSERT INTO classifications (award_code, level, stream, title, description, duties, indicative_tasks, sort_order)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (award_code, level, stream) DO UPDATE SET
+        INSERT INTO classifications (award_code, level, stream, pay_point, title, description, duties, indicative_tasks, sort_order)
+        VALUES ($1, $2, $3, 1, $4, $5, $6, $7, $8)
+        ON CONFLICT (award_code, level, stream, pay_point) DO UPDATE SET
           title = EXCLUDED.title,
           description = EXCLUDED.description,
           duties = EXCLUDED.duties,
@@ -424,6 +424,13 @@ async function seed() {
         description: 'If you are required to work overtime without being given the required prior notice, you are entitled to a meal allowance. Not payable to casual employees.',
         trigger_condition: 'Overtime worked without prior notice, FT/PT only — first meal when OT starts',
         amount: 16.65, amount_type: 'fixed', per_unit: 'per_meal',
+      },
+      {
+        allowance_type: 'meal_second',
+        name: 'Meal allowance (overtime — second meal)',
+        description: 'If you work more than 4 hours of overtime, you are entitled to a further meal allowance of $15.04 in addition to the first meal allowance.',
+        trigger_condition: 'Overtime exceeds 4 hours without prior notice, FT/PT only — second meal',
+        amount: 15.04, amount_type: 'fixed', per_unit: 'per_meal',
       },
       {
         allowance_type: 'vehicle_delivery',

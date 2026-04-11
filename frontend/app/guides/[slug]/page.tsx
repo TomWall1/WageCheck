@@ -121,6 +121,33 @@ export default async function GuidePage({ params }: Props) {
       </div>
 
       <CheckPayCTA />
+
+      {/* Article schema for AI search visibility */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: guide.title,
+        description: guide.description,
+        datePublished: guide.lastUpdated,
+        dateModified: guide.lastUpdated,
+        author: {
+          '@type': 'Organization',
+          name: 'Review My Pay',
+          url: 'https://reviewmypay.com',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Review My Pay',
+          url: 'https://reviewmypay.com',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://reviewmypay.com/guides/${slug}`,
+        },
+        inLanguage: 'en-AU',
+        isAccessibleForFree: true,
+        keywords: guide.keywords.join(', '),
+      }) }} />
     </div>
   );
 }

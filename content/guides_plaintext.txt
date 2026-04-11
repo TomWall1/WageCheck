@@ -1,0 +1,628 @@
+Guide 1 — What Is a Modern Award? (revised)
+URL: /guides/what-is-a-modern-award Meta title: What Is a Modern Award? A Plain-English Guide | Review My Pay Meta description: What modern awards are, who they cover, and how to find yours — explained in plain English for Australian workers.
+What Is a Modern Award?
+Last updated: March 2026
+If you've never checked whether a modern award applies to your job, there's a high chance you're missing out on entitlements you're legally owed. Most Australian workers are covered by one — but most have no idea what theirs says. This guide explains what awards are and why they matter for your pay.
+If you work in hospitality, retail, fast food, cleaning, admin, or almost any non-professional industry — a modern award almost certainly applies to you.
+Real example
+Scenario: Worker assumes their pay is set by their contract. What they were paid: Contract rate — slightly above minimum wage, no penalty rate breakdown. What should have happened: The Hospitality Award applied. Sunday and public holiday rates were legally required on top of the base rate. Underpayment: Hundreds of dollars per month in missed penalty rates — never detected because neither party checked the award. Why it happens: The worker assumed the contract governed everything. Under Australian law, the award is the floor — the contract cannot go below it.
+What is a modern award?
+A modern award is a legal document set by the Fair Work Commission that establishes minimum pay rates and employment conditions for a specific industry or occupation.
+It covers:
+Minimum hourly rates by classification levelPenalty rates for evenings, weekends, and public holidaysOvertime rates and when they triggerCasual loading and how it interacts with other ratesAllowances for specific tasks or conditionsBreak entitlementsModern awards are not optional. Your employer must comply — regardless of what your contract says. A contract cannot offer less than the award minimum. If it does, the award overrides it.
+If you've never compared your actual pay against your award, check now. → [Check my pay →]
+How many modern awards are there?
+There are 122 modern awards in Australia. Each covers a specific industry or occupation. The most common for Australian workers:
+Hospitality → Hospitality Industry (General) Award MA000009 → [see full guide →]Retail → General Retail Industry Award MA000004Fast food → Fast Food Industry Award MA000003Admin/clerical → Clerks Private Sector Award MA000002Cleaning → Cleaning Services Award MA000022Restaurants and cafes → Restaurant Industry Award MA000119If your industry isn't listed, there's likely still an award that covers you. The Miscellaneous Award acts as a catch-all.
+Awards vs enterprise agreements
+An enterprise agreement (EA) is a negotiated arrangement between an employer and their workforce that can set different conditions from the award. An EA must pass the "Better Off Overall Test" — employees must be better off under the EA than the award. Even under an EA, the award is the legal floor.
+⚠️ Common ways workers miss out because of award misunderstanding
+Not knowing which award applies Many workers assume the pay is correct because the employer set it. But if the wrong award — or no award — is being applied, the minimums are wrong from the start.
+Assuming the contract overrides the award A contract can offer more than the award, but never less. If your contract rate is below the award minimum, you're legally owed the higher rate.
+Working in a covered industry and being told the award doesn't apply In almost all cases, this is wrong. If you work in a covered industry, the award applies.
+If any of these sound familiar, check your pay now. [Check my pay →]
+How to find your modern award
+The simplest way is the Fair Work Award Finder at fairwork.gov.au. Enter your industry or job title and it identifies which award applies. You can also check your payslip — your award and classification should be listed there. → See [how to read your payslip →]
+Frequently asked questions
+Does a modern award apply if I have a contract? Yes. The award is the legal minimum. Your contract applies on top of it, not instead of it.
+What if my employer says they don't use an award? In almost all cases, a modern award still applies. Employers covered by an award cannot opt out.
+What happens if my employer doesn't follow the award? They're in breach of the Fair Work Act. You can recover unpaid wages going back 6 years through the Fair Work Ombudsman. → See [how to report underpayment →]
+Don't guess — find out in 2 minutes.
+Enter your shifts and we'll calculate exactly what you should have been paid under your award.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 2 — Penalty Rates in Australia (revised)
+URL: /guides/penalty-rates-australia Meta title: Penalty Rates in Australia — What They Are and What You're Owed | Review My Pay Meta description: Penalty rates explained — what they are, when they apply, and the most common ways they're missed in hospitality, retail, and fast food.
+Penalty Rates in Australia — What They Are and What You're Owed
+Last updated: March 2026
+If you work weekends or public holidays and your pay looks the same as a regular weekday, there's a high chance your penalty rates aren't being applied. Penalty rates are one of the most commonly missed entitlements in Australia — and in industries like hospitality, retail, and fast food, a single underpaid Sunday shift adds up significantly over a year.
+If you work any shifts outside of Monday to Friday ordinary hours — penalty rates almost certainly apply to you.
+Real example
+Scenario: Casual retail worker. Works 2 Sundays per month — paid the same weekday rate. What they were paid: $30/hr on Sundays (ordinary casual rate) What should have happened: Retail Award Sunday casual rate — significantly higher Underpayment: ~$40–80 per Sunday shift, ~$960–$1,920/year Why it happens: Employer pays a single casual rate every day. Sunday rate never applied.
+What are penalty rates?
+Penalty rates are higher pay rates that apply when you work at times considered less desirable or more disruptive. They're built into modern awards to compensate workers for working evenings, weekends, and public holidays.
+The rate depends on the day, the time, and your award. These rates are legal minimums — they cannot be waived by agreement.
+If your payslip doesn't show different rates for different days, that's often a red flag. → [Check your pay →]
+Penalty rate multipliers by award — comparison
+Award
+Sunday (permanent)
+Public holiday
+Hospitality Award (MA000009)
+1.5×
+2.25×
+Restaurant Award (MA000119)
+1.75×
+2.25×
+Fast Food Award (MA000003)
+1.5×
+2.5×
+Retail Award (MA000004)
+2.0×
+2.25×
+Effective 1 July 2025. Casual rates differ from permanent rates — see your award's specific pay guide.
+⚠️ Common penalty rate underpayments
+Flat rate paid every day of the week One rate regardless of Saturday, Sunday, or public holiday. Unless the employer can prove the flat rate covers all penalty scenarios, this is almost always underpayment. → [Check your pay →]
+Casual loading treated as a substitute for penalty rates The 25% casual loading and penalty rates are separate. Both apply. → See the [casual loading guide →] for exactly how they stack.
+Wrong multiplier on public holidays Some employers apply double time (2×) when the award specifies 2.25×. On a full shift, that's a real shortfall on every holiday shift worked.
+Penalty rates not applied to overtime hours Working overtime on a Sunday? The penalty rate interacts with the overtime rate. Paying only the overtime multiplier without the day penalty is underpayment.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+If any of these sound familiar, check your pay now. [Check my pay →]
+How to check your penalty rates
+Find your award and look at the pay guide published by the Fair Work Commission. Every award pay guide lists exact penalty rate multipliers and dollar amounts by classification.
+For the most common awards:
+[Hospitality Award penalty rates →][Retail Award penalty rates →][Fast Food Award penalty rates →]Or enter your actual shifts in the tool below — it applies your award's specific rates to your hours.
+Frequently asked questions
+Do casual employees get penalty rates? Yes — and any employer who claims otherwise is wrong. If you've been told casuals don't get penalty rates, there's a strong chance your pay has been incorrect. Casual penalty rates are built into every modern award.
+Can my employer pay a flat rate that covers all penalties? Only if they can prove with actual numbers that the flat rate exceeds award entitlements in every scenario. If they haven't shown you the calculation, that's worth questioning.
+I've been underpaid penalty rates for years — can I claim back pay? Yes — up to 6 years under the Fair Work Act. → See [how to report underpayment →]
+Don't guess — small underpayments add up fast.
+Enter your shifts below and see exactly what you should have been paid.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 3 — Casual Loading Explained (revised)
+URL: /guides/casual-loading-explained Meta title: Casual Loading in Australia Explained — What the 25% Means | Review My Pay Meta description: What casual loading is, what it compensates for, and why it doesn't replace penalty rates — explained clearly for Australian casual workers.
+Casual Loading in Australia Explained — What the 25% Means
+Last updated: March 2026
+If you're a casual worker in Australia, you've probably been paid the 25% loading — but there's a good chance you've been told it covers weekends. It doesn't. The loading and penalty rates are completely separate entitlements. Both apply every time. Understanding this one distinction could be worth thousands of dollars a year.
+If you're employed as a casual in any award-covered industry — this applies to you.
+Real example
+Scenario: Casual hospitality worker told the 25% loading covers Sunday rates. What they were paid: $30.13/hr every day (casual base rate) What should have happened: Sunday casual rate under the Hospitality Award — $42.18/hr at Level 1 Underpayment: ~$72 per 6-hour Sunday shift. ~$3,744/year on one Sunday per week. Why it happens: Employer conflates the loading with penalty rates. Many workers accept the explanation without checking.
+What is the 25% casual loading?
+The casual loading compensates for entitlements casual employees don't receive:
+No paid annual leaveNo paid personal/carer's leaveNo paid compassionate leaveNo notice of terminationNo redundancy payIt's applied to the base rate to produce the casual ordinary hourly rate.
+Example: Hospitality Award Level 1 base rate = $24.10/hr. Casual rate = $24.10 × 1.25 = $30.13/hr.
+That $30.13/hr is your starting point on an ordinary weekday. It is not your rate on Sundays.
+If your Sunday rate looks the same as your Tuesday rate, check your pay now. → [Check my pay →]
+Does casual loading replace penalty rates?
+No. This is the most important point on this page.
+The loading and penalty rates are separate entitlements — both apply every time. Here's how it works at Level 1 under the Hospitality Award:
+Day
+Casual ordinary rate
+Penalty
+Rate you're owed
+Weekday
+$30.13/hr
+None
+$30.13/hr
+Saturday
+$30.13/hr
+Saturday loading
+$36.15/hr
+Sunday
+$30.13/hr
+Sunday loading
+$42.18/hr
+Public holiday
+$30.13/hr
+PH rate
+$54.23/hr
+Rates based on the Fair Work Commission pay guide for MA000009, effective 1 July 2025.
+For the full breakdown of penalty rate multipliers, see the [penalty rates guide →]
+⚠️ Common casual loading underpayments
+Loading treated as a substitute for penalty rates Your employer applies the 25% and pays the same rate every day. Both the loading and the day-specific penalty must apply. → [Check your pay →]
+Loading calculated on a wrong base rate The 25% is applied to the award base rate. If your base rate is already below the award minimum, the loading doesn't fix the problem — it magnifies it.
+No loading at all on weekday shifts Some employers pay the ordinary base rate on weekdays and a "penalty rate" on weekends without including the casual loading in either. On weekdays, the loading is missing.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+If any of these sound familiar, check your pay now. [Check my pay →]
+Frequently asked questions
+Do I earn more than a permanent worker as a casual? On ordinary weekdays, yes — the loading makes your rate higher. But permanent workers accrue leave entitlements with real monetary value, and they receive notice on termination.
+I'm casual but work the same shifts every week — does the loading still apply? Yes — but you may also have casual conversion rights after 12 months. → See [casual vs part-time →]
+Can my employer remove the loading if I get other benefits? Not without a formal, legally compliant arrangement. The loading is an award entitlement.
+Don't guess — small underpayments add up fast.
+Enter your shifts and see exactly what you're owed — including your loading and every applicable penalty rate.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 4 — Overtime Pay in Australia (revised)
+URL: /guides/overtime-pay-australia Meta title: Overtime Pay in Australia — Rates, Rules &amp; When It Kicks In | Review My Pay Meta description: How overtime works under Australian modern awards — when it triggers, what you're paid, and the most common ways it's missed.
+Overtime Pay in Australia — Rates, Rules &amp; When It Kicks In
+Last updated: March 2026
+If you regularly work long hours in Australia and your pay looks the same every week, there's a high chance overtime isn't being applied. Overtime is one of the most frequently unpaid entitlements across hospitality, retail, fast food, and office work — often because employers assume a salary or verbal agreement covers it. It usually doesn't.
+If you work more than 38 hours a week or more than your award's daily threshold — overtime almost certainly applies to you.
+Real example
+Scenario: Full-time admin worker under the Clerks Award. Works 42 hours one week — regularly. What they were paid: Same weekly salary as always What should have happened: 38 ordinary hours at base rate; 4 hours at time-and-a-half Underpayment: ~$50–80 that week, ~$2,600–$4,200/year if this happens weekly Why it happens: Employer says the salary covers all reasonable hours. That claim is only valid if the salary genuinely exceeds all overtime obligations — most of the time, it doesn't.
+How overtime works in Australia
+Under most modern awards, overtime applies when you work beyond your ordinary hours. The general structure:
+Daily trigger — overtime after exceeding a set number of hours in a dayWeekly trigger — overtime after more than 38 ordinary hours in a weekRate — time-and-a-half (1.5×) for the first period, double time (2×) after thatIf your payslip never shows overtime despite working past these thresholds, that's a red flag. → [Check your pay →]
+Overtime thresholds — key awards compared
+Award
+Daily trigger
+Weekly trigger
+Hospitality (MA000009)
+After 10 hours
+After 38 hours
+Fast Food (MA000003)
+After 11 hours
+After 38 hours
+Retail (MA000004)
+After 9 hours
+After 38 hours
+Clerks (MA000002)
+After 7.6 hours
+After 38 hours
+Thresholds are indicative — refer to your specific award. Rates effective 1 July 2025.
+For detailed worked examples, see your award-specific overtime guide:
+[Hospitality Award overtime →][Retail Award overtime →]Time off in lieu (TOIL)
+Some awards allow TOIL instead of overtime pay — but only when:
+Agreed in writing before the overtime is workedTaken at the overtime rate — 1 hour at time-and-a-half = 1.5 hours TOILHour-for-hour TOIL is underpayment. If you've been taking it 1:1, the difference is owed. → [Check your pay →]
+⚠️ Common overtime underpayments
+Salary absorption — "your salary covers all hours" A salary only covers overtime if it demonstrably exceeds total award obligations across every week worked. Most don't — especially during peak periods.
+If you regularly work 40+ hours on a fixed salary, check your pay now. → [Check my pay →]
+Long single shifts with no overtime applied A 12-hour shift often contains overtime under most awards. Many employers pay a flat shift rate regardless of length.
+TOIL taken hour-for-hour 1 hour at time-and-a-half = 1.5 hours TOIL minimum. Anything less is underpayment.
+Part-time workers pushed past agreed hours Hours beyond agreed part-time hours are overtime — even if the week doesn't exceed 38.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+Frequently asked questions
+My employer says my salary covers overtime — is that valid? Only if the salary exceeds all award obligations including overtime in every week worked. If you work significantly more than 38 hours regularly, ask for the calculation.
+Do casual employees get overtime? The daily threshold still applies to casuals under most awards. Weekly overtime generally doesn't apply the same way, but a casual working 12-hour shifts may still be owed overtime on the excess.
+Can I claim back unpaid overtime? Yes — up to 6 years under the Fair Work Act. → See [how to report underpayment →]
+Don't guess — small underpayments add up fast.
+Enter your shifts and see exactly what you're owed including every overtime threshold.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 5 — Am I Being Underpaid? (revised)
+URL: /guides/am-i-being-underpaid Meta title: Am I Being Underpaid? How to Check Your Pay in Australia | Review My Pay Meta description: The clearest signs you're being underpaid in Australia — and the fastest way to find out exactly what you're owed under your award.
+Am I Being Underpaid? How to Check Your Pay in Australia
+Last updated: March 2026
+If you're asking this question, there's a high chance the answer is yes. Wage underpayment is widespread in Australia — the Fair Work Ombudsman recovers over $500 million every year, and research consistently shows that's a fraction of the total. Most underpayment never gets reported because workers either don't know it's happening or don't know how to check. This guide gives you a clear process.
+If you work in hospitality, retail, fast food, cleaning, or almost any non-professional role and have never checked your award — start here.
+Real example
+Scenario: Casual retail worker, 3 years in role. Paid $26/hr on Sundays — assumed it was correct. What should have happened: Retail Award Sunday casual rate is significantly higher than $26/hr. Underpayment: ~$50–80 per Sunday, ~$2,600–4,200/year Why it happens: No reference point. The employer paid what was convenient. The worker never checked.
+Signs you might be underpaid
+These are the most common indicators:
+Same rate every day — weekdays, Saturdays, Sundays, public holidays all look identical on your payslipOvertime never appears — you regularly work 40+ hours but never see overtime on your payslipNo classification shown — your payslip doesn't list an award or classification levelFlat rate explained as covering everything — your employer says your rate includes weekendsCash paid with no payslip — no documentation of hours or ratesAny one of these is a red flag. Multiple together is a strong signal something is wrong. → [Check your pay →]
+How to check — step by step
+Step 1: Find your award Check your payslip, contract, or letter of engagement — the award should be named. If not, use the Fair Work Award Finder at fairwork.gov.au. → See [what is a modern award →]
+Step 2: Find your classification level Your pay rate depends on your classification. Check your payslip or ask your employer — they're required to tell you.
+Step 3: Check the penalty rates Did you work any Saturdays, Sundays, or public holidays? Check the pay guide for your award and compare against what you actually received.
+Step 4: Check your allowances Do you work split shifts, use your own tools, hold a first aid certificate? Check the pay guide for applicable allowances. → See [award allowances explained →]
+Step 5: Run the numbers The fastest way: enter your actual shifts in the calculator below. It applies your award's specific rates to your hours and tells you if there's a shortfall.
+If any step reveals a gap, check your pay now. [Check my pay →]
+The most underpaid industries in Australia
+Hospitality — flat rates, missed penalty rates, misclassification → [Hospitality Award guide →] Retail — incorrect Sunday rates, overtime missed → [Retail Award guide →] Fast food — junior rates misapplied, Sunday rates wrong → [Fast Food Award guide →] Cleaning — missed allowances, incorrect shift rates
+If you work in these industries and have never checked against the award, use the tool. It takes 2 minutes.
+What to do if you find a shortfall
+Document everything — payslips, rosters, any record of hours workedRaise it with your employer — many underpayments are genuine errorsIf unresolved, contact the Fair Work Ombudsman on 13 13 94 → See [how to report underpayment →]Frequently asked questions
+I signed a contract agreeing to the rate — does that mean I can't claim? No. A contract cannot override award entitlements. If the contracted rate falls below the award minimum, you're owed the difference regardless.
+My employer seems like a good person — could this really be happening? Yes. Many underpayments aren't deliberate. Payroll errors, incorrect award interpretation, and outdated systems are common causes.
+How far back can I claim? 6 years under the Fair Work Act.
+Don't guess — find out in 2 minutes.
+Enter your shifts and see exactly what you should have been paid.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 6 — How to Report Underpayment (revised)
+URL: /guides/how-to-report-underpayment Meta title: How to Report Underpayment to Fair Work — A Step-by-Step Guide | Review My Pay Meta description: Step-by-step guide to reporting underpayment in Australia — raise it with your employer, lodge a complaint with the FWO, and understand what to expect.
+How to Report Underpayment to Fair Work — A Step-by-Step Guide
+Last updated: March 2026
+If you've found out you've been underpaid, acting on it can feel overwhelming — especially if you're worried about your job. But you have strong legal protections, a clear process to follow, and a government agency whose entire job is recovering money on your behalf. This guide walks through every step.
+If you've identified a pay shortfall and want to know what to do — start here.
+Real example
+Scenario: Kitchen hand discovers after 2 years they were never paid Sunday rates. Underpayment estimated: ~$4,800 across 2 years Process: Raised with employer → employer disputed → FWO complaint lodged → full recovery How long: ~4 months from complaint to resolution Key evidence: Rosters showing shift days + payslips showing flat rate
+Step 1: Document everything first
+Before raising anything with your employer, gather what you can:
+Payslips — as many as possible, as far back as possibleRoster records — anything showing days and hours workedBank statements — show payment dates and amounts if payslips are missingEmployment contract or letter of engagementAny written communications about pay, hours, or classificationYou don't need everything to make a complaint — but more evidence means a stronger case.
+Step 2: Raise it with your employer
+This is usually the right first step. Many underpayments aren't intentional. A direct, professional conversation often resolves it quickly.
+How to approach it:
+State the issue factually: "I've checked the award and I believe my Sunday rate has been applied incorrectly."Refer to the award and pay guide by name and clauseGive them a week to respond — and follow up in writingIf they acknowledge the error and fix it, you're done. If they dispute, deny, or become hostile — move to Step 3.
+Step 3: Lodge a complaint with the Fair Work Ombudsman
+The Fair Work Ombudsman (FWO) is the government body responsible for investigating workplace underpayment. Their service is free.
+How to lodge:
+Online: fairwork.gov.au/contact-usPhone: 13 13 94 (Monday to Friday, 8am–5:30pm)What to include:
+Your name and employer detailsThe award you believe appliesThe nature and dates of the underpaymentAny evidence gatheredWhat the FWO can do:
+Investigate your employer's recordsIssue compliance noticesRecover unpaid wages and interest going back 6 yearsRefer serious cases for prosecutionIf you've identified a shortfall but haven't calculated the exact amount, do that first. → [Check my pay →] A specific number makes your complaint much stronger.
+Step 4: Know your protections
+You cannot be legally dismissed, demoted, or disadvantaged for making a Fair Work complaint. This is called the "general protections" provision. If your employer takes adverse action because you raised a pay complaint, that is a separate and serious legal breach — and you can make a further complaint about it.
+⚠️ Common mistakes when reporting
+Waiting too long Every week you wait is a week harder to reconstruct. Start documenting now.
+Not raising it with the employer first The FWO will generally ask. It's not required, but it strengthens your complaint and is often the fastest path to resolution.
+Accepting partial payment without written confirmation If your employer offers back pay, get the amount and scope confirmed in writing before accepting.
+Frequently asked questions
+Will my employer know I made a complaint? If the FWO investigates, yes — your employer will be contacted. Your legal protections against retaliation are strong.
+What if I'm on a visa? Your visa status doesn't affect your right to minimum wages or to make a complaint. The FWO has a visa holder support service.
+Can I get a lawyer involved? Yes. Many employment lawyers offer free initial consultations. The FWO is free and often the most efficient path, but legal representation is an option.
+Don't wait — underpayment compounds.
+Check what you're owed first. A specific number makes your complaint much stronger.
+[Check my pay →]
+General information only — not legal advice. Contact the Fair Work Ombudsman on 13 13 94 or an employment lawyer for advice. Verify at fairwork.gov.au.
+Guide 7 — Minimum Wage Australia 2025 (revised)
+URL: /guides/minimum-wage-australia-2025 Meta title: Minimum Wage Australia 2025–26 — Current Rate Explained | Review My Pay Meta description: Australia's current minimum wage, how the annual review works, and why award minimums are what most workers should actually be checking.
+Minimum Wage Australia 2025–26 — Current Rate Explained
+Last updated: March 2026 · Effective 1 July 2025
+If you're checking whether your pay is legal, knowing the national minimum wage is a starting point — but it's probably not the number that applies to you. Most Australian workers are covered by a modern award, which sets a minimum that varies by classification level and shift type. This guide explains both — and which one actually matters for your pay.
+If you're trying to check whether your pay is legal in Australia — start here, then check your specific award.
+Real example
+Scenario: Retail worker assumes their $25/hr rate is fine because it's above minimum wage. What should have happened: The Retail Award Sunday casual rate is higher than $25/hr. The national minimum wage was not the relevant number. Underpayment: Workers who check only against minimum wage miss award entitlements entirely. Why it happens: Most workers know about the minimum wage. Far fewer know their award rate — which is what actually applies.
+What is the national minimum wage?
+The National Minimum Wage is the absolute floor that any adult employee in Australia can be paid. From 1 July 2025:
+$24.95 per hour $948.10 per week (38 ordinary hours)
+Set annually by the Fair Work Commission through the Annual Wage Review, effective 1 July each year.
+Does the national minimum wage apply to me?
+Probably not directly. The NMW applies only to employees not covered by a modern award or enterprise agreement. The vast majority of Australian workers are covered by an award.
+If you're covered by an award, the award minimums apply to you — not just the NMW. And award rates vary significantly by classification, day, and time.
+If your payslip doesn't show your award or classification, that's often a red flag. → [Check your pay →]
+Award minimums vs the national minimum wage
+Award
+Entry level base rate
+NMW comparison
+Hospitality Award (MA000009)
+$24.10/hr (Level 1)
+Below NMW — NMW applies instead
+Retail Award (MA000004)
+$24.10/hr (Level 1)
+Below NMW — NMW applies instead
+Fast Food Award (MA000003)
+$24.10/hr (Level 1)
+Below NMW — NMW applies instead
+Clerks Award (MA000002)
+$24.10/hr (Level 1)
+Below NMW — NMW applies instead
+Note: The NMW acts as a floor even within awards. Where an award rate falls below the NMW, the NMW applies. Rates effective 1 July 2025.
+Even at minimum wage, penalty rates and allowances apply on top for evenings, weekends, and public holidays.
+The Annual Wage Review
+Each year, the Fair Work Commission reviews and typically increases minimum wages. The new rates take effect from the first full pay period on or after 1 July.
+Employers must update pay rates from 1 July. Paying the previous year's rate after this date is underpayment — even if the increase was small.
+⚠️ Common minimum wage underpayments
+July rate increases not applied on time Employers who don't update their payroll system continue paying the old rate. Every week of delay is a week of underpayment.
+Penalty rates calculated from a wrong base If your base rate is below the correct award minimum, every penalty rate calculated from it is also wrong.
+Junior rates applied to workers aged 21+ Junior rates cannot be applied once a worker turns 21. Many payroll systems don't update automatically on the worker's birthday.
+If any of these sound familiar, check your pay now. [Check my pay →]
+Frequently asked questions
+Is the minimum wage the same in every state? Yes — the National Minimum Wage applies across all states and territories for private sector employees.
+Is super included in the minimum wage? No. Superannuation is paid in addition to wages. From July 2025, the rate is 11.5% on top of ordinary time earnings. → See [superannuation for casual workers →]
+What if my employer says they can't afford the minimum wage? That is not a legal exemption. The minimum wage applies regardless of employer circumstances.
+Don't guess — your award rate is what matters.
+Enter your shifts and we'll calculate what you're owed under your specific award — not just the minimum wage.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 8 — Public Holiday Pay in Australia (revised)
+URL: /guides/public-holiday-pay-australia Meta title: Public Holiday Pay in Australia — Rates, Rights &amp; Rules | Review My Pay Meta description: What you're owed for working a public holiday in Australia — rates by award, the right to refuse unreasonable requests, and how to check your shifts.
+Public Holiday Pay in Australia — Rates, Rights &amp; Rules
+Last updated: March 2026
+If you worked a public holiday in Australia and were paid your ordinary rate, there's a high chance you were significantly underpaid. Public holidays attract the highest penalty rates under modern awards — often more than double the ordinary rate. This page covers exactly what you're owed and your right to refuse unreasonable requests to work.
+If you work in any industry where your employer can roster you on public holidays — this applies to you.
+Real example
+Scenario: Casual hospitality worker, Level 2. 6-hour Christmas Day shift. What they were paid: $31.60/hr (ordinary casual rate) What should have happened: Public holiday casual rate at Level 2 — $56.88/hr Underpayment: ~$152 for that single shift Why it happens: Employer pays the standard casual rate. Worker doesn't realise Christmas Day attracts a different multiplier entirely.
+What public holidays are you entitled to?
+Under the National Employment Standards, all employees are entitled to a paid day off on national public holidays:
+New Year's Day (1 January)Australia Day (26 January)Good FridayEaster Saturday (most states)Easter MondayAnzac Day (25 April)King's Birthday (date varies by state)Christmas Day (25 December)Boxing Day (26 December)States and territories have additional public holidays. The ones that apply to you are those of the state where you work.
+Public holiday rates by award
+Award
+Public holiday rate (permanent)
+Hospitality Award (MA000009)
+2.25× base rate
+Restaurant Award (MA000119)
+2.25× base rate
+Fast Food Award (MA000003)
+2.5× base rate
+Retail Award (MA000004)
+2.25× base rate
+Clerks Award (MA000002)
+2.25× base rate
+Rates effective 1 July 2025. Casual rates apply the multiplier to the casual base rate.
+If your last public holiday pay looked like an ordinary shift, check your pay now. → [Check my pay →]
+The right to refuse unreasonable public holiday work
+Under the Fair Work Act (updated 2023), an employer must request — not demand — that you work a public holiday. Whether the request is reasonable depends on:
+The nature of your role and the businessYour personal or caring responsibilities that dayThe amount of notice givenWhether you're permanent or casualYou have the right to refuse if the request is unreasonable. You cannot be penalised for a reasonable refusal.
+⚠️ Common public holiday underpayments
+Ordinary rate paid instead of the public holiday rate The most common issue. Many employers pay the standard daily rate without applying the holiday multiplier. → [Check your pay →]
+Double time applied when 2.25× is required Even "double time" is technically underpayment under some awards. Hospitality and Retail specify 2.25× — meaning 2× falls short on every holiday shift.
+Shift crossing midnight not split correctly If your shift starts before midnight on the day before a public holiday, the public holiday rate applies from midnight — not from when the employer considers the "holiday" to start.
+Casual rate calculated without the loading The public holiday multiplier applies to the casual base rate (including loading). Applying it to only the pre-loading rate is underpayment.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+If any of these sound familiar, check your pay now. [Check my pay →]
+Frequently asked questions
+I'm casual — do I get public holiday pay if I don't work that day? Generally no — casuals are typically not paid for public holidays they don't work, unless the shift was already rostered and then cancelled.
+I was paid "double time" on Easter Friday — is that correct? Check your award. Some awards specify 2.25× — double time (2×) would be underpayment. The difference is real money on every public holiday shift.
+What if the public holiday falls on my day off? For permanent employees, if a public holiday falls on a day you'd ordinarily work, you're entitled to a paid day off or a substitute day. For casuals, entitlement depends on whether the day would have been a scheduled working day.
+Don't guess — public holiday underpayments are often the largest single shortfall.
+Enter your shifts and see exactly what you should have been paid.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 9 — Casual vs Part-Time (revised)
+URL: /guides/casual-vs-part-time Meta title: Casual vs Part-Time in Australia — What's the Actual Difference? | Review My Pay Meta description: The legal difference between casual and part-time employment in Australia — pay rates, entitlements, conversion rights, and what really applies to you.
+Casual vs Part-Time in Australia — What's the Actual Difference?
+Last updated: March 2026
+If you work regular hours each week but are employed as casual, there's a high chance the classification is wrong — and the financial consequences are real. Being incorrectly kept as casual means no paid leave, no notice, and no conversion offer. Understanding the difference between casual and part-time could be worth thousands of dollars in missed entitlements.
+If you work regular hours each week and are classified as casual — this page applies to you.
+Real example
+Scenario: Retail worker classified as casual. Works every Monday, Wednesday, and Friday — same hours, same shifts — for 2 years. What they missed: Never offered casual conversion. No annual leave or personal leave accrued. Missed entitlements: Annual leave alone (4 weeks/year) on 24hrs/week = ~$2,400/year in leave not accrued Why it happens: Employer keeps the worker casual indefinitely to avoid leave obligations. Worker doesn't know conversion rights exist.
+Key differences in pay and entitlements
+Casual
+Part-time
+Hourly rate
+Higher (25% loading)
+Lower (no loading)
+Annual leave
+No
+Yes — 4 weeks/year pro-rated
+Personal leave
+No
+Yes — 10 days/year pro-rated
+Guaranteed hours
+No
+Yes — as agreed
+Notice of termination
+No
+Yes
+Casual loading
+Yes — 25%
+No
+The casual conversion right
+Under the Fair Work Act, casual employees who have worked regularly and systematically for at least 12 months are entitled to:
+Request conversion to permanent part-time or full-time employment, ORReceive a proactive offer of conversion from their employerThe employer can decline if there are genuine operational reasons — but those must be provided in writing. Vague or unsupported refusals can be challenged at the Fair Work Commission.
+Ask yourself: are you trusted with a consistent schedule and regular responsibilities? If yes, and 12 months have passed, you may qualify for conversion.
+If your employer hasn't raised conversion after 12 months of regular work, they may be in breach. → [Check your pay →]
+⚠️ Common issues from incorrect casual classification
+Casual employment used to avoid leave obligations Keeping workers casual indefinitely — even when the schedule is completely regular — to avoid accruing annual and personal leave. Not legally sustainable after 12 months.
+If you've worked regular hours for over a year without a conversion offer, check your entitlements now. → [Check my pay →]
+Conversion right never raised by the employer Most casual workers don't know this right exists. Employers have an obligation to proactively offer conversion or inform eligible employees. Many don't.
+Loading used to justify below-award conditions The 25% loading compensates for specific missing entitlements. Penalty rates and correct classification still apply on top.
+"Irregular" roster to avoid regular status Slight variation in hours week to week doesn't necessarily negate regular and systematic status. A pattern of engagement over 12 months is what matters.
+Frequently asked questions
+My hours vary week to week — can I still convert? Possibly. "Regular and systematic" doesn't require identical hours. A consistent pattern of engagement can qualify even with varying hours.
+If I convert to part-time, will I earn less? Your hourly rate will be lower (no loading) but you'll accrue leave entitlements with real monetary value. Whether you're better off overall depends on your hours and how much leave you actually use.
+Can my employer refuse to convert me? Yes, if they have genuine operational reasons — provided in writing. If you believe the refusal is not genuine, you can apply to the Fair Work Commission for review.
+Don't guess — your employment type affects everything.
+Enter your shifts and see exactly what you should have been paid.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 10 — Wage Theft in Australia (revised)
+URL: /guides/wage-theft-australia Meta title: Wage Theft in Australia — How Widespread Is It? | Review My Pay Meta description: The scale of wage theft in Australia, which industries are worst, what the new criminal laws mean, and how to find out if it's happening to you.
+Wage Theft in Australia — How Widespread Is It?
+Last updated: March 2026
+Wage theft is not a niche problem in Australia. It is endemic. The Fair Work Ombudsman recovers over half a billion dollars in underpaid wages every year — and research consistently shows that represents a fraction of the total. Most underpayment never gets reported, not because it doesn't exist, but because most workers don't know it's happening to them.
+If you work in hospitality, retail, fast food, cleaning, or construction — your industry is among the highest risk.
+Real example
+Scenario: Large retail chain systematically underpaid thousands of workers over 6 years — penalty rates for evenings and weekends calculated incorrectly. Total underpayment: Tens of millions of dollars across the workforce How it was discovered: A single employee checked their payslip against the award Lesson: Systemic underpayment often persists for years because no one checks. One person's complaint can expose a problem affecting thousands.
+The scale of wage theft in Australia
+The Fair Work Ombudsman recovers $500m+ in underpaid wages annuallyIndependent research suggests the true figure across Australian workplaces is several billion dollars per yearHospitality, retail, and fast food consistently top the list of most investigated industriesWorkers aged 15–24 are the most likely to be underpaid — and the least likely to report itThese figures represent real money that should be in workers' pockets.
+Is it always deliberate?
+No. Underpayment falls into three categories:
+Deliberate — knowing underpayment to reduce costs. Flat rates designed to absorb penalties, keeping workers on wrong classification levels.
+Systemic payroll errors — incorrect award interpretation, misconfigured payroll software. Often affects large numbers simultaneously.
+Ignorance — small employers who don't understand the award system.
+All three result in underpayment. The worker's entitlement is the same regardless of whether the cause was intentional.
+The new criminal wage theft laws
+From 1 January 2025, deliberate wage theft is a criminal offence under federal law:
+Fines of up to 3× the amount underpaid (or $7.8m for corporations, whichever is higher)For individuals: up to 10 years imprisonment in the most serious casesThis applies to intentional underpayment. The threshold for "intentional" has widened significantly, and the consequences for employers who routinely underpay are now severe.
+⚠️ The most underpaid industries
+Hospitality — flat rates, misclassification, missed allowances. Most complex award in Australia. → [Hospitality Award guide →]
+Retail — incorrect Sunday rates, junior rates past 21, overtime absorbed by salary. → [Check your pay →]
+Fast food — young workforce, high turnover, junior rates frequently misapplied.
+Cleaning — high proportion of migrant workers, cash arrangements, shift allowances routinely ignored.
+If you work in any of these industries and have never checked your pay against the award, check now. It takes 2 minutes.
+[Check my pay →]
+Frequently asked questions
+Is underpayment the same as wage theft? Legally, "wage theft" now refers to intentional underpayment. But any underpayment — deliberate or not — gives you the right to recover the amount owed.
+What if my employer has since closed? You may still recover wages through the FWO or liquidation proceedings. The 6-year limitation still applies.
+What protection do I have if I raise a complaint? The Fair Work Act's general protections provisions prevent employers from taking adverse action — dismissal, demotion, reduction in hours — against employees who raise pay complaints.
+Don't wait — underpayment compounds.
+The longer it continues, the more is owed — and the harder records are to reconstruct.
+[Check my pay →]
+General information only — not legal advice. Contact Fair Work Ombudsman on 13 13 94. Verify at fairwork.gov.au.
+Guide 11 — Flat Rate vs Award Pay (revised)
+URL: /guides/flat-rate-vs-award Meta title: Flat Rate vs Award Pay — Is Your Flat Rate Legal? | Review My Pay Meta description: When a flat rate is legal in Australia, when it isn't, and how to check if yours genuinely covers what you're owed under your modern award.
+Flat Rate vs Award Pay — Is Your Flat Rate Legal?
+Last updated: March 2026
+If your employer pays you one rate every shift regardless of the day, there's a high chance you're being underpaid. Flat rates are legal in Australia — but only under very specific conditions that most employers don't actually meet. This page explains those conditions and how to check if yours qualifies.
+If you're paid the same rate every shift no matter what day it is — this applies to you.
+Real example
+Scenario: Hospitality worker told their $34/hr flat rate "covers everything including weekends." The problem: Level 2 casual public holiday rate is $56.88/hr. A $34/hr flat rate doesn't come close. Underpayment on one 8-hour public holiday shift: ~$183 Why it happens: Employer picks a number above the ordinary rate and assumes it covers everything. Nobody checks the public holiday scenario.
+When is a flat rate legal?
+A flat rate is legal only if it is demonstrably higher than the total amount owed under the award across every possible shift scenario, including:
+All penalty rates (Saturday, Sunday, public holiday)All applicable allowances (split shift, meal, tool)Overtime rates for any hours beyond the thresholdThis test must be met across every single pay period — not just on average. A flat rate that looks fine on a quiet Monday-to-Friday week may fail the moment a public holiday or late-night Sunday shift occurs.
+If your employer hasn't shown you the calculation proving this — that's a red flag. → [Check your pay →]
+How to check if your flat rate is legal
+Step 1: Find your award and classification level. → See [what is a modern award →]
+Step 2: Find the public holiday rate — the highest penalty rate in your award. If your flat rate is lower than this, it can't legally apply to public holiday shifts.
+Step 3: Check penalty rates for every day type you work. → See your award's [penalty rates guide →]
+Step 4: Check allowances. Does your flat rate include any applicable split shift, meal, or tool allowances? → See [award allowances explained →]
+Step 5: Enter your actual shifts into the calculator. It will compare what you were paid against what you were owed.
+⚠️ Common flat rate underpayments
+Flat rate set above ordinary weekday rate but below weekend rates A rate higher than Monday rates doesn't mean it covers Sunday or public holiday rates. Many employers make this mistake.
+If your flat rate is lower than the Sunday or public holiday rate for your classification, check your pay now. → [Check my pay →]
+Flat rate covers penalties but not allowances A rate that covers penalty rates may still underpay if it doesn't include split shift or meal allowances.
+Flat rate arrangement never formally assessed Many flat rates are set informally — someone quoted a number, the worker accepted it, no one ran the numbers. These are often legally insufficient.
+Flat rate applied to casuals without loading The casual loading must be included in the flat rate before comparing against award penalty scenarios. A flat rate that forgets the loading is almost always insufficient.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+Frequently asked questions
+My contract says flat rate — doesn't that mean I agreed to it? Not legally. A contract cannot exclude award entitlements. If the flat rate doesn't cover all obligations, you're entitled to the difference regardless of what you signed.
+My employer says my flat rate includes everything — what should I ask? Ask them to show you the calculation proving the flat rate exceeds the award in every scenario including public holidays. If they can't produce it, that tells you something.
+What if I've been on a flat rate for years — can I still claim? Yes. Under the Fair Work Act you can recover underpayments going back 6 years.
+Don't guess — enter your actual shifts and find out.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 12 — How to Read Your Payslip (revised)
+URL: /guides/how-to-read-your-payslip Meta title: How to Read Your Payslip in Australia — A Worker's Guide | Review My Pay Meta description: What every line on your Australian payslip means, what must be there, and the red flags that often signal underpayment.
+How to Read Your Payslip in Australia — A Worker's Guide
+Last updated: March 2026
+Most Australian workers glance at their payslip total and move on. But for anyone covered by a modern award, the payslip is where underpayment is either confirmed or concealed. Knowing how to read yours takes 5 minutes and could reveal whether you've been missing significant entitlements for months.
+If you work in an award-covered job and have never looked at your payslip line by line — start here.
+Real example
+Scenario: Worker receives payslip showing "40 hours × $29.50/hr." No other lines. The problem: Worked 2 Sundays and a public holiday. No penalty rates shown — meaning they weren't paid. Underpayment identified: ~$80–150 for that pay period alone Why it happens: Single-rate payslip format actively obscures missing penalty rates. Most workers never question it.
+What must be on your payslip?
+Under the Fair Work Act, every employee must receive a payslip within one working day of each pay period. It must include:
+Employer name and ABNEmployee namePay period (dates covered)Classification level and award (if award-covered)Gross pay and net payTax withheld (PAYG)Ordinary hours worked and the rate appliedAny penalty rates — separate line for each day typeAny allowances paidSuperannuation contributionsIf your payslip is missing any of these — particularly the classification level, award name, or penalty rate breakdown — that's a red flag. → [Check your pay →]
+Line-by-line guide
+Ordinary hours / base rate Shows your weekday hours and the rate applied. Check this matches your award classification. If the rate looks low, your classification may be wrong. → See [award classification levels →]
+Saturday / Sunday / public holiday lines These should appear as separate line items showing hours and the rate for each day type. If you worked a Sunday and there's no Sunday rate line, penalty rates almost certainly haven't been applied.
+If you worked weekends and see only one rate line, check your pay now. → [Check my pay →]
+Casual loading If you're casual, the loading should be visible — either as a percentage or built into the casual rate. A rate below the award casual minimum is a red flag.
+Allowances Any applicable allowances (split shift, meal, tools) should appear separately. Missing allowance lines mean they're not being paid. → See [award allowances explained →]
+Superannuation Should show the fund name and the contribution amount. The rate is 11.5% of ordinary time earnings from July 2025. If it's absent or looks low, check your super fund directly. → See [superannuation for casual workers →]
+⚠️ The biggest red flags
+Single rate line for all hours regardless of day One line: "Hours: 40 × $29.50." No breakdown by day type. This is the most common sign that penalty rates are not being applied.
+No award or classification shown If your award and classification aren't listed, there's a real chance they've never been set correctly.
+Super not appearing Super must be paid quarterly at minimum. If it's consistently absent from payslips, it may not be being paid at all. → [Check your pay →]
+No payslip at all Failure to issue a payslip is a breach of the Fair Work Act — separate from any underpayment issue. Raise it in writing.
+Frequently asked questions
+My payslip shows one rate — how do I know if it's right? Find your award pay guide and compare the rate against your classification's base rate. Then check whether you worked Saturdays, Sundays, or public holidays that period — if you did, separate lines should exist.
+My employer says I don't need a payslip because I'm casual — is that true? No. Every employee — permanent, part-time, and casual — is entitled to a payslip every pay period.
+My payslip shows super but I can't see it in my fund Log into your super fund and check incoming contributions. If they're on the payslip but not appearing in the fund, contact the ATO's unpaid super line on 13 10 20.
+Don't guess — check the numbers.
+Enter your shifts and compare what you were actually paid against what you should have been paid.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 13 — Award Allowances &amp; Loadings (revised)
+URL: /guides/allowances-and-loadings Meta title: Award Allowances &amp; Loadings in Australia Explained | Review My Pay Meta description: The most common allowances under Australian modern awards — what they are, when they apply, and current dollar amounts for key industries.
+Award Allowances &amp; Loadings in Australia Explained
+Last updated: March 2026
+If no allowances appear on your payslip, there's a good chance you're owed money that's been silently missed. Allowances are additional payments built into modern awards for specific conditions, expenses, or responsibilities — and they're the most frequently overlooked entitlement in Australia after penalty rates. This guide explains the most common ones and when you're entitled to them.
+If you work split shifts, use your own tools, hold a first aid certificate, or wash your own uniform — allowances likely apply to you.
+Real example
+Scenario: Cook, full-time, 5 years at the same venue. Brings their own knife roll to every shift. What they were paid: Hourly rate only What should have happened: Tool allowance of $2.03/day under the Hospitality Award Underpayment (allowances alone): $2.03 × 5 days × 50 weeks × 5 years = ~$2,537 Why it happens: Neither party knew the allowance existed. It was never mentioned, never paid.
+What are allowances?
+Allowances are additional payments your employer must make when specific working conditions apply. They're not discretionary — they're built into your award and are legally required.
+They appear separately from your hourly rate. If your payslip shows only an hourly rate with no allowance lines despite applicable conditions, that's often a red flag. → [Check your pay →]
+Common allowances — Hospitality Award (MA000009)
+Allowance
+Rate
+When it applies
+Split shift (2–3hr break)
+$3.53/day
+Shift broken into 2 periods, 2–3hr gap (perm/PT only)
+Split shift (3hr+ break)
+$5.34/day
+Same, gap over 3 hours
+Meal allowance (overtime)
+$16.73/meal
+Unplanned overtime spanning a meal time (FT/PT only)
+First aid (FT)
+$12.82/week
+Holds certificate, appointed responsible first aider
+First aid (PT/casual)
+$2.56/day
+Same condition, per shift
+Laundry (FT catering)
+$6.00/week
+Required to launder own uniform
+Tool/equipment
+$2.03/day
+Cook required to provide own knives/tools
+Rates based on Fair Work Commission pay guide for MA000009, effective 1 July 2025. For other awards, check the relevant pay guide.
+What are loadings?
+Loadings are percentage additions to your base rate for particular shift types:
+Casual loading — 25% on top of base rate for all casual employees → See [casual loading explained →]Evening loading — per-hour addition for work after a set time (7pm in hospitality)Late night loading — higher per-hour addition for shifts past midnightAnnual leave loading — 17.5% addition on top of annual leave payments (under some awards)⚠️ Common allowance underpayments
+Split shift allowance never paid Working morning and evening service with a break between is structurally common in hospitality and restaurants. The allowance applies every single day — and is almost never paid without being specifically claimed.
+If you work split shifts and see no allowance on your payslip, check your pay now. → [Check my pay →]
+First aid allowance ignored If you're the qualified first aider on shift, the allowance applies to every qualifying shift. Many employers provide the certificate as a workplace requirement and never add the payment.
+Tool allowance never applied to tradesperson cooks $2.03/day × 5 days × 50 weeks = $507.50/year that most cooks never see.
+Laundry allowance not paid to catering staff If you're washing your own uniform at home, you're owed the allowance. Most catering workers have never heard of it.
+These issues rarely happen in isolation — and even one can result in hundreds or thousands in underpayments per year.
+Frequently asked questions
+Do casual workers get allowances? Some. The first aid allowance (per shift) and tool allowance apply to casuals. The split shift and meal allowances are for permanent and part-time employees only.
+My employer says my rate covers allowances — is that valid? Only if they can demonstrate with actual calculations that the rate paid exceeds the award rate plus all applicable allowances across all shifts.
+How far back can I claim unpaid allowances? 6 years under the Fair Work Act. Given that allowances recur on every qualifying shift, the total can be significant.
+Don't guess — allowances add up quietly.
+Enter your shifts and we'll check what you're owed — including all applicable allowances.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.
+Guide 14 — Superannuation for Casual Workers (revised)
+URL: /guides/superannuation-casual-workers Meta title: Superannuation for Casual Workers in Australia | Review My Pay Meta description: When super must be paid to casual workers, how to check your contributions, and what to do if your employer isn't paying. Updated 2025–26.
+Superannuation for Casual Workers in Australia
+Last updated: March 2026 · Rate: 11.5% from 1 July 2025
+If you're a casual worker in Australia, there's a good chance your employer is either not paying super or underpaying it — and it may have been happening for years without your knowledge. Since 2022, all casual workers are entitled to superannuation regardless of earnings. There is no longer a minimum earnings threshold. This page explains what you're owed and how to check.
+If you're a casual worker in Australia and you've never verified your super contributions — this applies to you.
+Real example
+Scenario: Casual kitchen hand, earning ~$400/week. Before 2022, fell below the $450/month super threshold — employer never paid super. Post-2022 reality: Threshold abolished. Super must be paid on all earnings regardless of amount. What many employers are still doing: Not updating payroll systems. Continuing not to pay super for low-earning casuals. Missed super per year: $400 × 52 × 11.5% = ~$2,392 Why it happens: System wasn't updated. Worker doesn't check the fund. Years pass.
+Who is entitled to super?
+From 1 November 2022, the $450/month threshold was abolished. Now, all employees — including casual workers — are entitled to super contributions regardless of:
+How much they earnHow many hours they workWhether they have another jobTheir age (with limited exceptions)The rate from 1 July 2025 is 11.5% of ordinary time earnings.
+If you're a casual worker who hasn't verified your super recently, check now. → [Check your pay →]
+How much should you be receiving?
+Weekly earnings
+Super owed per week
+$300/week
+$34.50
+$400/week
+$46.00
+$600/week
+$69.00
+$800/week
+$92.00
+Super is payable quarterly — at minimum by the 28th day after each quarter ends.
+⚠️ Common super underpayments for casual workers
+$450 threshold not removed from payroll systems Many small employers haven't updated since 2022. Super is still not being triggered for casuals earning below $450/month.
+If your payslip shows no super and you earn less than $450/month, check your fund now. → [Check your pay →]
+Super shown on payslip but not actually paid The payslip can show contributions without the employer actually remitting them to the fund. Always check your fund balance — not just the payslip.
+Wrong rate applied From July 2024, the rate was 11%. From July 2025, it is 11.5%. Employers still using 10% or 10.5% are underpaying super.
+No super fund set up for new casual workers Some employers don't enrol casuals at all. This is illegal — you're entitled to super from your first eligible payment.
+These issues are ongoing and compound every year they're missed.
+If any of these sound familiar, check your pay now. [Check my pay →]
+How to check your super
+Log in to your super fund — most have apps showing incoming contributionsCheck the frequency — contributions should appear at least quarterlyCheck the amount — compare against 11.5% of your gross ordinary time earningsIf contributions are missing — contact the ATO on 13 10 20 or report via ato.gov.auFrequently asked questions
+My employer says I'm not entitled to super because I'm casual — is that right? No — and that claim is wrong. Since November 2022, all employees including casuals are entitled to super. If you've been told this, there's a strong chance your super hasn't been paid.
+I have multiple casual jobs — do I get super from each employer? Yes. Each employer calculates and pays super independently on your earnings with them.
+My employer is paying at 10% — is that still correct? No. From 1 July 2024 the rate was 11%. From 1 July 2025 it is 11.5%. If your employer is still at 10%, they're underpaying your super.
+How far back can I claim unpaid super? The ATO can pursue unpaid super going back 5 years in most cases. Act sooner rather than later.
+Don't guess — your retirement savings are at stake.
+Enter your shifts to check your pay — and verify your super separately through your fund or the ATO.
+[Check my pay →]
+General information only — not legal advice. For super queries, contact the ATO on 13 10 20. Verify at fairwork.gov.au.
+Guide 15 — Hospitality vs Restaurant Award (revised)
+URL: /guides/hospitality-vs-restaurant-award Meta title: Hospitality vs Restaurant Award — Which One Covers You? | Review My Pay Meta description: Which award applies to your café, restaurant, or hospitality job? A plain-English framework with a clear decision guide.
+Hospitality vs Restaurant Award — Which One Covers You?
+Last updated: March 2026
+If you work in a café, restaurant, or hospitality venue and have never verified which award applies, there's a high chance you don't know — and there's a meaningful chance the wrong one is being used. The Hospitality Award (MA000009) and the Restaurant Industry Award (MA000119) cover similar workers in similar settings. But the rates differ, particularly on Sundays — meaning the wrong award could mean every Sunday shift has been calculated incorrectly from the start.
+If you work in a café, restaurant, hotel dining room, or any food and beverage venue — this applies to you.
+Real example
+Scenario: Waitstaff at a standalone café. Employer applies the Hospitality Award. The Restaurant Award actually applies. Why it matters: Sunday permanent rates differ between the two awards. Restaurant Award Sunday rate (1.75×) is higher than Hospitality Award (1.5×). Impact: Potentially underpaid on every Sunday shift for the duration of employment. Why it happens: Employer uses whichever award they're familiar with. Worker has no way to check without knowing which applies.
+The core distinction
+The difference comes down to the employer's primary business activity.
+Hospitality Award (MA000009) applies when the primary business is:
+Hotel, motel, resort, or accommodationLicensed clubFunction centre connected to an accommodation venuePub or bar operating as part of a hotelRestaurant Industry Award (MA000119) applies when the primary business is:
+Standalone restaurantStandalone café or coffee shopCatering business not connected to a hotelEvent cateringIf your payslip doesn't show which award applies, that's a red flag. → [Check your pay →]
+Decision framework — which award applies to you?
+1. Is your employer primarily in accommodation or hotels? → Yes → Hospitality Award
+2. Is it a pub, bar, or licensed club (not primarily accommodation)? → Yes → Hospitality Award
+3. Is it a standalone restaurant or café with no accommodation component? → Yes → Restaurant Award
+4. Is your restaurant or café attached to a hotel or resort? → Yes → Hospitality Award
+5. Still not sure? → Use the Fair Work Award Finder at fairwork.gov.au
+Key rate differences
+Scenario
+Hospitality Award
+Restaurant Award
+Sunday rate (permanent)
+1.5×
+1.75×
+Sunday rate (casual)
+Higher multiplier — check pay guide
+Different multiplier — check pay guide
+Public holiday rate
+2.25×
+2.25×
+The Restaurant Award Sunday rate for permanent employees is meaningfully higher — making correct award identification particularly important for Sunday workers.
+Rates effective 1 July 2025. Refer to your award's pay guide for exact dollar amounts.
+If you've been on the wrong award for your Sunday shifts, check your pay now. → [Check my pay →]
+⚠️ Common wrong-award issues
+Hospitality Award applied to standalone restaurant staff The most common error. Restaurant staff on the Hospitality Award may receive lower Sunday rates than they're entitled to.
+Award not specified on payslip or contract If your documentation doesn't clearly identify which award applies, ask your employer directly. They're legally required to tell you.
+Award changed without notification Employees are entitled to know which award applies. Any change must be communicated — and changing to a less favourable award may not be legally valid.
+Frequently asked questions
+My café is inside a hotel — which award? Almost certainly the Hospitality Award. Food and beverage operations that are part of a hotel fall under the Hospitality Award regardless of how the venue is branded.
+I work at a café that does catering events — does that change anything? Not if the café is the primary business. Occasional catering doesn't switch the award. But if catering is the primary business, the Restaurant Award may apply.
+My employer says we're on the Hospitality Award — how do I verify? Check your payslip and employment contract — the award should be named. You can also check using the Fair Work Award Finder. If the Finder says Restaurant Award but your employer is applying Hospitality, that's worth raising.
+Don't guess — the award determines every rate you're paid.
+Enter your shifts and check what you should have been paid under the correct award for your workplace.
+[Check my pay →]
+General information only — not legal advice. Verify at fairwork.gov.au.

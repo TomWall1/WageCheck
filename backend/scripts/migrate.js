@@ -160,6 +160,29 @@ async function migrate() {
     await client.query(`ALTER TABLE classification_questions ADD COLUMN IF NOT EXISTS parent_question_key VARCHAR(100)`);
     await client.query(`ALTER TABLE classification_questions ADD COLUMN IF NOT EXISTS parent_answer_key VARCHAR(100)`);
 
+    // ── Pay point support (SCHADS and other awards with progression within levels) ──
+    await client.query(`ALTER TABLE classifications ADD COLUMN IF NOT EXISTS pay_point INTEGER NOT NULL DEFAULT 1`);
+    // Drop old unique constraint and add new one including pay_point (idempotent via IF EXISTS)
+    await client.query(`DO $$ BEGIN
+      IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'classifications_award_code_level_stream_key') THEN
+        ALTER TABLE classifications DROP CONSTRAINT classifications_award_code_level_stream_key;
+      END IF;
+    END $$`);
+    await client.query(`DO $$ BEGIN
+      IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'classifications_award_code_level_stream_pay_point_key') THEN
+        ALTER TABLE classifications ADD CONSTRAINT classifications_award_code_level_stream_pay_point_key UNIQUE (award_code, level, stream, pay_point);
+      END IF;
+    END $$`);
+
+    // ── Stream-specific overtime (SCHADS: SACS FT gets 3hr first band, disability/PT gets 2hr) ──
+    await client.query(`ALTER TABLE overtime_rates ADD COLUMN IF NOT EXISTS stream VARCHAR(50)`);
+
+    // ── Shift-type-specific penalty rates (remote work, 24hr care) ──
+    await client.query(`ALTER TABLE penalty_rates ADD COLUMN IF NOT EXISTS shift_type VARCHAR(30)`);
+
+    // ── Shift-type-specific pay rates (24hr care flat per-shift amounts) ──
+    // rate_type already supports this via '24hr_care_shift' — no schema change needed
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS classification_answers (
         id              SERIAL PRIMARY KEY,
@@ -261,6 +284,23 @@ async function migrate() {
         status      VARCHAR(20) NOT NULL DEFAULT 'running',  -- 'running', 'success', 'failed'
         pages_scraped INTEGER DEFAULT 0,
         error_message TEXT
+      )
+    `);
+
+    // ── Award features ────────────────────────────────────────────────────────
+    // Records which calculator features apply to each award. Used by the test
+    // runner and gap analyzer to know what to test — features are code logic,
+    // not DB data rows, so they can't be discovered by reading tables.
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS award_features (
+        id              SERIAL PRIMARY KEY,
+        award_code      VARCHAR(50) NOT NULL,
+        feature_key     VARCHAR(50) NOT NULL,  -- e.g. 'broken_shift', '24hr_care', 'remote_work', '10hr_break_rule', 'sleepover'
+        applies_to      JSONB,                 -- optional: which streams/emp types this applies to, e.g. {"streams": ["home_care_disability"]}
+        description     TEXT NOT NULL,
+        test_params     JSONB,                 -- parameters the test runner needs to generate test cases
+        created_at      TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(award_code, feature_key)
       )
     `);
 

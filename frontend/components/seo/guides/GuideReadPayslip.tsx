@@ -200,6 +200,46 @@ export default function GuideReadPayslip({ rates }: { rates?: HospitalityRateDat
           acceptedAnswer: { '@type': 'Answer', text: q.answer },
         })),
       }) }} />
+
+      {/* HowTo Schema for AI search visibility */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'How to Read Your Payslip in Australia',
+        description: 'A line-by-line guide to reading your Australian payslip: check your base rate, penalty rate lines, casual loading, allowances, superannuation, and spot red flags that signal underpayment.',
+        step: [
+          {
+            '@type': 'HowToStep',
+            position: 1,
+            name: 'Check your ordinary hours and base rate',
+            text: 'Find the line showing your weekday hours and the hourly rate applied. Compare this against your award classification rate. If the rate looks low, your classification may be wrong.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 2,
+            name: 'Check Saturday, Sunday, and public holiday lines',
+            text: 'These should appear as separate line items showing hours and the penalty rate for each day type. If you worked a Sunday and there is no Sunday rate line, penalty rates almost certainly have not been applied.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 3,
+            name: 'Check casual loading',
+            text: 'If you are casual, the 25% loading should be visible — either as a percentage or built into the casual rate. A rate below the award casual minimum is a red flag.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 4,
+            name: 'Check allowances',
+            text: 'Any applicable allowances (split shift, meal, tools) should appear as separate line items. Missing allowance lines mean they are not being paid.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 5,
+            name: 'Check superannuation',
+            text: 'Your payslip should show the fund name and contribution amount. The rate is 12% of ordinary time earnings from July 2025. If it is absent or looks low, check your super fund directly.',
+          },
+        ],
+      }) }} />
     </>
   );
 }

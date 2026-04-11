@@ -147,10 +147,10 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
   }
   if (awardCode === 'MA000083') {
     // MA000083 junior rates (Commercial Sales Award):
-    // ≤18=75%, 19=89%, 20+=adult.
+    // ≤18=75%, 19=88.9%, 20+=adult.
     if (age >= 20) return 1.0;
     if (age <= 18) return 0.75;
-    const MA000083_RATES = { 19: 0.89 };
+    const MA000083_RATES = { 19: 0.889 };
     return MA000083_RATES[age] || 1.0;
   }
   // MA000065 (Professional), MA000121 (State Govt), MA000034 (Nurses),
@@ -268,6 +268,61 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     return MA000113_RATES[age] || 1.0;
   }
   // MA000036 (Plumbing), MA000043 (Waste), MA000098 (Ambulance) — no junior rates
+  if (awardCode === 'MA000006' || awardCode === 'MA000014' || awardCode === 'MA000015') {
+    return 1.0; // No junior rates — mining/ports employees typically 18+, licence required
+  }
+  if (awardCode === 'MA000007' || awardCode === 'MA000011' || awardCode === 'MA000045') {
+    return 1.0; // No junior rates — heavy industry awards
+  }
+  if (awardCode === 'MA000008' || awardCode === 'MA000024' || awardCode === 'MA000040') {
+    return 1.0; // No junior rates specified
+  }
+  if (awardCode === 'MA000001' || awardCode === 'MA000017' || awardCode === 'MA000031') {
+    return 1.0; // No junior rates — health/corrections/modelling
+  }
+  if (awardCode === 'MA000037' || awardCode === 'MA000047' || awardCode === 'MA000048') {
+    return 1.0; // No junior rates — salt/asphalt/cemetery
+  }
+  if (awardCode === 'MA000050' || awardCode === 'MA000051' || awardCode === 'MA000054') {
+    return 1.0; // No junior rates — concrete products/coal terminals/electrical power
+  }
+  if (awardCode === 'MA000060' || awardCode === 'MA000061' || awardCode === 'MA000062') {
+    return 1.0; // No junior rates — marine/airline/airport
+  }
+  if (awardCode === 'MA000064' || awardCode === 'MA000066' || awardCode === 'MA000067') {
+    return 1.0; // No junior rates — pest control/animal training/hydrocarbons
+  }
+  if (awardCode === 'MA000070' || awardCode === 'MA000075' || awardCode === 'MA000078') {
+    return 1.0; // No junior rates — silviculture/rail/stevedoring
+  }
+  if (awardCode === 'MA000035') {
+    // MA000035 (Pastoral Award): <16=50%, 16=60%, 17=70%, 18=80%, 19=90%, 20+=adult.
+    if (age >= 20) return 1.0;
+    if (age < 16) return 0.50;
+    const MA000035_RATES = { 16: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 };
+    return MA000035_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000039') {
+    // MA000039 (Seafood Processing): <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000039_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000039_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000044') {
+    // MA000044 (Timber Industry): <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000044_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000044_RATES[age] || 1.0;
+  }
+  if (awardCode === 'MA000046') {
+    // MA000046 (Textile, Clothing, Footwear): <16=45%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult.
+    if (age >= 21) return 1.0;
+    if (age < 16) return 0.45;
+    const MA000046_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
+    return MA000046_RATES[age] || 1.0;
+  }
   if (awardCode === 'MA000120') {
     // MA000120 junior rates (Children's Services Award — educator L1 and L2 only):
     // Under 17: 70%, 17yr: 80%, 18yr: 90%, 19+: adult.
@@ -716,7 +771,7 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
           // Meal allowance: one per 4 hours of daily OT (or part thereof)
           const dailyMeals = Math.ceil(otMinutes / (4 * 60));
           totalMealAllowancesOwed += dailyMeals;
-          breakdown.push({ type: 'daily', date, overtimeMinutes: otMinutes, pay, mealAllowancesOwed: dailyMeals });
+          breakdown.push({ type: 'daily', date, overtimeMinutes: otMinutes, firstBandMinutes: firstDailyBand, secondBandMinutes: secondDailyBand, firstBandMultiplier: m1, secondBandMultiplier: m2, pay, mealAllowancesOwed: dailyMeals });
         }
       }
     }
@@ -779,6 +834,8 @@ function calculateOvertime(processedShifts, employmentType, baseHourlyRate, over
         overtimeMinutes,
         firstBandMinutes: firstBand,
         secondBandMinutes: secondBand,
+        firstBandMultiplier,
+        secondBandMultiplier,
         pay,
         mealAllowancesOwed,
       });
@@ -908,11 +965,31 @@ async function calculateEntitlements(input, db) {
   `, [awardCode, classificationId, employmentType]);
   const effectiveDate = rateDateResult.rows[0]?.effective_date?.toISOString().split('T')[0] || '2025-07-01';
 
+  // ── Shift type detection: check if any shift uses a special type ──────────
+  // Supported shiftTypes: null/undefined/'standard', 'remote', '24hr_care', 'broken', 'sleepover'
+  const hasRemoteShifts = shifts.some(s => s.shiftType === 'remote');
+  const has24hrCareShifts = shifts.some(s => s.shiftType === '24hr_care');
+  const hasBrokenShifts = shifts.some(s => s.shiftType === 'broken');
+
+  // Fetch stream for this classification (needed for stream-specific OT rules)
+  const classStreamResult = await db.query('SELECT stream FROM classifications WHERE id = $1', [classificationId]);
+  const classificationStream = classStreamResult.rows[0]?.stream || null;
+
   const penaltyResult = await db.query(
-    `SELECT * FROM penalty_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC`,
-    [awardCode, employmentType]
+    `SELECT * FROM penalty_rates WHERE award_code = $1 AND employment_type = $2 AND (shift_type IS NULL OR shift_type = $3) ORDER BY effective_date DESC`,
+    [awardCode, employmentType, hasRemoteShifts ? 'remote' : '___none___']
   );
   let penaltyRates = penaltyResult.rows;
+
+  // For remote shifts, prefer shift_type='remote' penalty rates; for standard shifts, use shift_type IS NULL
+  if (hasRemoteShifts) {
+    const remotePenalties = penaltyRates.filter(r => r.shift_type === 'remote');
+    const standardPenalties = penaltyRates.filter(r => !r.shift_type);
+    // Use remote penalties where available, fall back to standard for day types not covered
+    penaltyRates = remotePenalties.length > 0 ? remotePenalties : standardPenalties;
+  } else {
+    penaltyRates = penaltyRates.filter(r => !r.shift_type);
+  }
 
   // MA000003 special case: Grade 1 has a lower Sunday rate than Grade 2/3.
   // FT/PT L1 Sunday = ×1.25 (same as Saturday); Casual L1 Sunday = ×1.20 (same as Saturday).
@@ -968,11 +1045,15 @@ async function calculateEntitlements(input, db) {
     }
   }
 
+  // Fetch OT rates — prefer stream-specific rules, fall back to stream=NULL (generic)
   const overtimeResult = await db.query(
-    `SELECT * FROM overtime_rates WHERE award_code = $1 AND employment_type = $2 ORDER BY effective_date DESC`,
-    [awardCode, employmentType]
+    `SELECT * FROM overtime_rates WHERE award_code = $1 AND employment_type = $2 AND (stream IS NULL OR stream = $3) ORDER BY effective_date DESC`,
+    [awardCode, employmentType, classificationStream]
   );
-  let overtimeRates = overtimeResult.rows;
+  // If stream-specific OT rules exist, use only those; otherwise use generic (stream IS NULL)
+  const streamOTRules = overtimeResult.rows.filter(r => r.stream === classificationStream);
+  const genericOTRules = overtimeResult.rows.filter(r => !r.stream);
+  let overtimeRates = streamOTRules.length > 0 ? streamOTRules : genericOTRules;
 
   // MA000013: liquor employees use all-in Mon–Sat rates (clause 12.9).
   // Sunday and PH additions are flat dollar amounts on top, not multipliers.
@@ -1002,19 +1083,158 @@ async function calculateEntitlements(input, db) {
   const breakResult = await db.query(`SELECT * FROM break_entitlements WHERE award_code = $1`, [awardCode]);
   const breakEntitlements = breakResult.rows;
 
+  // ── 24-hour care flat rate handling ──────────────────────────────────────
+  // If shift.shiftType === '24hr_care', use the flat per-shift rate instead of hourly calculation.
+  // The flat rate is stored as rate_type = '24hr_care_shift' in pay_rates.
+  // OT on 24hr care shifts is calculated separately (first 2hr ×1.5, after 2hr ×2.0, Sunday ×2.0, PH ×2.5).
+  if (has24hrCareShifts) {
+    const flatRateResult = await db.query(`
+      SELECT rate_amount FROM pay_rates
+      WHERE award_code = $1 AND classification_id = $2 AND employment_type = $3 AND rate_type = '24hr_care_shift'
+      ORDER BY effective_date DESC LIMIT 1
+    `, [awardCode, classificationId, employmentType]);
+
+    if (flatRateResult.rows.length) {
+      const flatRate = parseFloat(flatRateResult.rows[0].rate_amount);
+      const twentyFourHrShifts = shifts.filter(s => s.shiftType === '24hr_care');
+      const standardShifts = shifts.filter(s => s.shiftType !== '24hr_care');
+
+      // Process 24hr care shifts with flat rate
+      const processedCareShifts = [];
+      let totalCarePay = 0;
+      for (const shift of twentyFourHrShifts) {
+        const dayType = getDayType(shift.date, publicHolidays);
+        let shiftPay = flatRate;
+        let rateLabel = `24-hour care shift — flat $${flatRate.toFixed(2)}`;
+
+        // Apply day-type multiplier to flat rate for weekends/PH
+        if (dayType === 'saturday') { shiftPay = Math.round(flatRate * 1.5 * 100) / 100; rateLabel += ' × 1.5 (Saturday)'; }
+        else if (dayType === 'sunday') { shiftPay = Math.round(flatRate * 2.0 * 100) / 100; rateLabel += ' × 2.0 (Sunday)'; }
+        else if (dayType === 'public_holiday') { shiftPay = Math.round(flatRate * 2.5 * 100) / 100; rateLabel += ' × 2.5 (Public Holiday)'; }
+
+        processedCareShifts.push({
+          date: shift.date,
+          startTime: shift.startTime || '00:00',
+          endTime: shift.endTime || '00:00',
+          workedMinutes: 24 * 60,
+          workedHours: 24,
+          mealBreakMinutes: 0,
+          restBreakTaken: true,
+          ordinaryMinutes: 24 * 60,
+          ordinaryPay: shiftPay,
+          penaltyExtra: 0,
+          missedBreakExtra: 0,
+          totalPay: shiftPay,
+          missedBreakApplied: false,
+          minimumEngagementApplied: false,
+          minimumShiftHours: null,
+          segments: [{
+            dayType, dayLabel: getDayLabel(dayType), multiplier: 1.0, addition_per_hour: 0,
+            effectiveRate: shiftPay / 24, rateLabel, missedBreakPenalty: false,
+            baseRate: baseHourlyRate, minutes: 24 * 60, hours: 24,
+            pay: shiftPay,
+          }],
+          breakViolations: [],
+          shiftType: '24hr_care',
+        });
+        totalCarePay += shiftPay;
+      }
+
+      // If there are no standard shifts, return 24hr care results directly
+      if (standardShifts.length === 0) {
+        const superEligible = totalCarePay;
+        const superAmount = Math.round(superEligible * SGC_RATE * 100) / 100;
+        return {
+          baseHourlyRate, rawBaseRate, juniorMultiplier,
+          isJuniorRate: juniorMultiplier < 1.0, employmentType, effectiveDate, period,
+          shifts: processedCareShifts,
+          summary: {
+            totalWorkedHours: processedCareShifts.reduce((s, sh) => s + sh.workedHours, 0),
+            ordinaryPay: totalCarePay, penaltyPay: 0, missedBreakPay: 0, overtimePay: 0,
+            overtimeMinutes: 0, mealAllowancePay: 0, mealAllowancesOwed: 0, mealAllowanceRate: 0,
+            totalPayOwed: totalCarePay, superEligiblePay: superEligible, superAmount, sgcRate: SGC_RATE,
+            superBreakdown: [{ rateLabel: '24-hour care shifts', effectiveRate: null, hours: processedCareShifts.length * 24, totalPay: totalCarePay, superApplies: true, superRate: SGC_RATE, superAmount }],
+            overtimeBreakdown: [], allBreakViolations: [],
+          },
+        };
+      }
+      // If mixed, fall through to standard processing for the non-24hr shifts
+      // (rare scenario — typically all shifts in a period are same type)
+    }
+  }
+
+  // ── Broken shift handling ─────────────────────────────────────────────────
+  // If shift.shiftType === 'broken', the shift has multiple work periods within a single day.
+  // The shift object should include shift.periods = [{startTime, endTime}, ...].
+  // If the span (first start to last end) > 12 hours, time beyond 12hr is paid at double time.
+  // The broken shift allowance ($20.82 for 1 break, $27.56 for 2 breaks) is added automatically.
+
+  // ── 10-hour break rule ────────────────────────────────────────────────────
+  // If the gap between the end of one shift and the start of the next is < 10 hours
+  // AND the previous shift included overtime, the next shift is paid at double time
+  // until a 10-hour break is provided. We check this across all shifts.
+  let tenHourBreakPenaltyMinutes = 0;
+  if (shifts.length > 1) {
+    const sortedShifts = [...shifts].sort((a, b) => {
+      if (a.date !== b.date) return a.date.localeCompare(b.date);
+      return (a.startTime || '').localeCompare(b.startTime || '');
+    });
+    for (let i = 1; i < sortedShifts.length; i++) {
+      const prev = sortedShifts[i - 1];
+      const curr = sortedShifts[i];
+      // Calculate gap in minutes between end of prev and start of curr
+      const prevEndMin = timeToMinutes(prev.endTime);
+      const currStartMin = timeToMinutes(curr.startTime);
+      let gapMinutes;
+      if (prev.date === curr.date) {
+        gapMinutes = currStartMin - prevEndMin;
+      } else {
+        // Different dates — calculate across midnight
+        const prevDate = new Date(prev.date + 'T00:00:00');
+        const currDate = new Date(curr.date + 'T00:00:00');
+        const dayDiff = (currDate - prevDate) / (1000 * 60 * 60 * 24);
+        gapMinutes = (dayDiff * 24 * 60) - prevEndMin + currStartMin;
+      }
+      if (gapMinutes < 10 * 60 && gapMinutes >= 0) {
+        // Mark this shift for double-time treatment
+        curr._tenHourBreakViolation = true;
+        curr._gapMinutes = gapMinutes;
+        tenHourBreakPenaltyMinutes += Math.min(currStartMin + (10 * 60 - gapMinutes), timeToMinutes(curr.endTime) - currStartMin);
+      }
+    }
+  }
+
   const processedShifts = [];
   let totalOrdinaryPay = 0;
   let totalPenaltyPay = 0;
   let totalMissedBreakPay = 0;
 
   for (const shift of shifts) {
+    // Skip 24hr care shifts (already processed above)
+    if (shift.shiftType === '24hr_care') continue;
+
+    // ── Broken shift: calculate total worked time from multiple periods ──────
+    let effectiveStartTime = shift.startTime;
+    let effectiveEndTime = shift.endTime;
+    let brokenShiftSpanMinutes = 0;
+    let brokenShiftBreakCount = 0;
+    if (shift.shiftType === 'broken' && Array.isArray(shift.periods) && shift.periods.length > 1) {
+      // Use first period start and last period end for the span
+      const sortedPeriods = [...shift.periods].sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+      effectiveStartTime = sortedPeriods[0].startTime;
+      effectiveEndTime = sortedPeriods[sortedPeriods.length - 1].endTime;
+      brokenShiftSpanMinutes = shiftDurationMinutes(effectiveStartTime, effectiveEndTime);
+      brokenShiftBreakCount = sortedPeriods.length - 1; // number of unpaid breaks between periods
+    }
+
     const mealBreakMinutes = shift.mealBreakTaken ? (shift.mealBreakDuration ?? 30) : 0;
-    const totalShiftMinutes = shiftDurationMinutes(shift.startTime, shift.endTime);
+    const totalShiftMinutes = shiftDurationMinutes(effectiveStartTime, effectiveEndTime);
     const workedMinutes = totalShiftMinutes - mealBreakMinutes;
 
     // Get base segments (penalty rates by day/time)
+    // For remote shifts, penalty rates already filtered to remote set above
     const rawSegments = calculateShiftSegments(
-      shift.date, shift.startTime, shift.endTime,
+      shift.date, effectiveStartTime, effectiveEndTime,
       employmentType, penaltyRates, publicHolidays
     );
 
@@ -1033,6 +1253,38 @@ async function calculateEntitlements(input, db) {
       nonEmptySegments,
       shift.mealBreakTaken
     );
+
+    // ── Broken shift: apply double time for span > 12 hours ─────────────────
+    if (shift.shiftType === 'broken' && brokenShiftSpanMinutes > 12 * 60) {
+      const beyondMinutes = brokenShiftSpanMinutes - 12 * 60;
+      // Apply double time to the last N minutes (similar to missed break logic)
+      let cumulative = 0;
+      for (let i = finalSegments.length - 1; i >= 0 && cumulative < beyondMinutes; i--) {
+        const seg = finalSegments[i];
+        const applyMins = Math.min(seg.minutes, beyondMinutes - cumulative);
+        if (applyMins > 0 && seg.multiplier < 2.0) {
+          // Split segment if needed
+          if (applyMins < seg.minutes) {
+            const normalMins = seg.minutes - applyMins;
+            finalSegments.splice(i, 1,
+              { ...seg, minutes: normalMins },
+              { ...seg, minutes: applyMins, multiplier: 2.0, missedBreakPenalty: false }
+            );
+          } else {
+            seg.multiplier = Math.max(seg.multiplier, 2.0);
+          }
+        }
+        cumulative += applyMins;
+      }
+    }
+
+    // ── 10-hour break rule: apply double time if insufficient break ──────────
+    if (shift._tenHourBreakViolation) {
+      // Apply double time to all segments until 10hr break would be satisfied
+      for (const seg of finalSegments) {
+        seg.multiplier = Math.max(seg.multiplier, 2.0);
+      }
+    }
 
     // Apply minimum engagement — if worked < minimum, extend the last segment
     // at whatever rate applies (preserves the correct penalty rate for that day).
@@ -1127,40 +1379,131 @@ async function calculateEntitlements(input, db) {
 
   const overtimeCalc = calculateOvertime(processedShifts, employmentType, baseHourlyRate, overtimeRates, period);
 
-  // ── Attribute OT premium back to per-shift segments for display ───────────
-  // The overtime calc runs post-processing on all shifts, so we now fold the
-  // premium pay back into each shift's totalPay and segments array so the
-  // per-shift breakdown in the UI matches the actual amount owed.
+  // ── Replace overtime hours in per-shift segments with proper OT categories ──
+  // Instead of adding an "overtime loading" line, carve the OT hours out of the
+  // original penalty segments and replace them with overtime category rows.
+  // Result: (a) hours in all rows sum to total worked hours, (b) each row shows
+  // the full rate actually paid — not just the premium.
+  //
+  // Higher-of rule: for each OT minute, the worker receives whichever is greater
+  // — the overtime rate or the existing penalty rate. Minutes where the penalty
+  // rate already exceeds the OT rate stay in their penalty category (no uplift).
   for (const otEntry of overtimeCalc.overtimeBreakdown) {
-    let targetShift = null;
+    const otMinutes = otEntry.overtimeMinutes;
+    if (otMinutes <= 0) continue;
+
+    // Determine which shift(s) the OT hours come from
+    let targetShifts = [];
     if (otEntry.type === 'daily') {
-      targetShift = processedShifts.find(s => s.date === otEntry.date) || null;
+      targetShifts = processedShifts.filter(s => s.date === otEntry.date);
     } else if (otEntry.type === 'weekly') {
-      const shiftsInWeek = processedShifts.filter(s => getISOWeek(s.date) === otEntry.key);
-      targetShift = shiftsInWeek[shiftsInWeek.length - 1] || null;
+      targetShifts = processedShifts.filter(s => getISOWeek(s.date) === otEntry.key);
     } else {
-      // fortnightly: attribute to last shift overall
-      targetShift = processedShifts[processedShifts.length - 1] || null;
+      targetShifts = [...processedShifts];
     }
-    if (!targetShift) continue;
-    targetShift.totalPay = Math.round((targetShift.totalPay + otEntry.pay) * 100) / 100;
-    const otHours = Math.round(otEntry.overtimeMinutes / 60 * 100) / 100;
-    const isWeekly = otEntry.type === 'weekly' || otEntry.type === 'fortnightly';
-    targetShift.segments.push({
-      dayType: 'overtime',
-      dayLabel: isWeekly ? 'Weekly overtime loading' : 'Overtime loading',
-      multiplier: null,
-      addition_per_hour: 0,
-      effectiveRate: null,
-      rateLabel: isWeekly
-        ? `Weekly overtime loading (${otHours}h past 38h threshold)`
-        : `Overtime loading (${otHours}h)`,
-      missedBreakPenalty: false,
-      baseRate: baseHourlyRate,
-      minutes: otEntry.overtimeMinutes,
-      hours: otHours,
-      pay: Math.round(otEntry.pay * 100) / 100,
-    });
+    if (!targetShifts.length) continue;
+
+    const displayShift = targetShifts[targetShifts.length - 1];
+    const firstBandMult = otEntry.firstBandMultiplier || 1.5;
+    const secondBandMult = otEntry.secondBandMultiplier || 2.0;
+    const firstBandMinutes = otEntry.firstBandMinutes ?? otMinutes;
+
+    // Collect per-minute info from the END of the period's segments (OT applies
+    // to the last N minutes worked). Record the penalty multiplier for each.
+    const allNonOtSegs = [];
+    for (const sh of targetShifts) {
+      for (const seg of sh.segments) {
+        if (seg.dayType === 'overtime' || seg.minutes <= 0) continue;
+        allNonOtSegs.push(seg);
+      }
+    }
+    const perMin = []; // { segRef, shiftRef, penaltyMult, penaltyRate }
+    for (const sh of targetShifts) {
+      for (const seg of sh.segments) {
+        if (seg.dayType === 'overtime' || seg.minutes <= 0) continue;
+        for (let m = 0; m < seg.minutes; m++) {
+          perMin.push({ seg, shift: sh, penaltyMult: seg.multiplier || 1.0, effectiveRate: seg.effectiveRate || baseHourlyRate });
+        }
+      }
+    }
+
+    // OT minutes are the last N minutes
+    const otStartIdx = Math.max(0, perMin.length - otMinutes);
+
+    // Determine which OT band each minute falls in, and whether OT rate > penalty rate
+    let firstBandOtMins = 0;
+    let secondBandOtMins = 0;
+    let consumedOt = 0;
+    const minutesToCarve = new Map(); // seg -> minutes to remove
+    for (let i = otStartIdx; i < perMin.length; i++) {
+      const { seg, penaltyMult } = perMin[i];
+      const otMult = consumedOt < firstBandMinutes ? firstBandMult : secondBandMult;
+      const otRate = baseHourlyRate * otMult;
+      const penaltyRate = baseHourlyRate * penaltyMult + (seg.addition_per_hour || 0);
+
+      if (otRate > penaltyRate) {
+        // This minute moves to OT category
+        minutesToCarve.set(seg, (minutesToCarve.get(seg) || 0) + 1);
+        if (consumedOt < firstBandMinutes) firstBandOtMins++;
+        else secondBandOtMins++;
+      }
+      // If penalty rate >= OT rate, minute stays in its penalty category (higher-of)
+      consumedOt++;
+    }
+
+    // Carve minutes from their original segments
+    for (const [seg, mins] of minutesToCarve) {
+      seg.minutes -= mins;
+      seg.hours = Math.round(seg.minutes / 60 * 100) / 100;
+      seg.pay = Math.round(seg.minutes / 60 * seg.effectiveRate * 100) / 100;
+    }
+    // Clean up zero-minute segments and recalc shift totals
+    for (const sh of targetShifts) {
+      sh.segments = sh.segments.filter(s => s.minutes > 0);
+      const newPay = sh.segments.reduce((s, seg) => s + (seg.pay || 0), 0);
+      sh.totalPay = Math.round(newPay * 100) / 100;
+    }
+
+    // Add proper OT category segments to the display shift
+    if (firstBandOtMins > 0) {
+      const hours = Math.round(firstBandOtMins / 60 * 100) / 100;
+      const rate = Math.round(baseHourlyRate * firstBandMult * 100) / 100;
+      const pay = Math.round(hours * rate * 100) / 100;
+      displayShift.segments.push({
+        dayType: 'overtime',
+        dayLabel: 'Overtime',
+        multiplier: firstBandMult,
+        addition_per_hour: 0,
+        effectiveRate: rate,
+        rateLabel: `Overtime (\u00d7${firstBandMult.toFixed(1)})`,
+        missedBreakPenalty: false,
+        baseRate: baseHourlyRate,
+        minutes: firstBandOtMins,
+        hours,
+        pay,
+      });
+      displayShift.totalPay = Math.round((displayShift.totalPay + pay) * 100) / 100;
+    }
+
+    if (secondBandOtMins > 0) {
+      const hours = Math.round(secondBandOtMins / 60 * 100) / 100;
+      const rate = Math.round(baseHourlyRate * secondBandMult * 100) / 100;
+      const pay = Math.round(hours * rate * 100) / 100;
+      displayShift.segments.push({
+        dayType: 'overtime',
+        dayLabel: 'Overtime',
+        multiplier: secondBandMult,
+        addition_per_hour: 0,
+        effectiveRate: rate,
+        rateLabel: `Overtime (\u00d7${secondBandMult.toFixed(1)})`,
+        missedBreakPenalty: false,
+        baseRate: baseHourlyRate,
+        minutes: secondBandOtMins,
+        hours,
+        pay,
+      });
+      displayShift.totalPay = Math.round((displayShift.totalPay + pay) * 100) / 100;
+    }
   }
 
   // ── Meal allowance — award-specific rules ────────────────────────────────
@@ -1228,17 +1571,40 @@ async function calculateEntitlements(input, db) {
     }
   }
 
-  const grandTotal = totalOrdinaryPay + totalPenaltyPay + totalMissedBreakPay + overtimeCalc.overtimePay + mealAllowancePay;
+  // ── Recompute summary figures from final segment state ────────────────────
+  // After OT carving, recalculate ordinary/penalty/overtime pay from segments
+  // so the summary card numbers are consistent with the breakdown rows.
+  let finalOrdinaryPay = 0;
+  let finalPenaltyPay = 0;
+  let finalOvertimePay = 0;
+  let finalMissedBreakPay = 0;
+  for (const sh of processedShifts) {
+    for (const seg of sh.segments) {
+      if (seg.dayType === 'overtime') {
+        finalOvertimePay += seg.pay;
+      } else if (seg.missedBreakPenalty) {
+        finalMissedBreakPay += seg.pay;
+      } else {
+        const ordinaryPortion = (seg.minutes / 60) * baseHourlyRate;
+        const penaltyPortion = seg.pay - ordinaryPortion;
+        finalOrdinaryPay += ordinaryPortion;
+        finalPenaltyPay += Math.max(0, penaltyPortion);
+      }
+    }
+  }
+  const grandTotal = processedShifts.reduce((s, sh) => s + sh.totalPay, 0) + mealAllowancePay;
 
   // ── Per-category super breakdown ────────────────────────────────────────
   // Aggregate all shift segments across all shifts, grouped by rate category.
   // Each entry shows hours, effective rate, total pay, and whether super applies.
   // OTE (ordinary time earnings) = ordinary + penalty rate hours.
-  // NOT OTE: overtime (premium and base), missed-break double time (extra only),
-  //           expense allowances (meal, vehicle).
+  // NOT OTE: overtime segments, missed-break double time, expense allowances.
+  // Since overtime hours are now carved out of ordinary segments and replaced
+  // with proper overtime category segments, the aggregation is straightforward.
   const categoryAgg = new Map();
   for (const shift of processedShifts) {
     for (const seg of shift.segments) {
+      if (seg.minutes <= 0) continue;
       const key = `${seg.dayType}_${seg.multiplier}_${seg.addition_per_hour}_${seg.missedBreakPenalty}`;
       if (!categoryAgg.has(key)) {
         categoryAgg.set(key, {
@@ -1254,39 +1620,6 @@ async function calculateEntitlements(input, db) {
       entry.totalHours += seg.hours;
       entry.totalPay += seg.pay;
     }
-  }
-
-  // Overtime correction: the segment categories above contain base pay for ALL
-  // worked hours, including overtime hours (since overtime is computed as premium-only
-  // and added separately). We must deduct the OT base pay from OTE categories and
-  // fold it into the overtime entry so the breakdown sums correctly.
-  if (overtimeCalc.overtimeMinutes > 0) {
-    const otHours = overtimeCalc.overtimeMinutes / 60;
-    const otBase = otHours * baseHourlyRate;
-
-    // Deduct from the largest OTE category (almost always ordinary weekday rate)
-    let remainingDeduction = otBase;
-    for (const cat of categoryAgg.values()) {
-      if (!cat.superApplies || remainingDeduction <= 0) continue;
-      const deduction = Math.min(cat.totalPay, remainingDeduction);
-      cat.totalPay -= deduction;
-      cat.totalHours = Math.max(0, cat.totalHours - (deduction / baseHourlyRate));
-      remainingDeduction -= deduction;
-    }
-  }
-
-  // Overtime entry: premium + base pay for OT hours (none is OTE)
-  if (overtimeCalc.overtimePay > 0 || overtimeCalc.overtimeMinutes > 0) {
-    const otHours = overtimeCalc.overtimeMinutes / 60;
-    const otBase = otHours * baseHourlyRate;
-    categoryAgg.set('_overtime', {
-      rateLabel: 'Overtime (not OTE — excluded from super)',
-      effectiveRate: null,
-      missedBreakPenalty: false,
-      superApplies: false,
-      totalHours: Math.round(otHours * 100) / 100,
-      totalPay: overtimeCalc.overtimePay + otBase,
-    });
   }
 
   if (mealAllowancePay > 0) {
@@ -1329,10 +1662,10 @@ async function calculateEntitlements(input, db) {
     shifts: processedShifts,
     summary: {
       totalWorkedHours: Math.round(processedShifts.reduce((s, sh) => s + sh.workedMinutes, 0) / 60 * 100) / 100,
-      ordinaryPay: Math.round(totalOrdinaryPay * 100) / 100,
-      penaltyPay: Math.round(totalPenaltyPay * 100) / 100,
-      missedBreakPay: Math.round(totalMissedBreakPay * 100) / 100,
-      overtimePay: overtimeCalc.overtimePay,
+      ordinaryPay: Math.round(finalOrdinaryPay * 100) / 100,
+      penaltyPay: Math.round(finalPenaltyPay * 100) / 100,
+      missedBreakPay: Math.round(finalMissedBreakPay * 100) / 100,
+      overtimePay: Math.round(finalOvertimePay * 100) / 100,
       overtimeMinutes: overtimeCalc.overtimeMinutes,
       mealAllowancePay,
       mealAllowancesOwed,

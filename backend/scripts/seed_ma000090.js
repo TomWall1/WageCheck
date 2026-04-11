@@ -163,9 +163,9 @@ async function seed() {
 
     for (const c of classifications) {
       await client.query(`
-        INSERT INTO classifications (award_code, level, stream, title, description, duties, indicative_tasks, sort_order, fwc_classification_fixed_id)
+        INSERT INTO classifications (award_code, level, stream, pay_point, title, description, duties, indicative_tasks, sort_order, fwc_classification_fixed_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ON CONFLICT (award_code, level, stream) DO UPDATE SET
+        ON CONFLICT (award_code, level, stream, pay_point) DO UPDATE SET
           title = EXCLUDED.title,
           description = EXCLUDED.description,
           duties = EXCLUDED.duties,

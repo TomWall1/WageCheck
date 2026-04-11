@@ -1,0 +1,82 @@
+{
+  "award_code": "MA000003",
+  "award_name": "Fast Food Industry Award",
+  "effective_date": "2025-07-01",
+  "published_date": "2025-12-24",
+  "source": "FWO Pay Guide MA000003 (PDF)",
+
+  "streams": [
+    {
+      "stream": "general",
+      "label": "Fast Food employee",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 26.55, "casual_hourly": 33.19, "title": "Level 1" },
+        { "level": 2, "pay_point": 1, "ft_hourly": 28.12, "casual_hourly": 35.15, "title": "Level 2" }
+      ]
+    },
+    {
+      "stream": "solo",
+      "label": "Fast Food employee - Level 3 solo",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 3, "pay_point": 1, "ft_hourly": 28.55, "casual_hourly": 35.69, "title": "Level 3 - in charge of 1 or no persons" }
+      ]
+    },
+    {
+      "stream": "responsible",
+      "label": "Fast Food employee - Level 3 responsible",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 3, "pay_point": 1, "ft_hourly": 28.90, "casual_hourly": 36.13, "title": "Level 3 - in charge of 2 or more persons" }
+      ]
+    }
+  ],
+
+  "penalty_rates": {
+    "full_time_and_part_time": {
+      "evening_10pm_midnight": { "multiplier": 1.10, "label": "Evening Mon-Fri 10pm-midnight" },
+      "night_midnight_6am": { "multiplier": 1.15, "label": "Night Mon-Fri midnight-6am" },
+      "saturday": { "multiplier": 1.25, "label": "Saturday" },
+      "sunday_level1": { "multiplier": 1.25, "label": "Sunday (Level 1 only — same as Saturday)" },
+      "sunday_level2_plus": { "multiplier": 1.50, "label": "Sunday (Level 2+)" },
+      "public_holiday": { "multiplier": 2.25, "label": "Public holiday" }
+    },
+    "casual": {
+      "evening_10pm_midnight": { "multiplier": 1.08, "label": "Casual evening Mon-Fri 10pm-midnight (approx)" },
+      "night_midnight_6am": { "multiplier": 1.12, "label": "Casual night Mon-Fri midnight-6am (approx)" },
+      "saturday": { "multiplier": 1.20, "label": "Casual Saturday" },
+      "sunday_level1": { "multiplier": 1.20, "label": "Casual Sunday (Level 1 only — same as Saturday)" },
+      "sunday_level2_plus": { "multiplier": 1.40, "label": "Casual Sunday (Level 2+)" },
+      "public_holiday": { "multiplier": 2.00, "label": "Casual public holiday" }
+    },
+    "notes": [
+      "Level 1 Sunday rate = Level 1 Saturday rate (both FT and casual)",
+      "Level 2+ Sunday rate is higher than Saturday rate",
+      "This distinction is handled in awardCalculator.js lines 922-935",
+      "Casual multipliers verified: L1 cas base=$33.19, Sat=$39.83 (×1.20), Sun=$39.83 (×1.20), PH=$66.38 (×2.00)",
+      "L2 cas base=$35.15, Sat=$42.18 (×1.20), Sun=$49.21 (×1.40), PH=$70.30 (×2.00)"
+    ]
+  },
+
+  "overtime": {
+    "all_employment_types": {
+      "first_2_hours": { "hours": 2, "multiplier": 1.5, "label": "OT first 2 hours" },
+      "after_2_hours": { "hours_after": 2, "multiplier": 2.0, "label": "OT after 2 hours" },
+      "sunday": { "multiplier": 2.0, "label": "OT Sunday" },
+      "public_holiday": { "multiplier": 2.5, "label": "OT public holiday" }
+    }
+  },
+
+  "allowances": [
+    { "name": "Cold work allowance", "amount": 0.37, "per_unit": "per_hour", "is_all_purpose": false },
+    { "name": "Cold work allowance (below 0°C additional)", "amount": 0.56, "per_unit": "per_hour", "is_all_purpose": false },
+    { "name": "District allowance (Broken Hill)", "amount": 45.73, "per_unit": "per_week", "is_all_purpose": false },
+    { "name": "Laundry allowance - full-time", "amount": 6.25, "per_unit": "per_week", "is_all_purpose": false },
+    { "name": "Laundry allowance - part-time or casual", "amount": 1.25, "per_unit": "per_shift", "is_all_purpose": false },
+    { "name": "Meal allowance (overtime)", "amount": 16.65, "per_unit": "per_meal", "is_all_purpose": false },
+    { "name": "Meal allowance (overtime — second meal, >4hr OT)", "amount": 15.04, "per_unit": "per_meal", "is_all_purpose": false },
+    { "name": "Vehicle allowance (delivery drivers)", "amount": 0.52, "per_unit": "per_km", "is_all_purpose": false },
+    { "name": "Vehicle allowance (non-delivery)", "amount": 0.98, "per_unit": "per_km", "is_all_purpose": false }
+  ]
+}

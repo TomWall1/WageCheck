@@ -15,7 +15,14 @@ module.paths.unshift(path.join(backendDir, 'node_modules'));
 process.chdir(backendDir);
 require('dotenv').config({ path: path.join(backendDir, '.env') });
 
-const pool = require(path.join(backendDir, 'src', 'db', 'pool'));
+// Use a small pool to avoid exhausting hosted DB session limits when running all awards
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  max: 3,           // only 3 connections (default pg is 10, hosted DBs cap at ~20-60 sessions)
+  idleTimeoutMillis: 1000,  // release idle connections quickly between awards
+});
 const { calculateEntitlements } = require(path.join(backendDir, 'src', 'services', 'awardCalculator'));
 const XLSX = require('xlsx');
 
@@ -29,7 +36,7 @@ const REF_SATURDAY  = '2025-07-12';
 const REF_SUNDAY    = '2025-07-13';
 const REF_PH        = '2025-12-25';
 
-const TOLERANCE = 0.05;
+const TOLERANCE = 0.04;  // max $0.01/hr on a 4hr shift
 
 function round2(n) { return Math.round(n * 100) / 100; }
 
@@ -213,7 +220,9 @@ function createTestRunner(awardCode, xlsxPath) {
   }
 
   async function cleanup() {
-    await pool.end();
+    // Drain idle connections but keep pool alive for next award in 'all' mode.
+    // pool._clients tracks checked-out clients; wait for them to return.
+    await new Promise(resolve => setTimeout(resolve, 200));
   }
 
   return {

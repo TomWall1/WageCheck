@@ -1215,18 +1215,36 @@ function classify(answers, awardCode = 'MA000009') {
   }
 
   if (awardCode === 'MA000100') {
-    // MA000100 — SCHADS Award 2010
-    if (answers.schads_stream === 'home_care') {
-      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.home_care_level];
-      if (level) return { level, stream: 'home_care', rationale: 'Home Care Level ' + level, confidence: 'high' };
-      return { level: 1, stream: 'home_care', rationale: 'Defaulting to Home Care Level 1. Please review.', confidence: 'low' };
-    }
+    // MA000100 — SCHADS Award 2010 (5 streams with pay points)
+    const pp = { pp1: 1, pp2: 2, pp3: 3, pp4: 4 }[answers.schads_pay_point] || 1;
+    const levelMap = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8 };
+
     if (answers.schads_stream === 'social_community') {
-      const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8 }[answers.sacs_level];
-      if (level) return { level, stream: 'social_community', rationale: 'SACS Level ' + level, confidence: 'high' };
-      return { level: 1, stream: 'social_community', rationale: 'Defaulting to SACS Level 1. Please review.', confidence: 'low' };
+      const level = levelMap[answers.schads_sacs_level];
+      if (level) return { level, stream: 'social_community', payPoint: pp, rationale: `SACS Level ${level} Pay Point ${pp}`, confidence: 'high' };
+      return { level: 1, stream: 'social_community', payPoint: 1, rationale: 'Defaulting to SACS Level 1 PP1.', confidence: 'low' };
     }
-    return { level: 1, stream: 'home_care', rationale: 'Defaulting to Home Care Level 1. Please review.', confidence: 'low' };
+    if (answers.schads_stream === 'crisis_accommodation') {
+      const level = levelMap[answers.schads_crisis_level];
+      if (level) return { level, stream: 'crisis_accommodation', payPoint: pp, rationale: `Crisis Accommodation Level ${level} Pay Point ${pp}`, confidence: 'high' };
+      return { level: 1, stream: 'crisis_accommodation', payPoint: 1, rationale: 'Defaulting to Crisis Accommodation Level 1 PP1.', confidence: 'low' };
+    }
+    if (answers.schads_stream === 'family_day_care') {
+      const level = levelMap[answers.schads_fdc_level];
+      if (level) return { level, stream: 'family_day_care', payPoint: pp, rationale: `Family Day Care Level ${level} Pay Point ${pp}`, confidence: 'high' };
+      return { level: 1, stream: 'family_day_care', payPoint: 1, rationale: 'Defaulting to Family Day Care Level 1 PP1.', confidence: 'low' };
+    }
+    if (answers.schads_stream === 'home_care_disability') {
+      const level = levelMap[answers.schads_hc_disability_level];
+      if (level) return { level, stream: 'home_care_disability', payPoint: pp, rationale: `Home Care Disability Level ${level} Pay Point ${pp}`, confidence: 'high' };
+      return { level: 1, stream: 'home_care_disability', payPoint: 1, rationale: 'Defaulting to HC Disability Level 1 PP1.', confidence: 'low' };
+    }
+    if (answers.schads_stream === 'home_care_aged') {
+      const level = levelMap[answers.schads_hc_aged_level];
+      if (level) return { level, stream: 'home_care_aged', payPoint: pp, rationale: `Home Care Aged Care Level ${level} Pay Point ${pp}`, confidence: 'high' };
+      return { level: 1, stream: 'home_care_aged', payPoint: 1, rationale: 'Defaulting to HC Aged Care Level 1 PP1.', confidence: 'low' };
+    }
+    return { level: 1, stream: 'social_community', payPoint: 1, rationale: 'Defaulting to SACS Level 1 PP1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000012') {
@@ -1403,6 +1421,192 @@ function classify(answers, awardCode = 'MA000009') {
     const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7, l8: 8, l9: 9, l10: 10 }[answers.water_level];
     if (level) return { level, stream: 'water', rationale: 'Water Industry Level ' + level, confidence: 'high' };
     return { level: 1, stream: 'water', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000001') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.acch_level];
+    if (level) return { level, stream: 'health_services', rationale: 'Health Worker Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'health_services', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000017') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.corrections_level];
+    if (level) return { level, stream: 'corrections', rationale: 'Correctional Officer Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'corrections', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000031') {
+    const level = { l1: 1, l2: 2, l3: 3 }[answers.model_grade];
+    if (level) return { level, stream: 'modelling', rationale: 'Model Grade ' + level, confidence: 'high' };
+    return { level: 1, stream: 'modelling', rationale: 'Defaulting to Grade 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000037') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.salt_level];
+    if (level) return { level, stream: 'salt', rationale: 'Salt Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'salt', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000047') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.asphalt_level];
+    if (level) return { level, stream: 'asphalt', rationale: 'Asphalt Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'asphalt', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000048') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.cemetery_level];
+    if (level) return { level, stream: 'cemetery', rationale: 'Cemetery Worker Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'cemetery', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000050') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.concrete_products_level];
+    if (level) return { level, stream: 'concrete_products', rationale: 'Concrete Products Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'concrete_products', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000051') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.coal_terminal_level];
+    if (level) return { level, stream: 'coal_terminal', rationale: 'Terminal Employee Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'coal_terminal', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000054') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.electrical_power_level];
+    if (level) return { level, stream: 'electrical_power', rationale: 'Power Worker Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'electrical_power', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000060') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.marine_tourism_level];
+    if (level) return { level, stream: 'marine_tourism', rationale: 'Marine Tourism Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'marine_tourism', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000061') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.airline_ground_level];
+    if (level) return { level, stream: 'airline_ground', rationale: 'Ground Staff Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'airline_ground', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000062') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.airport_level];
+    if (level) return { level, stream: 'airport', rationale: 'Airport Employee Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'airport', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000064') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.pest_control_level];
+    if (level) return { level, stream: 'pest_control', rationale: 'Pest Control Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'pest_control', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000066') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.animal_training_level];
+    if (level) return { level, stream: 'animal_training', rationale: 'Horse/Greyhound Training Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'animal_training', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000067') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.hydrocarbons_level];
+    if (level) return { level, stream: 'hydrocarbons', rationale: 'Hydrocarbons Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'hydrocarbons', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000070') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.silviculture_level];
+    if (level) return { level, stream: 'silviculture', rationale: 'Silviculture Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'silviculture', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000075') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6, l7: 7 }[answers.rail_level];
+    if (level) return { level, stream: 'rail', rationale: 'Rail Worker Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'rail', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000078') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.stevedoring_level];
+    if (level) return { level, stream: 'stevedoring', rationale: 'Stevedore Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'stevedoring', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000006') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.coal_mining_level];
+    if (level) return { level, stream: 'coal_mining', rationale: 'Black Coal Mining Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'coal_mining', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000007') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.cement_quarry_level];
+    if (level) return { level, stream: 'cement_quarry', rationale: 'Cement & Quarrying Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'cement_quarry', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000008') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4 }[answers.wool_level];
+    if (level) return { level, stream: 'wool', rationale: 'Wool Storage Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'wool', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000011') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.oil_refining_level];
+    if (level) return { level, stream: 'oil_refining', rationale: 'Oil Refining Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'oil_refining', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000014') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.mining_level];
+    if (level) return { level, stream: 'mining', rationale: 'Mining Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'mining', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000015') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.ports_level];
+    if (level) return { level, stream: 'ports', rationale: 'Ports & Harbours Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'ports', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000024') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.cotton_ginning_level];
+    if (level) return { level, stream: 'cotton_ginning', rationale: 'Cotton Ginning Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'cotton_ginning', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000035') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.pastoral_level];
+    if (level) return { level, stream: 'pastoral', rationale: 'Pastoral Award Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'pastoral', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000039') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.seafood_level];
+    if (level) return { level, stream: 'seafood', rationale: 'Seafood Processing Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'seafood', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000040') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.sugar_level];
+    if (level) return { level, stream: 'sugar', rationale: 'Sugar Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'sugar', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000044') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5, l6: 6 }[answers.timber_level];
+    if (level) return { level, stream: 'timber', rationale: 'Timber Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'timber', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000045') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.concrete_level];
+    if (level) return { level, stream: 'concrete', rationale: 'Premixed Concrete Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'concrete', rationale: 'Defaulting to Level 1.', confidence: 'low' };
+  }
+
+  if (awardCode === 'MA000046') {
+    const level = { l1: 1, l2: 2, l3: 3, l4: 4, l5: 5 }[answers.textile_level];
+    if (level) return { level, stream: 'textile', rationale: 'Textile Industry Level ' + level, confidence: 'high' };
+    return { level: 1, stream: 'textile', rationale: 'Defaulting to Level 1.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000104') {

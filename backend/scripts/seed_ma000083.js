@@ -12,13 +12,14 @@
  * Casual rates = FT rate x 1.25
  *
  * Penalty rates:
- *   FT/PT: Sat x1.25, Sun x2.00, PH x2.50
- *   Casual: Sat x1.25, Sun x2.00, PH x2.50
+ *   FT/PT: Sat x1.50, Sun x2.00, PH x2.50
+ *   Casual: Sat x1.40, Sun x1.80, PH x2.20 (base × [FT_mult + 0.25])
  *
  * Overtime (daily threshold 7.6 hrs):
  *   First 2 OT hours: x1.50, after 2 OT hours: x2.00
  *
- * Junior rates: None
+ * Junior rates (% of adult L1, from FWO pay guide):
+ *   ≤18 yrs: 75%, 19 yrs: 88.9%, 20 yrs: adult
  *
  * Allowances:
  *   Vehicle car: $0.98/km, Vehicle motorcycle: $0.33/km,
@@ -114,9 +115,9 @@ async function seed() {
 
     for (const c of classifications) {
       await client.query(`
-        INSERT INTO classifications (award_code, level, stream, title, description, duties, indicative_tasks, sort_order, fwc_classification_fixed_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ON CONFLICT (award_code, level, stream) DO UPDATE SET
+        INSERT INTO classifications (award_code, level, stream, pay_point, title, description, duties, indicative_tasks, sort_order, fwc_classification_fixed_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        ON CONFLICT (award_code, level, stream, pay_point) DO UPDATE SET
           title = EXCLUDED.title,
           description = EXCLUDED.description,
           duties = EXCLUDED.duties,
@@ -124,7 +125,7 @@ async function seed() {
           sort_order = EXCLUDED.sort_order,
           fwc_classification_fixed_id = EXCLUDED.fwc_classification_fixed_id
       `, [
-        AWARD_CODE, c.level, c.stream, c.title, c.description,
+        AWARD_CODE, c.level, c.stream, c.pay_point || 1, c.title, c.description,
         JSON.stringify(c.duties), JSON.stringify(c.indicative_tasks), c.sort_order, c.fwc_id,
       ]);
     }
@@ -177,19 +178,19 @@ async function seed() {
     const penaltyRates = [
       // Full-time
       { employment_type: 'full_time',  day_type: 'weekday',        multiplier: 1.00, description: 'Weekday ordinary rate (x1.0)' },
-      { employment_type: 'full_time',  day_type: 'saturday',       multiplier: 1.25, description: 'Saturday — time and a quarter (x1.25)' },
+      { employment_type: 'full_time',  day_type: 'saturday',       multiplier: 1.50, description: 'Saturday — time and a half (x1.50)' },
       { employment_type: 'full_time',  day_type: 'sunday',         multiplier: 2.00, description: 'Sunday — double time (x2.0)' },
       { employment_type: 'full_time',  day_type: 'public_holiday', multiplier: 2.50, description: 'Public holiday — double time and a half (x2.5)' },
       // Part-time
       { employment_type: 'part_time',  day_type: 'weekday',        multiplier: 1.00, description: 'Weekday ordinary rate (x1.0)' },
-      { employment_type: 'part_time',  day_type: 'saturday',       multiplier: 1.25, description: 'Saturday — time and a quarter (x1.25)' },
+      { employment_type: 'part_time',  day_type: 'saturday',       multiplier: 1.50, description: 'Saturday — time and a half (x1.50)' },
       { employment_type: 'part_time',  day_type: 'sunday',         multiplier: 2.00, description: 'Sunday — double time (x2.0)' },
       { employment_type: 'part_time',  day_type: 'public_holiday', multiplier: 2.50, description: 'Public holiday — double time and a half (x2.5)' },
-      // Casual
+      // Casual (multipliers applied to casual base; equivalent to base × [FT_mult + 0.25])
       { employment_type: 'casual',     day_type: 'weekday',        multiplier: 1.00, description: 'Weekday ordinary casual rate (incl. 25% casual loading)' },
-      { employment_type: 'casual',     day_type: 'saturday',       multiplier: 1.25, description: 'Saturday — x1.25 of casual base (incl. loading)' },
-      { employment_type: 'casual',     day_type: 'sunday',         multiplier: 2.00, description: 'Sunday — x2.00 of casual base (incl. loading)' },
-      { employment_type: 'casual',     day_type: 'public_holiday', multiplier: 2.50, description: 'Casual public holiday — x2.50 of casual base (incl. loading)' },
+      { employment_type: 'casual',     day_type: 'saturday',       multiplier: 1.40, description: 'Saturday — x1.40 of casual base (base × 1.75)' },
+      { employment_type: 'casual',     day_type: 'sunday',         multiplier: 1.80, description: 'Sunday — x1.80 of casual base (base × 2.25)' },
+      { employment_type: 'casual',     day_type: 'public_holiday', multiplier: 2.20, description: 'Casual public holiday — x2.20 of casual base (base × 2.75)' },
     ];
 
     await client.query(`DELETE FROM penalty_rates WHERE award_code = $1`, [AWARD_CODE]);

@@ -1,0 +1,549 @@
+
+WageCheck Exhaustive Award Testing Agent — MA000119
+═════════════════════════════════════════════════════════════════
+
+Award: MA000119
+Classifications: 16
+Streams: food_beverage, general, introductory, kitchen
+Penalty configs: 18
+OT rules: 12
+Allowances: 4
+Junior rates: yes
+Min engagement: yes
+
+═══ STAGE 0 — PAY GUIDE COMPLETENESS (spec vs DB) ═══
+  ⊘ No pay guide spec found at C:\Documents\WageCheck\testing\pay_guides\MA000119.spec.json. Add MA000119.spec.json to testing/pay_guides/ to enable Stage 0.
+
+═══ STAGE 1 — SEED VERIFICATION (DB vs FWC API) ═══
+
+  Verifying base pay rates against FWC API (latest available)...
+  Verifying allowances against FWC API...
+    ~ SEED-AL-01: meal DB=$16.73 — no exact API match (manual verify needed)
+    ~ SEED-AL-03: split_shift DB=$5.34 — no exact API match (manual verify needed)
+    ~ SEED-AL-04: tool DB=$2.03 — no exact API match (manual verify needed)
+  Seed verification: 0 PASS, 0 FAIL, 3 WARN, 33 SKIP (36 total)
+  ⊘ SEED-BR-01: SKIPPED — No fwc_classification_fixed_id for L1 food_beverage
+  ⊘ SEED-BR-02: SKIPPED — No fwc_classification_fixed_id for L1 food_beverage
+  ⊘ SEED-BR-03: SKIPPED — No fwc_classification_fixed_id for L2 food_beverage
+  ⊘ SEED-BR-04: SKIPPED — No fwc_classification_fixed_id for L2 food_beverage
+  ⊘ SEED-BR-05: SKIPPED — No fwc_classification_fixed_id for L3 food_beverage
+  ⊘ SEED-BR-06: SKIPPED — No fwc_classification_fixed_id for L3 food_beverage
+  ⊘ SEED-BR-07: SKIPPED — No fwc_classification_fixed_id for L4 food_beverage
+  ⊘ SEED-BR-08: SKIPPED — No fwc_classification_fixed_id for L4 food_beverage
+  ⊘ SEED-BR-09: SKIPPED — No fwc_classification_fixed_id for L5 food_beverage
+  ⊘ SEED-BR-10: SKIPPED — No fwc_classification_fixed_id for L5 food_beverage
+  ⊘ SEED-BR-11: SKIPPED — No fwc_classification_fixed_id for L2 general
+  ⊘ SEED-BR-12: SKIPPED — No fwc_classification_fixed_id for L2 general
+  ⊘ SEED-BR-13: SKIPPED — No fwc_classification_fixed_id for L3 general
+  ⊘ SEED-BR-14: SKIPPED — No fwc_classification_fixed_id for L3 general
+  ⊘ SEED-BR-15: SKIPPED — No fwc_classification_fixed_id for L4 general
+  ⊘ SEED-BR-16: SKIPPED — No fwc_classification_fixed_id for L4 general
+  ⊘ SEED-BR-17: SKIPPED — No fwc_classification_fixed_id for L5 general
+  ⊘ SEED-BR-18: SKIPPED — No fwc_classification_fixed_id for L5 general
+  ⊘ SEED-BR-19: SKIPPED — No fwc_classification_fixed_id for L0 introductory
+  ⊘ SEED-BR-20: SKIPPED — No fwc_classification_fixed_id for L0 introductory
+  ⊘ SEED-BR-21: SKIPPED — No fwc_classification_fixed_id for L1 kitchen
+  ⊘ SEED-BR-22: SKIPPED — No fwc_classification_fixed_id for L1 kitchen
+  ⊘ SEED-BR-23: SKIPPED — No fwc_classification_fixed_id for L2 kitchen
+  ⊘ SEED-BR-24: SKIPPED — No fwc_classification_fixed_id for L2 kitchen
+  ⊘ SEED-BR-25: SKIPPED — No fwc_classification_fixed_id for L3 kitchen
+  ⊘ SEED-BR-26: SKIPPED — No fwc_classification_fixed_id for L3 kitchen
+  ⊘ SEED-BR-27: SKIPPED — No fwc_classification_fixed_id for L4 kitchen
+  ⊘ SEED-BR-28: SKIPPED — No fwc_classification_fixed_id for L4 kitchen
+  ⊘ SEED-BR-29: SKIPPED — No fwc_classification_fixed_id for L5 kitchen
+  ⊘ SEED-BR-30: SKIPPED — No fwc_classification_fixed_id for L5 kitchen
+  ⊘ SEED-BR-31: SKIPPED — No fwc_classification_fixed_id for L6 kitchen
+  ⊘ SEED-BR-32: SKIPPED — No fwc_classification_fixed_id for L6 kitchen
+  ⊘ SEED-AL-02: SKIPPED — special_clothing has no fixed amount
+  ~ SEED-AL-01: PARTIAL — meal allowance ($16.73) — no exact match in API response
+  ~ SEED-AL-03: PARTIAL — split_shift allowance ($5.34) — no exact match in API response
+  ~ SEED-AL-04: PARTIAL — tool allowance ($2.03) — no exact match in API response
+
+═══ BASE RATES — every classification × FT/PT ═══
+  ✓ BR-001: expected $24.95, got $24.95 [PASS] — L1 food_beverage full_time
+  ✓ BR-002: expected $24.95, got $24.95 [PASS] — L1 food_beverage part_time
+  ✓ BR-003: expected $25.85, got $25.85 [PASS] — L2 food_beverage full_time
+  ✓ BR-004: expected $25.85, got $25.85 [PASS] — L2 food_beverage part_time
+  ✓ BR-005: expected $26.70, got $26.70 [PASS] — L3 food_beverage full_time
+  ✓ BR-006: expected $26.70, got $26.70 [PASS] — L3 food_beverage part_time
+  ✓ BR-007: expected $28.12, got $28.12 [PASS] — L4 food_beverage full_time
+  ✓ BR-008: expected $28.12, got $28.12 [PASS] — L4 food_beverage part_time
+  ✓ BR-009: expected $29.88, got $29.88 [PASS] — L5 food_beverage full_time
+  ✓ BR-010: expected $29.88, got $29.88 [PASS] — L5 food_beverage part_time
+  ✓ BR-011: expected $25.85, got $25.85 [PASS] — L2 general full_time
+  ✓ BR-012: expected $25.85, got $25.85 [PASS] — L2 general part_time
+  ✓ BR-013: expected $26.70, got $26.70 [PASS] — L3 general full_time
+  ✓ BR-014: expected $26.70, got $26.70 [PASS] — L3 general part_time
+  ✓ BR-015: expected $28.12, got $28.12 [PASS] — L4 general full_time
+  ✓ BR-016: expected $28.12, got $28.12 [PASS] — L4 general part_time
+  ✓ BR-017: expected $29.88, got $29.88 [PASS] — L5 general full_time
+  ✓ BR-018: expected $29.88, got $29.88 [PASS] — L5 general part_time
+  ✓ BR-019: expected $24.28, got $24.28 [PASS] — L0 introductory full_time
+  ✓ BR-020: expected $24.28, got $24.28 [PASS] — L0 introductory part_time
+  ✓ BR-021: expected $24.95, got $24.95 [PASS] — L1 kitchen full_time
+  ✓ BR-022: expected $24.95, got $24.95 [PASS] — L1 kitchen part_time
+  ✓ BR-023: expected $25.85, got $25.85 [PASS] — L2 kitchen full_time
+  ✓ BR-024: expected $25.85, got $25.85 [PASS] — L2 kitchen part_time
+  ✓ BR-025: expected $26.70, got $26.70 [PASS] — L3 kitchen full_time
+  ✓ BR-026: expected $26.70, got $26.70 [PASS] — L3 kitchen part_time
+  ✓ BR-027: expected $28.12, got $28.12 [PASS] — L4 kitchen full_time
+  ✓ BR-028: expected $28.12, got $28.12 [PASS] — L4 kitchen part_time
+  ✓ BR-029: expected $29.88, got $29.88 [PASS] — L5 kitchen full_time
+  ✓ BR-030: expected $29.88, got $29.88 [PASS] — L5 kitchen part_time
+  ✓ BR-031: expected $30.68, got $30.68 [PASS] — L6 kitchen full_time
+  ✓ BR-032: expected $30.68, got $30.68 [PASS] — L6 kitchen part_time
+
+═══ CASUAL RATES — every classification, verify = FT × 1.25 ═══
+  ✓ CL-001: expected $31.19, got $31.19 [PASS] — L1 food_beverage casual (FT $24.95 × 1.25)
+  ✓ CL-002: expected $32.31, got $32.31 [PASS] — L2 food_beverage casual (FT $25.85 × 1.25)
+  ✓ CL-003: expected $33.38, got $33.38 [PASS] — L3 food_beverage casual (FT $26.7 × 1.25)
+  ✓ CL-004: expected $35.15, got $35.15 [PASS] — L4 food_beverage casual (FT $28.12 × 1.25)
+  ✓ CL-005: expected $37.35, got $37.35 [PASS] — L5 food_beverage casual (FT $29.88 × 1.25)
+  ✓ CL-006: expected $32.31, got $32.31 [PASS] — L2 general casual (FT $25.85 × 1.25)
+  ✓ CL-007: expected $33.38, got $33.38 [PASS] — L3 general casual (FT $26.7 × 1.25)
+  ✓ CL-008: expected $35.15, got $35.15 [PASS] — L4 general casual (FT $28.12 × 1.25)
+  ✓ CL-009: expected $37.35, got $37.35 [PASS] — L5 general casual (FT $29.88 × 1.25)
+  ✓ CL-010: expected $30.35, got $30.35 [PASS] — L0 introductory casual (FT $24.28 × 1.25)
+  ✓ CL-011: expected $31.19, got $31.19 [PASS] — L1 kitchen casual (FT $24.95 × 1.25)
+  ✓ CL-012: expected $32.31, got $32.31 [PASS] — L2 kitchen casual (FT $25.85 × 1.25)
+  ✓ CL-013: expected $33.38, got $33.38 [PASS] — L3 kitchen casual (FT $26.7 × 1.25)
+  ✓ CL-014: expected $35.15, got $35.15 [PASS] — L4 kitchen casual (FT $28.12 × 1.25)
+  ✓ CL-015: expected $37.35, got $37.35 [PASS] — L5 kitchen casual (FT $29.88 × 1.25)
+  ✓ CL-016: expected $38.35, got $38.35 [PASS] — L6 kitchen casual (FT $30.68 × 1.25)
+
+═══ PENALTY RATES — every classification × employment_type × day_type ═══
+  ✓ PR-001: expected $124.75, got $124.75 [PASS] — L1 food_beverage full_time saturday ×1.25
+  ✓ PR-002: expected $149.70, got $149.70 [PASS] — L1 food_beverage full_time sunday ×1.5
+  ✓ PR-003: expected $224.55, got $224.55 [PASS] — L1 food_beverage full_time public_holiday ×2.25
+  ✓ PR-004: expected $124.75, got $124.75 [PASS] — L1 food_beverage part_time saturday ×1.25
+  ✓ PR-005: expected $149.70, got $149.70 [PASS] — L1 food_beverage part_time sunday ×1.5
+  ✓ PR-006: expected $224.55, got $224.55 [PASS] — L1 food_beverage part_time public_holiday ×2.25
+  ✓ PR-007: expected $149.70, got $149.70 [PASS] — L1 food_beverage casual saturday ×1.2
+  ✓ PR-008: expected $149.70, got $149.70 [PASS] — L1 food_beverage casual sunday ×1.2
+  ✓ PR-009: expected $249.50, got $249.50 [PASS] — L1 food_beverage casual public_holiday ×2
+  ✓ PR-010: expected $133.50, got $133.50 [PASS] — L3 food_beverage full_time saturday ×1.25
+  ✓ PR-011: expected $160.20, got $160.20 [PASS] — L3 food_beverage full_time sunday ×1.5
+  ✓ PR-012: expected $240.30, got $240.30 [PASS] — L3 food_beverage full_time public_holiday ×2.25
+  ✓ PR-013: expected $133.50, got $133.50 [PASS] — L3 food_beverage part_time saturday ×1.25
+  ✓ PR-014: expected $160.20, got $160.20 [PASS] — L3 food_beverage part_time sunday ×1.5
+  ✓ PR-015: expected $240.30, got $240.30 [PASS] — L3 food_beverage part_time public_holiday ×2.25
+  ✓ PR-016: expected $160.20, got $160.20 [PASS] — L3 food_beverage casual saturday ×1.2
+  ✓ PR-017: expected $186.90, got $186.90 [PASS] — L3 food_beverage casual sunday ×1.4
+  ✓ PR-018: expected $267.00, got $267.00 [PASS] — L3 food_beverage casual public_holiday ×2
+  ✓ PR-019: expected $149.40, got $149.40 [PASS] — L5 food_beverage full_time saturday ×1.25
+  ✓ PR-020: expected $179.28, got $179.28 [PASS] — L5 food_beverage full_time sunday ×1.5
+  ✓ PR-021: expected $268.92, got $268.92 [PASS] — L5 food_beverage full_time public_holiday ×2.25
+  ✓ PR-022: expected $149.40, got $149.40 [PASS] — L5 food_beverage part_time saturday ×1.25
+  ✓ PR-023: expected $179.28, got $179.28 [PASS] — L5 food_beverage part_time sunday ×1.5
+  ✓ PR-024: expected $268.92, got $268.92 [PASS] — L5 food_beverage part_time public_holiday ×2.25
+  ✓ PR-025: expected $179.28, got $179.28 [PASS] — L5 food_beverage casual saturday ×1.2
+  ✓ PR-026: expected $209.16, got $209.16 [PASS] — L5 food_beverage casual sunday ×1.4
+  ✓ PR-027: expected $298.80, got $298.80 [PASS] — L5 food_beverage casual public_holiday ×2
+  ✓ PR-028: expected $129.25, got $129.25 [PASS] — L2 general full_time saturday ×1.25
+  ✓ PR-029: expected $155.10, got $155.10 [PASS] — L2 general full_time sunday ×1.5
+  ✓ PR-030: expected $232.65, got $232.65 [PASS] — L2 general full_time public_holiday ×2.25
+  ✓ PR-031: expected $129.25, got $129.25 [PASS] — L2 general part_time saturday ×1.25
+  ✓ PR-032: expected $155.10, got $155.10 [PASS] — L2 general part_time sunday ×1.5
+  ✓ PR-033: expected $232.65, got $232.65 [PASS] — L2 general part_time public_holiday ×2.25
+  ✓ PR-034: expected $155.10, got $155.10 [PASS] — L2 general casual saturday ×1.2
+  ✓ PR-035: expected $155.10, got $155.10 [PASS] — L2 general casual sunday ×1.2
+  ✓ PR-036: expected $258.50, got $258.50 [PASS] — L2 general casual public_holiday ×2
+  ✓ PR-037: expected $140.60, got $140.60 [PASS] — L4 general full_time saturday ×1.25
+  ✓ PR-038: expected $168.72, got $168.72 [PASS] — L4 general full_time sunday ×1.5
+  ✓ PR-039: expected $253.08, got $253.08 [PASS] — L4 general full_time public_holiday ×2.25
+  ✓ PR-040: expected $140.60, got $140.60 [PASS] — L4 general part_time saturday ×1.25
+  ✓ PR-041: expected $168.72, got $168.72 [PASS] — L4 general part_time sunday ×1.5
+  ✓ PR-042: expected $253.08, got $253.08 [PASS] — L4 general part_time public_holiday ×2.25
+  ✓ PR-043: expected $168.72, got $168.72 [PASS] — L4 general casual saturday ×1.2
+  ✓ PR-044: expected $196.84, got $196.84 [PASS] — L4 general casual sunday ×1.4
+  ✓ PR-045: expected $281.20, got $281.20 [PASS] — L4 general casual public_holiday ×2
+  ✓ PR-046: expected $149.40, got $149.40 [PASS] — L5 general full_time saturday ×1.25
+  ✓ PR-047: expected $179.28, got $179.28 [PASS] — L5 general full_time sunday ×1.5
+  ✓ PR-048: expected $268.92, got $268.92 [PASS] — L5 general full_time public_holiday ×2.25
+  ✓ PR-049: expected $149.40, got $149.40 [PASS] — L5 general part_time saturday ×1.25
+  ✓ PR-050: expected $179.28, got $179.28 [PASS] — L5 general part_time sunday ×1.5
+  ✓ PR-051: expected $268.92, got $268.92 [PASS] — L5 general part_time public_holiday ×2.25
+  ✓ PR-052: expected $179.28, got $179.28 [PASS] — L5 general casual saturday ×1.2
+  ✓ PR-053: expected $209.16, got $209.16 [PASS] — L5 general casual sunday ×1.4
+  ✓ PR-054: expected $298.80, got $298.80 [PASS] — L5 general casual public_holiday ×2
+  ✓ PR-055: expected $121.40, got $121.40 [PASS] — L0 introductory full_time saturday ×1.25
+  ✓ PR-056: expected $145.68, got $145.68 [PASS] — L0 introductory full_time sunday ×1.5
+  ✓ PR-057: expected $218.52, got $218.52 [PASS] — L0 introductory full_time public_holiday ×2.25
+  ✓ PR-058: expected $121.40, got $121.40 [PASS] — L0 introductory part_time saturday ×1.25
+  ✓ PR-059: expected $145.68, got $145.68 [PASS] — L0 introductory part_time sunday ×1.5
+  ✓ PR-060: expected $218.52, got $218.52 [PASS] — L0 introductory part_time public_holiday ×2.25
+  ✓ PR-061: expected $145.68, got $145.68 [PASS] — L0 introductory casual saturday ×1.2
+  ✓ PR-062: expected $145.68, got $145.68 [PASS] — L0 introductory casual sunday ×1.2
+  ✓ PR-063: expected $242.80, got $242.80 [PASS] — L0 introductory casual public_holiday ×2
+  ✓ PR-064: expected $124.75, got $124.75 [PASS] — L1 kitchen full_time saturday ×1.25
+  ✓ PR-065: expected $149.70, got $149.70 [PASS] — L1 kitchen full_time sunday ×1.5
+  ✓ PR-066: expected $224.55, got $224.55 [PASS] — L1 kitchen full_time public_holiday ×2.25
+  ✓ PR-067: expected $124.75, got $124.75 [PASS] — L1 kitchen part_time saturday ×1.25
+  ✓ PR-068: expected $149.70, got $149.70 [PASS] — L1 kitchen part_time sunday ×1.5
+  ✓ PR-069: expected $224.55, got $224.55 [PASS] — L1 kitchen part_time public_holiday ×2.25
+  ✓ PR-070: expected $149.70, got $149.70 [PASS] — L1 kitchen casual saturday ×1.2
+  ✓ PR-071: expected $149.70, got $149.70 [PASS] — L1 kitchen casual sunday ×1.2
+  ✓ PR-072: expected $249.50, got $249.50 [PASS] — L1 kitchen casual public_holiday ×2
+  ✓ PR-073: expected $140.60, got $140.60 [PASS] — L4 kitchen full_time saturday ×1.25
+  ✓ PR-074: expected $168.72, got $168.72 [PASS] — L4 kitchen full_time sunday ×1.5
+  ✓ PR-075: expected $253.08, got $253.08 [PASS] — L4 kitchen full_time public_holiday ×2.25
+  ✓ PR-076: expected $140.60, got $140.60 [PASS] — L4 kitchen part_time saturday ×1.25
+  ✓ PR-077: expected $168.72, got $168.72 [PASS] — L4 kitchen part_time sunday ×1.5
+  ✓ PR-078: expected $253.08, got $253.08 [PASS] — L4 kitchen part_time public_holiday ×2.25
+  ✓ PR-079: expected $168.72, got $168.72 [PASS] — L4 kitchen casual saturday ×1.2
+  ✓ PR-080: expected $196.84, got $196.84 [PASS] — L4 kitchen casual sunday ×1.4
+  ✓ PR-081: expected $281.20, got $281.20 [PASS] — L4 kitchen casual public_holiday ×2
+  ✓ PR-082: expected $153.40, got $153.40 [PASS] — L6 kitchen full_time saturday ×1.25
+  ✓ PR-083: expected $184.08, got $184.08 [PASS] — L6 kitchen full_time sunday ×1.5
+  ✓ PR-084: expected $276.12, got $276.12 [PASS] — L6 kitchen full_time public_holiday ×2.25
+  ✓ PR-085: expected $153.40, got $153.40 [PASS] — L6 kitchen part_time saturday ×1.25
+  ✓ PR-086: expected $184.08, got $184.08 [PASS] — L6 kitchen part_time sunday ×1.5
+  ✓ PR-087: expected $276.12, got $276.12 [PASS] — L6 kitchen part_time public_holiday ×2.25
+  ✓ PR-088: expected $184.08, got $184.08 [PASS] — L6 kitchen casual saturday ×1.2
+  ✓ PR-089: expected $214.76, got $214.76 [PASS] — L6 kitchen casual sunday ×1.4
+  ✓ PR-090: expected $306.80, got $306.80 [PASS] — L6 kitchen casual public_holiday ×2
+
+  Time-band penalty rates (all classifications × employment types):
+  ✓ TB-091: expected $55.52, got $55.52 [PASS] — L1 food_beverage full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-092: expected $57.32, got $57.32 [PASS] — L2 food_beverage full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-093: expected $59.02, got $59.02 [PASS] — L3 food_beverage full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-094: expected $61.86, got $61.86 [PASS] — L4 food_beverage full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-095: expected $65.38, got $65.38 [PASS] — L5 food_beverage full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-096: expected $57.32, got $57.32 [PASS] — L2 general full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-097: expected $59.02, got $59.02 [PASS] — L3 general full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-098: expected $61.86, got $61.86 [PASS] — L4 general full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-099: expected $65.38, got $65.38 [PASS] — L5 general full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-100: expected $54.18, got $54.18 [PASS] — L0 introductory full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-101: expected $55.52, got $55.52 [PASS] — L1 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-102: expected $57.32, got $57.32 [PASS] — L2 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-103: expected $59.02, got $59.02 [PASS] — L3 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-104: expected $61.86, got $61.86 [PASS] — L4 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-105: expected $65.38, got $65.38 [PASS] — L5 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-106: expected $66.98, got $66.98 [PASS] — L6 kitchen full_time weekday 22:00:00-00:00:00 ×1+$2.81/hr
+  ✓ TB-107: expected $58.34, got $58.34 [PASS] — L1 food_beverage full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-108: expected $60.14, got $60.14 [PASS] — L2 food_beverage full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-109: expected $61.84, got $61.84 [PASS] — L3 food_beverage full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-110: expected $64.68, got $64.68 [PASS] — L4 food_beverage full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-111: expected $68.20, got $68.20 [PASS] — L5 food_beverage full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-112: expected $60.14, got $60.14 [PASS] — L2 general full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-113: expected $61.84, got $61.84 [PASS] — L3 general full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-114: expected $64.68, got $64.68 [PASS] — L4 general full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-115: expected $68.20, got $68.20 [PASS] — L5 general full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-116: expected $57.00, got $57.00 [PASS] — L0 introductory full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-117: expected $58.34, got $58.34 [PASS] — L1 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-118: expected $60.14, got $60.14 [PASS] — L2 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-119: expected $61.84, got $61.84 [PASS] — L3 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-120: expected $64.68, got $64.68 [PASS] — L4 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-121: expected $68.20, got $68.20 [PASS] — L5 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+  ✓ TB-122: expected $69.80, got $69.80 [PASS] — L6 kitchen full_time weekday 00:00:00-06:00:00 ×1+$4.22/hr
+
+═══ OVERTIME — daily and weekly thresholds ═══
+  ✓ OT-001: PASS — L1 food_beverage full_time exactly 11hr — verify no OT triggered
+  ✓ OT-002: PASS — L1 food_beverage full_time 12hr (1hr OT ×1.5)
+  ✓ OT-003: PASS — L1 food_beverage full_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-004: PASS — L1 food_beverage part_time exactly 11hr — verify no OT triggered
+  ✓ OT-005: PASS — L1 food_beverage part_time 12hr (1hr OT ×1.5)
+  ✓ OT-006: PASS — L1 food_beverage part_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-007: PASS — L1 food_beverage casual exactly 11hr — verify no OT triggered
+  ✓ OT-008: PASS — L1 food_beverage casual 12hr (1hr OT ×1.5)
+  ✓ OT-009: PASS — L1 food_beverage casual 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-010: PASS — L2 general full_time exactly 11hr — verify no OT triggered
+  ✓ OT-011: PASS — L2 general full_time 12hr (1hr OT ×1.5)
+  ✓ OT-012: PASS — L2 general full_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-013: PASS — L2 general part_time exactly 11hr — verify no OT triggered
+  ✓ OT-014: PASS — L2 general part_time 12hr (1hr OT ×1.5)
+  ✓ OT-015: PASS — L2 general part_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-016: PASS — L2 general casual exactly 11hr — verify no OT triggered
+  ✓ OT-017: PASS — L2 general casual 12hr (1hr OT ×1.5)
+  ✓ OT-018: PASS — L2 general casual 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-019: PASS — L0 introductory full_time exactly 11hr — verify no OT triggered
+  ✓ OT-020: PASS — L0 introductory full_time 12hr (1hr OT ×1.5)
+  ✓ OT-021: PASS — L0 introductory full_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-022: PASS — L0 introductory part_time exactly 11hr — verify no OT triggered
+  ✓ OT-023: PASS — L0 introductory part_time 12hr (1hr OT ×1.5)
+  ✓ OT-024: PASS — L0 introductory part_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-025: PASS — L0 introductory casual exactly 11hr — verify no OT triggered
+  ✓ OT-026: PASS — L0 introductory casual 12hr (1hr OT ×1.5)
+  ✓ OT-027: PASS — L0 introductory casual 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-028: PASS — L1 kitchen full_time exactly 11hr — verify no OT triggered
+  ✓ OT-029: PASS — L1 kitchen full_time 12hr (1hr OT ×1.5)
+  ✓ OT-030: PASS — L1 kitchen full_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-031: PASS — L1 kitchen part_time exactly 11hr — verify no OT triggered
+  ✓ OT-032: PASS — L1 kitchen part_time 12hr (1hr OT ×1.5)
+  ✓ OT-033: PASS — L1 kitchen part_time 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-034: PASS — L1 kitchen casual exactly 11hr — verify no OT triggered
+  ✓ OT-035: PASS — L1 kitchen casual 12hr (1hr OT ×1.5)
+  ✓ OT-036: PASS — L1 kitchen casual 15hr (tier1 3hr + tier2 1hr = 240min OT)
+  ✓ OT-037: PASS — L1 food_beverage FT 43.0hr week — OT mins: 300
+  ✓ OT-038: PASS — L2 general FT 43.0hr week — OT mins: 300
+  ✓ OT-039: PASS — L0 introductory FT 43.0hr week — OT mins: 300
+  ✓ OT-040: PASS — L1 kitchen FT 43.0hr week — OT mins: 300
+
+═══ MINIMUM ENGAGEMENT — shift below minimum (one classification per stream) ═══
+  ✓ ME-001: expected $62.38, got $62.38 [PASS] — L1 food_beverage casual 1hr shift → paid for 2hr minimum
+  ✓ ME-002: expected $74.85, got $74.85 [PASS] — L1 food_beverage casual 1hr Sat → paid for 2hr minimum at ×1.2
+  ✓ ME-003: expected $49.90, got $49.90 [PASS] — L1 food_beverage part_time 1hr shift → paid for 2hr minimum
+  ✓ ME-004: expected $62.38, got $62.38 [PASS] — L1 food_beverage part_time 1hr Sat → paid for 2hr minimum at ×1.25
+  ✓ ME-005: expected $64.63, got $64.63 [PASS] — L2 general casual 1hr shift → paid for 2hr minimum
+  ✓ ME-006: expected $77.55, got $77.55 [PASS] — L2 general casual 1hr Sat → paid for 2hr minimum at ×1.2
+  ✓ ME-007: expected $51.70, got $51.70 [PASS] — L2 general part_time 1hr shift → paid for 2hr minimum
+  ✓ ME-008: expected $64.63, got $64.63 [PASS] — L2 general part_time 1hr Sat → paid for 2hr minimum at ×1.25
+  ✓ ME-009: expected $60.70, got $60.70 [PASS] — L0 introductory casual 1hr shift → paid for 2hr minimum
+  ✓ ME-010: expected $72.84, got $72.84 [PASS] — L0 introductory casual 1hr Sat → paid for 2hr minimum at ×1.2
+  ✓ ME-011: expected $48.56, got $48.56 [PASS] — L0 introductory part_time 1hr shift → paid for 2hr minimum
+  ✓ ME-012: expected $60.70, got $60.70 [PASS] — L0 introductory part_time 1hr Sat → paid for 2hr minimum at ×1.25
+  ✓ ME-013: expected $62.38, got $62.38 [PASS] — L1 kitchen casual 1hr shift → paid for 2hr minimum
+  ✓ ME-014: expected $74.85, got $74.85 [PASS] — L1 kitchen casual 1hr Sat → paid for 2hr minimum at ×1.2
+  ✓ ME-015: expected $49.90, got $49.90 [PASS] — L1 kitchen part_time 1hr shift → paid for 2hr minimum
+  ✓ ME-016: expected $62.38, got $62.38 [PASS] — L1 kitchen part_time 1hr Sat → paid for 2hr minimum at ×1.25
+
+═══ ALLOWANCES — every allowance amount verified ═══
+  ✓ AL-001: expected $16.73, got $16.73 [PASS] — Meal allowance (overtime): $16.73 per_meal (all_purpose=false)
+  ⊘ AL-002: SKIPPED — special_clothing has no fixed amount
+  ✓ AL-003: expected $5.34, got $5.34 [PASS] — Split shift allowance: $5.34 per_split_shift (all_purpose=false)
+  ✓ AL-004: expected $2.03, got $2.03 [PASS] — Tool allowance: $2.03 per_day (all_purpose=false)
+
+═══ SUPERANNUATION — 12% SGC on OTE for every pay category ═══
+
+  Positive tests — pay items that SHOULD attract super:
+  ✓ SU-001: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L1 food_beverage)
+  ✓ SU-002: expected $11.98, got $11.98 [PASS] — Super on 4hr ordinary FT L1 food_beverage
+  ✓ SU-003: expected $14.97, got $14.97 [PASS] — Super on Sat penalty FT L1 food_beverage (×1.25)
+  ✓ SU-004: expected $17.96, got $17.96 [PASS] — Super on Sun penalty FT L1 food_beverage (×1.5)
+  ✓ SU-005: expected $26.95, got $26.95 [PASS] — Super on PH FT L1 food_beverage (×2.25)
+  ✓ SU-006: expected $14.97, got $14.97 [PASS] — Super on casual L1 food_beverage weekday
+  ✗ SU-007: expected $13.32, got $13.66 [FAIL] — Super on shift loading (22:00 band) FT L1 food_beverage
+  ✓ SU-008: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L2 general)
+  ✓ SU-009: expected $12.41, got $12.41 [PASS] — Super on 4hr ordinary FT L2 general
+  ✓ SU-010: expected $15.51, got $15.51 [PASS] — Super on Sat penalty FT L2 general (×1.25)
+  ✓ SU-011: expected $18.61, got $18.61 [PASS] — Super on Sun penalty FT L2 general (×1.5)
+  ✓ SU-012: expected $27.92, got $27.92 [PASS] — Super on PH FT L2 general (×2.25)
+  ✓ SU-013: expected $15.51, got $15.51 [PASS] — Super on casual L2 general weekday
+  ✗ SU-014: expected $13.76, got $14.10 [FAIL] — Super on shift loading (22:00 band) FT L2 general
+  ✓ SU-015: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L0 introductory)
+  ✓ SU-016: expected $11.65, got $11.65 [PASS] — Super on 4hr ordinary FT L0 introductory
+  ✓ SU-017: expected $14.57, got $14.57 [PASS] — Super on Sat penalty FT L0 introductory (×1.25)
+  ✓ SU-018: expected $17.48, got $17.48 [PASS] — Super on Sun penalty FT L0 introductory (×1.5)
+  ✓ SU-019: expected $26.22, got $26.22 [PASS] — Super on PH FT L0 introductory (×2.25)
+  ✓ SU-020: expected $14.57, got $14.57 [PASS] — Super on casual L0 introductory weekday
+  ✗ SU-021: expected $13.00, got $13.34 [FAIL] — Super on shift loading (22:00 band) FT L0 introductory
+  ✓ SU-022: expected $0.12, got $0.12 [PASS] — SGC rate = 12% (L1 kitchen)
+  ✓ SU-023: expected $11.98, got $11.98 [PASS] — Super on 4hr ordinary FT L1 kitchen
+  ✓ SU-024: expected $14.97, got $14.97 [PASS] — Super on Sat penalty FT L1 kitchen (×1.25)
+  ✓ SU-025: expected $17.96, got $17.96 [PASS] — Super on Sun penalty FT L1 kitchen (×1.5)
+  ✓ SU-026: expected $26.95, got $26.95 [PASS] — Super on PH FT L1 kitchen (×2.25)
+  ✓ SU-027: expected $14.97, got $14.97 [PASS] — Super on casual L1 kitchen weekday
+  ✗ SU-028: expected $13.32, got $13.66 [FAIL] — Super on shift loading (22:00 band) FT L1 kitchen
+
+  Negative tests — pay items that should NOT attract super:
+  ✓ SU-029: expected $32.93, got $32.93 [PASS] — Super excludes OT: 13hr shift, OTE=11hr×$24.95=$274.45, super=$32.93
+  ✗ SU-030: FAIL — superEligiblePay ($274.45) = totalPay ($366.02) - OT ($74.84)
+  ✓ SU-031: expected $14.97, got $14.97 [PASS] — Super excludes missed break pay ($49.9): OTE=$124.75
+  ✓ SU-032: PASS — Meal allowance ($16.73) excluded from super: super=$34.11 < totalPay×12%=$49.59
+
+  Breakdown audit — verify superApplies flag on every pay category:
+  ✓ SU-033: PASS — Breakdown audit: ordinary weekday — 1 rows, 0 flag errors
+  ✓ SU-034: PASS — Breakdown audit: OT shift — 3 rows, OT flagged false, ordinary flagged true
+  ✓ SU-035: PASS — Breakdown audit: missed break — 2 rows, missed-break flagged false
+  ✓ SU-036: PASS — Breakdown audit: Sat penalty — all 1 rows should attract super
+  ✓ SU-037: PASS — Breakdown audit: casual Sat + OT — 2 rows
+
+═══ JUNIOR RATES — every age bracket × classification ═══
+  ✓ JR-001: expected $12.47, got $12.48 [PASS] — L1 food_beverage FT age 16 (<17)
+  ✓ JR-002: expected $15.59, got $15.59 [PASS] — L1 food_beverage casual age 16 (50% × 1.25)
+  ✓ JR-003: expected $14.97, got $14.97 [PASS] — L1 food_beverage FT age 17 (60%)
+  ✓ JR-004: expected $18.71, got $18.71 [PASS] — L1 food_beverage casual age 17 (60% × 1.25)
+  ✓ JR-005: expected $17.46, got $17.47 [PASS] — L1 food_beverage FT age 18 (70%)
+  ✓ JR-006: expected $21.83, got $21.83 [PASS] — L1 food_beverage casual age 18 (70% × 1.25)
+  ✓ JR-007: expected $21.21, got $21.21 [PASS] — L1 food_beverage FT age 19 (85%)
+  ✓ JR-008: expected $26.51, got $26.51 [PASS] — L1 food_beverage casual age 19 (85% × 1.25)
+  ✓ JR-009: expected $24.95, got $24.95 [PASS] — L1 food_beverage FT age 20 (adult)
+  ✓ JR-010: expected $12.93, got $12.93 [PASS] — L2 food_beverage FT age 16 (<17)
+  ✓ JR-011: expected $16.16, got $16.16 [PASS] — L2 food_beverage casual age 16 (50% × 1.25)
+  ✓ JR-012: expected $15.51, got $15.51 [PASS] — L2 food_beverage FT age 17 (60%)
+  ✓ JR-013: expected $19.39, got $19.39 [PASS] — L2 food_beverage casual age 17 (60% × 1.25)
+  ✓ JR-014: expected $18.09, got $18.10 [PASS] — L2 food_beverage FT age 18 (70%)
+  ✓ JR-015: expected $22.62, got $22.62 [PASS] — L2 food_beverage casual age 18 (70% × 1.25)
+  ✓ JR-016: expected $21.97, got $21.97 [PASS] — L2 food_beverage FT age 19 (85%)
+  ✓ JR-017: expected $27.47, got $27.47 [PASS] — L2 food_beverage casual age 19 (85% × 1.25)
+  ✓ JR-018: expected $25.85, got $25.85 [PASS] — L2 food_beverage FT age 20 (adult)
+  ✓ JR-019: expected $13.35, got $13.35 [PASS] — L3 food_beverage FT age 16 (<17)
+  ✓ JR-020: expected $16.69, got $16.69 [PASS] — L3 food_beverage casual age 16 (50% × 1.25)
+  ✓ JR-021: expected $16.02, got $16.02 [PASS] — L3 food_beverage FT age 17 (60%)
+  ✓ JR-022: expected $20.02, got $20.02 [PASS] — L3 food_beverage casual age 17 (60% × 1.25)
+  ✓ JR-023: expected $18.69, got $18.69 [PASS] — L3 food_beverage FT age 18 (70%)
+  ✓ JR-024: expected $23.36, got $23.36 [PASS] — L3 food_beverage casual age 18 (70% × 1.25)
+  ✓ JR-025: expected $22.70, got $22.70 [PASS] — L3 food_beverage FT age 19 (85%)
+  ✓ JR-026: expected $28.37, got $28.37 [PASS] — L3 food_beverage casual age 19 (85% × 1.25)
+  ✓ JR-027: expected $26.70, got $26.70 [PASS] — L3 food_beverage FT age 20 (adult)
+  ✓ JR-028: expected $14.06, got $14.06 [PASS] — L4 food_beverage FT age 16 (<17)
+  ✓ JR-029: expected $17.57, got $17.58 [PASS] — L4 food_beverage casual age 16 (50% × 1.25)
+  ✓ JR-030: expected $16.87, got $16.87 [PASS] — L4 food_beverage FT age 17 (60%)
+  ✓ JR-031: expected $21.09, got $21.09 [PASS] — L4 food_beverage casual age 17 (60% × 1.25)
+  ✓ JR-032: expected $19.68, got $19.68 [PASS] — L4 food_beverage FT age 18 (70%)
+  ✓ JR-033: expected $24.61, got $24.61 [PASS] — L4 food_beverage casual age 18 (70% × 1.25)
+  ✓ JR-034: expected $23.90, got $23.90 [PASS] — L4 food_beverage FT age 19 (85%)
+  ✓ JR-035: expected $29.88, got $29.88 [PASS] — L4 food_beverage casual age 19 (85% × 1.25)
+  ✓ JR-036: expected $28.12, got $28.12 [PASS] — L4 food_beverage FT age 20 (adult)
+  ✓ JR-037: expected $14.94, got $14.94 [PASS] — L5 food_beverage FT age 16 (<17)
+  ✓ JR-038: expected $18.68, got $18.68 [PASS] — L5 food_beverage casual age 16 (50% × 1.25)
+  ✓ JR-039: expected $17.93, got $17.93 [PASS] — L5 food_beverage FT age 17 (60%)
+  ✓ JR-040: expected $22.41, got $22.41 [PASS] — L5 food_beverage casual age 17 (60% × 1.25)
+  ✓ JR-041: expected $20.92, got $20.92 [PASS] — L5 food_beverage FT age 18 (70%)
+  ✓ JR-042: expected $26.14, got $26.15 [PASS] — L5 food_beverage casual age 18 (70% × 1.25)
+  ✓ JR-043: expected $25.40, got $25.40 [PASS] — L5 food_beverage FT age 19 (85%)
+  ✓ JR-044: expected $31.75, got $31.75 [PASS] — L5 food_beverage casual age 19 (85% × 1.25)
+  ✓ JR-045: expected $29.88, got $29.88 [PASS] — L5 food_beverage FT age 20 (adult)
+  ✓ JR-046: expected $12.93, got $12.93 [PASS] — L2 general FT age 16 (<17)
+  ✓ JR-047: expected $16.16, got $16.16 [PASS] — L2 general casual age 16 (50% × 1.25)
+  ✓ JR-048: expected $15.51, got $15.51 [PASS] — L2 general FT age 17 (60%)
+  ✓ JR-049: expected $19.39, got $19.39 [PASS] — L2 general casual age 17 (60% × 1.25)
+  ✓ JR-050: expected $18.09, got $18.10 [PASS] — L2 general FT age 18 (70%)
+  ✓ JR-051: expected $22.62, got $22.62 [PASS] — L2 general casual age 18 (70% × 1.25)
+  ✓ JR-052: expected $21.97, got $21.97 [PASS] — L2 general FT age 19 (85%)
+  ✓ JR-053: expected $27.47, got $27.47 [PASS] — L2 general casual age 19 (85% × 1.25)
+  ✓ JR-054: expected $25.85, got $25.85 [PASS] — L2 general FT age 20 (adult)
+  ✓ JR-055: expected $13.35, got $13.35 [PASS] — L3 general FT age 16 (<17)
+  ✓ JR-056: expected $16.69, got $16.69 [PASS] — L3 general casual age 16 (50% × 1.25)
+  ✓ JR-057: expected $16.02, got $16.02 [PASS] — L3 general FT age 17 (60%)
+  ✓ JR-058: expected $20.02, got $20.02 [PASS] — L3 general casual age 17 (60% × 1.25)
+  ✓ JR-059: expected $18.69, got $18.69 [PASS] — L3 general FT age 18 (70%)
+  ✓ JR-060: expected $23.36, got $23.36 [PASS] — L3 general casual age 18 (70% × 1.25)
+  ✓ JR-061: expected $22.70, got $22.70 [PASS] — L3 general FT age 19 (85%)
+  ✓ JR-062: expected $28.37, got $28.37 [PASS] — L3 general casual age 19 (85% × 1.25)
+  ✓ JR-063: expected $26.70, got $26.70 [PASS] — L3 general FT age 20 (adult)
+  ✓ JR-064: expected $14.06, got $14.06 [PASS] — L4 general FT age 16 (<17)
+  ✓ JR-065: expected $17.57, got $17.58 [PASS] — L4 general casual age 16 (50% × 1.25)
+  ✓ JR-066: expected $16.87, got $16.87 [PASS] — L4 general FT age 17 (60%)
+  ✓ JR-067: expected $21.09, got $21.09 [PASS] — L4 general casual age 17 (60% × 1.25)
+  ✓ JR-068: expected $19.68, got $19.68 [PASS] — L4 general FT age 18 (70%)
+  ✓ JR-069: expected $24.61, got $24.61 [PASS] — L4 general casual age 18 (70% × 1.25)
+  ✓ JR-070: expected $23.90, got $23.90 [PASS] — L4 general FT age 19 (85%)
+  ✓ JR-071: expected $29.88, got $29.88 [PASS] — L4 general casual age 19 (85% × 1.25)
+  ✓ JR-072: expected $28.12, got $28.12 [PASS] — L4 general FT age 20 (adult)
+  ✓ JR-073: expected $14.94, got $14.94 [PASS] — L5 general FT age 16 (<17)
+  ✓ JR-074: expected $18.68, got $18.68 [PASS] — L5 general casual age 16 (50% × 1.25)
+  ✓ JR-075: expected $17.93, got $17.93 [PASS] — L5 general FT age 17 (60%)
+  ✓ JR-076: expected $22.41, got $22.41 [PASS] — L5 general casual age 17 (60% × 1.25)
+  ✓ JR-077: expected $20.92, got $20.92 [PASS] — L5 general FT age 18 (70%)
+  ✓ JR-078: expected $26.14, got $26.15 [PASS] — L5 general casual age 18 (70% × 1.25)
+  ✓ JR-079: expected $25.40, got $25.40 [PASS] — L5 general FT age 19 (85%)
+  ✓ JR-080: expected $31.75, got $31.75 [PASS] — L5 general casual age 19 (85% × 1.25)
+  ✓ JR-081: expected $29.88, got $29.88 [PASS] — L5 general FT age 20 (adult)
+  ✓ JR-082: expected $12.14, got $12.14 [PASS] — L0 introductory FT age 16 (<17)
+  ✓ JR-083: expected $15.18, got $15.18 [PASS] — L0 introductory casual age 16 (50% × 1.25)
+  ✓ JR-084: expected $14.57, got $14.57 [PASS] — L0 introductory FT age 17 (60%)
+  ✓ JR-085: expected $18.21, got $18.21 [PASS] — L0 introductory casual age 17 (60% × 1.25)
+  ✓ JR-086: expected $17.00, got $17.00 [PASS] — L0 introductory FT age 18 (70%)
+  ✓ JR-087: expected $21.25, got $21.25 [PASS] — L0 introductory casual age 18 (70% × 1.25)
+  ✓ JR-088: expected $20.64, got $20.64 [PASS] — L0 introductory FT age 19 (85%)
+  ✓ JR-089: expected $25.80, got $25.80 [PASS] — L0 introductory casual age 19 (85% × 1.25)
+  ✓ JR-090: expected $24.28, got $24.28 [PASS] — L0 introductory FT age 20 (adult)
+  ✓ JR-091: expected $12.47, got $12.48 [PASS] — L1 kitchen FT age 16 (<17)
+  ✓ JR-092: expected $15.59, got $15.59 [PASS] — L1 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-093: expected $14.97, got $14.97 [PASS] — L1 kitchen FT age 17 (60%)
+  ✓ JR-094: expected $18.71, got $18.71 [PASS] — L1 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-095: expected $17.46, got $17.47 [PASS] — L1 kitchen FT age 18 (70%)
+  ✓ JR-096: expected $21.83, got $21.83 [PASS] — L1 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-097: expected $21.21, got $21.21 [PASS] — L1 kitchen FT age 19 (85%)
+  ✓ JR-098: expected $26.51, got $26.51 [PASS] — L1 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-099: expected $24.95, got $24.95 [PASS] — L1 kitchen FT age 20 (adult)
+  ✓ JR-100: expected $12.93, got $12.93 [PASS] — L2 kitchen FT age 16 (<17)
+  ✓ JR-101: expected $16.16, got $16.16 [PASS] — L2 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-102: expected $15.51, got $15.51 [PASS] — L2 kitchen FT age 17 (60%)
+  ✓ JR-103: expected $19.39, got $19.39 [PASS] — L2 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-104: expected $18.09, got $18.10 [PASS] — L2 kitchen FT age 18 (70%)
+  ✓ JR-105: expected $22.62, got $22.62 [PASS] — L2 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-106: expected $21.97, got $21.97 [PASS] — L2 kitchen FT age 19 (85%)
+  ✓ JR-107: expected $27.47, got $27.47 [PASS] — L2 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-108: expected $25.85, got $25.85 [PASS] — L2 kitchen FT age 20 (adult)
+  ✓ JR-109: expected $13.35, got $13.35 [PASS] — L3 kitchen FT age 16 (<17)
+  ✓ JR-110: expected $16.69, got $16.69 [PASS] — L3 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-111: expected $16.02, got $16.02 [PASS] — L3 kitchen FT age 17 (60%)
+  ✓ JR-112: expected $20.02, got $20.02 [PASS] — L3 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-113: expected $18.69, got $18.69 [PASS] — L3 kitchen FT age 18 (70%)
+  ✓ JR-114: expected $23.36, got $23.36 [PASS] — L3 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-115: expected $22.70, got $22.70 [PASS] — L3 kitchen FT age 19 (85%)
+  ✓ JR-116: expected $28.37, got $28.37 [PASS] — L3 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-117: expected $26.70, got $26.70 [PASS] — L3 kitchen FT age 20 (adult)
+  ✓ JR-118: expected $14.06, got $14.06 [PASS] — L4 kitchen FT age 16 (<17)
+  ✓ JR-119: expected $17.57, got $17.58 [PASS] — L4 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-120: expected $16.87, got $16.87 [PASS] — L4 kitchen FT age 17 (60%)
+  ✓ JR-121: expected $21.09, got $21.09 [PASS] — L4 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-122: expected $19.68, got $19.68 [PASS] — L4 kitchen FT age 18 (70%)
+  ✓ JR-123: expected $24.61, got $24.61 [PASS] — L4 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-124: expected $23.90, got $23.90 [PASS] — L4 kitchen FT age 19 (85%)
+  ✓ JR-125: expected $29.88, got $29.88 [PASS] — L4 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-126: expected $28.12, got $28.12 [PASS] — L4 kitchen FT age 20 (adult)
+  ✓ JR-127: expected $14.94, got $14.94 [PASS] — L5 kitchen FT age 16 (<17)
+  ✓ JR-128: expected $18.68, got $18.68 [PASS] — L5 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-129: expected $17.93, got $17.93 [PASS] — L5 kitchen FT age 17 (60%)
+  ✓ JR-130: expected $22.41, got $22.41 [PASS] — L5 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-131: expected $20.92, got $20.92 [PASS] — L5 kitchen FT age 18 (70%)
+  ✓ JR-132: expected $26.14, got $26.15 [PASS] — L5 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-133: expected $25.40, got $25.40 [PASS] — L5 kitchen FT age 19 (85%)
+  ✓ JR-134: expected $31.75, got $31.75 [PASS] — L5 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-135: expected $29.88, got $29.88 [PASS] — L5 kitchen FT age 20 (adult)
+  ✓ JR-136: expected $15.34, got $15.34 [PASS] — L6 kitchen FT age 16 (<17)
+  ✓ JR-137: expected $19.18, got $19.18 [PASS] — L6 kitchen casual age 16 (50% × 1.25)
+  ✓ JR-138: expected $18.41, got $18.41 [PASS] — L6 kitchen FT age 17 (60%)
+  ✓ JR-139: expected $23.01, got $23.01 [PASS] — L6 kitchen casual age 17 (60% × 1.25)
+  ✓ JR-140: expected $21.48, got $21.48 [PASS] — L6 kitchen FT age 18 (70%)
+  ✓ JR-141: expected $26.84, got $26.85 [PASS] — L6 kitchen casual age 18 (70% × 1.25)
+  ✓ JR-142: expected $26.08, got $26.08 [PASS] — L6 kitchen FT age 19 (85%)
+  ✓ JR-143: expected $32.60, got $32.60 [PASS] — L6 kitchen casual age 19 (85% × 1.25)
+  ✓ JR-144: expected $30.68, got $30.68 [PASS] — L6 kitchen FT age 20 (adult)
+
+═══ MISSED BREAK — shift > 5hr without meal break ═══
+  ✓ MB-001: expected $174.65, got $174.65 [PASS] — L1 food_beverage FT 6hr no break (5hr ord + 1hr ×2.0)
+  ✓ MB-002: expected $124.75, got $124.75 [PASS] — L1 food_beverage FT 5hr no break (exactly at threshold, no penalty)
+  ✓ MB-003: expected $305.64, got $305.64 [PASS] — L1 food_beverage FT 8hr Sat no break (5hr ×1.25 + 3hr ×2)
+
+═══ COMPLEX SCENARIOS — multi-shift, penalty + OT combos ═══
+  ✓ CS-001: PASS — L1 food_beverage FT Mon-Fri 38hr week (pay=$948.1)
+  ✓ CS-002: PASS — L1 food_beverage FT 4×weekday + Sat (pay=$995.5)
+  ✓ CS-003: expected $249.50, got $249.50 [PASS] — L1 food_beverage casual PH 4hr (×2 of casual base)
+  ~ CS-004: expected $417.91, got $417.90 [PARTIAL] — L1 food_beverage FT Sat 13hr (OT + penalty, higher-of)
+  ✓ CS-005: expected $486.53, got $486.53 [PASS] — L1 food_beverage FT Sun 13hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-006: PASS — L2 general FT Mon-Fri 38hr week (pay=$982.3)
+  ✓ CS-007: PASS — L2 general FT 4×weekday + Sat (pay=$1031.42)
+  ✓ CS-008: expected $258.50, got $258.50 [PASS] — L2 general casual PH 4hr (×2 of casual base)
+  ~ CS-009: expected $432.99, got $433.00 [PARTIAL] — L2 general FT Sat 13hr (OT + penalty, higher-of)
+  ✓ CS-010: expected $504.08, got $504.08 [PASS] — L2 general FT Sun 13hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-011: PASS — L0 introductory FT Mon-Fri 38hr week (pay=$922.65)
+  ✓ CS-012: PASS — L0 introductory FT 4×weekday + Sat (pay=$968.78)
+  ✓ CS-013: expected $242.80, got $242.80 [PASS] — L0 introductory casual PH 4hr (×2 of casual base)
+  ✓ CS-014: expected $406.69, got $406.69 [PASS] — L0 introductory FT Sat 13hr (OT + penalty, higher-of)
+  ✓ CS-015: expected $473.46, got $473.46 [PASS] — L0 introductory FT Sun 13hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-016: PASS — L1 kitchen FT Mon-Fri 38hr week (pay=$948.1)
+  ✓ CS-017: PASS — L1 kitchen FT 4×weekday + Sat (pay=$995.5)
+  ✓ CS-018: expected $249.50, got $249.50 [PASS] — L1 kitchen casual PH 4hr (×2 of casual base)
+  ~ CS-019: expected $417.91, got $417.90 [PARTIAL] — L1 kitchen FT Sat 13hr (OT + penalty, higher-of)
+  ✓ CS-020: expected $486.53, got $486.53 [PASS] — L1 kitchen FT Sun 13hr (Sun ×1.5 ≥ OT ×1.5)
+  ✓ CS-021: expected $89.82, got $89.82 [PASS] — L1 food_beverage casual age 17 Sat 4hr (60% × 1.25 × 1.2)
+
+═══ REGRESSION — quick smoke tests ═══
+  ✓ RT-001: expected $99.80, got $99.80 [PASS] — L1 food_beverage FT Mon 4hr = $24.95 × 4
+  ✓ RT-002: expected $124.75, got $124.75 [PASS] — L1 food_beverage casual Mon 4hr = $31.1875 × 4
+  ✓ RT-003: expected $103.40, got $103.40 [PASS] — L2 general FT Mon 4hr = $25.85 × 4
+  ✓ RT-004: expected $129.25, got $129.25 [PASS] — L2 general casual Mon 4hr = $32.3125 × 4
+  ✓ RT-005: expected $97.12, got $97.12 [PASS] — L0 introductory FT Mon 4hr = $24.28 × 4
+  ✓ RT-006: expected $121.40, got $121.40 [PASS] — L0 introductory casual Mon 4hr = $30.35 × 4
+  ✓ RT-007: expected $99.80, got $99.80 [PASS] — L1 kitchen FT Mon 4hr = $24.95 × 4
+  ✓ RT-008: expected $124.75, got $124.75 [PASS] — L1 kitchen casual Mon 4hr = $31.1875 × 4
+
+═══ FEATURE TESTS — no award_features registered ═══
+  ⊘ FT-001: SKIPPED — No award_features rows for MA000119
+
+════════════════════════════════════════════════════════════
+
+RESULTS: 434 PASS, 6 PARTIAL, 5 FAIL, 35 SKIPPED (480 total)
+
+FAILURES:
+  ✗ SU-007: expected 13.32, got 13.66 — Super on shift loading (22:00 band) FT L1 food_beverage
+  ✗ SU-014: expected 13.76, got 14.1 — Super on shift loading (22:00 band) FT L2 general
+  ✗ SU-021: expected 13, got 13.34 — Super on shift loading (22:00 band) FT L0 introductory
+  ✗ SU-028: expected 13.32, got 13.66 — Super on shift loading (22:00 band) FT L1 kitchen
+  ✗ SU-030: expected $291.18, got $274.45 — superEligiblePay ($274.45) = totalPay ($366.02) - OT ($74.84)
+
+✓ Results written to C:\Documents\WageCheck\testing\MA000119_Exhaustive_Tests.xlsx

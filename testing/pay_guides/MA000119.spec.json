@@ -1,0 +1,97 @@
+{
+  "award_code": "MA000119",
+  "award_name": "Restaurant Industry Award",
+  "effective_date": "2025-07-01",
+  "published_date": "2026-01-09",
+  "source": "FWO Pay Guide MA000119 (PDF)",
+
+  "streams": [
+    {
+      "stream": "introductory",
+      "label": "Introductory level",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 0, "pay_point": 1, "ft_hourly": 24.28, "casual_hourly": 30.35 }
+      ]
+    },
+    {
+      "stream": "food_beverage",
+      "label": "Food and beverage / general",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 24.95, "casual_hourly": 31.19 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 25.85, "casual_hourly": 32.31 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 26.70, "casual_hourly": 33.38 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 28.12, "casual_hourly": 35.15 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 29.88, "casual_hourly": 37.35 }
+      ]
+    },
+    {
+      "stream": "kitchen",
+      "label": "Kitchen attendant / cook",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 24.95, "casual_hourly": 31.19 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 25.85, "casual_hourly": 32.31 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 26.70, "casual_hourly": 33.38 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 28.12, "casual_hourly": 35.15 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 29.88, "casual_hourly": 37.35 },
+        { "level": 6, "pay_point": 1, "ft_hourly": 30.68, "casual_hourly": 38.35, "title": "Cook grade 5 (tradesperson)" }
+      ]
+    },
+    {
+      "stream": "general",
+      "label": "Clerical / storeperson / door person",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 2, "pay_point": 1, "ft_hourly": 25.85, "casual_hourly": 32.31 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 26.70, "casual_hourly": 33.38 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 28.12, "casual_hourly": 35.15 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 29.88, "casual_hourly": 37.35 }
+      ]
+    }
+  ],
+
+  "penalty_rates": {
+    "full_time_and_part_time": {
+      "saturday": { "multiplier": 1.25, "label": "Saturday" },
+      "sunday": { "multiplier": 1.50, "label": "Sunday" },
+      "public_holiday": { "multiplier": 2.25, "label": "Public holiday" },
+      "late_night_10pm_midnight": { "addition_per_hour": 2.81, "label": "Late night Mon-Fri 10pm-midnight (+$2.81/hr)" },
+      "early_morning_midnight_6am": { "addition_per_hour": 4.22, "label": "Early morning Mon-Fri midnight-6am (+$4.22/hr)" }
+    },
+    "casual": {
+      "saturday": { "multiplier": 1.20, "label": "Casual Saturday (×1.20 of casual base)" },
+      "sunday_intro_l1_l2": { "multiplier": 1.20, "label": "Casual Sunday Intro/L1/L2 (×1.20 — same as Saturday)" },
+      "sunday_l3_plus": { "multiplier": 1.40, "label": "Casual Sunday L3+ (×1.40)" },
+      "public_holiday": { "multiplier": 2.00, "label": "Casual PH (×2.00)" },
+      "late_night_10pm_midnight": { "addition_per_hour": 2.81, "label": "Casual late night (+$2.81/hr)" },
+      "early_morning_midnight_6am": { "addition_per_hour": 4.22, "label": "Casual early morning (+$4.22/hr)" }
+    },
+    "notes": [
+      "Casual Intro/L1/L2 Sunday = same as Saturday (×1.20). L3+ Sunday = ×1.40.",
+      "This L1/L2 Sunday override is handled in awardCalculator.js lines 957-971.",
+      "Late night and early morning loadings are flat $/hr additions, same for FT and casual.",
+      "Christmas Day (Sat/Sun not declared PH) = Saturday rate.",
+      "OT Saturday first 2hr = ×1.75 (not ×1.50)."
+    ]
+  },
+
+  "overtime": {
+    "all_employment_types": {
+      "mon_fri_first_2hr": { "multiplier": 1.5, "label": "OT Mon-Fri first 2hr" },
+      "mon_fri_after_2hr": { "multiplier": 2.0, "label": "OT Mon-Fri after 2hr" },
+      "saturday_first_2hr": { "multiplier": 1.75, "label": "OT Saturday first 2hr" },
+      "saturday_after_2hr": { "multiplier": 2.0, "label": "OT Saturday after 2hr" },
+      "sunday": { "multiplier": 2.0, "label": "OT Sunday" },
+      "rdo": { "multiplier": 2.0, "label": "OT on rostered day off" }
+    }
+  },
+
+  "allowances": [
+    { "name": "Split shift allowance", "amount": 5.34, "per_unit": "per_shift", "is_all_purpose": false },
+    { "name": "Meal allowance (overtime)", "amount": 16.73, "per_unit": "per_meal", "is_all_purpose": false },
+    { "name": "Tool allowance (cooks)", "amount": 2.03, "per_unit": "per_day", "is_all_purpose": false, "max_per_week": 9.94 },
+    { "name": "Vehicle allowance", "amount": 0.99, "per_unit": "per_km", "is_all_purpose": false }
+  ]
+}

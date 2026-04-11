@@ -1017,6 +1017,106 @@ const ALLOWANCE_QUESTIONS: AllowanceQuestion[] = [
   { type: 'meal', primary: 'Did you work more than 2 hours overtime?', primaryHelp: '$23.60 first meal. $14.98 after 4 more hours.', onlyForAward: ['MA000113'] },
   { type: 'tool', primary: 'Are you a tradesperson with your own tools?', primaryHelp: '$22.25 per week.', onlyForAward: ['MA000113'] },
   { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: 'Car: $0.99/km. Motorcycle: $0.33/km.', onlyForAward: ['MA000113'] },
+
+  // ── MA000006 (Black Coal Mining) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000006'] },
+  { type: 'underground', primary: 'Do you work underground?', primaryHelp: '$1.82 per hour (all-purpose allowance).', onlyForAward: ['MA000006'] },
+
+  // ── MA000007 (Cement & Quarrying) ─────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000007'] },
+
+  // ── MA000008 (Wool Storage) ───────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000008'] },
+
+  // ── MA000011 (Oil Refining) ───────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000011'] },
+
+  // ── MA000014 (Mining Industry) ────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000014'] },
+  { type: 'underground', primary: 'Do you work underground?', primaryHelp: '$1.68 per hour (all-purpose allowance).', onlyForAward: ['MA000014'] },
+
+  // ── MA000015 (Ports & Harbours) ───────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000015'] },
+
+  // ── MA000024 (Cotton Ginning) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000024'] },
+
+  // ── MA000035 (Pastoral) ───────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000035'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.96 per km.', onlyForAward: ['MA000035'] },
+
+  // ── MA000039 (Seafood Processing) ─────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000039'] },
+
+  // ── MA000040 (Sugar Industry) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000040'] },
+
+  // ── MA000044 (Timber Industry) ────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000044'] },
+  { type: 'first_aid', primary: 'Are you a designated first aid officer?', primaryHelp: '$16.78 per week.', onlyForAward: ['MA000044'] },
+
+  // ── MA000045 (Premixed Concrete) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000045'] },
+
+  // ── MA000046 (Textile & Clothing) ─────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000046'] },
+  { type: 'first_aid', primary: 'Are you a designated first aid officer?', primaryHelp: '$16.78 per week.', onlyForAward: ['MA000046'] },
+  { type: 'laundry', primary: 'Do you launder your own work clothing?', primaryHelp: '$3.55 per week.', onlyForAward: ['MA000046'] },
+
+  // ── MA000001 (Aboriginal Health Services) ─────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000001'] },
+
+  // ── MA000017 (Corrections & Detention) ────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000017'] },
+
+  // ── MA000031 (Mannequins & Models) ────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000031'] },
+
+  // ── MA000037 (Salt Industry) ──────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000037'] },
+
+  // ── MA000047 (Asphalt Industry) ───────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000047'] },
+
+  // ── MA000048 (Cemetery Industry) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000048'] },
+
+  // ── MA000050 (Concrete Products) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000050'] },
+
+  // ── MA000051 (Coal Export Terminals) ──────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000051'] },
+
+  // ── MA000054 (Electrical Power) ───────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000054'] },
+
+  // ── MA000060 (Marine Tourism) ─────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000060'] },
+
+  // ── MA000061 (Airline Ground Staff) ───────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000061'] },
+
+  // ── MA000062 (Airport Employees) ──────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000062'] },
+
+  // ── MA000064 (Pest Control) ───────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000064'] },
+  { type: 'vehicle', primary: 'Do you use your own vehicle for work?', primaryHelp: '$0.96 per km.', onlyForAward: ['MA000064'] },
+
+  // ── MA000066 (Horse & Greyhound Training) ─────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000066'] },
+
+  // ── MA000067 (Hydrocarbons Upstream) ──────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000067'] },
+
+  // ── MA000070 (Silviculture) ───────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000070'] },
+
+  // ── MA000075 (Rail Industry) ──────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000075'] },
+
+  // ── MA000078 (Stevedoring) ────────────────────────────────────────────────
+  { type: 'meal', primary: 'Did you work 2+ hours overtime without notice?', primaryHelp: '$20.96 per meal.', onlyForAward: ['MA000078'] },
 ];
 
 type FollowUpAnswers = Record<string, string>;

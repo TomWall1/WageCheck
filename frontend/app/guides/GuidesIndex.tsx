@@ -1,19 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { GUIDES, getAllTags } from '@/lib/guides';
+import { AWARDS } from '@/lib/awards';
 import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import CheckPayCTA from '@/components/seo/CheckPayCTA';
 
 const ALL_TAGS = getAllTags();
+const SORTED_AWARDS = [...AWARDS].sort((a, b) => a.shortName.localeCompare(b.shortName));
 
 export default function GuidesIndex() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
-  // Read tag from URL on mount (e.g. /guides?tag=Casual)
   useEffect(() => {
     const tagParam = searchParams.get('tag');
     if (tagParam && ALL_TAGS.includes(tagParam)) {
@@ -74,6 +76,39 @@ export default function GuidesIndex() {
         />
       </div>
 
+      {/* Award-specific guides dropdown */}
+      <div style={{ marginBottom: '1.25rem' }}>
+        <select
+          onChange={e => {
+            if (e.target.value) router.push(`/awards/${e.target.value}`);
+          }}
+          defaultValue=""
+          style={{
+            width: '100%',
+            padding: '10px 14px',
+            fontSize: '14px',
+            border: '1.5px solid var(--border)',
+            borderRadius: '8px',
+            outline: 'none',
+            color: 'var(--secondary)',
+            background: '#ffffff',
+            cursor: 'pointer',
+            appearance: 'none',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2390A4AE' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'right 14px center',
+            paddingRight: '36px',
+          }}
+        >
+          <option value="" disabled>View guides for a specific award...</option>
+          {SORTED_AWARDS.map(a => (
+            <option key={a.code} value={a.slug}>
+              {a.shortName} ({a.code})
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Tags */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
         <button
@@ -112,6 +147,14 @@ export default function GuidesIndex() {
           </button>
         ))}
       </div>
+
+      {/* General guides heading */}
+      <h2 style={{
+        fontFamily: 'Fraunces, Georgia, serif', fontSize: '1.15rem', fontWeight: 500,
+        color: 'var(--secondary)', marginBottom: '1rem',
+      }}>
+        General guides
+      </h2>
 
       {/* Results */}
       {filtered.length === 0 ? (

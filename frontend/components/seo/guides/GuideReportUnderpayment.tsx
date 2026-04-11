@@ -208,6 +208,40 @@ export default function GuideReportUnderpayment() {
           acceptedAnswer: { '@type': 'Answer', text: q.answer },
         })),
       }) }} />
+
+      {/* HowTo Schema for AI search visibility */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'How to Report Underpayment in Australia',
+        description: 'Step-by-step guide to reporting underpayment: document evidence, raise with your employer, lodge a Fair Work Ombudsman complaint, and know your legal protections.',
+        step: [
+          {
+            '@type': 'HowToStep',
+            position: 1,
+            name: 'Document everything first',
+            text: 'Gather payslips, roster records, bank statements, your employment contract, and any written communications about pay, hours, or classification. More evidence means a stronger case.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 2,
+            name: 'Raise it with your employer',
+            text: 'State the issue factually, refer to the award and pay guide by name and clause, and give them a week to respond. Follow up in writing. Many underpayments are resolved at this stage.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 3,
+            name: 'Lodge a complaint with the Fair Work Ombudsman',
+            text: 'If your employer disputes or ignores your claim, lodge a free complaint with the FWO online at fairwork.gov.au/contact-us or by phone on 13 13 94. Include your employer details, the award that applies, the nature and dates of underpayment, and your evidence.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 4,
+            name: 'Know your protections',
+            text: 'You cannot be legally dismissed, demoted, or disadvantaged for making a Fair Work complaint. This is the general protections provision. Adverse action by your employer is a separate and serious legal breach.',
+          },
+        ],
+      }) }} />
     </>
   );
 }

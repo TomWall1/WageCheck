@@ -1,0 +1,246 @@
+{
+  "award_code": "MA000100",
+  "award_name": "Social, Community, Home Care and Disability Services Industry Award",
+  "effective_date": "2025-10-01",
+  "published_date": "2025-09-04",
+  "source": "FWO Pay Guide MA000100 (PDF)",
+
+  "streams": [
+    {
+      "stream": "social_community",
+      "label": "Social and community services employee",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 26.30, "casual_hourly": 32.88 },
+        { "level": 1, "pay_point": 2, "ft_hourly": 27.15, "casual_hourly": 33.94 },
+        { "level": 1, "pay_point": 3, "ft_hourly": 28.12, "casual_hourly": 35.15 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 34.58, "casual_hourly": 43.23 },
+        { "level": 2, "pay_point": 2, "ft_hourly": 35.67, "casual_hourly": 44.59 },
+        { "level": 2, "pay_point": 3, "ft_hourly": 36.75, "casual_hourly": 45.94 },
+        { "level": 2, "pay_point": 4, "ft_hourly": 37.73, "casual_hourly": 47.16 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 38.65, "casual_hourly": 48.31 },
+        { "level": 3, "pay_point": 2, "ft_hourly": 39.77, "casual_hourly": 49.71 },
+        { "level": 3, "pay_point": 3, "ft_hourly": 40.62, "casual_hourly": 50.78 },
+        { "level": 3, "pay_point": 4, "ft_hourly": 41.45, "casual_hourly": 51.81 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 44.58, "casual_hourly": 55.73 },
+        { "level": 4, "pay_point": 2, "ft_hourly": 45.75, "casual_hourly": 57.19 },
+        { "level": 4, "pay_point": 3, "ft_hourly": 46.93, "casual_hourly": 58.66 },
+        { "level": 4, "pay_point": 4, "ft_hourly": 47.97, "casual_hourly": 59.96 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 51.00, "casual_hourly": 63.75 },
+        { "level": 5, "pay_point": 2, "ft_hourly": 52.10, "casual_hourly": 65.13 },
+        { "level": 5, "pay_point": 3, "ft_hourly": 53.31, "casual_hourly": 66.64 },
+        { "level": 6, "pay_point": 1, "ft_hourly": 55.72, "casual_hourly": 69.65 },
+        { "level": 6, "pay_point": 2, "ft_hourly": 56.95, "casual_hourly": 71.19 },
+        { "level": 6, "pay_point": 3, "ft_hourly": 58.19, "casual_hourly": 72.74 },
+        { "level": 7, "pay_point": 1, "ft_hourly": 60.27, "casual_hourly": 75.34 },
+        { "level": 7, "pay_point": 2, "ft_hourly": 61.53, "casual_hourly": 76.91 },
+        { "level": 7, "pay_point": 3, "ft_hourly": 62.79, "casual_hourly": 78.49 },
+        { "level": 8, "pay_point": 1, "ft_hourly": 65.39, "casual_hourly": 81.74 },
+        { "level": 8, "pay_point": 2, "ft_hourly": 66.67, "casual_hourly": 83.34 },
+        { "level": 8, "pay_point": 3, "ft_hourly": 67.96, "casual_hourly": 84.95 }
+      ]
+    },
+    {
+      "stream": "crisis_accommodation",
+      "label": "Crisis accommodation employee",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 38.65, "casual_hourly": 48.31 },
+        { "level": 1, "pay_point": 2, "ft_hourly": 39.77, "casual_hourly": 49.71 },
+        { "level": 1, "pay_point": 3, "ft_hourly": 40.62, "casual_hourly": 50.78 },
+        { "level": 1, "pay_point": 4, "ft_hourly": 41.45, "casual_hourly": 51.81 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 44.58, "casual_hourly": 55.73 },
+        { "level": 2, "pay_point": 2, "ft_hourly": 45.75, "casual_hourly": 57.19 },
+        { "level": 2, "pay_point": 3, "ft_hourly": 46.93, "casual_hourly": 58.66 },
+        { "level": 2, "pay_point": 4, "ft_hourly": 47.97, "casual_hourly": 59.96 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 51.00, "casual_hourly": 63.75 },
+        { "level": 3, "pay_point": 2, "ft_hourly": 52.10, "casual_hourly": 65.13 },
+        { "level": 3, "pay_point": 3, "ft_hourly": 53.31, "casual_hourly": 66.64 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 55.72, "casual_hourly": 69.65 },
+        { "level": 4, "pay_point": 2, "ft_hourly": 56.95, "casual_hourly": 71.19 },
+        { "level": 4, "pay_point": 3, "ft_hourly": 58.19, "casual_hourly": 72.74 }
+      ]
+    },
+    {
+      "stream": "family_day_care",
+      "label": "Family day care employee",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 26.33, "casual_hourly": 32.91 },
+        { "level": 1, "pay_point": 2, "ft_hourly": 27.18, "casual_hourly": 33.98 },
+        { "level": 1, "pay_point": 3, "ft_hourly": 28.16, "casual_hourly": 35.20 },
+        { "level": 1, "pay_point": 4, "ft_hourly": 29.11, "casual_hourly": 36.39 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 29.94, "casual_hourly": 37.43 },
+        { "level": 2, "pay_point": 2, "ft_hourly": 30.91, "casual_hourly": 38.64 },
+        { "level": 2, "pay_point": 3, "ft_hourly": 31.89, "casual_hourly": 39.86 },
+        { "level": 2, "pay_point": 4, "ft_hourly": 32.65, "casual_hourly": 40.81 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 33.48, "casual_hourly": 41.85 },
+        { "level": 3, "pay_point": 2, "ft_hourly": 34.52, "casual_hourly": 43.15 },
+        { "level": 3, "pay_point": 3, "ft_hourly": 35.59, "casual_hourly": 44.49 },
+        { "level": 3, "pay_point": 4, "ft_hourly": 36.57, "casual_hourly": 45.71 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 37.62, "casual_hourly": 47.03 },
+        { "level": 4, "pay_point": 2, "ft_hourly": 38.02, "casual_hourly": 47.53 },
+        { "level": 4, "pay_point": 3, "ft_hourly": 38.91, "casual_hourly": 48.64 },
+        { "level": 4, "pay_point": 4, "ft_hourly": 39.55, "casual_hourly": 49.44 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 42.38, "casual_hourly": 52.98 },
+        { "level": 5, "pay_point": 2, "ft_hourly": 43.56, "casual_hourly": 54.45 },
+        { "level": 5, "pay_point": 3, "ft_hourly": 44.74, "casual_hourly": 55.93 },
+        { "level": 5, "pay_point": 4, "ft_hourly": 45.91, "casual_hourly": 57.39 }
+      ]
+    },
+    {
+      "stream": "home_care_disability",
+      "label": "Home care employee - Disability care",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 26.05, "casual_hourly": 32.56 },
+        { "level": 2, "pay_point": 1, "ft_hourly": 27.55, "casual_hourly": 34.44 },
+        { "level": 2, "pay_point": 2, "ft_hourly": 27.74, "casual_hourly": 34.68 },
+        { "level": 3, "pay_point": 1, "ft_hourly": 28.12, "casual_hourly": 35.15 },
+        { "level": 3, "pay_point": 2, "ft_hourly": 28.98, "casual_hourly": 36.23 },
+        { "level": 4, "pay_point": 1, "ft_hourly": 30.67, "casual_hourly": 38.34 },
+        { "level": 4, "pay_point": 2, "ft_hourly": 31.29, "casual_hourly": 39.11 },
+        { "level": 5, "pay_point": 1, "ft_hourly": 32.89, "casual_hourly": 41.11 },
+        { "level": 5, "pay_point": 2, "ft_hourly": 34.19, "casual_hourly": 42.74 }
+      ]
+    },
+    {
+      "stream": "home_care_aged",
+      "label": "Home care employee - Aged care",
+      "employment_types": ["full_time", "part_time", "casual"],
+      "classifications": [
+        { "level": 1, "pay_point": 1, "ft_hourly": 31.13, "casual_hourly": 38.91, "title": "Introductory" },
+        { "level": 2, "pay_point": 1, "ft_hourly": 32.86, "casual_hourly": 41.08, "title": "Home carer" },
+        { "level": 3, "pay_point": 1, "ft_hourly": 34.59, "casual_hourly": 43.24, "title": "Qualified" },
+        { "level": 4, "pay_point": 1, "ft_hourly": 35.97, "casual_hourly": 44.96, "title": "Senior" },
+        { "level": 5, "pay_point": 1, "ft_hourly": 37.35, "casual_hourly": 46.69, "title": "Specialist" },
+        { "level": 6, "pay_point": 1, "ft_hourly": 38.74, "casual_hourly": 48.43, "title": "Team leader" }
+      ]
+    }
+  ],
+
+  "penalty_rates": {
+    "full_time_and_part_time": {
+      "saturday": { "multiplier": 1.5, "label": "Saturday" },
+      "sunday": { "multiplier": 2.0, "label": "Sunday" },
+      "public_holiday": { "multiplier": 2.5, "label": "Public holiday" },
+      "afternoon_shift": { "description": "Afternoon shift loading — specific $/hr rates in tables (approx ×1.125 of base)" },
+      "night_shift": { "description": "Night shift loading — specific $/hr rates in tables (approx ×1.15 of base)" }
+    },
+    "casual": {
+      "saturday": { "multiplier": 1.4, "label": "Casual Saturday (×1.4 of casual base = 175% of FT)" },
+      "sunday": { "multiplier": 1.8, "label": "Casual Sunday (×1.8 of casual base = 225% of FT)" },
+      "public_holiday": { "multiplier": 2.2, "label": "Casual PH (×2.2 of casual base = 275% of FT)" },
+      "afternoon_shift": { "description": "Afternoon shift loading — specific $/hr rates in tables" },
+      "night_shift": { "description": "Night shift loading — specific $/hr rates in tables" }
+    },
+    "notes": [
+      "Afternoon and night shift rates are published as absolute $/hr amounts, not multipliers",
+      "Casual Saturday/Sunday/PH multipliers are DIFFERENT from FT/PT — applied to casual base (which includes 25% loading)",
+      "Verified: SACS L1 PP1 casual base=$32.88, Sat=$46.03 (×1.4), Sun=$59.18 (×1.8), PH=$72.33 (×2.2)"
+    ]
+  },
+
+  "overtime": {
+    "social_community_full_time": {
+      "mon_sat_first_hours": { "hours": 3, "multiplier": 1.5, "label": "OT Mon-Sat first 3 hours (full-time)" },
+      "mon_sat_after_hours": { "hours_after": 3, "multiplier": 2.0, "label": "OT Mon-Sat after 3 hours (full-time)" },
+      "public_holiday": { "multiplier": 2.5, "label": "OT public holiday" }
+    },
+    "disability_and_part_time": {
+      "mon_sat_first_hours": { "hours": 2, "multiplier": 1.5, "label": "OT Mon-Sat first 2 hours (disability/PT)" },
+      "mon_sat_after_hours": { "hours_after": 2, "multiplier": 2.0, "label": "OT Mon-Sat after 2 hours (disability/PT)" },
+      "public_holiday": { "multiplier": 2.5, "label": "OT public holiday" }
+    },
+    "casual": {
+      "mon_sat_first_hours": { "hours": 2, "multiplier": 1.5, "label": "OT Mon-Sat first 2 hours (casual)" },
+      "mon_sat_after_hours": { "hours_after": 2, "multiplier": 2.0, "label": "OT Mon-Sat after 2 hours (casual)" },
+      "public_holiday": { "multiplier": 2.5, "label": "OT public holiday (casual)" }
+    },
+    "less_than_10hr_break": {
+      "multiplier": 2.0,
+      "label": "Less than 10 hour break after working overtime — double time until 10hr break given"
+    },
+    "notes": [
+      "SACS full-time: first 3 hours OT at 1.5x, after 3 hours at 2.0x",
+      "Disability services, part-time, and casual: first 2 hours OT at 1.5x, after 2 hours at 2.0x",
+      "This distinction is NOT currently modelled in the DB"
+    ]
+  },
+
+  "special_shift_types": {
+    "twenty_four_hour_care": {
+      "description": "24-hour care shift — flat payment per shift (home care disability and aged care streams only)",
+      "applies_to": ["home_care_disability", "home_care_aged"],
+      "sample_rates": [
+        { "stream": "home_care_disability", "level": 1, "pay_point": 1, "ft_per_shift": 323.04, "casual_per_shift": 375.12 },
+        { "stream": "home_care_disability", "level": 5, "pay_point": 2, "ft_per_shift": 423.92, "casual_per_shift": 492.32 },
+        { "stream": "home_care_aged", "level": 1, "pay_point": 1, "ft_per_shift": 386.00, "casual_per_shift": 448.24 },
+        { "stream": "home_care_aged", "level": 6, "pay_point": 1, "ft_per_shift": 480.40, "casual_per_shift": 557.84 }
+      ],
+      "overtime_on_24hr": {
+        "mon_sat_first_2hr": { "multiplier": 1.5 },
+        "mon_sat_after_2hr": { "multiplier": 2.0 },
+        "sunday": { "multiplier": 2.0 },
+        "public_holiday": { "multiplier": 2.5 }
+      }
+    },
+    "broken_shift": {
+      "description": "Broken shift — working beyond a 12 hour span (disability services work)",
+      "rate": "double time (×2.0)",
+      "applies_to": ["home_care_disability", "social_community"]
+    },
+    "remote_work": {
+      "description": "Remote work — multiple rate variants based on day, time span, and duration",
+      "variants": [
+        { "label": "Mon-Fri within 6am-8pm", "multiplier": 1.0, "note": "ordinary rate" },
+        { "label": "Mon-Fri outside 6am-8pm first 2hr", "multiplier": 1.5 },
+        { "label": "Mon-Fri outside 6am-8pm after 2hr", "multiplier": 2.0 },
+        { "label": "Saturday within 6am-8pm", "multiplier": 1.5 },
+        { "label": "Saturday outside 6am-8pm first 2hr", "multiplier": 1.5 },
+        { "label": "Saturday outside 6am-8pm after 2hr", "multiplier": 2.0 },
+        { "label": "Sunday", "multiplier": 2.0 },
+        { "label": "Public holiday", "multiplier": 2.5 },
+        { "label": "More than 10hr/day first 2hr", "multiplier": 1.5 },
+        { "label": "More than 10hr/day after 2hr", "multiplier": 2.0 }
+      ],
+      "applies_to": ["social_community", "crisis_accommodation", "family_day_care", "home_care_disability", "home_care_aged"]
+    }
+  },
+
+  "allowances": [
+    { "name": "Broken shift allowance - 1 unpaid break", "amount": 20.82, "per_unit": "per_broken_shift", "is_all_purpose": false },
+    { "name": "Broken shift allowance - 2 unpaid breaks", "amount": 27.56, "per_unit": "per_broken_shift", "is_all_purpose": false },
+    { "name": "First aid allowance - full-time", "amount": 20.46, "per_unit": "per_week", "is_all_purpose": true },
+    { "name": "First aid allowance - part-time or casual", "amount": 0.54, "per_unit": "per_hour", "is_all_purpose": true, "max_per_week": 20.46 },
+    { "name": "Hot work allowance - 40-46°C", "amount": 0.61, "per_unit": "per_hour", "is_all_purpose": false },
+    { "name": "Hot work allowance - over 46°C", "amount": 0.73, "per_unit": "per_hour", "is_all_purpose": false },
+    { "name": "Laundry allowance", "amount": 0.32, "per_unit": "per_shift", "is_all_purpose": false, "max_per_week": 1.49 },
+    { "name": "Laundry allowance - not a uniform", "amount": 0.32, "per_unit": "per_shift", "is_all_purpose": false },
+    { "name": "Meal allowance", "amount": 16.62, "per_unit": "per_meal", "is_all_purpose": false },
+    { "name": "On call allowance - Mon-Fri", "amount": 24.50, "per_unit": "per_24hr_period", "is_all_purpose": false },
+    { "name": "On call allowance - weekend/PH", "amount": 48.51, "per_unit": "per_24hr_period", "is_all_purpose": false },
+    { "name": "Sleepover allowance", "amount": 60.02, "per_unit": "per_sleepover", "is_all_purpose": false },
+    { "name": "Uniform allowance", "amount": 1.23, "per_unit": "per_shift", "is_all_purpose": false, "max_per_week": 6.24 },
+    { "name": "Vehicle allowance", "amount": 0.99, "per_unit": "per_km", "is_all_purpose": false }
+  ],
+
+  "shift_loadings": {
+    "description": "Afternoon and night shift loadings are published as specific $/hr amounts (not simple multipliers). Sample rates for SACS L1 PP1:",
+    "sample_rates": {
+      "social_community_L1_PP1": {
+        "ft_base": 26.30,
+        "ft_afternoon": 29.59,
+        "ft_night": 30.25,
+        "casual_base": 32.88,
+        "casual_afternoon": 36.16,
+        "casual_night": 36.82
+      }
+    },
+    "notes": [
+      "Afternoon shift: approx base × 1.125 (FT) or base × 1.10 (casual)",
+      "Night shift: approx base × 1.15 (FT) or base × 1.12 (casual)",
+      "Exact $/hr amounts are in the pay guide tables for every classification"
+    ]
+  }
+}
