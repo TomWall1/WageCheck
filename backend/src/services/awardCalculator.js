@@ -6,10 +6,22 @@
 const DEFAULT_AWARD_CODE = 'MA000009';
 
 // ── Superannuation ────────────────────────────────────────────────────────
-// SGC rate from 1 July 2025. Super applies to OTE (ordinary time earnings).
-// OTE includes: ordinary hours pay + penalty rates on ordinary hours.
-// OTE excludes: overtime, missed-break double time, expense allowances.
-const SGC_RATE = 0.12; // 12%
+// SGC rate is versioned in the system_rates DB table (name='sgc_rate') so it
+// updates on schedule (11.5% → 12.0% on 2025-07-01, more to come). Fallback
+// constant below is used only if the table/query fails.
+const SGC_RATE_FALLBACK = 0.12;
+async function getSgcRate(db, asOfDate = null) {
+  try {
+    const r = await db.query(
+      `SELECT value FROM system_rates WHERE name = 'sgc_rate' AND effective_date <= COALESCE($1::date, CURRENT_DATE) ORDER BY effective_date DESC LIMIT 1`,
+      [asOfDate]
+    );
+    if (r.rows.length) return parseFloat(r.rows[0].value);
+  } catch (err) {
+    console.warn('[sgc_rate] DB lookup failed, using fallback:', err.message);
+  }
+  return SGC_RATE_FALLBACK;
+}
 
 // ── Junior rates ──────────────────────────────────────────────────────────
 // Applied to the base rate. Casual loading applies on top.
@@ -959,6 +971,7 @@ async function calculateEntitlements(input, db) {
   } = input;
 
   const juniorMultiplier = getJuniorMultiplier(age, awardCode);
+  const SGC_RATE = await getSgcRate(db);
 
   // Fetch the most current base rate
   const rateResult = await db.query(`

@@ -180,6 +180,27 @@ async function migrate() {
     // ── Shift-type-specific penalty rates (remote work, 24hr care) ──
     await client.query(`ALTER TABLE penalty_rates ADD COLUMN IF NOT EXISTS shift_type VARCHAR(30)`);
 
+    // ── System-wide rates (SGC rate, etc.) with effective_date versioning ──
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS system_rates (
+        id             SERIAL PRIMARY KEY,
+        name           VARCHAR(50) NOT NULL,
+        value          NUMERIC(8,4) NOT NULL,
+        effective_date DATE NOT NULL,
+        description    TEXT,
+        created_at     TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE (name, effective_date)
+      )
+    `);
+    // Seed the SGC rate schedule per the Superannuation Guarantee (Administration) Act 1992.
+    // 12% from 1 July 2025. (Prior: 11.5% from 1 July 2024.)
+    await client.query(`
+      INSERT INTO system_rates (name, value, effective_date, description) VALUES
+        ('sgc_rate', 0.115, '2024-07-01', 'Superannuation Guarantee rate'),
+        ('sgc_rate', 0.120, '2025-07-01', 'Superannuation Guarantee rate')
+      ON CONFLICT (name, effective_date) DO UPDATE SET value = EXCLUDED.value, description = EXCLUDED.description
+    `);
+
     // ── Shift-type-specific pay rates (24hr care flat per-shift amounts) ──
     // rate_type already supports this via '24hr_care_shift' — no schema change needed
 
