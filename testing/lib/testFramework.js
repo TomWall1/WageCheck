@@ -53,6 +53,23 @@ function payOnly(r) { return round2(r.summary.totalPayOwed - r.summary.mealAllow
 function createTestRunner(awardCode, xlsxPath) {
   const results = [];
   let classMap = {};
+  const labelContradictions = [];
+
+  function checkLabelsForResult(r) {
+    for (const shift of r.shifts || []) {
+      for (const seg of shift.segments || []) {
+        const label = (seg.rateLabel || '').toLowerCase();
+        const dt = seg.dayType;
+        if (!label || !dt || seg.missedBreakPenalty || dt === 'overtime') continue;
+        let issue = null;
+        if (dt === 'saturday' && (label.includes('sunday') || label.includes('public holiday'))) issue = 'Sat→Sun/PH';
+        else if (dt === 'sunday' && (label.includes('saturday') || label.includes('public holiday'))) issue = 'Sun→Sat/PH';
+        else if (dt === 'public_holiday' && (label.includes('saturday') || label.includes('sunday'))) issue = 'PH→Sat/Sun';
+        else if (dt === 'weekday' && (label.includes('saturday') || label.includes('sunday') || label.includes('public holiday'))) issue = 'Wkdy→Sat/Sun/PH';
+        if (issue) labelContradictions.push(`${shift.date} (${dt}): "${seg.rateLabel}" [${issue}]`);
+      }
+    }
+  }
 
   function record(testId, expected, actual, notes = '') {
     const result = comparePay(actual, expected);
@@ -70,6 +87,34 @@ function createTestRunner(awardCode, xlsxPath) {
   function skip(testId, reason) {
     results.push({ testId, expected: 'N/A', actual: 'SKIPPED', result: 'SKIP', notes: reason });
     console.log(`  ⊘ ${testId}: SKIPPED — ${reason}`);
+  }
+
+  // Sanity check: the rate label for each segment should not contradict its dayType.
+  // e.g. a Saturday segment should never be labelled "Sunday penalty" or "Public holiday".
+  // Catches mislabelling bugs where the label switch ignores dayType.
+  function assertLabelsMatchDayType(testId, result) {
+    const contradictions = [];
+    for (const shift of result.shifts || []) {
+      for (const seg of shift.segments || []) {
+        const label = (seg.rateLabel || '').toLowerCase();
+        const dt = seg.dayType;
+        if (!label || !dt || seg.missedBreakPenalty) continue;
+        if (dt === 'saturday' && (label.includes('sunday') || label.includes('public holiday'))) {
+          contradictions.push(`${shift.date} (${dt}): "${seg.rateLabel}"`);
+        } else if (dt === 'sunday' && (label.includes('saturday') || label.includes('public holiday'))) {
+          contradictions.push(`${shift.date} (${dt}): "${seg.rateLabel}"`);
+        } else if (dt === 'public_holiday' && (label.includes('saturday') || label.includes('sunday'))) {
+          contradictions.push(`${shift.date} (${dt}): "${seg.rateLabel}"`);
+        } else if (dt === 'weekday' && (label.includes('saturday') || label.includes('sunday') || label.includes('public holiday'))) {
+          contradictions.push(`${shift.date} (${dt}): "${seg.rateLabel}"`);
+        }
+      }
+    }
+    if (contradictions.length === 0) {
+      recordText(testId, 'no label/dayType contradictions', 'clean', 'PASS');
+    } else {
+      recordText(testId, 'no contradictions', `${contradictions.length} mislabelled`, 'FAIL', contradictions.join('; '));
+    }
   }
 
   async function init() {
@@ -96,7 +141,7 @@ function createTestRunner(awardCode, xlsxPath) {
       mealBreakDuration: opts.mealBreakDuration ?? (opts.mealBreakTaken === false ? 0 : 30),
       restBreakTaken: opts.restBreakTaken ?? true,
     };
-    return calculateEntitlements({
+    const r = await calculateEntitlements({
       employmentType: empType, classificationId: clsId,
       shifts: [shift],
       publicHolidays: opts.publicHolidays || [],
@@ -104,6 +149,8 @@ function createTestRunner(awardCode, xlsxPath) {
       period: opts.period || 'weekly',
       awardCode,
     }, pool);
+    checkLabelsForResult(r);
+    return r;
   }
 
   async function calcMultiShift(empType, clsId, shifts, opts = {}) {
@@ -113,7 +160,7 @@ function createTestRunner(awardCode, xlsxPath) {
       mealBreakDuration: s.mealBreakDuration ?? (s.mealBreakTaken === false ? 0 : 30),
       restBreakTaken: s.restBreakTaken ?? true,
     }));
-    return calculateEntitlements({
+    const r = await calculateEntitlements({
       employmentType: empType, classificationId: clsId,
       shifts: formatted,
       publicHolidays: opts.publicHolidays || [],
@@ -121,9 +168,21 @@ function createTestRunner(awardCode, xlsxPath) {
       period: opts.period || 'weekly',
       awardCode,
     }, pool);
+    checkLabelsForResult(r);
+    return r;
+  }
+
+  function finalizeLabelCheck() {
+    if (labelContradictions.length === 0) {
+      recordText('LB-001', 'no label/dayType contradictions', 'clean', 'PASS', 'rate labels consistent with dayType across all shifts');
+    } else {
+      const unique = Array.from(new Set(labelContradictions));
+      recordText('LB-001', 'no contradictions', `${unique.length} mislabelled segment(s)`, 'FAIL', unique.slice(0, 10).join(' | '));
+    }
   }
 
   function printSummary() {
+    finalizeLabelCheck();
     console.log('\n' + '═'.repeat(60));
     const pass = results.filter(r => r.result === 'PASS').length;
     const partial = results.filter(r => r.result === 'PARTIAL').length;
@@ -233,7 +292,7 @@ function createTestRunner(awardCode, xlsxPath) {
     // Calculation helpers
     calcShift, calcMultiShift,
     // Result recording
-    record, recordText, skip,
+    record, recordText, skip, assertLabelsMatchDayType,
     // Utilities
     round2, comparePay, payOnly,
     // Constants

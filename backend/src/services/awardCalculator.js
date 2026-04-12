@@ -450,7 +450,16 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     const MA000004_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     return MA000004_RATES[age] || 1.0;
   }
-  // MA000003 and remaining defaults: under 16=40%, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%, 21+=adult
+  // Awards without an explicit branch above fall through to this default schedule.
+  // Log once per process so operators can spot untested awards hitting the fallback
+  // (log only when age < 21 because adult ages are always 1.0 and don't need review).
+  if (age < 21) {
+    if (!getJuniorMultiplier._warned) getJuniorMultiplier._warned = new Set();
+    if (!getJuniorMultiplier._warned.has(awardCode)) {
+      getJuniorMultiplier._warned.add(awardCode);
+      console.warn(`[junior-rates] ${awardCode} using default junior schedule (21+=adult, 16=50%, 17=60%, 18=70%, 19=80%, 20=90%). Verify against award pay guide.`);
+    }
+  }
   if (age >= 21) return 1.0;
   if (age < 16) return 0.40;
   const DEFAULT_FULL = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
@@ -638,34 +647,8 @@ function checkBreakCompliance(shift, breakEntitlements) {
 // If an employee works less than the minimum engagement period, they must still
 // be paid for the full minimum at the applicable penalty rate for that day.
 // Values are in HOURS. Full-time is omitted (contracted hours apply).
-const MINIMUM_SHIFT_HOURS = {
-  MA000009: { casual: 2, part_time: 2 },
-  MA000003: { casual: 3, part_time: 3 },
-  MA000119: { casual: 2, part_time: 2 },
-  MA000004: { casual: 3, part_time: 3 },
-  MA000094: { casual: 2, part_time: 2 },
-  MA000080: { casual: 2, part_time: 2 },
-  MA000081: { casual: 2, part_time: 2 },
-  MA000084: { casual: 2, part_time: 2 },
-  MA000022: { casual: 2, part_time: 2 },
-  MA000028: { casual: 2, part_time: 2 },
-  MA000033: { casual: 2, part_time: 2 },
-  MA000002: { casual: 3, part_time: 3 },
-  MA000104: { casual: 2, part_time: 2 },
-  MA000013: { casual: 4, part_time: 4, full_time: 4 },
-  MA000102: { casual: 2, part_time: 2 },
-  MA000082: { casual: 2, part_time: 2 },
-  MA000120: { casual: 2, part_time: 2 },
-  MA000023: { casual: 3, part_time: 3 },
-  MA000005: { casual: 3, part_time: 3 },
-  MA000058: { casual: 2, part_time: 2 },
-  MA000026: { casual: 2, part_time: 2 },
-  MA000030: { casual: 3, part_time: 3 },
-  MA000063: { casual: 2, part_time: 2 },
-  MA000095: { casual: 3, part_time: 3 },
-  MA000105: { casual: 2, part_time: 2 },
-  MA000101: { casual: 2, part_time: 2 },
-};
+// Single source of truth — shared with frontend/components/steps/StepRightsSummary.tsx
+const MINIMUM_SHIFT_HOURS = require('../../../frontend/lib/shared/minimum-shift-hours.json');
 
 function getMinimumShiftMinutes(awardCode, employmentType) {
   const map = MINIMUM_SHIFT_HOURS[awardCode];

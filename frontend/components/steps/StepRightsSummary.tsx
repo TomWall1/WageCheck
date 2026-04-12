@@ -18,24 +18,9 @@ interface Props {
   onBack: () => void;
 }
 
-// Minimum engagement hours per award, per employment type.
-// Must mirror MINIMUM_SHIFT_HOURS in awardCalculator.js.
-const MIN_SHIFT: Record<string, { casual?: number; part_time?: number; full_time?: number }> = {
-  MA000009: { casual: 2, part_time: 2 },
-  MA000003: { casual: 3, part_time: 3 },
-  MA000119: { casual: 2, part_time: 2 },
-  MA000004: { casual: 3, part_time: 3 },
-  MA000094: { casual: 2, part_time: 2 },
-  MA000080: { casual: 2, part_time: 2 },
-  MA000081: { casual: 2, part_time: 2 },
-  MA000084: { casual: 2, part_time: 2 },
-  MA000022: { casual: 2, part_time: 2 },
-  MA000028: { casual: 2, part_time: 2 },
-  MA000033: { casual: 2, part_time: 2 },
-  MA000002: { casual: 3, part_time: 3 },
-  MA000104: { casual: 2, part_time: 2 },
-  MA000013: { casual: 4, part_time: 4, full_time: 4 },
-};
+// Single source of truth — shared with backend/src/services/awardCalculator.js
+import minShiftData from '@/lib/shared/minimum-shift-hours.json';
+const MIN_SHIFT = minShiftData as Record<string, { casual?: number; part_time?: number; full_time?: number }>;
 
 export default function StepRightsSummary({ awardCode, employmentType, classificationResult, onNext, onBack }: Props) {
   const isCasual = employmentType === 'casual';
