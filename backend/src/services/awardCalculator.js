@@ -531,19 +531,32 @@ function calculateShiftSegments(dateStr, startTime, endTime, employmentType, pen
     const multiplierRates = applicableRates.filter(r => !parseFloat(r.addition_per_hour));
     const additionRates = applicableRates.filter(r => parseFloat(r.addition_per_hour) > 0);
 
-    const multiplier = multiplierRates.length > 0
-      ? Math.max(...multiplierRates.map(r => parseFloat(r.multiplier)))
-      : 1.0;
-    const addition_per_hour = additionRates.length > 0
-      ? Math.max(...additionRates.map(r => parseFloat(r.addition_per_hour)))
-      : 0;
+    let multiplier = 1.0;
+    let multiplierDescription = null;
+    if (multiplierRates.length > 0) {
+      const winner = multiplierRates.reduce((best, r) =>
+        parseFloat(r.multiplier) > parseFloat(best.multiplier) ? r : best
+      );
+      multiplier = parseFloat(winner.multiplier);
+      multiplierDescription = winner.description || null;
+    }
+
+    let addition_per_hour = 0;
+    let additionDescription = null;
+    if (additionRates.length > 0) {
+      const winner = additionRates.reduce((best, r) =>
+        parseFloat(r.addition_per_hour) > parseFloat(best.addition_per_hour) ? r : best
+      );
+      addition_per_hour = parseFloat(winner.addition_per_hour);
+      additionDescription = winner.description || null;
+    }
 
     const key = `${dayType}_${multiplier}_${addition_per_hour}`;
     if (currentGroup && currentGroup.key === key) {
       currentGroup.minutes++;
     } else {
       if (currentGroup) segments.push(currentGroup);
-      currentGroup = { key, dayType, multiplier, addition_per_hour, minutes: 1 };
+      currentGroup = { key, dayType, multiplier, addition_per_hour, multiplierDescription, additionDescription, minutes: 1 };
     }
   }
   if (currentGroup) segments.push(currentGroup);
@@ -855,7 +868,14 @@ function getDayLabel(dayType) {
   return { weekday: 'Weekday', saturday: 'Saturday', sunday: 'Sunday', public_holiday: 'Public holiday' }[dayType] || dayType;
 }
 
-function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType) {
+function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType, seg = null) {
+  // Prefer description from seed data when available — this is the source of truth
+  // per award, so we don't have to reverse-engineer labels from numeric multipliers.
+  if (!missedBreakPenalty && seg) {
+    if (addition_per_hour > 0 && seg.additionDescription) return seg.additionDescription;
+    if (multiplier !== 1.0 && seg.multiplierDescription) return seg.multiplierDescription;
+    if (multiplier === 1.0 && addition_per_hour === 0 && seg.multiplierDescription) return seg.multiplierDescription;
+  }
   if (missedBreakPenalty) return `Double time (×2.0) — meal break not taken after 5 hours`;
   if (addition_per_hour === 7.07) return dayType === 'weekday' ? 'Out-of-hours Mon–Fri (8pm–8am) +$7.07/hr' : 'Saturday loading +$7.07/hr';
   if (addition_per_hour === 14.15) return dayType === 'sunday' ? 'Sunday loading +$14.15/hr' : 'Public holiday loading +$14.15/hr';
@@ -1337,7 +1357,7 @@ async function calculateEntitlements(input, db) {
         multiplier: seg.multiplier,
         addition_per_hour,
         effectiveRate: effectiveHourlyRate,
-        rateLabel: getRateLabel(seg.multiplier, addition_per_hour, seg.missedBreakPenalty, seg.dayType),
+        rateLabel: getRateLabel(seg.multiplier, addition_per_hour, seg.missedBreakPenalty, seg.dayType, seg),
         missedBreakPenalty: !!seg.missedBreakPenalty,
         minutes: seg.minutes,
         hours: Math.round(hours * 100) / 100,
