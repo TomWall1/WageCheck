@@ -681,6 +681,21 @@ function matchesRule(answers, conditions) {
   return true;
 }
 
+// Generic rule-table matcher — the common shape across almost all awards.
+// Returns the matched outcome, or the provided fallback if no rule matches.
+// Rules with `level: null` are passthrough "cannot classify" outcomes.
+function classifyFromRules(rules, answers, fallback) {
+  for (const rule of rules) {
+    if (matchesRule(answers, rule.conditions)) {
+      if (rule.level === null) {
+        return { level: null, stream: null, rationale: rule.rationale, confidence: 'low' };
+      }
+      return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
+    }
+  }
+  return { ...fallback, confidence: 'low' };
+}
+
 /**
  * Classify the worker based on their questionnaire answers.
  * Returns the best matching classification.
