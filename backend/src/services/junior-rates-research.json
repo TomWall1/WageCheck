@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "source": "FWO pay guides (MAxxxxxx.txt files)",
+    "method": "Junior percentages computed by junior_hourly / adult_hourly for the lowest/comparable classification. Where award uses fixed dollar amounts across classifications (not classification-based), noted in 'notes'.",
+    "caveats": "FWO pay guides list dollar rates only; they do not state percentage. Percentages are derived and may have small rounding deviations. Always verify against the award clause for production use."
+  },
+  "MA000034": {
+    "has_juniors": false,
+    "notes": "Silviculture Award — no junior section found in pay guide. Adult-only rates."
+  },
+  "MA000036": {
+    "has_juniors": false,
+    "notes": "Building and Construction General On-site Award — no junior rates in pay guide. Has apprentice rates only."
+  },
+  "MA000038": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"under_19": 0.70, "19": 0.80},
+    "under_min_age": null,
+    "notes": "Road Transport and Distribution Award. Junior bands: Under 19 years and 19 years for Transport employees, Oil distribution employees, and Distribution facility employees. 'Where a junior employee aged 18 years or more is required to drive a motor vehicle and is in sole charge of that vehicle, the employee must be paid the relevant adult rate.' Percentages derived from Level 1 Transport worker grade 1: adult $28.12, under 19 ≈ $19.68 (70%), 19 ≈ $22.49 (80%). Adult rate from 20."
+  },
+  "MA000043": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"under_19": 0.70, "19": 0.80, "20": 1.00},
+    "under_min_age": null,
+    "notes": "Waste Management Award. 'Junior rates are based on the relevant adult rate including the industry allowance.' Bands: Under 19, 19 years, 20 years. Level 1: adult $28.74, U19 $20.12 (70%), 19y $22.99 (80%), 20y $28.74 (100%). Effectively adult rates apply from 20."
+  },
+  "MA000049": {
+    "has_juniors": true,
+    "adult_age": 21,
+    "rates": {"under_18": 0.60, "18": 0.70, "19": 0.81, "20": 0.91},
+    "under_min_age": null,
+    "notes": "Airport Employees Award. 'Trade qualified juniors must be paid the appropriate adult rate.' Bands: Under 18, 18, 19, 20 years, for Technical services officers, Administrative services officers, Ground services officers, Professional engineers. Technical services assistant: adult $27.05, U18 $16.23 (60%), 18 $18.93 (70%), 19 $21.91 (81%), 20 $24.62 (91%). Adult rate from 21."
+  },
+  "MA000052": {
+    "has_juniors": false,
+    "notes": "Transport (Cash in Transit) Award — no junior rate tables found in pay guide."
+  },
+  "MA000053": {
+    "has_juniors": false,
+    "notes": "Travelling Shows Award — no junior rates found in pay guide."
+  },
+  "MA000054": {
+    "has_juniors": false,
+    "notes": "Wool Storage, Sampling and Testing Award — no junior rates found in pay guide."
+  },
+  "MA000055": {
+    "has_juniors": false,
+    "notes": "Meat Industry Award — no junior rate tables in pay guide. (Apprentice rates exist separately.)"
+  },
+  "MA000056": {
+    "has_juniors": false,
+    "notes": "Gardening and Landscaping Services Award — no junior rates found in pay guide."
+  },
+  "MA000057": {
+    "has_juniors": false,
+    "notes": "Pet Food Manufacturing Award — no junior rates found in pay guide."
+  },
+  "MA000065": {
+    "has_juniors": false,
+    "notes": "Concrete Products Award — no junior rates found in pay guide."
+  },
+  "MA000068": {
+    "has_juniors": true,
+    "adult_age": 19,
+    "rates": {"under_17": 0.55, "17": 0.65, "18": 0.75},
+    "under_min_age": null,
+    "notes": "Seafood Processing Award. Bands: Under 17, 17, 18 years. Process attendant L1: adult $24.28, U17 $13.35 (55%), 17 $15.78 (65%), 18 $18.21 (75%). Adult rate from 19."
+  },
+  "MA000069": {
+    "has_juniors": true,
+    "adult_age": 19,
+    "rates": {"under_17": 0.50, "17": 0.60, "18": 0.80, "19": 1.00},
+    "under_min_age": null,
+    "notes": "Pharmaceutical Industry Award. Bands: Under 17, 17, 18, 19 years for Manufacturing/production workers and Warehouse/distribution workers. Grade 1 on commencement: adult $25.85, U17 $12.93 (50%), 17 $15.51 (60%), 18 $20.68 (80%), 19 $25.85 (100%). Effectively adult rate reached at 19."
+  },
+  "MA000071": {
+    "has_juniors": true,
+    "adult_age": 21,
+    "rates": {"16_and_under": null, "17": null, "18": null, "19": null, "20": null},
+    "fixed_hourly_rates_general_timber_stream": {"16_and_under": 10.00, "17": 13.70, "18": 17.45, "19": 21.20, "20": 24.95},
+    "under_min_age": null,
+    "notes": "Timber Industry Award. 'Trade qualified juniors must be paid the appropriate adult rate.' Bands: 16 and under, 17, 18, 19, 20 years. Junior rates are FIXED DOLLAR AMOUNTS that do not vary by classification (unlike adult rates which do vary by level 1-7). General timber / Wood-and-timber furniture streams share the same rates; Pulp and paper stream rates are ~5% higher. Because junior rate does not scale with classification, no simple percentage applies — rates are flat per age band. Adult rate from 21."
+  },
+  "MA000072": {
+    "has_juniors": true,
+    "adult_age": 18,
+    "rates": {"under_17": 0.76, "17": 0.86},
+    "under_min_age": null,
+    "notes": "Oil Refining and Manufacturing Award. 'Trade qualified juniors must be paid the appropriate adult rate.' Only 2 junior bands: Under 17 and 17 years. Refinery operations trainee L1: adult $28.15, U17 $21.42 (76.1%), 17 $24.11 (85.6%). Clerical L1 Y1: adult $27.95, U17 $20.96 (75.0%), 17 $23.76 (85.0%). Percentages vary slightly by classification due to rounding; approximately 75% and 85%. Adult rate from 18."
+  },
+  "MA000077": {
+    "has_juniors": false,
+    "notes": "Nursery Award — no junior rates found in pay guide."
+  },
+  "MA000085": {
+    "has_juniors": false,
+    "notes": "Sporting Organisations Award — no junior rates found in pay guide."
+  },
+  "MA000086": {
+    "has_juniors": false,
+    "notes": "Telecommunications Services Award — no junior rate section found in pay guide."
+  },
+  "MA000087": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"field_under_18": null, "field_18_to_19": null, "milling_under_15": 0.50, "milling_15": 0.65, "milling_16": 0.75, "milling_17": 0.90},
+    "fixed_hourly_rates_field_sector": {"under_18": 15.19, "18_to_19": 18.98},
+    "under_min_age": null,
+    "notes": "Sugar Industry Award. Two distinct junior schemes: (1) Field sector — fixed flat hourly rates by age band (Under 18: $15.19; 18-19: $18.98), not scaling with classification. (2) Milling, Distillery, Refinery and Maintenance — age-graded by classification: <15 years, 15, 16, 17 years. Milling L2 adult $24.28: <15 $12.14 (50%), 15 $15.78 (65%), 16 $18.21 (75%), 17 $21.85 (90%). 'Junior employees appointed to level C13/L3 or above must be paid the adult wage rate appropriate to that level.' Adult rate from 18 for milling, from 20 for field sector."
+  },
+  "MA000088": {
+    "has_juniors": true,
+    "adult_age": 19,
+    "rates": {"under_19": 0.73},
+    "under_min_age": null,
+    "notes": "Telecommunications Services Award (Industry). Single junior band 'Under 19 years' applies across all streams: Technical, Administrative, Professional/Manager/Specialist, Operations, Other. 'Trade qualified juniors must be paid the appropriate adult rate.' Technical/Administrative L1: adult $25.39, U19 $18.53 (approx 73%). Adult rate from 19."
+  },
+  "MA000093": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"16_and_under": 0.50, "17": 0.60, "18": 0.75, "19": 0.90},
+    "under_min_age": null,
+    "notes": "Marine Tourism and Charter Vessels Award. Bands: 16 and under, 17, 18, 19 years. Crew level 1 hourly: adult $26.04, 16&under $13.02 (50%), 17 $15.63 (60%), 18 $19.53 (75%), 19 $23.43 (90%). Applies to Overnight charter crew levels 1-3 and Non-overnight charter employees. Adult rate from 20."
+  },
+  "MA000097": {
+    "has_juniors": false,
+    "notes": "Miscellaneous Award — no junior rate section found in pay guide."
+  },
+  "MA000098": {
+    "has_juniors": false,
+    "notes": "Manufacturing and Associated Industries and Occupations Award — no junior rate tables found in pay guide. (Apprentice rates exist separately.)"
+  },
+  "MA000107": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"under_17": 0.66, "17": 0.81, "18": 0.90, "19": 1.00},
+    "under_min_age": null,
+    "notes": "Salt Industry Award. 'Trade qualified juniors must be paid the appropriate adult rate.' Bands: Under 17, 17, 18, 19 years. Junior hourly rate is a single scale (not varying by adult classification levels): U17 $17.65, 17 $21.57, 18 $24.18, 19 $26.78. Matched to adult Level 2 basic $26.78: U17 66%, 17 81%, 18 90%, 19 100%. Effectively adult rate from 19/20."
+  },
+  "MA000108": {
+    "has_juniors": false,
+    "notes": "Professional Diving Industry (Industrial) Award — no junior rate section found in pay guide."
+  },
+  "MA000109": {
+    "has_juniors": false,
+    "notes": "Seagoing Industry Award — no junior rate section found in pay guide."
+  },
+  "MA000110": {
+    "has_juniors": false,
+    "notes": "Marine Towage Award — no junior rate section found in pay guide."
+  },
+  "MA000111": {
+    "has_juniors": false,
+    "notes": "Ports, Harbours and Enclosed Water Vessels Award — no junior rate section found in pay guide."
+  },
+  "MA000114": {
+    "has_juniors": true,
+    "adult_age": 20,
+    "rates": {"under_17": 0.60, "17": 0.70, "18": 0.80, "19": 0.90},
+    "under_min_age": null,
+    "notes": "Aquaculture Industry Award. Bands: Under 17, 17, 18, 19 years. Aquaculture attendant L1 adult $24.28: U17 $14.57 (60%), 17 $17.00 (70%), 18 $19.43 (80%), 19 $21.85 (90%). Adult rate from 20."
+  },
+  "MA000115": {
+    "has_juniors": true,
+    "adult_age": 21,
+    "rates": {"under_17": 0.50, "17": 0.60, "18": 0.70, "19": 0.80, "20": 0.90},
+    "under_min_age": null,
+    "notes": "Aboriginal Community Controlled Health Services Award. Bands: Under 17, At 17, At 18, At 19, At 20 years for Health workers, Administrative employees, Dental employees, Ancillary employees. Health worker trainee grade 1 L1: adult $26.83, U17 $13.42 (50%), 17 $16.10 (60%), 18 $18.78 (70%), 19 $21.46 (80%), 20 $24.15 (90%). Adult rate from 21."
+  },
+  "MA000117": {
+    "has_juniors": true,
+    "adult_age": 18,
+    "rates": {"15_and_under": 0.60, "16": 0.75, "17": 0.90},
+    "under_min_age": null,
+    "notes": "Mannequins and Models Award. Junior section 'House mannequins and models - Full-time & part-time'. Bands: 15 years and under, 16, 17 years. Adult hourly $26.67: 15&under $16.00 (60%), 16 $20.00 (75%), 17 $24.00 (90%). Adult rate from 18. Note: Casual model rates for still photography/TV/movies are independent (per-appearance fees), not age-graded."
+  },
+  "MA000121": {
+    "has_juniors": false,
+    "notes": "Maritime Offshore Oil and Gas Award — no junior rate section found in pay guide."
+  },
+  "MA000122": {
+    "has_juniors": false,
+    "notes": "Dredging Industry Award — no junior rate section found in pay guide."
+  }
+}

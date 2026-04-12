@@ -450,6 +450,65 @@ function getJuniorMultiplier(age, awardCode = DEFAULT_AWARD_CODE) {
     const MA000004_RATES = { 16: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 };
     return MA000004_RATES[age] || 1.0;
   }
+  // ── Data-driven junior rate tables ──────────────────────────────────────
+  // Extracted from FWO pay guides for the 2026 audit. See junior-rates-research.json
+  // in the repo root for full source data and per-award notes. Percentages are
+  // derived ratios (junior $ / adult $); verify against the award clause before
+  // material decisions.
+  //
+  // Awards explicitly adult-only (no junior rates in pay guide):
+  const ADULT_ONLY = new Set([
+    'MA000034', 'MA000036', 'MA000052', 'MA000053', 'MA000054', 'MA000055',
+    'MA000056', 'MA000057', 'MA000065', 'MA000077', 'MA000085', 'MA000086',
+    'MA000097', 'MA000098', 'MA000108', 'MA000109', 'MA000110', 'MA000111',
+    'MA000121', 'MA000122',
+  ]);
+  if (ADULT_ONLY.has(awardCode)) return 1.0;
+
+  // Awards with age-graded percentage-based junior rates. adult_age = the age
+  // at which the full adult rate begins. under_min = the multiplier applied
+  // below the lowest listed band.
+  const JR_TABLE = {
+    MA000038: { adult_age: 20, bands: { under_19: 0.70, 19: 0.80 }, under_min: 0.70 },
+    MA000043: { adult_age: 20, bands: { under_19: 0.70, 19: 0.80 }, under_min: 0.70 },
+    MA000049: { adult_age: 21, bands: { under_18: 0.60, 18: 0.70, 19: 0.81, 20: 0.91 }, under_min: 0.60 },
+    MA000068: { adult_age: 19, bands: { under_17: 0.55, 17: 0.65, 18: 0.75 }, under_min: 0.55 },
+    MA000069: { adult_age: 19, bands: { under_17: 0.50, 17: 0.60, 18: 0.80 }, under_min: 0.50 },
+    MA000072: { adult_age: 18, bands: { under_17: 0.76, 17: 0.86 }, under_min: 0.76 },
+    MA000088: { adult_age: 19, bands: { under_19: 0.73 }, under_min: 0.73 },
+    MA000093: { adult_age: 20, bands: { '16_and_under': 0.50, 17: 0.60, 18: 0.75, 19: 0.90 }, under_min: 0.50 },
+    MA000107: { adult_age: 20, bands: { under_17: 0.66, 17: 0.81, 18: 0.90, 19: 1.00 }, under_min: 0.66 },
+    MA000114: { adult_age: 20, bands: { under_17: 0.60, 17: 0.70, 18: 0.80, 19: 0.90 }, under_min: 0.60 },
+    MA000115: { adult_age: 21, bands: { under_17: 0.50, 17: 0.60, 18: 0.70, 19: 0.80, 20: 0.90 }, under_min: 0.50 },
+    MA000117: { adult_age: 18, bands: { '15_and_under': 0.60, 16: 0.75, 17: 0.90 }, under_min: 0.60 },
+  };
+  if (JR_TABLE[awardCode]) {
+    const t = JR_TABLE[awardCode];
+    if (age >= t.adult_age) return 1.0;
+    if (t.bands[age]) return t.bands[age];
+    if (age === 16 && t.bands['16_and_under']) return t.bands['16_and_under'];
+    if (age <= 15 && t.bands['15_and_under']) return t.bands['15_and_under'];
+    if (age <= 16 && t.bands['16_and_under']) return t.bands['16_and_under'];
+    if (age < 19 && t.bands.under_19) return t.bands.under_19;
+    if (age < 18 && t.bands.under_18) return t.bands.under_18;
+    if (age < 17 && t.bands.under_17) return t.bands.under_17;
+    return t.under_min;
+  }
+
+  // Awards with non-percentage junior rates (flat dollar amounts that do not
+  // scale with classification). Cannot be expressed as a multiplier; must be
+  // handled via a fixed-rate lookup. Until that's built, log and return 1.0
+  // (pays adult rate = overpayment, legally safe but not award-accurate).
+  const FIXED_RATE_JUNIORS = new Set(['MA000071', 'MA000087']);
+  if (FIXED_RATE_JUNIORS.has(awardCode) && age < 20) {
+    if (!getJuniorMultiplier._fixedWarned) getJuniorMultiplier._fixedWarned = new Set();
+    if (!getJuniorMultiplier._fixedWarned.has(awardCode)) {
+      getJuniorMultiplier._fixedWarned.add(awardCode);
+      console.warn(`[junior-rates] ${awardCode} uses fixed $ junior rates that don't scale with classification — paying adult rate as a safe fallback. Implement fixed-rate lookup to calculate accurately.`);
+    }
+    return 1.0;
+  }
+
   // Awards without an explicit branch above fall through to this default schedule.
   // Log once per process so operators can spot untested awards hitting the fallback
   // (log only when age < 21 because adult ages are always 1.0 and don't need review).
