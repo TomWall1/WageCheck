@@ -867,7 +867,7 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (addition_per_hour === 19.32) return 'Public holiday — junior liquor (+$19.32/hr above Mon–Sat all-in rate)';
   if (multiplier === 1.0) return 'Ordinary rate (×1.0)';
   if (multiplier === 1.1) return 'Evening loading (10pm–midnight, ×1.10)';
-  if (multiplier === 1.12) return 'Outside span of hours — Sunday (×1.12 of casual base)';
+  if (multiplier === 1.12) return dayType === 'sunday' ? 'Sunday — casual (×1.12 of casual base)' : dayType === 'saturday' ? 'Saturday — casual (×1.12 of casual base)' : 'Casual penalty (×1.12)';
   if (multiplier === 1.15) return dayType === 'weekday' ? 'Afternoon/night shift Mon–Fri (×1.15)' : 'Late night loading (midnight–6am, ×1.15)';
   if (multiplier === 1.16) return dayType === 'weekday' ? 'Evening/night loading — casual (7pm–7am, ×1.16 of casual base)' : 'Saturday penalty — casual (×1.16 of casual base = ×1.45 of FT)';
   if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening/night loading (7pm–7am, ×1.20)' : 'Saturday penalty (×1.2)';
@@ -876,7 +876,7 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (multiplier === 1.4) return dayType === 'saturday' ? 'Saturday penalty (×1.4)' : dayType === 'sunday' ? 'Sunday penalty (×1.4)' : 'Penalty (×1.4)';
   if (multiplier === 1.6) return dayType === 'sunday' ? 'Casual Sunday (×1.60 of casual base = 200% FT base)' : 'Rate ×1.60';
   if (multiplier === 1.5) return dayType === 'saturday' ? 'Saturday afternoon — time and a half (×1.5)' : 'Sunday / time and a half (×1.5)';
-  if (multiplier === 1.8) return 'Public holiday — casual (×1.80 of casual base = 225% of FT)';
+  if (multiplier === 1.8) return dayType === 'sunday' ? 'Sunday — casual (×1.80 of casual base)' : dayType === 'saturday' ? 'Saturday — casual (×1.80 of casual base)' : dayType === 'public_holiday' ? 'Public holiday — casual (×1.80 of casual base)' : 'Casual penalty (×1.80)';
   if (multiplier === 2.0) return dayType === 'sunday' ? 'Sunday — double time (×2.0)' : 'Double time (×2.0)';
   if (multiplier === 2.25) return 'Public holiday — double time and a quarter (×2.25)';
   if (multiplier === 2.5) return 'Public holiday — double time and a half (×2.50)';
