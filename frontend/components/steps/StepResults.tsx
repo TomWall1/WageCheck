@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api';
 import { formatCurrency, formatHours, employmentTypeLabel } from '@/lib/utils';
 import clsx from 'clsx';
+import ShareWithMate from '@/components/ShareWithMate';
 
 interface Props {
   state: WageCheckState;
@@ -970,6 +971,9 @@ ${(hasPaidAmount || hasPaidAllowances || hasPaidSuper) ? `
           check <a href="https://www.fairwork.gov.au" target="_blank" rel="noopener noreferrer" className="underline">fairwork.gov.au</a> for the latest.
         </p>
       </div>
+
+      {/* Help a mate out */}
+      {awardCode && <ShareWithMate awardCode={awardCode} />}
 
       {/* Download report */}
       <div className="card space-y-3">
