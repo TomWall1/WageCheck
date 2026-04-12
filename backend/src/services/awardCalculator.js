@@ -1066,23 +1066,37 @@ async function calculateEntitlements(input, db) {
     penaltyRates = penaltyRates.filter(r => !r.shift_type);
   }
 
-  // MA000003 special case: Grade 1 has a lower Sunday rate than Grade 2/3.
-  // FT/PT L1 Sunday = ×1.25 (same as Saturday); Casual L1 Sunday = ×1.20 (same as Saturday).
-  // Default penalty_rates store the L2/L3 rates; override here for L1.
-  if (awardCode === 'MA000003') {
-    const levelResult = await db.query(
-      'SELECT level FROM classifications WHERE id = $1', [classificationId]
-    );
-    const classLevel = parseInt(levelResult.rows[0]?.level || 2);
-    if (classLevel === 1) {
-      const sundayOverride = employmentType === 'casual' ? 1.20 : 1.25;
-      penaltyRates = penaltyRates.map(r =>
-        r.day_type === 'sunday'
-          ? { ...r, multiplier: sundayOverride.toString(), addition_per_hour: null }
-          : r
-      );
+  // ── Classification-scoped penalty resolution ───────────────────────────────
+  // Apply applies_to_levels / applies_to_streams filters. Within each unique
+  // (day_type, time_band_label) group, prefer a level/stream-specific row
+  // over the generic (null-scoped) row. This replaces hardcoded per-award
+  // overrides previously in this file for MA000003 Grade 1 and MA000119 L1-L2.
+  const classLevelResult = await db.query(
+    'SELECT level, stream FROM classifications WHERE id = $1', [classificationId]
+  );
+  const classLevel = parseInt(classLevelResult.rows[0]?.level ?? -1);
+  const classStreamForFilter = classLevelResult.rows[0]?.stream || null;
+  penaltyRates = penaltyRates.filter(r => {
+    if (r.applies_to_levels && r.applies_to_levels.length > 0 && !r.applies_to_levels.includes(classLevel)) return false;
+    if (r.applies_to_streams && r.applies_to_streams.length > 0 && !r.applies_to_streams.includes(classStreamForFilter)) return false;
+    return true;
+  });
+  // Dedup within day_type + time_band: prefer scoped rows over generic ones
+  const penaltyDedupMap = new Map();
+  for (const r of penaltyRates) {
+    const key = `${r.day_type}|${r.time_band_label || 'all'}`;
+    const current = penaltyDedupMap.get(key);
+    const rIsScoped = (r.applies_to_levels && r.applies_to_levels.length > 0) ||
+                      (r.applies_to_streams && r.applies_to_streams.length > 0);
+    if (!current) {
+      penaltyDedupMap.set(key, r);
+    } else {
+      const currentIsScoped = (current.applies_to_levels && current.applies_to_levels.length > 0) ||
+                              (current.applies_to_streams && current.applies_to_streams.length > 0);
+      if (rIsScoped && !currentIsScoped) penaltyDedupMap.set(key, r);
     }
   }
+  penaltyRates = Array.from(penaltyDedupMap.values());
 
   // MA000003 casual evening/night: the 10%/15% penalty is on the FT ORDINARY rate,
   // not the casual base. The DB stores multipliers (1.10/1.15) which compound with casual
@@ -1102,22 +1116,6 @@ async function calculateEntitlements(input, db) {
       }
       return r;
     });
-  }
-
-  // MA000119: casual Introductory/L1/L2 Sunday = ×1.20 (150% of FT = 150/125 of casual base).
-  // DB stores ×1.40 (L3–L6 default); override here for ≤L2.
-  if (awardCode === 'MA000119' && employmentType === 'casual') {
-    const levelResult = await db.query(
-      'SELECT level FROM classifications WHERE id = $1', [classificationId]
-    );
-    const classLevel = parseInt(levelResult.rows[0]?.level ?? 3);
-    if (classLevel <= 2) {
-      penaltyRates = penaltyRates.map(r =>
-        r.day_type === 'sunday'
-          ? { ...r, multiplier: '1.20', addition_per_hour: null }
-          : r
-      );
-    }
   }
 
   // Fetch OT rates — prefer stream-specific rules, fall back to stream=NULL (generic)

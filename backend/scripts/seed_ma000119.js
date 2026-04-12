@@ -480,6 +480,15 @@ async function seed() {
         multiplier: 2.00, addition_per_hour: null,
         description: 'Casual public holiday — ×2.0 of casual base rate',
       },
+      // ── Casual L0–L2 Sunday override (lower than L3–L6 per clause 26.3) ──
+      // Introductory (L0), L1 and L2 get ×1.20 on Sundays vs ×1.40 for L3+.
+      {
+        employment_type: 'casual', day_type: 'sunday',
+        time_band_start: null, time_band_end: null, time_band_label: null,
+        multiplier: 1.20, addition_per_hour: null,
+        applies_to_levels: [0, 1, 2],
+        description: 'Casual Sunday — Introductory/L1/L2 (×1.20, lower than L3–L6)',
+      },
     ];
 
     await client.query(`DELETE FROM penalty_rates WHERE award_code = $1`, [AWARD_CODE]);
@@ -487,12 +496,13 @@ async function seed() {
     for (const r of penaltyRates) {
       await client.query(`
         INSERT INTO penalty_rates
-          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, addition_per_hour, description, effective_date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, addition_per_hour, description, effective_date, applies_to_levels, applies_to_streams)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       `, [
         AWARD_CODE, r.employment_type, r.day_type,
         r.time_band_start, r.time_band_end, r.time_band_label,
         r.multiplier, r.addition_per_hour || null, r.description, EFFECTIVE_DATE,
+        r.applies_to_levels || null, r.applies_to_streams || null,
       ]);
     }
     console.log(`✓ Inserted ${penaltyRates.length} penalty rate rules`);

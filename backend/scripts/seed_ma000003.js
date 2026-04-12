@@ -321,6 +321,30 @@ async function seed() {
         multiplier: 2.0, addition_per_hour: null,
         description: 'Casual public holiday — ×2.0 of casual base rate',
       },
+      // ── Grade 1 Sunday overrides (lower than L2/L3 per clause 29.3) ───────
+      // Level-scoped rows; the calculator prefers these over the generic
+      // Sunday rows above when the user's classification level is 1.
+      {
+        employment_type: 'full_time', day_type: 'sunday',
+        time_band_start: null, time_band_end: null, time_band_label: null,
+        multiplier: 1.25, addition_per_hour: null,
+        applies_to_levels: [1],
+        description: 'Sunday — Grade 1 (×1.25, lower than L2/L3)',
+      },
+      {
+        employment_type: 'part_time', day_type: 'sunday',
+        time_band_start: null, time_band_end: null, time_band_label: null,
+        multiplier: 1.25, addition_per_hour: null,
+        applies_to_levels: [1],
+        description: 'Sunday — Grade 1 (×1.25, lower than L2/L3)',
+      },
+      {
+        employment_type: 'casual', day_type: 'sunday',
+        time_band_start: null, time_band_end: null, time_band_label: null,
+        multiplier: 1.20, addition_per_hour: null,
+        applies_to_levels: [1],
+        description: 'Casual Sunday — Grade 1 (×1.20, lower than L2/L3)',
+      },
     ];
 
     await client.query(`DELETE FROM penalty_rates WHERE award_code = $1`, [AWARD_CODE]);
@@ -328,12 +352,13 @@ async function seed() {
     for (const r of penaltyRates) {
       await client.query(`
         INSERT INTO penalty_rates
-          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, addition_per_hour, description, effective_date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          (award_code, employment_type, day_type, time_band_start, time_band_end, time_band_label, multiplier, addition_per_hour, description, effective_date, applies_to_levels, applies_to_streams)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       `, [
         AWARD_CODE, r.employment_type, r.day_type,
         r.time_band_start, r.time_band_end, r.time_band_label,
         r.multiplier, r.addition_per_hour || null, r.description, EFFECTIVE_DATE,
+        r.applies_to_levels || null, r.applies_to_streams || null,
       ]);
     }
     console.log(`✓ Inserted ${penaltyRates.length} penalty rate rules`);

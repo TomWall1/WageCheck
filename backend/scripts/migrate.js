@@ -180,6 +180,14 @@ async function migrate() {
     // ── Shift-type-specific penalty rates (remote work, 24hr care) ──
     await client.query(`ALTER TABLE penalty_rates ADD COLUMN IF NOT EXISTS shift_type VARCHAR(30)`);
 
+    // ── Classification-scoped penalty rates ──
+    // NULL = applies to all levels/streams. Array = only applies when the
+    // user's classification level/stream is in the list. Lets us seed
+    // per-level overrides (e.g. MA000003 Grade 1 Sunday at ×1.25 vs ×1.50
+    // for L2/L3) as data rather than hardcoded JS branches.
+    await client.query(`ALTER TABLE penalty_rates ADD COLUMN IF NOT EXISTS applies_to_levels INT[]`);
+    await client.query(`ALTER TABLE penalty_rates ADD COLUMN IF NOT EXISTS applies_to_streams TEXT[]`);
+
     // ── System-wide rates (SGC rate, etc.) with effective_date versioning ──
     await client.query(`
       CREATE TABLE IF NOT EXISTS system_rates (
