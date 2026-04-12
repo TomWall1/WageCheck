@@ -480,39 +480,17 @@ function CalculationBreakdown({ result, onRecalculate, onNext, onBack }: {
           </div>
         </div>
 
-        {/* Pay component breakdown */}
+        {/* Pay component breakdown — aggregated from per-day segments */}
         <div className="bg-white rounded-lg p-3 space-y-2 text-sm">
-          <div className="flex justify-between py-1 border-b border-gray-100">
-            <span className="text-gray-600">Ordinary hours</span>
-            <span className="font-medium">{formatCurrency(summary.ordinaryPay)}</span>
-          </div>
-          {summary.penaltyPay > 0 && (
-            <div className="flex justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-600">Penalty rate loading</span>
-              <span className="font-medium text-warning-700">+ {formatCurrency(summary.penaltyPay)}</span>
-            </div>
-          )}
-          {(summary as any).missedBreakPay > 0 && (
-            <div className="flex justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-600">Missed break penalty (double time)</span>
-              <span className="font-medium text-warning-700">+ {formatCurrency((summary as any).missedBreakPay)}</span>
-            </div>
-          )}
-          {summary.overtimePay > 0 && (
-            <div className="flex justify-between py-1 border-b border-gray-100">
-              <span className="text-gray-600">Overtime loading</span>
-              <span className="font-medium text-warning-700">+ {formatCurrency(summary.overtimePay)}</span>
-            </div>
-          )}
-          {(summary as any).mealAllowancePay > 0 && (
-            <div className="flex justify-between py-1 border-b border-gray-100">
+          {(summary.superBreakdown || []).map((row, i) => (
+            <div key={i} className="flex justify-between py-1 border-b border-gray-100 gap-2">
               <span className="text-gray-600">
-                Meal allowance for overtime
-                {(summary as any).mealAllowancesOwed > 1 && ` ×${(summary as any).mealAllowancesOwed}`}
+                {row.rateLabel}
+                <span className="text-xs text-gray-400 ml-1">({formatHours(row.hours)})</span>
               </span>
-              <span className="font-medium text-warning-700">+ {formatCurrency((summary as any).mealAllowancePay)}</span>
+              <span className="font-medium">{formatCurrency(row.totalPay)}</span>
             </div>
-          )}
+          ))}
           <div className="flex justify-between pt-1 font-bold text-base">
             <span>Total</span>
             <span>{formatCurrency(summary.totalPayOwed)}</span>

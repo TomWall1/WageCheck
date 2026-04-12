@@ -873,7 +873,7 @@ function getRateLabel(multiplier, addition_per_hour, missedBreakPenalty, dayType
   if (multiplier === 1.2) return dayType === 'weekday' ? 'Evening/night loading (7pm–7am, ×1.20)' : 'Saturday penalty (×1.2)';
   if (multiplier === 1.25) return dayType === 'weekday' ? 'Evening loading (after 6pm, ×1.25)' : 'Saturday penalty (×1.25)';
   if (multiplier === 1.24) return 'Night cleaning (11pm–7am, casual) — ×1.24 of casual base';
-  if (multiplier === 1.4) return 'Sunday penalty (×1.4)';
+  if (multiplier === 1.4) return dayType === 'saturday' ? 'Saturday penalty (×1.4)' : dayType === 'sunday' ? 'Sunday penalty (×1.4)' : 'Penalty (×1.4)';
   if (multiplier === 1.6) return dayType === 'sunday' ? 'Casual Sunday (×1.60 of casual base = 200% FT base)' : 'Rate ×1.60';
   if (multiplier === 1.5) return dayType === 'saturday' ? 'Saturday afternoon — time and a half (×1.5)' : 'Sunday / time and a half (×1.5)';
   if (multiplier === 1.8) return 'Public holiday — casual (×1.80 of casual base = 225% of FT)';
