@@ -700,108 +700,38 @@ function classifyFromRules(rules, answers, fallback) {
  * Classify the worker based on their questionnaire answers.
  * Returns the best matching classification.
  */
+// Dispatch table for rule-table-driven awards. Each entry pairs the rule
+// array with its fallback outcome. MA000013 (racing) and other awards with
+// multi-branch custom logic are handled separately below.
+const RULE_DISPATCH = {
+  MA000022: { rules: CLASSIFICATION_RULES_MA000022, fallback: { level: 1, stream: 'cleaning', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000003: { rules: CLASSIFICATION_RULES_MA000003, fallback: { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to entry level. Please review.' } },
+  MA000119: { rules: CLASSIFICATION_RULES_MA000119, fallback: { level: 1, stream: 'food_beverage', rationale: 'Unable to determine level — defaulting to entry level. Please review.' } },
+  MA000004: { rules: CLASSIFICATION_RULES_MA000004, fallback: { level: 1, stream: 'retail', rationale: 'Unable to determine level — defaulting to entry level. Please review.' } },
+  MA000094: { rules: CLASSIFICATION_RULES_MA000094, fallback: { level: 1, stream: 'fitness', rationale: 'Unable to determine level — defaulting to entry level. Please review.' } },
+  MA000080: { rules: CLASSIFICATION_RULES_MA000080, fallback: { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to Grade 1. Please review.' } },
+  MA000084: { rules: CLASSIFICATION_RULES_MA000084, fallback: { level: 1, stream: 'storeworker', rationale: 'Unable to determine classification — defaulting to Grade 1 commencement. Please review.' } },
+  MA000081: { rules: CLASSIFICATION_RULES_MA000081, fallback: { level: 1, stream: 'general', rationale: 'Unable to determine classification — defaulting to Level 1 production & support. Please review.' } },
+  MA000028: { rules: CLASSIFICATION_RULES_MA000028, fallback: { level: 1, stream: 'horticulture', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000033: { rules: CLASSIFICATION_RULES_MA000033, fallback: { level: 1, stream: 'nursery', rationale: 'Unable to determine classification — defaulting to Grade 1A. Please review.' } },
+  MA000002: { rules: CLASSIFICATION_RULES_MA000002, fallback: { level: 1, stream: 'clerical', rationale: 'Unable to determine classification — defaulting to Level 1 Year 1. Please review.' } },
+  MA000030: { rules: CLASSIFICATION_RULES_MA000030, fallback: { level: 1, stream: 'research', rationale: 'Unable to determine classification — defaulting to Market Research Trainee. Please review.' } },
+  MA000063: { rules: CLASSIFICATION_RULES_MA000063, fallback: { level: 1, stream: 'transport', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.' } },
+  MA000095: { rules: CLASSIFICATION_RULES_MA000095, fallback: { level: 1, stream: 'car_parking', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000105: { rules: CLASSIFICATION_RULES_MA000105, fallback: { level: 1, stream: 'funeral', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.' } },
+  MA000101: { rules: CLASSIFICATION_RULES_MA000101, fallback: { level: 0, stream: 'landscaping', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.' } },
+  MA000091: { rules: CLASSIFICATION_RULES_MA000091, fallback: { level: 1, stream: 'cinema', rationale: 'Default — Cinema Worker Level 1' } },
+  MA000079: { rules: CLASSIFICATION_RULES_MA000079, fallback: { level: 1, stream: 'graduate', rationale: 'Unable to determine classification — defaulting to Graduate Level 1. Please review.' } },
+  MA000106: { rules: CLASSIFICATION_RULES_MA000106, fallback: { level: 1, stream: 'real_estate', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000016: { rules: CLASSIFICATION_RULES_MA000016, fallback: { level: 1, stream: 'security', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000042: { rules: CLASSIFICATION_RULES_MA000042, fallback: { level: 1, stream: 'cash_in_transit', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.' } },
+  MA000032: { rules: CLASSIFICATION_RULES_MA000032, fallback: { level: 1, stream: 'mobile_crane', rationale: 'Unable to determine classification — defaulting to MCE1. Please review.' } },
+  MA000103: { rules: CLASSIFICATION_RULES_MA000103, fallback: { level: 1, stream: 'supported_employment', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.' } },
+};
+
 function classify(answers, awardCode = 'MA000009') {
-  if (awardCode === 'MA000022') {
-    for (const rule of CLASSIFICATION_RULES_MA000022) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'cleaning', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000003') {
-    for (const rule of CLASSIFICATION_RULES_MA000003) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000119') {
-    for (const rule of CLASSIFICATION_RULES_MA000119) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'food_beverage', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000004') {
-    for (const rule of CLASSIFICATION_RULES_MA000004) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'retail', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000094') {
-    for (const rule of CLASSIFICATION_RULES_MA000094) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'fitness', rationale: 'Unable to determine level — defaulting to entry level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000080') {
-    for (const rule of CLASSIFICATION_RULES_MA000080) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'general', rationale: 'Unable to determine level — defaulting to Grade 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000084') {
-    for (const rule of CLASSIFICATION_RULES_MA000084) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'storeworker', rationale: 'Unable to determine classification — defaulting to Grade 1 commencement. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000081') {
-    for (const rule of CLASSIFICATION_RULES_MA000081) {
-      if (matchesRule(answers, rule.conditions)) {
-        if (rule.level === null) {
-          return { level: null, stream: null, rationale: rule.rationale, confidence: 'low' };
-        }
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'general', rationale: 'Unable to determine classification — defaulting to Level 1 production & support. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000028') {
-    for (const rule of CLASSIFICATION_RULES_MA000028) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'horticulture', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000033') {
-    for (const rule of CLASSIFICATION_RULES_MA000033) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'nursery', rationale: 'Unable to determine classification — defaulting to Grade 1A. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000002') {
-    for (const rule of CLASSIFICATION_RULES_MA000002) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'clerical', rationale: 'Unable to determine classification — defaulting to Level 1 Year 1. Please review.', confidence: 'low' };
-  }
+  const dispatched = RULE_DISPATCH[awardCode];
+  if (dispatched) return classifyFromRules(dispatched.rules, answers, dispatched.fallback);
 
   if (awardCode === 'MA000013') {
     // Liquor employees
@@ -829,114 +759,6 @@ function classify(answers, awardCode = 'MA000009') {
       if (level !== undefined) return { level, stream: 'racecourse', rationale: labels[level], confidence: 'high' };
     }
     return { level: 0, stream: 'racecourse', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000030') {
-    for (const rule of CLASSIFICATION_RULES_MA000030) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'research', rationale: 'Unable to determine classification — defaulting to Market Research Trainee. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000063') {
-    for (const rule of CLASSIFICATION_RULES_MA000063) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'transport', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000095') {
-    for (const rule of CLASSIFICATION_RULES_MA000095) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'car_parking', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000105') {
-    for (const rule of CLASSIFICATION_RULES_MA000105) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'funeral', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000101') {
-    for (const rule of CLASSIFICATION_RULES_MA000101) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 0, stream: 'landscaping', rationale: 'Unable to determine classification — defaulting to Introductory level. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000091') {
-    for (const rule of CLASSIFICATION_RULES_MA000091) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'cinema', rationale: 'Default — Cinema Worker Level 1', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000079') {
-    for (const rule of CLASSIFICATION_RULES_MA000079) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'graduate', rationale: 'Unable to determine classification — defaulting to Graduate Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000106') {
-    for (const rule of CLASSIFICATION_RULES_MA000106) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'real_estate', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000016') {
-    for (const rule of CLASSIFICATION_RULES_MA000016) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'security', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000042') {
-    for (const rule of CLASSIFICATION_RULES_MA000042) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'cash_in_transit', rationale: 'Unable to determine classification — defaulting to Level 1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000032') {
-    for (const rule of CLASSIFICATION_RULES_MA000032) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'mobile_crane', rationale: 'Unable to determine classification — defaulting to MCE1. Please review.', confidence: 'low' };
-  }
-
-  if (awardCode === 'MA000103') {
-    for (const rule of CLASSIFICATION_RULES_MA000103) {
-      if (matchesRule(answers, rule.conditions)) {
-        return { level: rule.level, stream: rule.stream, rationale: rule.rationale, confidence: 'high' };
-      }
-    }
-    return { level: 1, stream: 'supported_employment', rationale: 'Unable to determine classification — defaulting to Grade 1. Please review.', confidence: 'low' };
   }
 
   if (awardCode === 'MA000092') {
