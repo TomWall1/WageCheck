@@ -54,6 +54,13 @@ export default function StepRightsSummary({ awardCode, employmentType, classific
 
   return (
     <div className="space-y-6">
+      <button
+        onClick={onNext}
+        className="btn-primary w-full"
+      >
+        Skip directly to results →
+      </button>
+
       <div className="space-y-2">
         <h2 className="text-2xl font-bold text-gray-900">Your key rights</h2>
         <p className="text-gray-600">
