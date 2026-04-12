@@ -34,7 +34,7 @@ const data = seedData as unknown as Record<string, SeedAward>;
 export function getAwardRatesFromSeed(awardCode: string): AwardRateData {
   const award = data[awardCode];
   if (!award) {
-    return { awardCode, levels: [], penalties: [], allowances: [], effectiveDate: '1 July 2025' };
+    return { awardCode, levels: [], penalties: [], allowances: [], effectiveDate: '1 July 2025', rateType: 'hourly' };
   }
 
   // Format effective date
@@ -79,6 +79,6 @@ export function getAwardRatesFromSeed(awardCode: string): AwardRateData {
     penalties: award.penalties || [],
     allowances: award.allowances || [],
     effectiveDate,
-    rateType: (award as Record<string, unknown>).rateType === 'daily' ? 'daily' as const : 'hourly' as const,
+    rateType: (award as unknown as Record<string, unknown>).rateType === 'daily' ? 'daily' as const : 'hourly' as const,
   };
 }
